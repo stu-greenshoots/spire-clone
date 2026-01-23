@@ -1,0 +1,628 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #0a0a0f;
+  color: white;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.game-container {
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(ellipse at center top, #1a1a3e 0%, #0a0a1a 50%, #050510 100%);
+  overflow: hidden;
+}
+
+/* Button reset */
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+}
+
+button:active {
+  transform: scale(0.98) translateY(0);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a2a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #555 0%, #333 100%);
+  border-radius: 4px;
+  border: 1px solid #444;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #666 0%, #444 100%);
+}
+
+/* Prevent text selection in game */
+.game-container {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Safe area support for notched phones */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .game-container {
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-top: env(safe-area-inset-top);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* ==================== ANIMATIONS ==================== */
+
+/* Card glow animation */
+@keyframes cardGlow {
+  0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.1); }
+  50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), inset 0 0 15px rgba(255, 215, 0, 0.2); }
+  100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5), inset 0 0 5px rgba(255, 215, 0, 0.1); }
+}
+
+/* Damage shake animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-8px) rotate(-1deg); }
+  30% { transform: translateX(8px) rotate(1deg); }
+  50% { transform: translateX(-6px) rotate(-0.5deg); }
+  70% { transform: translateX(6px) rotate(0.5deg); }
+  90% { transform: translateX(-3px); }
+}
+
+/* Healing pulse animation */
+@keyframes pulse {
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.05); filter: brightness(1.3); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Enemy idle breathing animation */
+@keyframes breathe {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.02) translateY(-2px); }
+}
+
+/* Float animation for relics and icons */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Glow pulse for important elements */
+@keyframes glowPulse {
+  0%, 100% { filter: drop-shadow(0 0 3px currentColor); }
+  50% { filter: drop-shadow(0 0 10px currentColor); }
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Slide up animation */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Card play animation */
+@keyframes cardPlay {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2) translateY(-30px); opacity: 0.8; }
+  100% { transform: scale(0.5) translateY(-60px); opacity: 0; }
+}
+
+/* Damage number float */
+@keyframes damageFloat {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  20% { opacity: 1; transform: translateY(-10px) scale(1.3); }
+  100% { opacity: 0; transform: translateY(-60px) scale(0.8); }
+}
+
+/* Block number float */
+@keyframes blockFloat {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  20% { opacity: 1; transform: translateY(-8px) scale(1.2); }
+  100% { opacity: 0; transform: translateY(-50px) scale(0.8); }
+}
+
+/* Heal number float */
+@keyframes healFloat {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  20% { opacity: 1; transform: translateY(-5px) scale(1.15); }
+  100% { opacity: 0; transform: translateY(-45px) scale(0.9); }
+}
+
+/* Enemy hit flash */
+@keyframes enemyHit {
+  0% { filter: brightness(1); transform: translateX(0); }
+  10% { filter: brightness(2) saturate(0.5); transform: translateX(-8px); }
+  20% { filter: brightness(1.5); transform: translateX(6px); }
+  30% { filter: brightness(1.2); transform: translateX(-4px); }
+  40% { filter: brightness(1.1); transform: translateX(2px); }
+  50% { filter: brightness(1); transform: translateX(0); }
+  100% { filter: brightness(1); transform: translateX(0); }
+}
+
+/* Enemy death */
+@keyframes enemyDeath {
+  0% { opacity: 1; transform: scale(1) rotate(0); filter: brightness(1); }
+  30% { opacity: 1; transform: scale(1.1) rotate(-3deg); filter: brightness(2); }
+  100% { opacity: 0; transform: scale(0.3) rotate(15deg) translateY(30px); filter: brightness(0.5); }
+}
+
+/* Card fly to target */
+@keyframes cardFlyToEnemy {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  40% { transform: translateY(-100px) scale(1.1); opacity: 1; }
+  100% { transform: translateY(-200px) scale(0.5); opacity: 0; }
+}
+
+/* Block shield appear */
+@keyframes blockAppear {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Player hit flash */
+@keyframes playerHit {
+  0%, 100% { filter: brightness(1); }
+  25% { filter: brightness(0.5) sepia(1) saturate(5) hue-rotate(-30deg); }
+  50% { filter: brightness(1.5); }
+  75% { filter: brightness(0.8) sepia(0.5) saturate(3) hue-rotate(-20deg); }
+}
+
+/* Heal pulse effect */
+@keyframes healPulse {
+  0% { box-shadow: 0 0 0 0 rgba(68, 255, 68, 0.7); }
+  50% { box-shadow: 0 0 20px 10px rgba(68, 255, 68, 0.4); }
+  100% { box-shadow: 0 0 0 0 rgba(68, 255, 68, 0); }
+}
+
+/* Status applied effect */
+@keyframes statusApplied {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Energy spent flash */
+@keyframes energySpent {
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(0.9); filter: brightness(1.5); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+
+/* Card draw animation */
+@keyframes cardDraw {
+  0% { transform: translateX(-100px) translateY(50px) rotate(-20deg) scale(0.5); opacity: 0; }
+  50% { transform: translateX(-20px) translateY(-10px) rotate(-5deg) scale(1.1); opacity: 1; }
+  100% { transform: translateX(0) translateY(0) rotate(0) scale(1); opacity: 1; }
+}
+
+/* Screen fade transition */
+@keyframes screenFadeIn {
+  0% { opacity: 0; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Combat start zoom */
+@keyframes combatStart {
+  0% { opacity: 0; transform: scale(1.1); filter: blur(5px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+/* End turn button pulse when ready */
+@keyframes endTurnPulse {
+  0%, 100% {
+    box-shadow: 0 4px 15px rgba(170, 32, 32, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(255, 100, 100, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transform: scale(1.02);
+  }
+}
+
+/* Card hover lift */
+@keyframes cardHoverLift {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-15px) scale(1.05); }
+}
+
+/* Victory screen celebration */
+@keyframes victoryPulse {
+  0%, 100% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.05); filter: brightness(1.2); }
+}
+
+/* Reward card reveal */
+@keyframes rewardCardReveal {
+  0% { transform: rotateY(90deg) scale(0.8); opacity: 0; }
+  50% { transform: rotateY(-10deg) scale(1.05); opacity: 1; }
+  100% { transform: rotateY(0) scale(1); opacity: 1; }
+}
+
+/* Boss entrance */
+@keyframes bossEntrance {
+  0% { transform: scale(2) rotate(-5deg); opacity: 0; filter: blur(10px); }
+  50% { transform: scale(1.1) rotate(2deg); opacity: 1; filter: blur(0); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* Intent indicator pulse */
+@keyframes intentPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* Status effect shimmer */
+@keyframes shimmer {
+  0% { background-position: -100% 0; }
+  100% { background-position: 100% 0; }
+}
+
+/* Energy orb glow */
+@keyframes energyGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6),
+                inset 0 0 10px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.9),
+                inset 0 0 15px rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Victory celebration */
+@keyframes celebrate {
+  0%, 100% { transform: rotate(-5deg) scale(1); }
+  25% { transform: rotate(5deg) scale(1.1); }
+  50% { transform: rotate(-3deg) scale(1.05); }
+  75% { transform: rotate(3deg) scale(1.08); }
+}
+
+/* HP bar drain */
+@keyframes hpDrain {
+  0% { filter: brightness(1); }
+  50% { filter: brightness(1.5); }
+  100% { filter: brightness(1); }
+}
+
+/* Sparkle effect */
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+/* Rotating border for rare items */
+@keyframes rotateBorder {
+  0% { border-image-source: linear-gradient(0deg, #FFD700, #FF6B35, #FFD700); }
+  33% { border-image-source: linear-gradient(120deg, #FFD700, #FF6B35, #FFD700); }
+  66% { border-image-source: linear-gradient(240deg, #FFD700, #FF6B35, #FFD700); }
+  100% { border-image-source: linear-gradient(360deg, #FFD700, #FF6B35, #FFD700); }
+}
+
+/* ==================== ENHANCED ANIMATIONS ==================== */
+
+/* Smooth card hover with 3D effect */
+@keyframes cardHover3D {
+  0% { transform: translateY(0) rotateX(0) scale(1); }
+  100% { transform: translateY(-20px) rotateX(-5deg) scale(1.08); }
+}
+
+/* Card drag animation */
+@keyframes cardDragging {
+  0%, 100% { box-shadow: 0 5px 20px rgba(255, 215, 0, 0.4); }
+  50% { box-shadow: 0 10px 40px rgba(255, 215, 0, 0.6); }
+}
+
+/* Performance optimized dragging card */
+.card.dragging {
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* Card drop target highlight */
+@keyframes dropTargetPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 100, 100, 0.3);
+    border-color: rgba(255, 100, 100, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 100, 100, 0.6);
+    border-color: rgba(255, 100, 100, 0.8);
+  }
+}
+
+/* Smooth path drawing animation */
+@keyframes drawPath {
+  from { stroke-dashoffset: 100; }
+  to { stroke-dashoffset: 0; }
+}
+
+/* Path glow animation */
+@keyframes pathGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px currentColor);
+    opacity: 0.6;
+  }
+  50% {
+    filter: drop-shadow(0 0 6px currentColor);
+    opacity: 1;
+  }
+}
+
+/* Enhanced enemy breathing */
+@keyframes enemyBreathe {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.03) translateY(-3px);
+    filter: brightness(1.05);
+  }
+}
+
+/* Boss dramatic entrance */
+@keyframes bossEntranceDramatic {
+  0% {
+    transform: scale(3) rotate(-10deg);
+    opacity: 0;
+    filter: blur(20px) brightness(2);
+  }
+  40% {
+    transform: scale(1.2) rotate(5deg);
+    opacity: 1;
+    filter: blur(0) brightness(1.5);
+  }
+  70% {
+    transform: scale(0.95) rotate(-2deg);
+    filter: brightness(1);
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    filter: brightness(1);
+  }
+}
+
+/* Health bar smooth fill */
+@keyframes healthBarFill {
+  0% { width: 0%; }
+  100% { width: var(--hp-percent, 100%); }
+}
+
+/* Damage taken screen shake */
+@keyframes screenShake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-5px); }
+  20% { transform: translateX(5px); }
+  30% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  50% { transform: translateX(-2px); }
+  60% { transform: translateX(2px); }
+  70% { transform: translateX(-1px); }
+  80% { transform: translateX(1px); }
+}
+
+/* Turn indicator pulse */
+@keyframes turnPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+  }
+}
+
+/* Relic pickup animation */
+@keyframes relicPickup {
+  0% {
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.3) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+/* Gold gain animation */
+@keyframes goldGain {
+  0% {
+    transform: scale(0.5) translateY(20px);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) translateY(-5px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Map node connection animation */
+@keyframes nodeConnectGlow {
+  0% { stroke-opacity: 0.3; }
+  50% { stroke-opacity: 0.8; }
+  100% { stroke-opacity: 0.3; }
+}
+
+/* Smooth transition for all interactive elements */
+.interactive {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s ease,
+              filter 0.2s ease;
+}
+
+/* Card in hand fan effect */
+@keyframes cardFanIn {
+  0% {
+    transform: translateX(-50px) translateY(100px) rotate(-30deg) scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0) translateY(0) rotate(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Scroll hint animation for large hands */
+@keyframes scrollHint {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateY(-50%) translateX(0);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(-50%) translateX(-5px);
+  }
+}
+
+/* Responsive font sizes */
+@media (max-width: 360px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+/* Landscape adjustments */
+@media (orientation: landscape) and (max-height: 500px) {
+  .game-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+/* Glass morphism effect class */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Neon text effect */
+.neon-text {
+  text-shadow:
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 20px currentColor;
+}
+
+/* Card type color variables */
+:root {
+  --attack-color: #c41e3a;
+  --attack-gradient: linear-gradient(135deg, #8B0000 0%, #c41e3a 50%, #8B0000 100%);
+  --skill-color: #0078d4;
+  --skill-gradient: linear-gradient(135deg, #004488 0%, #0078d4 50%, #004488 100%);
+  --power-color: #d4a017;
+  --power-gradient: linear-gradient(135deg, #8B6914 0%, #d4a017 50%, #8B6914 100%);
+  --curse-color: #4a0080;
+  --curse-gradient: linear-gradient(135deg, #1a0030 0%, #4a0080 50%, #1a0030 100%);
+  --status-color: #404040;
+  --status-gradient: linear-gradient(135deg, #202020 0%, #404040 50%, #202020 100%);
+
+  /* Rarity colors */
+  --common-color: #888888;
+  --uncommon-color: #00bfff;
+  --rare-color: #ffd700;
+
+  /* UI colors */
+  --hp-color: #c41e3a;
+  --block-color: #4a90d9;
+  --energy-color: #ffd700;
+  --gold-color: #ffd700;
+}
+
+/* ==================== SCREEN SHAKE EFFECTS ==================== */
+
+.shake-light { animation: shake-light 0.2s ease-in-out; }
+.shake-medium { animation: shake-medium 0.2s ease-in-out; }
+.shake-heavy { animation: shake-heavy 0.3s ease-in-out; }
+
+@keyframes shake-light {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+@keyframes shake-medium {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+
+@keyframes shake-heavy {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translate(-8px, 2px); }
+  30% { transform: translate(8px, -2px); }
+  50% { transform: translate(-6px, 1px); }
+  70% { transform: translate(6px, -1px); }
+  90% { transform: translate(-3px, 0); }
+}
+
+/* ==================== CARD HOVER GLOW ==================== */
+
+.card:hover:not(.disabled) {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 0 20px rgba(100, 200, 255, 0.5);
+  transition: all 0.15s ease;
+}
