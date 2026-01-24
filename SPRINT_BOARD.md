@@ -1,7 +1,10 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-01-24
-**Current Sprint:** 2 (Stabilize & Expand)
+**Current Sprint:** 2 (Stabilize & Expand) - READY TO START
+**Integration Branch:** `sprint-2` (pushed to origin)
+**Kickoff Plan:** See SPRINT_2_PLAN.md
+**Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
 
 ---
