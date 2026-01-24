@@ -38,3 +38,26 @@ Tester - Component tests, balance simulator, E2E tests
 **Stability path:** Fix P0s → 4/10 becomes 7/10. E2E tests prevent regression.
 
 ---
+
+### Day 3 - FIX-06 Complete
+**Date:** 2026-01-24
+**Status:** FIX-06 complete, PR pending
+**Done today:**
+- Added data-testid attributes to Enemy.jsx:
+  - `enemy-intent` on intent display div
+  - `enemy-name` on name div
+  - `enemy-hp` on HP text div
+  - `enemy-block` on block display div
+- Rewrote all Enemy.test.jsx assertions:
+  - Replaced `screen.getByText(/44.*\/.*44/)` with `screen.getByTestId('enemy-hp').toHaveTextContent('44/44')`
+  - Replaced `screen.getByText('11')` with `screen.getByTestId('enemy-intent').toHaveTextContent('11')`
+  - All name/intent/block assertions now use testid-based queries
+- Added new test: verifies block element is absent when block is 0
+- All tests pass, validate clean
+**Blockers:**
+- None
+**Next:**
+- QA-03: E2E test suite with Playwright (if time permits in sprint 2)
+- Available for reviewing other PRs
+
+---
