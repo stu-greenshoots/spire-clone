@@ -16,14 +16,14 @@ export const loadSettings = () => {
   try {
     const saved = localStorage.getItem(SETTINGS_KEY);
     if (saved) return { ...DEFAULT_SETTINGS, ...JSON.parse(saved) };
-  } catch (e) { /* ignore */ }
+  } catch { /* ignore */ }
   return { ...DEFAULT_SETTINGS };
 };
 
 export const saveSettings = (settings) => {
   try {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-  } catch (e) { /* ignore */ }
+  } catch { /* ignore */ }
 };
 
 export const getAnimationDuration = (settings, baseDuration = 400) => {

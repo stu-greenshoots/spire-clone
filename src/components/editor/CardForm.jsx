@@ -28,7 +28,7 @@ const CardForm = ({ data, onChange }) => {
     onChange({ ...data, [field]: value });
   };
 
-  const updateNested = (path, value) => {
+  const _updateNested = (path, value) => {
     const newData = { ...data };
     const parts = path.split('.');
     let obj = newData;
