@@ -8,6 +8,7 @@ import { useAnimations } from '../hooks/useAnimations';
 import { ANIMATION_TYPE } from '../constants/animationTypes';
 import CardSelectionModal from './CardSelectionModal';
 import { CARD_TYPES } from '../data/cards';
+import CardTooltip from './CardTooltip';
 import { getPassiveRelicEffects } from '../systems/combatSystem';
 
 const CombatScreen = () => {
@@ -622,13 +623,15 @@ const CombatScreen = () => {
                 flexShrink: 0
               }}
             >
-              <Card
-                card={card}
-                onClick={() => !isDragging && handleCardClick(card)}
-                selected={isSelected}
-                disabled={!canPlayCard(card)}
-                player={player}
-              />
+              <CardTooltip card={card} player={player}>
+                <Card
+                  card={card}
+                  onClick={() => !isDragging && handleCardClick(card)}
+                  selected={isSelected}
+                  disabled={!canPlayCard(card)}
+                  player={player}
+                />
+              </CardTooltip>
             </div>
           );
         })}
