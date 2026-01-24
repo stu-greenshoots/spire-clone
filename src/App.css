@@ -975,20 +975,88 @@ button:active {
 
 /* ==================== CARD FRAME & TYPE VISUAL SYSTEM (GD-02) ==================== */
 
-.card-frame { border: 2px solid; border-radius: 8px; position: relative; }
-.card-frame--attack { border-color: #c0392b; background: linear-gradient(135deg, #2c1a1a, #1a1a2c); }
-.card-frame--skill { border-color: #2980b9; background: linear-gradient(135deg, #1a2c2c, #1a1a2c); }
-.card-frame--power { border-color: #f39c12; background: linear-gradient(135deg, #2c2a1a, #1a1a2c); }
-.card-frame--curse { border-color: #8e44ad; background: linear-gradient(135deg, #2c1a2c, #1a1a1a); }
-.card-frame--status { border-color: #7f8c8d; background: linear-gradient(135deg, #1a1a1a, #2c2c2c); }
-.card-frame--upgraded { box-shadow: 0 0 8px rgba(46, 204, 113, 0.5); }
+.card-frame {
+  border: 2px solid;
+  border-radius: 10px;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-.card-cost-orb { /* energy cost circle */ }
-.card-cost-orb--attack { background: radial-gradient(circle, #e74c3c, #c0392b); }
-.card-cost-orb--skill { background: radial-gradient(circle, #3498db, #2980b9); }
-.card-cost-orb--power { background: radial-gradient(circle, #f1c40f, #f39c12); }
+/* Attack cards - red tinted frame */
+.card-frame--attack {
+  border-color: rgba(200, 50, 50, 0.7);
+}
+.card-frame--attack:hover:not([style*="not-allowed"]) {
+  box-shadow: 0 0 12px rgba(200, 50, 50, 0.4), 0 4px 15px rgba(0, 0, 0, 0.4);
+}
 
-.card-rarity-indicator { /* bottom of card */ }
+/* Skill cards - blue tinted frame */
+.card-frame--skill {
+  border-color: rgba(50, 100, 200, 0.7);
+}
+.card-frame--skill:hover:not([style*="not-allowed"]) {
+  box-shadow: 0 0 12px rgba(50, 100, 200, 0.4), 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Power cards - gold/yellow tinted frame */
+.card-frame--power {
+  border-color: rgba(200, 170, 50, 0.7);
+}
+.card-frame--power:hover:not([style*="not-allowed"]) {
+  box-shadow: 0 0 12px rgba(200, 170, 50, 0.4), 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Curse cards - dark purple frame */
+.card-frame--curse {
+  border-color: rgba(120, 40, 160, 0.6);
+}
+.card-frame--curse:hover:not([style*="not-allowed"]) {
+  box-shadow: 0 0 10px rgba(120, 40, 160, 0.3), 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Status cards - gray frame */
+.card-frame--status {
+  border-color: rgba(100, 100, 100, 0.6);
+}
+.card-frame--status:hover:not([style*="not-allowed"]) {
+  box-shadow: 0 0 8px rgba(100, 100, 100, 0.3), 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Upgraded card glow */
+.card-frame--upgraded {
+  box-shadow: 0 0 8px rgba(46, 204, 113, 0.4), inset 0 0 6px rgba(46, 204, 113, 0.1);
+}
+.card-frame--upgraded.card-frame--attack {
+  box-shadow: 0 0 8px rgba(46, 204, 113, 0.4), 0 0 4px rgba(200, 50, 50, 0.3);
+}
+.card-frame--upgraded.card-frame--skill {
+  box-shadow: 0 0 8px rgba(46, 204, 113, 0.4), 0 0 4px rgba(50, 100, 200, 0.3);
+}
+.card-frame--upgraded.card-frame--power {
+  box-shadow: 0 0 8px rgba(46, 204, 113, 0.4), 0 0 4px rgba(200, 170, 50, 0.3);
+}
+
+/* Cost orb type tinting */
+.card-cost-orb {
+  transition: box-shadow 0.2s ease;
+}
+.card-cost-orb--attack {
+  border-color: rgba(200, 50, 50, 0.6) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 4px rgba(200, 50, 50, 0.3), inset 0 -2px 4px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+.card-cost-orb--skill {
+  border-color: rgba(50, 100, 200, 0.6) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 4px rgba(50, 100, 200, 0.3), inset 0 -2px 4px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+.card-cost-orb--power {
+  border-color: rgba(200, 170, 50, 0.6) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 4px rgba(200, 170, 50, 0.3), inset 0 -2px 4px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+}
+
+/* Rarity indicator */
+.card-rarity-indicator {
+  transition: opacity 0.2s ease;
+}
 .card-rarity--common { border-bottom-color: #95a5a6; }
 .card-rarity--uncommon { border-bottom-color: #3498db; }
 .card-rarity--rare { border-bottom-color: #f1c40f; }
