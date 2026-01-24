@@ -76,3 +76,15 @@ Back Ender - Architecture, state management, performance
 - All BE Sprint 2 tasks complete (FIX-03 merged, BE-02 PR pending)
 
 ---
+
+### Sprint 2 Complete
+**Date:** 2026-01-24
+**Status:** All tasks merged. Sprint 2 DONE.
+**Summary:**
+- FIX-03: Card effect context fix — MERGED (PR #10)
+- BE-02: Normalize state to IDs — MERGED (PR #18), all public APIs now ID-based
+**Architecture note:** cardEffects.js still uses ctx.targetIndex internally via backward-compat getter. Full normalization would be a separate Sprint 3+ task.
+**Satisfaction:** Happy with sprint 2. State is properly normalized, no more index mutations in public API.
+**Ready for Sprint 3:** Yes. BE-05 (damage preview with modifiers) queued.
+
+---

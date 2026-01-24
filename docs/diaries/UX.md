@@ -48,3 +48,13 @@ UX Guy - Combat feedback, tooltips, visual polish
 - How does speed multiplier work? (global CSS var or JS calculation?)
 
 ---
+
+### Sprint 2 Complete
+**Date:** 2026-01-24
+**Status:** All tasks merged. Sprint 2 DONE.
+**Summary:**
+- UX-02: Card tooltips — MERGED (PR #13)
+**Satisfaction:** Happy with sprint 2. Tooltip groundwork laid for Sprint 3 infrastructure expansion.
+**Ready for Sprint 3:** Yes. UX-05 (text truncation), UX-06 (tooltip infra), UX-07 (combat feedback) queued.
+
+---

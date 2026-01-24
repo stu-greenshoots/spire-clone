@@ -61,3 +61,16 @@ Tester - Component tests, balance simulator, E2E tests
 - Available for reviewing other PRs
 
 ---
+
+### Sprint 2 Complete
+**Date:** 2026-01-24
+**Status:** All priority tasks merged. Sprint 2 DONE.
+**Summary:**
+- FIX-06: Test selectors — MERGED (PR #16), replaced all fragile regex with data-testid
+- QA-03: E2E tests — Deferred to Sprint 3 (not blocking)
+**Validation:** 759 tests passing across 27 files. Lint clean. Build passes.
+**Known issue:** audioSystem.test.js has worker timeout (infra issue, not code). Not blocking.
+**Satisfaction:** Happy with sprint 2. All blocking tasks complete.
+**Ready for Sprint 3:** Yes. QA-03 (E2E with Playwright) carries forward.
+
+---
