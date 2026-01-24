@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import {
   ENEMY_SIZES,
   getEnemyImagePath,
+  getEnemyImagePathWebP,
   getEnemySizeForType,
   hasImage,
   preloadImage,
@@ -106,6 +107,33 @@ describe('Asset Loader - Enemy Art Pipeline', () => {
       const ids = ['cultist', 'jawWorm', 'slimeBoss', 'louse_red', 'hexaghost'];
       ids.forEach(id => {
         expect(getEnemyImagePath(id)).toMatch(/^\/images\/enemies\/.+\.png$/);
+      });
+    });
+  });
+
+  // =============================================
+  // getEnemyImagePathWebP
+  // =============================================
+  describe('getEnemyImagePathWebP', () => {
+    it('should return a path under /images/enemies/ with .webp extension', () => {
+      const path = getEnemyImagePathWebP('cultist');
+      expect(path).toBe('/images/enemies/cultist.webp');
+    });
+
+    it('should preserve camelCase enemy IDs in the path', () => {
+      const path = getEnemyImagePathWebP('jawWorm');
+      expect(path).toBe('/images/enemies/jawWorm.webp');
+    });
+
+    it('should preserve underscore enemy IDs in the path', () => {
+      const path = getEnemyImagePathWebP('louse_red');
+      expect(path).toBe('/images/enemies/louse_red.webp');
+    });
+
+    it('should always start with /images/enemies/ and end with .webp', () => {
+      const ids = ['cultist', 'jawWorm', 'slimeBoss', 'louse_red', 'hexaghost'];
+      ids.forEach(id => {
+        expect(getEnemyImagePathWebP(id)).toMatch(/^\/images\/enemies\/.+\.webp$/);
       });
     });
   });
@@ -265,28 +293,71 @@ describe('Asset Loader - Enemy Art Pipeline', () => {
       expect(result).toBeInstanceOf(Promise);
     });
 
-    it('should resolve with the correct image path for the enemy', async () => {
+    it('should resolve with the WebP path when WebP is available', async () => {
       MockImage.autoResolve = true;
+      const result = await preloadEnemyImage('cultist');
+      expect(result).toBe('/images/enemies/cultist.webp');
+    });
+
+    it('should fall back to PNG when WebP fails', async () => {
+      // WebP fails, PNG succeeds
+      global.Image = class extends MockImage {
+        set src(value) {
+          this._src = value;
+          MockImage.instances.push(this);
+          setTimeout(() => {
+            if (value.endsWith('.webp')) {
+              if (this.onerror) this.onerror(new Error('Not found'));
+            } else {
+              if (this.onload) this.onload();
+            }
+          }, 0);
+        }
+      };
+      MockImage.instances = [];
+
       const result = await preloadEnemyImage('cultist');
       expect(result).toBe('/images/enemies/cultist.png');
     });
 
-    it('should reject when the enemy image fails to load', async () => {
+    it('should reject when both WebP and PNG fail to load', async () => {
       MockImage.autoReject = true;
       await expect(preloadEnemyImage('missing_enemy')).rejects.toThrow('Image not found');
     });
 
-    it('should make hasImage return true after successful load', async () => {
+    it('should make hasImage return true after successful WebP load', async () => {
       MockImage.autoResolve = true;
       expect(hasImage('jawWorm')).toBe(false);
       await preloadEnemyImage('jawWorm');
       expect(hasImage('jawWorm')).toBe(true);
     });
 
-    it('should use the correct path convention for the enemy ID', async () => {
+    it('should make hasImage return true after PNG fallback load', async () => {
+      // WebP fails, PNG succeeds
+      global.Image = class extends MockImage {
+        set src(value) {
+          this._src = value;
+          MockImage.instances.push(this);
+          setTimeout(() => {
+            if (value.endsWith('.webp')) {
+              if (this.onerror) this.onerror(new Error('Not found'));
+            } else {
+              if (this.onload) this.onload();
+            }
+          }, 0);
+        }
+      };
+      MockImage.instances = [];
+
+      expect(hasImage('jawWorm')).toBe(false);
+      await preloadEnemyImage('jawWorm');
+      expect(hasImage('jawWorm')).toBe(true);
+    });
+
+    it('should try WebP path first before PNG', async () => {
       MockImage.autoResolve = true;
       await preloadEnemyImage('louse_red');
-      expect(MockImage.instances[0]._src).toBe('/images/enemies/louse_red.png');
+      expect(MockImage.instances[0]._src).toBe('/images/enemies/louse_red.webp');
     });
   });
 
@@ -326,7 +397,7 @@ describe('Asset Loader - Enemy Art Pipeline', () => {
     });
 
     it('should handle mixed success and failure', async () => {
-      // Use a custom approach: resolve for specific paths, reject for others
+      // Use a custom approach: resolve for cultist (webp), reject for others
       global.Image = class extends MockImage {
         set src(value) {
           this._src = value;
@@ -368,15 +439,18 @@ describe('Asset Loader - Enemy Art Pipeline', () => {
       await preloadEnemyImage('cultist');
       const status = getCacheStatus();
       expect(status.size).toBe(1);
-      expect(status.entries['/images/enemies/cultist.png']).toBeDefined();
-      expect(status.entries['/images/enemies/cultist.png'].loaded).toBe(true);
+      expect(status.entries['/images/enemies/cultist.webp']).toBeDefined();
+      expect(status.entries['/images/enemies/cultist.webp'].loaded).toBe(true);
     });
 
     it('should reflect error entries after failed preloads', async () => {
       MockImage.autoReject = true;
       try { await preloadEnemyImage('fake'); } catch { /* expected */ }
       const status = getCacheStatus();
-      expect(status.size).toBe(1);
+      // Both WebP and PNG attempts are cached as errors
+      expect(status.size).toBe(2);
+      expect(status.entries['/images/enemies/fake.webp'].loaded).toBe(false);
+      expect(status.entries['/images/enemies/fake.webp'].error).toBe(true);
       expect(status.entries['/images/enemies/fake.png'].loaded).toBe(false);
       expect(status.entries['/images/enemies/fake.png'].error).toBe(true);
     });
@@ -527,10 +601,12 @@ describe('Asset Loader - Enemy Art Pipeline', () => {
       expect(hasImage('unknown_foe')).toBe(false);
     });
 
-    it('should produce correct path even for enemies without actual images', () => {
-      // The path is deterministic regardless of whether the file exists
-      const path = getEnemyImagePath('totally_imaginary_enemy');
-      expect(path).toBe('/images/enemies/totally_imaginary_enemy.png');
+    it('should produce correct paths even for enemies without actual images', () => {
+      // The paths are deterministic regardless of whether the files exist
+      const pngPath = getEnemyImagePath('totally_imaginary_enemy');
+      expect(pngPath).toBe('/images/enemies/totally_imaginary_enemy.png');
+      const webpPath = getEnemyImagePathWebP('totally_imaginary_enemy');
+      expect(webpPath).toBe('/images/enemies/totally_imaginary_enemy.webp');
     });
 
     it('should not crash on repeated hasImage calls for same enemy', () => {
@@ -538,6 +614,104 @@ describe('Asset Loader - Enemy Art Pipeline', () => {
       for (let i = 0; i < 100; i++) {
         expect(hasImage('cultist')).toBe(false);
       }
+    });
+  });
+
+  // =============================================
+  // WebP fallback behavior
+  // =============================================
+  describe('WebP fallback behavior', () => {
+    it('should prefer WebP when both formats are available', async () => {
+      MockImage.autoResolve = true;
+      const result = await preloadEnemyImage('cultist');
+      expect(result).toBe('/images/enemies/cultist.webp');
+    });
+
+    it('should resolve to PNG path when WebP is unavailable', async () => {
+      global.Image = class extends MockImage {
+        set src(value) {
+          this._src = value;
+          MockImage.instances.push(this);
+          setTimeout(() => {
+            if (value.endsWith('.webp')) {
+              if (this.onerror) this.onerror(new Error('Not found'));
+            } else if (value.endsWith('.png')) {
+              if (this.onload) this.onload();
+            }
+          }, 0);
+        }
+      };
+      MockImage.instances = [];
+
+      const result = await preloadEnemyImage('cultist');
+      expect(result).toBe('/images/enemies/cultist.png');
+      expect(hasImage('cultist')).toBe(true);
+    });
+
+    it('should reject when neither WebP nor PNG is available', async () => {
+      MockImage.autoReject = true;
+      await expect(preloadEnemyImage('no_asset_enemy')).rejects.toThrow('Image not found');
+      expect(hasImage('no_asset_enemy')).toBe(false);
+    });
+
+    it('should cache WebP success and not attempt PNG', async () => {
+      MockImage.autoResolve = true;
+      await preloadEnemyImage('cultist');
+      const status = getCacheStatus();
+      // Only WebP should be cached (PNG was never attempted)
+      expect(status.entries['/images/enemies/cultist.webp']).toBeDefined();
+      expect(status.entries['/images/enemies/cultist.webp'].loaded).toBe(true);
+      expect(status.entries['/images/enemies/cultist.png']).toBeUndefined();
+    });
+
+    it('should cache both WebP error and PNG success on fallback', async () => {
+      global.Image = class extends MockImage {
+        set src(value) {
+          this._src = value;
+          MockImage.instances.push(this);
+          setTimeout(() => {
+            if (value.endsWith('.webp')) {
+              if (this.onerror) this.onerror(new Error('Not found'));
+            } else if (value.endsWith('.png')) {
+              if (this.onload) this.onload();
+            }
+          }, 0);
+        }
+      };
+      MockImage.instances = [];
+
+      await preloadEnemyImage('cultist');
+      const status = getCacheStatus();
+      expect(status.entries['/images/enemies/cultist.webp'].error).toBe(true);
+      expect(status.entries['/images/enemies/cultist.png'].loaded).toBe(true);
+    });
+
+    it('should handle batch preload with mixed format availability', async () => {
+      global.Image = class extends MockImage {
+        set src(value) {
+          this._src = value;
+          MockImage.instances.push(this);
+          setTimeout(() => {
+            // cultist has WebP, jawWorm only has PNG, fake has neither
+            if (value.includes('cultist')) {
+              if (this.onload) this.onload();
+            } else if (value.includes('jawWorm') && value.endsWith('.png')) {
+              if (this.onload) this.onload();
+            } else {
+              if (this.onerror) this.onerror(new Error('Not found'));
+            }
+          }, 0);
+        }
+      };
+      MockImage.instances = [];
+
+      const result = await preloadEnemyImages(['cultist', 'jawWorm', 'fake']);
+      expect(result.loaded).toContain('cultist');
+      expect(result.loaded).toContain('jawWorm');
+      expect(result.failed).toContain('fake');
+      expect(hasImage('cultist')).toBe(true);
+      expect(hasImage('jawWorm')).toBe(true);
+      expect(hasImage('fake')).toBe(false);
     });
   });
 
