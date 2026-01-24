@@ -121,11 +121,32 @@ FIX-01: Wire usePotion action through GameContext
 QA-03: Add Playwright E2E test for combat flow
 ```
 
+### Author Identity
+
+Each team member commits as themselves using the `--author` flag:
+
+```
+PM:  --author="PM <pm@spire-ascent.dev>"
+BE:  --author="BE <be@spire-ascent.dev>"
+JR:  --author="JR <jr@spire-ascent.dev>"
+AR:  --author="AR <ar@spire-ascent.dev>"
+UX:  --author="UX <ux@spire-ascent.dev>"
+GD:  --author="GD <gd@spire-ascent.dev>"
+SL:  --author="SL <sl@spire-ascent.dev>"
+QA:  --author="QA <qa@spire-ascent.dev>"
+```
+
+Example:
+```bash
+git commit --author="JR <jr@spire-ascent.dev>" -m "FIX-01: Wire usePotion action through GameContext"
+```
+
 ### Rules
 - Present tense, imperative mood ("Add" not "Added")
 - First line under 72 characters
 - Task ID prefix always included
 - No generic messages ("fix stuff", "updates", "wip")
+- Always use your role's `--author` flag
 
 ---
 

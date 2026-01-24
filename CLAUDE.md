@@ -49,7 +49,7 @@ git checkout -b sprint-2/task-id-description
 # ... do work ...
 npm run validate                    # MUST pass before push
 git add <specific-files>
-git commit -m "TASK-ID: description"
+git commit --author="ROLE <role@spire-ascent.dev>" -m "TASK-ID: description"
 git push -u origin sprint-2/task-id-description
 # Open PR targeting sprint-2 branch
 ```
