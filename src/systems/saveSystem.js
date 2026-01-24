@@ -55,7 +55,7 @@ export const hasSavedGame = () => {
     if (!raw) return false;
     const saveData = JSON.parse(raw);
     return validateSave(saveData);
-  } catch (e) {
+  } catch {
     return false;
   }
 };
@@ -79,7 +79,7 @@ export const getSavePreview = () => {
       ascension: s.ascension || 0,
       timestamp: saveData.timestamp
     };
-  } catch (e) {
+  } catch {
     return null;
   }
 };
@@ -117,7 +117,7 @@ export const addRunToHistory = (runData) => {
     // Keep only last 10
     const trimmed = history.slice(0, 10);
     localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
-  } catch (e) { /* ignore */ }
+  } catch { /* ignore */ }
 };
 
 export const getRunHistory = () => {
@@ -125,7 +125,7 @@ export const getRunHistory = () => {
     const raw = localStorage.getItem(HISTORY_KEY);
     if (!raw) return [];
     return JSON.parse(raw);
-  } catch (e) {
+  } catch {
     return [];
   }
 };

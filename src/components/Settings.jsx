@@ -10,6 +10,7 @@ function Settings() {
     audioManager.setMasterVolume(settings.masterVolume);
     audioManager.setSFXVolume(settings.sfxVolume);
     audioManager.setMusicVolume(settings.musicVolume);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const updateSetting = useCallback((key, value) => {

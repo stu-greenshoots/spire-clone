@@ -1,4 +1,4 @@
-import { memo, useMemo, useCallback } from 'react';
+import { useMemo } from 'react';
 
 /**
  * Memoized damage calculation for card preview
@@ -11,6 +11,7 @@ export const useCalculatedDamage = (card, player, target) => {
     if (player.weak > 0) damage = Math.floor(damage * 0.75);
     if (target && target.vulnerable > 0) damage = Math.floor(damage * 1.5);
     return Math.max(0, damage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [card?.damage, card?.strengthMultiplier, player?.strength, player?.weak, target?.vulnerable]);
 };
 
@@ -24,6 +25,7 @@ export const useCalculatedBlock = (card, player) => {
     if (player.dexterity) block += player.dexterity;
     if (player.frail > 0) block = Math.floor(block * 0.75);
     return Math.max(0, block);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [card?.block, player?.dexterity, player?.frail]);
 };
 

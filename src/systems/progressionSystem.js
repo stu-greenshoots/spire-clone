@@ -54,14 +54,14 @@ export const loadProgression = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) return { ...DEFAULT_PROGRESSION, ...JSON.parse(saved) };
-  } catch (e) { /* ignore */ }
+  } catch { /* ignore */ }
   return { ...DEFAULT_PROGRESSION };
 };
 
 export const saveProgression = (progression) => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progression));
-  } catch (e) { /* ignore */ }
+  } catch { /* ignore */ }
 };
 
 export const updateRunStats = (progression, runData) => {
