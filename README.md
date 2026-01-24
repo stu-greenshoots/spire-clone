@@ -65,7 +65,7 @@ The agents coordinate through shared planning documents, enforce code ownership 
 
 - **React 19** — UI framework
 - **Vite 7** — Build tool and dev server
-- **Vitest** — Testing framework (763 tests)
+- **Vitest** — Testing framework (809+ tests)
 - **GitHub Actions** — CI/CD pipeline
 - **GitHub Pages** — Hosting
 

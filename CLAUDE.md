@@ -30,27 +30,28 @@ Propose → others review → PM resolves. No silent changes to things other peo
 ```
 master                              (stable, protected)
   └── sprint-N                      (integration branch)
-       └── sprint-N/task-id-desc    (one task, one branch)
+       └── task-id-description      (one task, one branch - flat names)
 ```
 
 ### Branch Naming
 ```
-sprint-{N}/{task-id}-{short-description}
+{task-id}-{short-description}
 ```
 - All lowercase, hyphens only
 - No auto-generated suffixes
-- Examples: `sprint-2/fix-potion-integration`, `sprint-2/be-02-normalize-state`
+- No `sprint-N/` prefix (conflicts with git refs per DEC-013)
+- Examples: `fix-01-potion-integration`, `be-02-normalize-state`, `ux-02-card-tooltips`
 
 ### Workflow Per Task
 ```bash
 git checkout sprint-2
 git pull origin sprint-2
-git checkout -b sprint-2/task-id-description
+git checkout -b task-id-description
 # ... do work ...
 npm run validate                    # MUST pass before push
 git add <specific-files>
 git commit --author="ROLE <role@spire-ascent.dev>" -m "TASK-ID: description"
-git push -u origin sprint-2/task-id-description
+git push -u origin task-id-description
 # Open PR targeting sprint-2 branch
 ```
 
@@ -79,36 +80,36 @@ Each "team member" is a role with owned files and responsibilities. When working
 ### PM (Project Manager)
 - **Owns:** `*.md` docs, `package.json` scripts, `.github/`
 - **Focus:** Sprint coordination, process, CI/CD, PR management
-- **Current tasks:** Close PR #4, maintain sprint board
+- **Current tasks:** Review open PRs (#13, #14), maintain sprint board, resolve open decisions
 
 ### BE (Back Ender)
 - **Owns:** `src/context/`, `src/context/reducers/`
 - **Focus:** Architecture, state management, performance
-- **Current tasks:** FIX-03 (card effect context), BE-02 (normalize state)
+- **Current tasks:** BE-02 (normalize state)
 - **Rule:** Same public interfaces - useGame hook shape must not change without team discussion
 
 ### JR (Junior Developer)
 - **Owns:** `src/data/potions.js`, `src/systems/potionSystem.js`, `src/components/PotionSlots.jsx`
 - **Focus:** Potion system, card upgrades, new content
-- **Current tasks:** FIX-01 (potion UI integration), FIX-05 (enemy block), JR-02 (card upgrades)
+- **Current tasks:** JR-02 (card upgrades - PR #14 open), FIX-05 (enemy block)
 - **Rule:** Build against existing APIs. If a function doesn't exist in the hook, don't call it - wire it up first.
 
 ### AR (Allrounder)
 - **Owns:** `src/systems/audioSystem.js`, `src/systems/saveSystem.js`, `src/components/Settings.jsx`
 - **Focus:** Audio, save/load, settings, honest assessment
-- **Current tasks:** FIX-02 (save system format), AR-02 (save overhaul), AR-03 (settings)
+- **Current tasks:** AR-02 (save overhaul), AR-03 (settings)
 - **Rule:** Data formats must match between save and load. Serialize IDs, not full objects.
 
 ### UX (UX Guy)
 - **Owns:** `src/components/CombatScreen.jsx`, `src/components/AnimationOverlay.jsx`, `src/hooks/useAnimations.js`
 - **Focus:** Combat feedback, tooltips, visual polish
-- **Current tasks:** UX-02 (card tooltips)
+- **Current tasks:** UX-02 (card tooltips - PR #13 open)
 - **Rule:** Animations must not block input. Speed multiplier always respected.
 
 ### GD (Graphic Designer)
 - **Owns:** `public/images/`, `src/utils/assetLoader.js`, `scripts/compress-images.js`
 - **Focus:** Art pipeline, asset optimization, visual consistency
-- **Current tasks:** FIX-04 (asset format), GD-02 (card frames)
+- **Current tasks:** GD-02 (card frames)
 - **Rule:** Always provide fallback when assets missing. Lazy-load images.
 
 ### SL (Story Line)
@@ -146,21 +147,21 @@ npm run build            # Production build
 9. **No unused imports/variables.** Lint must be clean.
 10. **No forward-referencing.** Don't call APIs that don't exist yet.
 
-## Current State (Sprint 2 - COMPLETE)
+## Current State (Sprint 2 - Phase B In Progress)
 
-- **Branch:** `sprint-2` (integration branch, all PRs merged)
-- **P0 Bugs:** 0 open (FIX-01, FIX-02, FIX-03 merged)
-- **P1/P2 Bugs:** 0 open (FIX-04, FIX-05, FIX-06 merged)
-- **Tests:** 759 passing (27 test files)
-- **Lint:** 0 errors
+- **Branch:** `sprint-2` (integration branch, deploys to GitHub Pages)
+- **P0 Bugs:** 0 open (all 3 fixed and merged: FIX-01, FIX-02, FIX-03)
+- **P1/P2 Bugs:** 2 open (enemy block FIX-05, test selectors FIX-06)
+- **Tests:** 809 passing (28 test files)
+- **Lint:** 0 errors, 1 warning (unused shuffleArray in combatReducer.js)
 - **Build:** Passing
-- **Runtime:** All systems functional
-- **Phase A:** COMPLETE (6 bug fixes merged: PRs #8-#12, #15-#16)
-- **Phase B:** COMPLETE (BE-02 #18, UX-02 #13, GD-02 #17, JR-02 #14)
-- **Phase C:** PARTIAL (AR-02 #19 merged; AR-03, QA-03 deferred to Sprint 3)
-- **Total PRs:** 11 merged into sprint-2
+- **Runtime:** Potions, save/load, card effects all WORKING
+- **Open PRs:** #13 (UX-02, +217/-7), #14 (JR-02, +166/-2), #7 (sprint-2→master, draft)
+- **Phase A:** COMPLETE (FIX-01, FIX-02, FIX-03, FIX-04 merged)
+- **Phase B:** In progress (UX-02 PR #13, JR-02 PR #14 open; BE-02, GD-02 pending)
 - **Diaries:** `docs/diaries/{ROLE}.md` - update daily
-- **Next:** Sprint 3 (review feedback & polish, target 70+ score)
+- **Review:** Game Zone magazine scored 58/100 (see review.html). Sprint 3 backlog derived from feedback.
+- **Decisions:** 6 open proposals awaiting PM resolution (DEC-004 through DEC-011)
 
 ## Architecture Quick Reference
 
