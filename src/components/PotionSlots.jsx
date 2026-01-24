@@ -4,7 +4,7 @@ import { canUsePotion } from '../systems/potionSystem';
 import { POTION_COLORS, getPotionImage } from '../assets/art/art-config';
 
 const PotionSlots = () => {
-  const { state, usePotion } = useGame();
+  const { state, usePotion: applyPotion } = useGame();
   const { potions, phase } = state;
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [targetingSlot, setTargetingSlot] = useState(null);
@@ -31,13 +31,13 @@ const PotionSlots = () => {
       return;
     }
 
-    usePotion(slotIndex);
+    applyPotion(slotIndex);
     setSelectedSlot(null);
   };
 
   const handleDiscard = (slotIndex) => {
     // Just remove the potion by using the remove action
-    usePotion(slotIndex); // This will fail canUsePotion check but we need a DISCARD action
+    applyPotion(slotIndex); // This will fail canUsePotion check but we need a DISCARD action
     setSelectedSlot(null);
   };
 
