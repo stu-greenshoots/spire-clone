@@ -33,3 +33,33 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 - AI art quality noted as "surprisingly coherent" — no action needed now, but worth noting for future art passes.
 
 ---
+
+### Day 3 - GD-02 Complete
+**Date:** 2026-01-24
+**Status:** GD-02 complete, PR pending
+**Done today:**
+- Implemented card frame & type visual system in Card.jsx and App.css:
+  - Type-specific left border accent (red=attack, blue=skill, gold=power, purple=curse, grey=status)
+  - Type-tinted gradient overlay on card body
+  - Top glow strip with type color gradient (subtle, 0.7 opacity)
+  - Hover box-shadow effects per card type (only when not disabled)
+  - Cost orb border tinting to match card type
+  - Upgraded card dual-glow combining green upgrade indicator with type color
+  - Type label background tint for readability
+- Added rarity indicator styles:
+  - Common: grey (#95a5a6)
+  - Uncommon: blue (#3498db)
+  - Rare: gold (#f1c40f)
+- Smooth transitions (0.2s cubic-bezier) on all interactive states
+- All tests pass, validate clean, no lint errors
+**Design decisions:**
+- Kept colors at 0.7 opacity to not overwhelm the card art
+- Used `not([style*="not-allowed"])` selector to skip hover on disabled cards
+- Left border is 4px (vs 2px for other sides) to create a clear type identifier even at small sizes
+**Blockers:**
+- None
+**Next:**
+- All my Sprint 2 tasks complete (FIX-04 merged, GD-02 PR pending)
+- Sprint 3: GD-05 (brightness pass) and GD-06 (sprite sheets) ready when sprint 3 starts
+
+---
