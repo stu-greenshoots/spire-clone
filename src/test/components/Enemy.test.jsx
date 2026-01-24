@@ -23,7 +23,7 @@ describe('Enemy Component', () => {
     currentHp: 44,
     maxHp: 44,
     block: 0,
-    emoji: '🐛',
+    emoji: '\uD83D\uDC1B',
     instanceId: 'jaw_worm_1',
     intentData: { intent: 'attack', damage: 11 },
     moveIndex: 0,
@@ -34,23 +34,23 @@ describe('Enemy Component', () => {
 
   it('renders enemy name', () => {
     render(<Enemy enemy={baseEnemy} index={0} />);
-    expect(screen.getByText('Jaw Worm')).toBeInTheDocument();
+    expect(screen.getByTestId('enemy-name')).toHaveTextContent('Jaw Worm');
   });
 
   it('renders enemy HP', () => {
     render(<Enemy enemy={baseEnemy} index={0} />);
-    expect(screen.getByText(/44.*\/.*44/)).toBeInTheDocument();
+    expect(screen.getByTestId('enemy-hp')).toHaveTextContent('44/44');
   });
 
   it('shows intent damage for attack intent', () => {
     render(<Enemy enemy={baseEnemy} index={0} />);
-    expect(screen.getByText('11')).toBeInTheDocument();
+    expect(screen.getByTestId('enemy-intent')).toHaveTextContent('11');
   });
 
   it('shows block when enemy has block', () => {
     const blockedEnemy = { ...baseEnemy, block: 10 };
     render(<Enemy enemy={blockedEnemy} index={0} />);
-    expect(screen.getByText(/10/)).toBeInTheDocument();
+    expect(screen.getByTestId('enemy-block')).toHaveTextContent('10');
   });
 
   it('calls onClick when clicked', () => {
@@ -67,31 +67,36 @@ describe('Enemy Component', () => {
   it('renders with damaged HP correctly', () => {
     const damagedEnemy = { ...baseEnemy, currentHp: 20 };
     render(<Enemy enemy={damagedEnemy} index={0} />);
-    expect(screen.getByText(/20.*\/.*44/)).toBeInTheDocument();
+    expect(screen.getByTestId('enemy-hp')).toHaveTextContent('20/44');
   });
 
   it('renders buff intent correctly', () => {
     const buffEnemy = { ...baseEnemy, intentData: { intent: 'buff' } };
     render(<Enemy enemy={buffEnemy} index={0} />);
-    expect(screen.getByText('Jaw Worm')).toBeInTheDocument();
-    expect(screen.getByText('Buff')).toBeInTheDocument();
+    expect(screen.getByTestId('enemy-name')).toHaveTextContent('Jaw Worm');
+    expect(screen.getByTestId('enemy-intent')).toHaveTextContent('Buff');
   });
 
   it('renders defend intent correctly', () => {
     const defendEnemy = { ...baseEnemy, intentData: { intent: 'defend', block: 8 } };
     render(<Enemy enemy={defendEnemy} index={0} />);
-    expect(screen.getByText('Jaw Worm')).toBeInTheDocument();
+    expect(screen.getByTestId('enemy-name')).toHaveTextContent('Jaw Worm');
   });
 
   it('renders debuff intent correctly', () => {
     const debuffEnemy = { ...baseEnemy, intentData: { intent: 'debuff' } };
     render(<Enemy enemy={debuffEnemy} index={0} />);
-    expect(screen.getByText('Debuff')).toBeInTheDocument();
+    expect(screen.getByTestId('enemy-intent')).toHaveTextContent('Debuff');
   });
 
   it('applies targeted styling when targeted prop is true', () => {
     const { container } = render(<Enemy enemy={baseEnemy} index={0} targeted={true} />);
     // Targeted enemies should have some visual distinction
     expect(container.firstChild).toBeInTheDocument();
+  });
+
+  it('does not render block element when block is 0', () => {
+    render(<Enemy enemy={baseEnemy} index={0} />);
+    expect(screen.queryByTestId('enemy-block')).not.toBeInTheDocument();
   });
 });
