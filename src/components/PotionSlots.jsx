@@ -35,12 +35,6 @@ const PotionSlots = () => {
     setSelectedSlot(null);
   };
 
-  const handleDiscard = (slotIndex) => {
-    // Just remove the potion by using the remove action
-    applyPotion(slotIndex); // This will fail canUsePotion check but we need a DISCARD action
-    setSelectedSlot(null);
-  };
-
   const getColors = (potion) => {
     if (!potion) return { primary: '#333', secondary: '#444', glow: 'transparent' };
     return POTION_COLORS[potion.id] || { primary: '#888', secondary: '#aaa', glow: 'rgba(136,136,136,0.3)' };
@@ -64,7 +58,6 @@ const PotionSlots = () => {
         const colors = getColors(potion);
         const isSelected = selectedSlot === index;
         const isUsable = potion && canUsePotion(potion, state);
-        const isTargeting = targetingSlot === index;
         const potionImg = potion ? getPotionImage(potion.id) : null;
 
         return (

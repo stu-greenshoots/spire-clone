@@ -18,7 +18,7 @@ const CombatScreen = () => {
   const [showEnemyInfo, setShowEnemyInfo] = useState(null);
   const [enemyHitStates, setEnemyHitStates] = useState({});
   const [dyingEnemies, setDyingEnemies] = useState({});
-  const [playerHit, setPlayerHit] = useState(false);
+  const [_playerHit, setPlayerHit] = useState(false);
   const [energySpent, setEnergySpent] = useState(false);
   const [cardPlaying, setCardPlaying] = useState(null);
   const [combatStarted] = useState(true);
