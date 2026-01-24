@@ -1,7 +1,21 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { CARD_TYPES } from '../data/cards';
 import { getCardArtInfo } from '../assets/art/art-config';
-import { CARD_ART_PROMPTS } from '../assets/art-prompts';
+import { getKeywordsInText } from '../data/keywords';
+
+// Tooltip component for keyword hover descriptions
+const Tooltip = ({ text, children }) => {
+  const [show, setShow] = useState(false);
+  return (
+    <span className="tooltip-wrapper"
+      onMouseEnter={() => setShow(true)}
+      onMouseLeave={() => setShow(false)}
+      style={{ position: 'relative', display: 'inline' }}>
+      {children}
+      {show && <div className="tooltip-popup">{text}</div>}
+    </span>
+  );
+};
 
 // Card art patterns for different card types (using CSS/Unicode visual)
 const getCardArt = (card) => {
@@ -74,10 +88,80 @@ const getCardArt = (card) => {
   return { icon: '', bg: 'linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%)' };
 };
 
-const Card = memo(function Card({ card, onClick, selected, disabled, small, showRalphTheme = true, player }) {
-  // Get Ralph Wiggum themed art info
-  const ralphArtInfo = getCardArtInfo(card.id);
-  const ralphPromptData = CARD_ART_PROMPTS[card.id];
+// Get the card frame CSS class based on type
+const getFrameClass = (card) => {
+  const classes = ['card-frame'];
+  switch (card.type) {
+    case CARD_TYPES.ATTACK: classes.push('card-frame--attack'); break;
+    case CARD_TYPES.SKILL: classes.push('card-frame--skill'); break;
+    case CARD_TYPES.POWER: classes.push('card-frame--power'); break;
+    case CARD_TYPES.CURSE: classes.push('card-frame--curse'); break;
+    case CARD_TYPES.STATUS: classes.push('card-frame--status'); break;
+    default: break;
+  }
+  if (card.upgraded) classes.push('card-frame--upgraded');
+  return classes.join(' ');
+};
+
+// Get the cost orb CSS class based on type
+const getCostOrbClass = (card) => {
+  const classes = ['card-cost-orb'];
+  switch (card.type) {
+    case CARD_TYPES.ATTACK: classes.push('card-cost-orb--attack'); break;
+    case CARD_TYPES.SKILL: classes.push('card-cost-orb--skill'); break;
+    case CARD_TYPES.POWER: classes.push('card-cost-orb--power'); break;
+    default: break;
+  }
+  return classes.join(' ');
+};
+
+// Get the rarity indicator CSS class
+const getRarityClass = (card) => {
+  const classes = ['card-rarity-indicator'];
+  switch (card.rarity) {
+    case 'common': classes.push('card-rarity--common'); break;
+    case 'uncommon': classes.push('card-rarity--uncommon'); break;
+    case 'rare': classes.push('card-rarity--rare'); break;
+    default: break;
+  }
+  return classes.join(' ');
+};
+
+// Render description text with keyword highlights and tooltips
+const renderDescriptionWithKeywords = (text, small) => {
+  if (!text) return null;
+  const keywords = getKeywordsInText(text);
+  if (keywords.length === 0) return text;
+
+  // Build a regex that matches any keyword name
+  const keywordNames = keywords.map(k => k.name);
+  const pattern = new RegExp(`(${keywordNames.map(n => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'gi');
+
+  const parts = text.split(pattern);
+
+  return parts.map((part, index) => {
+    const matchedKeyword = keywords.find(k => k.name.toLowerCase() === part.toLowerCase());
+    if (matchedKeyword) {
+      if (small) {
+        // In small mode, just show the underline without tooltip
+        return (
+          <span key={index} className="keyword-highlight">
+            {part}
+          </span>
+        );
+      }
+      return (
+        <Tooltip key={index} text={matchedKeyword.description}>
+          <span className="keyword-highlight">{part}</span>
+        </Tooltip>
+      );
+    }
+    return part;
+  });
+};
+
+const Card = memo(function Card({ card, onClick, selected, disabled, small, player }) {
+  const artInfo = getCardArtInfo(card.id);
 
   const getCardColor = () => {
     switch (card.type) {
@@ -173,11 +257,31 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, show
   };
   const descColor = getDescColor();
 
+  // Calculate damage preview value
+  const getDamagePreview = () => {
+    if (!card.damage || typeof card.damage !== 'number') return null;
+    const strengthMult = card.strengthMultiplier || 1;
+    let dmg = card.damage;
+    if (player) {
+      dmg = card.damage + (player.strength || 0) * strengthMult;
+      if (player.weak > 0) dmg = Math.floor(dmg * 0.75);
+    }
+    return Math.max(0, dmg);
+  };
+
+  const damagePreview = getDamagePreview();
+
   const cardWidth = small ? 75 : 100;
   const cardHeight = small ? 110 : 145;
 
+  // Build frame and rarity class names
+  const frameClass = getFrameClass(card);
+  const costOrbClass = getCostOrbClass(card);
+  const rarityClass = getRarityClass(card);
+
   return (
     <div
+      className={frameClass}
       onClick={!disabled ? onClick : undefined}
       style={{
         width: `${cardWidth}px`,
@@ -216,7 +320,7 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, show
 
       {/* Energy Cost Orb */}
       {card.cost >= 0 && (
-        <div style={{
+        <div className={costOrbClass} style={{
           position: 'absolute',
           top: '-6px',
           left: '-6px',
@@ -255,9 +359,9 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, show
         position: 'relative'
       }}>
         {/* Show image if available, otherwise show icon */}
-        {ralphArtInfo.hasImage ? (
+        {artInfo.hasImage ? (
           <img
-            src={ralphArtInfo.imageUrl}
+            src={artInfo.imageUrl}
             alt={card.name}
             style={{
               width: '100%',
@@ -268,18 +372,6 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, show
           />
         ) : (
           cardArt.icon
-        )}
-        {/* Ralph quote tooltip indicator */}
-        {showRalphTheme && ralphPromptData?.ralphQuote && !small && (
-          <div style={{
-            position: 'absolute',
-            bottom: '2px',
-            right: '2px',
-            fontSize: '10px',
-            opacity: 0.7
-          }} title={ralphPromptData.ralphQuote}>
-
-          </div>
         )}
       </div>
 
@@ -317,7 +409,7 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, show
         {card.type}
       </div>
 
-      {/* Card Description */}
+      {/* Card Description with Keyword Highlights */}
       <div style={{
         flex: 1,
         fontSize: small ? '6px' : '8px',
@@ -328,20 +420,27 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, show
         overflow: 'hidden',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flexDirection: 'column'
       }}>
         <span style={{
           textShadow: adjustedDesc.modified
             ? `0 0 4px ${descColor}88, 0 1px 2px rgba(0, 0, 0, 0.5)`
             : '0 1px 2px rgba(0, 0, 0, 0.5)'
         }}>
-          {adjustedDesc.text}
+          {renderDescriptionWithKeywords(adjustedDesc.text, small)}
         </span>
+        {/* Damage Preview */}
+        {damagePreview !== null && !small && (
+          <span className="damage-preview">
+            {damagePreview} dmg
+          </span>
+        )}
       </div>
 
-      {/* Rarity Gem */}
+      {/* Rarity Indicator */}
       {card.rarity && card.rarity !== 'basic' && (
-        <div style={{
+        <div className={rarityClass} style={{
           position: 'absolute',
           bottom: '4px',
           left: '50%',

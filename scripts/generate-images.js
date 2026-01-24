@@ -1,20 +1,21 @@
 #!/usr/bin/env node
 
 /**
- * Ralph Wiggum Spire Ascent - Automated AI Image Generation
+ * Spire Ascent - Dark Fantasy Art Generator
  *
- * Generates all game art using OpenAI DALL-E 3
+ * Generates all game art using OpenAI DALL-E 3 with consistent dark fantasy theme.
  *
  * Usage:
  *   OPENAI_API_KEY=your_key node scripts/generate-images.js [options]
  *
  * Options:
- *   --type=cards|enemies|relics|all  Generate specific type (default: all)
- *   --start=id                       Start from specific asset ID
- *   --only=id1,id2,id3               Generate only specific IDs
- *   --dry-run                        Show what would be generated without calling API
- *   --quality=standard|hd            Image quality (default: standard, $0.04 vs $0.08)
- *   --size=1024x1024|1024x1792       Image size (default: 1024x1024)
+ *   --type=cards|enemies|relics|potions|all  Generate specific type (default: all)
+ *   --start=id                               Start from specific asset ID
+ *   --only=id1,id2,id3                       Generate only specific IDs
+ *   --dry-run                                Show what would be generated without calling API
+ *   --quality=standard|hd                    Image quality (default: standard, $0.04 vs $0.08)
+ *   --size=1024x1024                         Image size (default: 1024x1024)
+ *   --skip-existing                          Skip assets that already have image files
  */
 
 import OpenAI from 'openai';
@@ -33,458 +34,677 @@ const __dirname = path.dirname(__filename);
 const CONFIG = {
   outputDir: path.join(__dirname, '../src/assets/art'),
   progressFile: path.join(__dirname, '../src/assets/art/.generation-progress.json'),
-  quality: 'standard', // 'standard' or 'hd'
-  size: '1024x1024',   // '1024x1024' or '1024x1792' for portrait
+  quality: 'standard',
+  size: '1024x1024',
   model: 'dall-e-3',
-  rateLimitDelay: 1000, // ms between requests
+  rateLimitDelay: 1200, // ms between requests
   maxRetries: 3,
 };
 
-// Style constants
-const STYLE_BASE = "Simpsons animated series art style, Matt Groening style, thick black outlines, bright saturated colors, yellow skin characters, comedic expressions";
+// Dark fantasy style template - consistent across all assets
+const STYLE_BASE = [
+  'dark fantasy oil painting style',
+  'dramatic top-left lighting with deep shadows',
+  'muted desaturated background',
+  'rich jewel-tone palette',
+  'textured brushstrokes visible',
+  'no text no watermark no signature',
+  'atmospheric fog and particle effects',
+  'high detail fantasy game art'
+].join(', ');
 
-const ASPECT_RATIOS = {
-  card: "portrait composition, card game art format",
-  enemy: "square composition, centered character, full body visible",
-  relic: "square composition, item focused, iconic design, simple background"
+const CATEGORY_STYLE = {
+  card: 'portrait card art composition, single focused action, vignette edges, dramatic contrast',
+  enemy: 'centered full-body character portrait, menacing pose, dark atmospheric background, creature design',
+  relic: 'centered iconic object, glowing magical aura, dark velvet background, ornate detailed item',
+  potion: 'glass bottle with luminous liquid, magical glow emanating, dark shelf background, alchemical style'
 };
 
 // ============================================
-// PROMPT DATA (embedded for standalone script)
+// CARD PROMPTS - Dark Fantasy Theme
 // ============================================
 
 const CARD_PROMPTS = {
+  // === BASIC ===
   strike: {
-    prompt: "Ralph Wiggum swinging a crayon like a sword, determined expression, yellow skin, blue shorts, pink shirt, dramatic action pose, colorful classroom background",
+    prompt: 'A worn iron sword held in a ready position, glowing with faint red energy along the edge, dark dungeon corridor behind, sparks drifting from the blade'
   },
   defend: {
-    prompt: "Ralph Wiggum hiding behind a lunch tray used as a shield, nervous but brave expression, cafeteria food splattered on tray, school hallway background",
+    prompt: 'A weathered iron shield with protective runes glowing blue, dents and scratches visible across its surface, torchlit stone walls behind'
   },
   bash: {
-    prompt: "Ralph Wiggum wearing a helmet backwards with stars circling his head, dizzy expression, goofy smile, colorful playground background, cartoon style",
+    prompt: 'A heavy armored gauntlet clenched into a fist, surrounded by crackling red energy rings, shockwave ripples emanating outward in a dark corridor'
   },
+
+  // === COMMON ATTACKS ===
   anger: {
-    prompt: "Ralph Wiggum having a tantrum, throwing crayons everywhere, red face, tears flying, broken toys around him, dramatic lighting",
+    prompt: 'A berserker with glowing red veins bursting from their skin, feral rage expression, dark crimson mist swirling'
   },
   cleave: {
-    prompt: "Ralph Wiggum spinning around with arms outstretched, dizzy spiral eyes, playground equipment around him, motion blur effect, cartoon spinning",
+    prompt: 'A massive greatsword mid-swing in a wide horizontal arc, bright energy trail behind the blade, wind and debris swirling around the warrior'
   },
   clothesline: {
-    prompt: "Ralph running while tangled in a jump rope, tripping over himself, playground background, comedic slapstick, funny accident",
+    prompt: 'A warriors extended armored forearm with kinetic energy waves radiating from it, momentum lines trailing behind, dark arena setting'
   },
   headbutt: {
-    prompt: "Ralph Wiggum leading with his oversized head, determined expression, glowing forehead, impact crater forming, comic book action lines",
+    prompt: 'A helmeted warrior lunging forward in a charge pose, energy emanating from the visor, stars and concussive rings around the helmet'
   },
   ironWave: {
-    prompt: "Ralph in a suit of armor made from cafeteria trays, waddling forward, clanking metal effects, school hallway, determined expression",
+    prompt: 'A warrior holding both sword and shield, a wave of iron-grey energy flowing between the two weapons, defensive yet powerful stance'
   },
   pommelStrike: {
-    prompt: "Ralph hitting something with the eraser end of a giant pencil, surprised expression, classroom setting, eraser dust clouds",
+    prompt: 'Close-up of an ornate sword pommel surrounded by concussive force rings, glowing with impact energy, dark background'
   },
   swordBoomerang: {
-    prompt: "Ralph throwing his lunchbox which flies around chaotically, sandwiches spilling out, dotted flight path, playground background",
+    prompt: 'A spinning enchanted blade flying through dark air in a curved arc, trailing blue ethereal energy ribbons, magical weapon in flight'
   },
   thunderclap: {
-    prompt: "Ralph clapping his hands together creating a shockwave of glitter and paste, excited expression, sparkle effects, art classroom",
+    prompt: 'Two gauntleted hands with crackling lightning arcing between the palms, thunder energy building, electric blue light illuminating a dark scene'
   },
   twinStrike: {
-    prompt: "Ralph Wiggum with both arms raised triumphantly, tongue sticking out in concentration, victory pose, schoolyard background, cartoon style, happy expression",
+    prompt: 'Two crossed swords forming an X shape, dual trails of crimson energy emanating from the blades, dark moody atmosphere'
   },
   wildStrike: {
-    prompt: "Ralph waving a ruler around chaotically, confused expression, objects flying everywhere, chaotic energy, classroom mess, cartoon chaos",
+    prompt: 'A frenzied warrior swinging recklessly with abandon, wild red energy arcs, chaotic and untamed power'
   },
   bodySlam: {
-    prompt: "Ralph doing a big belly flop jump onto a pile of pillows, joyful expression, pillows and feathers flying, gymnasium, cartoon fun",
+    prompt: 'A heavily armored warrior mid-leap with momentum energy trailing behind, massive weight and gravitational force visible as distortion waves'
   },
   clash: {
-    prompt: "Ralph in full berserker mode surrounded only by crayons, war paint on face, battlefield of broken pencils, intense expression",
+    prompt: 'Two swords crossed together with a shower of sparks at the contact point, intense energy at the intersection, dramatic lighting'
   },
   heavyBlade: {
-    prompt: "Ralph dragging an impossibly large novelty pencil bigger than him, struggling with weight, pencil is huge, school hallway, determined face, cartoon struggle",
+    prompt: 'An impossibly large dark iron greatsword being lifted overhead, veins of molten energy along the blade, immense power'
   },
+
+  // === COMMON SKILLS ===
   armaments: {
-    prompt: "Ralph duct-taping supplies to himself as armor, crayons rulers erasers, proud expression, art supply closet, crafting scene",
+    prompt: 'A blacksmith forge glowing with magical energy, weapons and armor being enhanced with runes, sparks flying upward'
   },
   flexCard: {
-    prompt: "Ralph Wiggum posing confidently like a superhero, cape made of towel, muscles drawn on arms with marker, mirror reflection, gym background, cartoon funny",
-  },
-  shrugItOff: {
-    prompt: "Ralph shrugging with a confused smile while things bounce off him, invincible ignorance, various projectiles deflecting, playground",
-  },
-  warcry: {
-    prompt: "Ralph yelling loudly with hands cupped around mouth, sound wave effects, other students covering ears, cafeteria, megaphone energy, cartoon loud",
-  },
-  carnage: {
-    prompt: "Ralph covered in finger paint looking like a horror movie, innocent smile, red and orange paint everywhere, art room destruction",
-  },
-  whirlwind: {
-    prompt: "Ralph spinning like a tornado destroying everything in radius, dizzy spirals, school supplies flying in vortex, energy symbols",
-  },
-  bludgeon: {
-    prompt: "Ralph swinging the leg of a desk like a club, Babe Ruth pose, massive impact incoming, dramatic angle, classroom destruction",
-  },
-  impervious: {
-    prompt: "Ralph wrapped entirely in bubble wrap, nothing can touch him, serene smile, impacts bouncing off, protective cocoon",
-  },
-  offering: {
-    prompt: "Ralph giving away his lunch for power, noble sacrifice pose, sandwich ascending, energy received, cafeteria altar",
-  },
-  demonForm: {
-    prompt: "Ralph transforming into a powerful demon version but still cute, horns and tail, growing strength, Halloween costume power",
-  },
-  inflame: {
-    prompt: "Ralph flexing while on fire, getting stronger, proud pose, flames and muscles, confident smile, power up moment",
-  },
-  metallicize: {
-    prompt: "Ralph slowly turning metallic, gaining block each turn, silver skin, robot transformation, cool pose",
-  },
-  wound: {
-    prompt: "A cartoon band-aid with a sad face drawn on it, ouchie symbol, simple graphic, pink background, cute medical sticker style",
-  },
-  burn: {
-    prompt: "A small fire burning on a hand, concerned cartoony face in flames, flame graphic, orange background",
-  },
-  // Additional cards
-  barricade: {
-    prompt: "Ralph building a fortress out of school desks and chairs, proud architect pose, impenetrable wall, classroom background, cartoon construction",
-  },
-  battleTrance: {
-    prompt: "Ralph in deep meditation with eyes crossed, floating slightly, mystical energy, peaceful but silly expression, gym mat background",
-  },
-  berserk: {
-    prompt: "Ralph with wild eyes and messy hair, surrounded by energy, going crazy with power, red aura, playground rampage",
-  },
-  bloodletting: {
-    prompt: "Ralph squeezing a juice box dramatically, red juice spraying, sacrifice for power, determined expression, cafeteria background",
-  },
-  brutality: {
-    prompt: "Ralph looking surprisingly fierce, crayon war paint on cheeks, intense stare, schoolyard warrior, cartoon intimidating",
-  },
-  combust: {
-    prompt: "Ralph surrounded by small flames, sweating but happy, everything around him slightly singed, fire powers, classroom chaos",
-  },
-  corruption: {
-    prompt: "Ralph with a mischievous dark glow, shadowy aura, evil smile but still cute, purple energy, corrupted but adorable",
-  },
-  curse_decay: {
-    prompt: "A wilting flower with sad cartoon eyes, drooping petals, dark purple background, curse symbol, gloomy atmosphere",
-  },
-  curse_doubt: {
-    prompt: "A question mark with worried cartoon eyes, shaky and uncertain, dark blue background, existential dread, cartoon doubt",
-  },
-  curse_pain: {
-    prompt: "A cartoon heart with band-aids all over it, sad expression, dark red background, pain symbol, ouchie vibes",
-  },
-  curse_regret: {
-    prompt: "A cartoon ghost of spilled milk crying, regretful expression, dark background, shoulda coulda woulda, sad cartoon",
-  },
-  darkEmbrace: {
-    prompt: "Ralph hugging his shadow which hugs back, dark but friendly, night time playground, embracing darkness, cartoon wholesome dark",
-  },
-  dazed: {
-    prompt: "Ralph with swirly confused eyes, stars circling head, completely lost, dazed expression, dizzy cartoon, blue tint",
-  },
-  disarm: {
-    prompt: "Ralph accidentally making others drop things by being distracting, oops expression, items falling, disarming cuteness",
-  },
-  doubleTap: {
-    prompt: "Ralph poking something twice rapidly, focused expression, double motion blur, tap tap gesture, cartoon precision",
-  },
-  dropkick: {
-    prompt: "Ralph attempting a dramatic kick but falling over, legs in air, comedic fail, playground background, cartoon slapstick",
-  },
-  dualWield: {
-    prompt: "Ralph holding two crayons like swords, ninja pose, determined expression, dual wielding stance, cartoon warrior",
-  },
-  entrench: {
-    prompt: "Ralph dug into a sandbox fort, only head visible, defensive position, protected and happy, cartoon fortification",
-  },
-  evolve: {
-    prompt: "Ralph glowing and transforming slightly, evolution energy, becoming stronger, metamorphosis effect, cartoon power up",
-  },
-  exhume: {
-    prompt: "Ralph digging up buried treasure toys from sandbox, excited discovery, old toys emerging, cartoon archaeology",
-  },
-  feed: {
-    prompt: "Ralph eating a sandwich and growing slightly larger, power from food, satisfied expression, cafeteria background",
-  },
-  feelNoPain: {
-    prompt: "Ralph with a completely blank happy expression while things bounce off him, oblivious to everything, cartoon invincibility",
-  },
-  fiendFire: {
-    prompt: "Ralph breathing cartoon fire like a dragon, fierce but cute, flames everywhere, Halloween costume energy, fire breath",
-  },
-  fireBreathing: {
-    prompt: "Ralph with hot sauce bottle, breathing fire after eating, spicy reaction, flames from mouth, cafeteria chaos",
-  },
-  flameBarrier: {
-    prompt: "Ralph surrounded by a ring of friendly flames, protective fire circle, warm and safe, fire shield cartoon",
-  },
-  ghostlyArmor: {
-    prompt: "Ralph wearing a sheet ghost costume as armor, spooky but cute, ghostly protection, Halloween vibes, cartoon ghost",
+    prompt: 'A warrior flexing with temporary supernatural strength, muscles glowing with fading red energy, power surge'
   },
   havoc: {
-    prompt: "Ralph causing absolute chaos everywhere, things flying, mess explosion, happy chaos expression, destruction cartoon",
+    prompt: 'Pure chaos energy erupting from a warriors hands, random bolts of wild magic in all directions, untamed arcane power'
   },
-  hemokinesis: {
-    prompt: "Ralph controlling spilled juice with his mind, juice bending powers, concentrated expression, cafeteria magic, cartoon psychic",
-  },
-  immolate: {
-    prompt: "Ralph happily on fire spreading warmth to everyone, friendly fire, warm hugs, everyone slightly singed, cartoon warmth",
-  },
-  infernalBlade: {
-    prompt: "Ralph holding a flaming ruler sword, epic fire weapon, dramatic pose, fire effects, cartoon epic",
-  },
-  intimidate: {
-    prompt: "Ralph trying to look scary but just looking cute, failed intimidation, pouty face, not very threatening, cartoon attempt",
-  },
-  juggernaut: {
-    prompt: "Ralph as an unstoppable force, marching forward, nothing can stop him, determination, juggernaut pose, cartoon tank",
-  },
-  limitBreak: {
-    prompt: "Ralph breaking through his limits, energy explosion, going beyond, power surge, limit exceeded, cartoon breakthrough",
-  },
-  perfectedStrike: {
-    prompt: "Ralph doing a perfect crayon stroke, artistic precision, masterpiece moment, perfect form, cartoon excellence",
-  },
-  powerThrough: {
-    prompt: "Ralph pushing through obstacles, determination face, barriers breaking, willpower energy, cartoon perseverance",
-  },
-  pummel: {
-    prompt: "Ralph doing rapid silly slaps, blur of hands, comedic rapid motion, playground scene, cartoon rapid fire",
-  },
-  rage: {
-    prompt: "Ralph in full tantrum mode, red faced, steam from ears, maximum anger, cartoon rage explosion",
-  },
-  rampage: {
-    prompt: "Ralph running wild through classroom, destruction path, gleeful chaos, rampage energy, cartoon mayhem",
-  },
-  reaper: {
-    prompt: "Ralph in a tiny grim reaper costume, scythe made of ruler, Halloween vibes, cute but spooky, cartoon reaper",
-  },
-  recklessCharge: {
-    prompt: "Ralph running forward with eyes closed, no plan, just charging, reckless abandon, cartoon bull rush",
-  },
-  rupture: {
-    prompt: "Ralph causing cracks in the ground by stomping, earthquake effect, powerful stomp, rupture cartoon",
-  },
-  searingBlow: {
-    prompt: "Ralph with glowing hot hands, searing touch, steam rising, powerful heated energy, cartoon heat",
-  },
-  secondWind: {
-    prompt: "Ralph catching his breath and getting second wind, energy returning, refreshed, deep breath cartoon",
-  },
-  seeingRed: {
-    prompt: "Ralph with red tinted vision, angry focus, seeing red literally, rage vision, cartoon anger mode",
-  },
-  sentinel: {
-    prompt: "Ralph standing guard like a sentinel, watchful pose, protective stance, guardian energy, cartoon sentry",
-  },
-  shockwave: {
-    prompt: "Ralph stomping and creating a circular shockwave, ground rippling, power burst, cartoon shockwave effect",
-  },
-  slimed: {
-    prompt: "Ralph covered in green slime, grossed out expression, dripping goo, slime puddle, cartoon gross",
-  },
-  spotWeakness: {
-    prompt: "Ralph pointing at something with detective magnifying glass, finding weakness, eureka moment, cartoon discovery",
+  shrugItOff: {
+    prompt: 'A stoic warrior with a fading shield aura around them, standing firm with determination, protective energy dissipating'
   },
   trueGrit: {
-    prompt: "Ralph with determined gritty expression, tough and resilient, cowboy vibes, true grit stance, cartoon determination",
+    prompt: 'A weathered warrior standing resolute, gritting teeth with iron determination, exhaling mist in cold air, enduring'
+  },
+  warcry: {
+    prompt: 'A warrior shouting with visible sound waves rippling outward, rallying energy pulse, dark atmospheric scene'
+  },
+  sentinel: {
+    prompt: 'A stalwart guardian in heavy plate standing immovable, shield planted in ground, protective aura emanating'
+  },
+
+  // === UNCOMMON ATTACKS ===
+  carnage: {
+    prompt: 'A dark ethereal greatsword wreathed in nightmare energy, pulsing with red-black power, ominous crimson aurora in the sky above'
+  },
+  dropkick: {
+    prompt: 'A warrior leaping through the air in a dynamic flying kick pose, kinetic energy trail from boots, dramatic motion blur'
+  },
+  hemokinesis: {
+    prompt: 'Crimson magical energy swirling from a warriors open palms upward, tendrils of arcane power forming a sphere'
+  },
+  pummel: {
+    prompt: 'A warriors armored fists with multiple afterimage echoes showing rapid motion, energy burst rings around the hands'
+  },
+  rampage: {
+    prompt: 'A warrior surrounded by escalating layers of red energy, building unstoppable momentum, each layer brighter and more intense'
+  },
+  recklessCharge: {
+    prompt: 'A warrior sprinting forward recklessly, trails of desperate energy behind them, throwing caution aside, motion blur and speed lines'
   },
   uppercut: {
-    prompt: "Ralph doing an upward motion punch, rising energy, uppercut pose, dramatic angle, cartoon fighting",
+    prompt: 'A warriors fist raised upward trailing golden energy in an arc, upward force shockwave, dramatic low angle view'
+  },
+  whirlwind: {
+    prompt: 'A warrior spinning with dual weapons extended creating a tornado of steel and energy, circular motion blur, wind vortex'
+  },
+  searingBlow: {
+    prompt: 'A weapon glowing white-hot with accumulated power, intense heat distortion warping the air around it, molten edge'
+  },
+  perfectedStrike: {
+    prompt: 'A perfectly poised sword gleaming with mastery energy, clean precise edge, the pinnacle of blade craft, elegant and refined'
+  },
+
+  // === UNCOMMON SKILLS ===
+  battleTrance: {
+    prompt: 'A warrior entering a deep meditative state, third eye opening with golden light, time slowing around them, focused awareness'
+  },
+  disarm: {
+    prompt: 'A lone blade spinning through the air after being knocked loose, tactical precision energy ripple, weapon floating weightlessly'
+  },
+  dualWield: {
+    prompt: 'A warrior wielding two gleaming weapons simultaneously in a ready stance, dual blade form, perfectly balanced posture'
+  },
+  entrench: {
+    prompt: 'A warrior digging in behind massive fortifications, doubling their defensive position, immovable stance'
+  },
+  flameBarrier: {
+    prompt: 'A ring of magical fire surrounding a warrior protectively, swirling flame wall, radiant fire shield glowing in darkness'
+  },
+  ghostlyArmor: {
+    prompt: 'Ethereal spectral armor materializing around a warrior, translucent ghostly plates, otherworldly protection'
+  },
+  infernalBlade: {
+    prompt: 'A sword spontaneously igniting with hellfire, demonic flames wrapping the blade, infernal weapon conjured from nothing'
+  },
+  intimidate: {
+    prompt: 'A warriors terrifying dark aura expanding outward, commanding presence, shadow energy radiating from their silhouette'
+  },
+  powerThrough: {
+    prompt: 'A warrior pushing forward through a wall of dark energy, converting adversity into protective power, determination personified'
+  },
+  rage: {
+    prompt: 'Building fury creating a defensive aura around a warrior, red rage energy becoming a visible shield, protective wrath'
+  },
+  secondWind: {
+    prompt: 'A warrior catching their second breath, old scrolls dissolving into healing energy around them, renewed vitality aura'
+  },
+  seeingRed: {
+    prompt: 'A warriors vision turning crimson with fury, gaining energy from pure rage, red-tinted perspective, power rising'
+  },
+  shockwave: {
+    prompt: 'A warrior slamming the ground with a fist, concentric shockwave rings spreading outward across cracked stone floor'
+  },
+  spotWeakness: {
+    prompt: 'A warriors trained eye with a glowing tactical monocle, analyzing a glowing weak point in the air, strategic assessment'
+  },
+  bloodletting: {
+    prompt: 'A warriors open palm with crimson energy orbs rising from it, sacrifice for power, dark ritual glow'
+  },
+
+  // === RARE ATTACKS ===
+  bludgeon: {
+    prompt: 'A massive ornate warhammer raised overhead, crackling with immense stored energy, ground cracking beneath the wielders feet'
+  },
+  feed: {
+    prompt: 'A dark warrior absorbing swirling green life energy into their body, growing stronger, ethereal wisps being drawn inward'
+  },
+  fiendFire: {
+    prompt: 'Hellish fire erupting from a warriors outstretched hands in all directions, cards burning as fuel, massive infernal firestorm'
+  },
+  immolate: {
+    prompt: 'A warrior engulfed in controlled flames, fire radiating outward in all directions, self-immolation as a source of power'
+  },
+  reaper: {
+    prompt: 'A spectral scythe emanating dark and green healing energy simultaneously, death and life intertwined in one weapon, ethereal'
+  },
+
+  // === RARE SKILLS ===
+  doubleTap: {
+    prompt: 'A warrior with a temporal afterimage echo visible beside them, ghostly duplicate of their next motion, time-doubled effect'
+  },
+  exhume: {
+    prompt: 'A hand reaching into a grave to pull out a discarded weapon, resurrection of exhausted power, necromantic recovery'
+  },
+  impervious: {
+    prompt: 'An impenetrable fortress of magical shields layering around a warrior, absolute defense, impenetrable barrier of light'
+  },
+  limitBreak: {
+    prompt: 'A warrior shattering their own limitations, strength doubling, chains breaking, power surge beyond natural limits'
+  },
+  offering: {
+    prompt: 'A warrior offering their own essence at a dark altar, receiving glowing cards and energy orbs in return, sacrificial ritual'
+  },
+
+  // === POWERS ===
+  barricade: {
+    prompt: 'Magical runes inscribing themselves on a shield, block becoming permanent, fortress enchantment activated'
+  },
+  berserk: {
+    prompt: 'A warriors eyes glowing with berserk fury, unstable energy crackling around them, power building dangerously'
+  },
+  brutality: {
+    prompt: 'A warrior in a primal stance drawing cards from dark energy around them, savage wisdom, raw instinctive power'
+  },
+  combust: {
+    prompt: 'Internal combustion building within a warrior, flames erupting from cracks in their armor, living furnace of contained fire'
+  },
+  corruption: {
+    prompt: 'Dark corruption spreading through a warriors armor, skills becoming free but ephemeral, power at a cost'
+  },
+  darkEmbrace: {
+    prompt: 'Shadowy tendrils embracing exhausted cards, drawing new power from destruction, dark recycling magic'
+  },
+  demonForm: {
+    prompt: 'A warrior slowly transforming into a demon, growing horns and strength each turn, dark metamorphosis'
+  },
+  evolve: {
+    prompt: 'Mutations and adaptations occurring in real-time, status cards triggering evolution, biological enhancement'
+  },
+  feelNoPain: {
+    prompt: 'A warrior numbed to all pain, exhausted cards becoming protective energy, transcending suffering'
+  },
+  fireBreathing: {
+    prompt: 'A warrior with draconic features, flames flickering from their mouth, fiery aura surrounding them'
+  },
+  inflame: {
+    prompt: 'Flames wrapping around a warriors fists permanently increasing strength, internal fire power growing'
+  },
+  juggernaut: {
+    prompt: 'An unstoppable armored juggernaut figure radiating force waves with each step, fortress incarnate, immovable power'
+  },
+  metallicize: {
+    prompt: 'Skin slowly turning to living metal, gaining automatic armor each turn, iron transformation'
+  },
+  rupture: {
+    prompt: 'Crimson energy veins cracking along armor and skin, raw power converting loss into strength, glowing transformation'
+  },
+
+  // === STATUS/CURSE ===
+  wound: {
+    prompt: 'A dark cursed mark on weathered armor, spreading dark energy cracks, useless and debilitating, persistent dark magic'
+  },
+  dazed: {
+    prompt: 'Swirling stars and confusion effects, ethereal daze, a mind lost in fog, disorienting magical state'
+  },
+  burn: {
+    prompt: 'A persistent cursed magical flame hovering in darkness, embers that never die, eternal fire curse, unquenchable'
+  },
+  slimed: {
+    prompt: 'Thick green acidic slime coating over armor, heavy and useless, corrosive magical ooze, hindering substance'
   },
   void: {
-    prompt: "A small black hole with worried cartoon eyes, emptiness incarnate, void energy, dark space, cartoon cosmic horror",
+    prompt: 'A void of absolute nothingness, unplayable emptiness, ethereal black hole consuming energy and hope'
   },
+  curse_pain: {
+    prompt: 'A cursed dark thorn vine wrapped around a glowing crystal heart, unplayable dark magic, thorns dripping shadow'
+  },
+  curse_regret: {
+    prompt: 'A mirror showing ghostly past failures, cursed reflection, haunting memories made visible, regret personified'
+  },
+  curse_doubt: {
+    prompt: 'A cursed eye spreading uncertainty, doubt made manifest as dark magic, wavering shadowy aura'
+  },
+  curse_decay: {
+    prompt: 'Rotting corruption spreading from a cursed mark, decay consuming everything, ethereal decomposition'
+  },
+
+  // === ADDITIONAL CARDS (upgraded variants and extras) ===
+  severSoul: {
+    prompt: 'A dark ethereal blade with a ghostly soul energy being separated from it, wisps of spirit energy floating away, soul magic'
+  },
+  darkShackles: {
+    prompt: 'Heavy shadow chains and dark magical shackles floating in darkness, weakening aura emanating, restraint magic'
+  },
+  burningPact: {
+    prompt: 'A flaming scroll contract with arcane symbols, fire consuming old pages while new ones appear, pact with fire'
+  },
+  bloodForBlood: {
+    prompt: 'A dark ceremonial blade on an altar with decreasing crimson candles around it, each flame smaller, reducing cost runes'
+  },
+  fireBreath: {
+    prompt: 'A warrior with draconic features exhaling a cone of magical flame, dragon breath power, fiery aura surrounding them'
+  },
+  infernalStrike: {
+    prompt: 'A sword wreathed in hellfire held aloft, infernal energy radiating outward, demonic blade glowing with power'
+  },
+  flameStrike: {
+    prompt: 'A massive fire-enchanted greatsword with flame trail arcing through the air, scorching energy radiating'
+  },
+  evolvedRage: {
+    prompt: 'Transcendent rage energy evolving beyond normal fury, layered auras of red and gold power, ascended wrath'
+  },
+  demonStrike: {
+    prompt: 'A partially transformed warriors demonic clawed hand crackling with dark energy, shadow flames around the arm'
+  },
+  combust_plus: {
+    prompt: 'Enhanced internal combustion, greater flames erupting from within a warriors armor, intensified living furnace'
+  },
+  doubleTapPlus: {
+    prompt: 'Triple afterimages of a warrior in sequence, enhanced temporal echo effect, perfected time-doubling aura'
+  },
+  seeingRedPlus: {
+    prompt: 'Eyes burning completely crimson, maximum fury energy gain, enhanced rage state, power overflowing'
+  },
+  sentinel_plus: {
+    prompt: 'An enhanced guardian with doubled shield aura, stronger protective stance, empowered sentinel form'
+  },
+  rupturePlus: {
+    prompt: 'More powerful energy-to-strength conversion, greater rupture effect, enhanced transformation glow'
+  },
+  warcryPlus: {
+    prompt: 'An enhanced rallying shout shaking the earth, stronger energy pulse radiating outward, empowered voice'
+  }
 };
+
+// ============================================
+// ENEMY PROMPTS - Dark Fantasy Theme
+// ============================================
 
 const ENEMY_PROMPTS = {
+  // === ACT 1 ===
   cultist: {
-    name: "Nelson the Bully Cultist",
-    prompt: "Nelson Muntz in dark robes performing a bully ritual, HA HA symbol glowing, schoolyard cult leader, menacing but comedic, purple lighting",
+    prompt: 'A hooded cultist with glowing purple ritual marks on face, building dark power each turn, sinister ceremonial robes'
   },
   jawWorm: {
-    name: "Giant Pet Worm",
-    prompt: "A giant friendly earthworm with oversized googly eyes, surprisingly menacing despite cute, playground dirt background, brown and pink colors",
+    prompt: 'A massive segmented worm with razor-sharp mandibles, burrowing from dark earth, armored carapace sections'
   },
   louse_red: {
-    name: "Angry Head Louse",
-    prompt: "A cartoonish red head louse with angry expression, tiny boxing gloves, gross but cute, white background with hair strands",
+    prompt: 'A giant aggressive red parasitic louse with armored shell, sharp pincers, curling defensively, insectoid horror'
   },
   louse_green: {
-    name: "Sickly Head Louse",
-    prompt: "A green head louse looking ill but mean, dripping slime, gross and comedic, white background with hair strands",
+    prompt: 'A bloated green parasitic louse oozing toxic fluid, weakening aura, sickly bioluminescent segments'
   },
   slime_small: {
-    name: "Mystery Meat Blob",
-    prompt: "A small blob of sentient cafeteria mystery meat, googly eyes, green goop dripping, lunch tray background",
+    prompt: 'A small translucent acidic slime creature, simple but corrosive, gelatinous body with visible bones inside'
   },
   slime_medium: {
-    name: "Cafeteria Slime",
-    prompt: "A medium-sized sentient cafeteria blob, multiple eyes, dripping sauce, aggressive expression, cafeteria background",
+    prompt: 'A medium green slime pulsating with absorbed matter, about to split, multiple dark nuclei visible inside'
   },
-  fungiBeast: {
-    name: "Locker Mushroom",
-    prompt: "A sentient mushroom creature with friendly but toxic expression, spore cloud, grown from forgotten lunch, locker background",
-  },
-  looter: {
-    name: "Jimbo the Thief",
-    prompt: "Jimbo Jones from The Simpsons looking sneaky, purple shirt, hands in pockets, mischievous grin, Springfield school hallway background, cartoon delinquent",
-  },
-  gremlinNob: {
-    name: "Gremlin Willie",
-    prompt: "Groundskeeper Willie in gremlin form, muscles bulging, Scottish rage, rake weapon, shirtless and furious, green tint, dramatic pose",
-  },
-  lagavulin: {
-    name: "Sleeping Janitor",
-    prompt: "A heavily armored janitor sleeping in closet, mop and bucket armor, snoring Z symbols, dormant threat, dark closet background",
-  },
-  sentryA: {
-    name: "Hall Monitor Drone",
-    prompt: "A robotic hall monitor with laser eyes, floating drone, HALL PASS display screen, Springfield Elementary security, metallic blue",
-  },
-  bookOfStabbing: {
-    name: "Revenge Diary",
-    prompt: "A floating magical diary with an angry face, pages fluttering dramatically, glowing red aura, spooky book character, dark background, cartoon villain book",
-  },
-  gremlinLeader: {
-    name: "Krusty Gremlin King",
-    prompt: "Krusty the Clown as a gremlin leader, commanding pose, tattered clown outfit, cigar, maniacal laugh, crown, green skin",
-  },
-  writhing_mass: {
-    name: "Kang or Kodos",
-    prompt: "One of the Rigellians Kang or Kodos in writhing tentacle form, drooling, alien terror, UFO background, green and purple",
-  },
-  giant_head: {
-    name: "Olmec Head",
-    prompt: "The Olmec head from Barts treehouse, giant stone face, glowing eyes, ominous countdown numbers, ancient and menacing",
-  },
-  reptomancer: {
-    name: "Snake Handler",
-    prompt: "A sinister snake-handling preacher summoning serpents, dramatic robes, multiple snakes, church window background, green lighting",
-  },
-  slimeBoss: {
-    name: "MEGA CAFETERIA BLOB",
-    prompt: "A giant green slime monster made of cafeteria food, multiple googly eyes, enormous and wobbly, epic boss character, cartoon monster, cafeteria background",
-  },
-  theGuardian: {
-    name: "Radioactive Man Armor",
-    prompt: "Massive Radioactive Man armor suit come to life, epic superhero robot, nuclear powered glow, dramatic defensive pose, comic book style",
-  },
-  hexaghost: {
-    name: "Six Christmas Ghosts",
-    prompt: "Six ghostly Christmas spirits merged into one fiery entity, burning and ethereal, holiday horror, red and orange flames, spooky",
-  },
-  theChamp: {
-    name: "Drederick Tatum",
-    prompt: "Drederick Tatum the boxer as final boss, championship belt, massive fists, boxing ring, gold chains, intimidating stance",
-  },
-  awakened_one: {
-    name: "Awakened Mr Burns",
-    prompt: "Mr Burns awakened to full demonic power, nuclear glow, Excellent finger pose, Smithers cowering, two-phase boss, terrifying",
-  },
-  timeEater: {
-    name: "Professor Frinks Mistake",
-    prompt: "A time-eating entity from Professor Frinks experiment, clock motif body, eating time and space, scientific horror, purple vortex",
-  },
-  corruptHeart: {
-    name: "Heart of Springfield",
-    prompt: "The literal corrupt heart of Springfield, all darkness manifested, tentacles of corruption, invincible shield glow, final boss, massive scale",
-  },
-  // Additional enemies
   slime_large: {
-    name: "Giant Cafeteria Blob",
-    prompt: "A large sentient cafeteria slime blob, many googly eyes, dripping green goo, threatening but silly, cafeteria background, cartoon monster",
+    prompt: 'A large imposing slime creature towering over the warrior, massive gelatinous body, threatening to divide'
   },
   spike_slime_small: {
-    name: "Spiky Jello",
-    prompt: "A small blue spiky jello creature with attitude, pointy protrusions, wiggly and dangerous, cafeteria dessert gone wrong, cartoon",
+    prompt: 'A small blue slime with sharp crystalline spikes protruding, aggressive and toxic, slime applying debuffs'
   },
   spike_slime_medium: {
-    name: "Medium Spiky Jello",
-    prompt: "A medium-sized blue spiky jello monster, multiple sharp points, wobbly menace, cafeteria background, cartoon dessert monster",
+    prompt: 'A medium spiked slime with longer crystal protrusions, blue acidic body, more dangerous and volatile'
   },
+  fungiBeast: {
+    prompt: 'A shambling fungal beast covered in toxic spore mushrooms, releasing poisonous clouds, decomposing flesh host'
+  },
+  looter: {
+    prompt: 'A sneaky masked thief in dark leather, daggers drawn, looking for gold to steal, quick and evasive'
+  },
+  gremlinNob: {
+    prompt: 'A massive muscular gremlin chieftain with a bone club, enraged and powerful, tribal war paint, hulking brute'
+  },
+  lagavulin: {
+    prompt: 'A sleeping ancient stone golem with dormant power, heavy armored shell, devastating once awakened, rune-covered'
+  },
+  sentryA: {
+    prompt: 'A floating magical sentry construct, beam-firing eye, automated dungeon guardian, bronze and crystal construction'
+  },
+
+  // === ACT 2 ===
   chosen: {
-    name: "Teachers Pet",
-    prompt: "Martin Prince as a glowing chosen one, halo effect, smug expression, golden aura, classroom background, cartoon enlightened nerd",
+    prompt: 'A chosen cultist champion with hexing powers, ornate dark robes, glowing third eye, empowered zealot'
   },
   byrd: {
-    name: "Angry Pigeon",
-    prompt: "A mean Springfield pigeon with angry eyes, puffed up feathers, pecking pose, city background, cartoon angry bird",
+    prompt: 'A large aggressive bird creature with razor talons, flying and swooping, feathered nightmare with flight ability'
   },
   snakePlant: {
-    name: "Classroom Plant",
-    prompt: "A sentient classroom plant with vines and angry face, overgrown menace, pot cracked, classroom windowsill, cartoon plant monster",
+    prompt: 'A carnivorous plant with snake-like vines, venomous thorns, writhing tendrils, dark forest predator'
   },
   centurion: {
-    name: "Roman Nerd",
-    prompt: "A school play Roman centurion costume kid, cardboard armor, determined expression, stage background, cartoon theater kid",
+    prompt: 'An undead Roman centurion in corroded bronze armor, shield wall stance, protecting allies, ghostly legion warrior'
+  },
+  bookOfStabbing: {
+    prompt: 'A malevolent floating tome with razor-sharp pages, attacking relentlessly, eldritch book creature, multi-attack'
+  },
+  gremlinLeader: {
+    prompt: 'A cunning gremlin leader commanding lesser gremlins, crown of teeth, tactical intelligence, summoning minions'
   },
   slaverBlue: {
-    name: "Detention Monitor",
-    prompt: "A mean detention hall monitor in blue, clipboard and whistle, disapproving frown, hallway background, cartoon authority figure",
+    prompt: 'A cruel slaver with a barbed whip, blue-tinged skin, applying weakness and dealing damage, sadistic warrior'
+  },
+
+  // === ACT 3 ===
+  writhing_mass: {
+    prompt: 'An amorphous writhing mass of tentacles and eyes, unpredictable attacks, eldritch horror constantly shifting form'
+  },
+  giant_head: {
+    prompt: 'An enormous floating stone head with glowing eyes, counting down to devastating attack, ancient and implacable'
+  },
+  reptomancer: {
+    prompt: 'A reptilian sorcerer summoning dagger minions, scaled skin, staff of serpents, dark ritual magic'
   },
   dagger: {
-    name: "Paper Airplane",
-    prompt: "A sharp paper airplane with angry eyes, swooping pose, pointy and dangerous, classroom background, cartoon projectile",
+    prompt: 'A small animated flying dagger, summoned minion creature, magical blade with its own malevolent will'
   },
   orbWalker: {
-    name: "Science Fair Robot",
-    prompt: "A crude science fair robot with glowing orb, walking awkwardly, wires showing, gymnasium background, cartoon robot",
+    prompt: 'A tall slender construct walking on stilts with a glowing orb core, energy beam attacks, mechanical horror'
   },
   spiker: {
-    name: "Cactus Kid",
-    prompt: "A sentient cactus from the classroom window, spiky and grumpy, pot cracked, desert plant attitude, cartoon plant character",
+    prompt: 'A defensive creature covered in retractable spines, dealing thorns damage when attacked, armored hedgehog beast'
   },
+
+  // === BOSSES ===
+  slimeBoss: {
+    prompt: 'A colossal slime boss filling the chamber, splitting into smaller slimes, massive gelatinous titan, dungeon boss'
+  },
+  theGuardian: {
+    prompt: 'A massive mechanical guardian construct, switching between offensive and defensive modes, ancient dungeon protector'
+  },
+  hexaghost: {
+    prompt: 'A spectral entity with six orbiting ghost flames, building to devastating fire attack, haunted boss creature'
+  },
+  theChamp: {
+    prompt: 'A veteran arena champion warrior, switching between tactical and berserk phases, scarred and powerful fighter'
+  },
+  awakened_one: {
+    prompt: 'A dark entity in first form with bird-like features, then awakening into a devastating second phase, two-form boss'
+  },
+  timeEater: {
+    prompt: 'A time-devouring entity punishing rapid play, clock motifs embedded in eldritch flesh, temporal horror'
+  },
+  corruptHeart: {
+    prompt: 'The corrupt heart of the spire itself, massive pulsating organ with invulnerable shield, final boss entity, cosmic horror'
+  }
 };
 
+// ============================================
+// RELIC PROMPTS - Dark Fantasy Theme
+// ============================================
+
 const RELIC_PROMPTS = {
+  // === STARTER ===
   burning_blood: {
-    name: "Band-Aid Collection",
-    prompt: "A collection of used band-aids arranged in heart shape, glowing red healing energy, slightly gross but magical, simple background",
+    prompt: 'A vial of eternally burning blood, crimson flames licking around the container, healing warmth at combat end'
   },
+
+  // === COMMON ===
   anchor: {
-    name: "Lucky Anchor Sticker",
-    prompt: "A shiny gold anchor sticker with protective glow, scratched but treasured, simple clean background",
+    prompt: 'A heavy iron anchor etched with protective runes, providing starting block, weathered by ocean and magic'
   },
   bag_of_preparation: {
-    name: "Oversized Backpack",
-    prompt: "An enormous bulging backpack full of school supplies, crayon tips poking out, magical storage glow, simple background",
+    prompt: 'An enchanted leather satchel overflowing with scrolls, extra cards drawn at combat start, magical preparation'
+  },
+  blood_vial: {
+    prompt: 'A crystal vial filled with restorative blood, slight healing at combat start, dark red liquid with a faint glow'
+  },
+  bronze_scales: {
+    prompt: 'Overlapping bronze dragon scales formed into an ornate bracer, reflective metallic surface, protective draconic armor piece'
+  },
+  centennial_puzzle: {
+    prompt: 'An ancient puzzle box with a hundred faces, draws cards when first hurt, intricate mechanical artifact'
   },
   lantern: {
-    name: "Krusty Flashlight",
-    prompt: "A Krusty brand flashlight that barely works, Krusty face on it, batteries falling out, yellow glow, simple background",
+    prompt: 'A flickering lantern with an eternal blue flame, granting extra energy on first turn, mystical light'
+  },
+  nunchaku: {
+    prompt: 'Battle-worn nunchaku wrapped in enchanted cloth, building energy through attack combos, martial weapon'
+  },
+  oddly_smooth_stone: {
+    prompt: 'A perfectly smooth river stone with impossible polish, granting dexterity, unnaturally perfect surface'
+  },
+  orichalcum: {
+    prompt: 'A chunk of mythical orichalcum ore glowing amber, providing block when undefended, ancient metal'
+  },
+  pen_nib: {
+    prompt: 'A quill pen nib stained with ink and blood, every tenth attack dealing double damage, counting scratches on it'
   },
   vajra: {
-    name: "Homers Dumbbell",
-    prompt: "A tiny dumbbell with 1 LB written huge on it, comedically light, strength aura, simple background",
+    prompt: 'A diamond-hard vajra thunderbolt weapon, granting starting strength, crackling with contained lightning'
   },
   red_skull: {
-    name: "Broken Red Crayon",
-    prompt: "A broken red crayon snapped in half, glowing with power, determined red color, simple background",
+    prompt: 'A small red crystalline skull glowing when HP is low, granting strength in desperation, dark gem carving'
+  },
+  bag_of_marbles: {
+    prompt: 'A pouch of enchanted glass marbles, applying vulnerability to all enemies at combat start, scattered light'
+  },
+
+  // === UNCOMMON ===
+  blue_candle: {
+    prompt: 'A blue wax candle with an ethereal flame, allowing curses to be played and burned away, ghostly light'
+  },
+  bottled_flame: {
+    prompt: 'A glass bottle containing a captured flame spirit, ensuring an attack in starting hand, fire trapped in glass'
+  },
+  eternal_feather: {
+    prompt: 'A golden feather that never decays, healing at rest based on deck size, pristine angelic plumage'
+  },
+  horn_cleat: {
+    prompt: 'A nautical horn cleat wrapped in enchanted rope, granting block on second turn, maritime artifact'
   },
   kunai: {
-    name: "Sharpened Butter Knife",
-    prompt: "A butter knife that someone tried to sharpen, obviously dull but believing, ninja star pose, simple background",
+    prompt: 'A razor-sharp throwing kunai with a poison edge, gaining dexterity from attack combos, ninja weapon'
+  },
+  letter_opener: {
+    prompt: 'An ornate silver letter opener with a cruel edge, dealing damage through skill combos, aristocratic weapon'
+  },
+  meat_on_the_bone: {
+    prompt: 'A mystical bone with regenerating meat, healing when low HP after combat, cursed sustenance'
+  },
+  mercury_hourglass: {
+    prompt: 'An ornate hourglass filled with flowing liquid mercury instead of sand, silver drops falling, time-themed artifact'
+  },
+  ornamental_fan: {
+    prompt: 'A decorative combat fan with hidden blades, gaining block from attack combos, eastern weapon art'
+  },
+  paper_phrog: {
+    prompt: 'A paper origami frog with magical properties, increasing vulnerable damage, enchanted paper charm'
+  },
+  self_forming_clay: {
+    prompt: 'Living clay that reshapes itself into armor when hurt, gaining block after HP loss, adaptive material'
+  },
+  shuriken: {
+    prompt: 'A star-shaped throwing blade glowing with ki energy, gaining strength from attack combos, ninja star'
+  },
+  singing_bowl: {
+    prompt: 'A bronze singing bowl resonating with healing frequency, offering max HP instead of cards, vibrating artifact'
+  },
+  strike_dummy: {
+    prompt: 'A battered training dummy with glowing strike points, boosting strike card damage, practice target'
+  },
+  torii: {
+    prompt: 'A miniature sacred torii gate, reducing small amounts of incoming damage, protective shrine artifact'
+  },
+
+  // === RARE ===
+  calipers: {
+    prompt: 'Enchanted measuring calipers that preserve block between turns, precision instrument with rune markings'
+  },
+  dead_branch: {
+    prompt: 'A withered branch from a dead world-tree, generating random cards when exhausting, necromantic wood'
+  },
+  du_vu_doll: {
+    prompt: 'A small cloth effigy doll with glowing rune stitching, gaining power from dark magic, curse-empowered artifact'
+  },
+  girya: {
+    prompt: 'A heavy kettlebell weight inscribed with strength runes, trainable at rest sites, iron exercise weight'
   },
   ice_cream: {
-    name: "Infinite Ice Cream",
-    prompt: "An ice cream cone that never melts, magical frozen treat, sparkles, multiple scoops, simple background",
+    prompt: 'A never-melting ice cream in a dark cone, conserving energy between turns, frozen magical treat'
+  },
+  incense_burner: {
+    prompt: 'An ornate incense burner with swirling sacred smoke, granting intangible every six turns, holy artifact'
+  },
+  lizard_tail: {
+    prompt: 'A glowing green lizard tail with regenerative magic emanating, regrowth energy swirling, reptilian renewal artifact'
+  },
+  magic_flower: {
+    prompt: 'A luminous magical flower blooming with healing energy, boosting all healing effects, enchanted blossom'
+  },
+  mango: {
+    prompt: 'A golden mango fruit radiating vitality, permanently raising max HP on pickup, divine fruit'
+  },
+  tungsten_rod: {
+    prompt: 'A heavy tungsten rod absorbing impact, reducing all HP loss by one, dense protective metal bar'
+  },
+
+  // === BOSS ===
+  black_star: {
+    prompt: 'A black crystalline star absorbing light, doubling elite relic drops, void-touched cosmic gem'
   },
   coffee_dripper: {
-    name: "Teachers Coffee",
-    prompt: "An endless coffee pot always brewing, steam rising, Mrs Krabappels mug, caffeine energy, simple background",
+    prompt: 'A magical coffee dripper endlessly brewing dark liquid, extra energy but no resting, cursed caffeine'
+  },
+  cursed_key: {
+    prompt: 'An ornate skeleton key wrapped in cursed chains, extra energy but cursed chests, double-edged artifact'
+  },
+  ectoplasm: {
+    prompt: 'A jar of glowing green ectoplasm, extra energy but no gold gain, ghostly restrictive substance'
+  },
+  runic_dome: {
+    prompt: 'A miniature dome covered in ancient runes, extra energy but hidden enemy intents, sealed knowledge'
   },
   snecko_eye: {
-    name: "Blinkys Third Eye",
-    prompt: "Blinkys third eye with swirling confusion powers, nuclear mutation glow, fish eye, hypnotic spiral, simple background",
+    prompt: 'A preserved snecko eye in amber, drawing extra cards but randomizing costs, chaotic reptilian artifact'
   },
+  sozu: {
+    prompt: 'A traditional sozu water feature cursed with dark magic, extra energy but no potions, restrictive artifact'
+  },
+  velvet_choker: {
+    prompt: 'A tight black velvet choker with a dark gem, extra energy but limiting card plays per turn, constricting'
+  },
+
+  // === SHOP ===
   membership_card: {
-    name: "Kwik-E-Mart Card",
-    prompt: "Apus rewards card laminated and glowing, loyalty card with discount symbol, simple background",
+    prompt: 'A worn merchants guild membership card with a gold seal, shop discount artifact, trade privilege'
   },
+  orange_pellets: {
+    prompt: 'A bottle of glowing orange medicinal pellets, removing debuffs when all card types played, alchemical cure'
+  }
+};
+
+// ============================================
+// POTION PROMPTS - Dark Fantasy Theme
+// ============================================
+
+const POTION_PROMPTS = {
+  fire_potion: {
+    prompt: 'A round flask filled with swirling liquid fire, orange and red flames visible inside glass, cork stopper, explosive'
+  },
+  block_potion: {
+    prompt: 'A stout blue bottle with thick silver liquid, shimmering defensive aura, heavy and protective, ice-blue glow'
+  },
+  energy_potion: {
+    prompt: 'A tall vial of crackling yellow-white lightning liquid, pure energy contained, electric sparks escaping the cork'
+  },
+  explosive_potion: {
+    prompt: 'A round flask with volatile swirling red-orange alchemical mixture, bubbling intensely, radiant energy potion'
+  },
+  weak_potion: {
+    prompt: 'A thin flask of murky green dripping liquid, sapping aura, debilitating alchemical brew, swirling contents'
+  },
+  health_potion: {
+    prompt: 'A heart-shaped bottle of rich crimson healing elixir, warm red glow, restorative blood-red liquid, golden stopper'
+  },
+  strength_potion: {
+    prompt: 'A muscular-shaped bottle of deep red power liquid, veins of energy visible inside, raw strength essence'
+  },
+  dexterity_potion: {
+    prompt: 'A sleek elongated flask of swirling green agility liquid, fluid and graceful, speed essence, emerald glow'
+  },
+  speed_potion: {
+    prompt: 'A streamlined vial of quicksilver-blue rushing liquid, motion blur on the contents, haste and card draw'
+  },
+  fear_potion: {
+    prompt: 'A dark purple bottle with swirling shadow faces visible in the mist inside, unsettling aura, vulnerability elixir'
+  },
+  fairy_potion: {
+    prompt: 'A small bottle with a trapped fairy spirit glowing inside, revival magic, golden light, tiny wings visible'
+  },
+  cultist_potion: {
+    prompt: 'A chalice-shaped vessel of swirling dark purple arcane liquid, extreme power boost, concentrated ritual energy'
+  },
+  duplication_potion: {
+    prompt: 'A bottle containing a mirror-like reflective liquid, showing doubles of everything nearby, copy magic'
+  },
+  essence_of_steel: {
+    prompt: 'A flask of liquid metal, steel essence that hardens into plated armor, silvery and impossibly dense'
+  },
+  heart_of_iron: {
+    prompt: 'A heart-shaped iron container with molten metal inside, granting metallicize, core of a construct'
+  }
 };
 
 // ============================================
@@ -521,7 +741,7 @@ async function downloadImage(url, filepath) {
         resolve(filepath);
       });
     }).on('error', (err) => {
-      fs.unlink(filepath, () => {}); // Delete partial file
+      fs.unlink(filepath, () => {});
       reject(err);
     });
   });
@@ -533,55 +753,72 @@ function ensureDir(dir) {
   }
 }
 
+function getOutputSubdir(type) {
+  switch (type) {
+    case 'card': return 'cards';
+    case 'enemy': return 'enemies';
+    case 'relic': return 'relics';
+    case 'potion': return 'potions';
+    default: return type + 's';
+  }
+}
+
 // ============================================
 // IMAGE GENERATION
 // ============================================
 
 async function generateImage(openai, prompt, type, id, options = {}) {
-  const fullPrompt = `${prompt}, ${STYLE_BASE}, ${ASPECT_RATIOS[type]}, high quality, clean lines, no text, no watermark`;
-
-  const size = type === 'card' ? '1024x1792' : '1024x1024';
+  const fullPrompt = `${prompt}, ${STYLE_BASE}, ${CATEGORY_STYLE[type]}`;
 
   console.log(`\n[${type}/${id}] Generating...`);
   if (options.dryRun) {
-    console.log(`  Prompt: ${fullPrompt.substring(0, 100)}...`);
-    console.log(`  Size: ${size}`);
+    console.log(`  Prompt: ${fullPrompt.substring(0, 120)}...`);
+    console.log(`  Size: ${CONFIG.size}`);
     return { success: true, dryRun: true };
   }
 
-  try {
-    const response = await openai.images.generate({
-      model: CONFIG.model,
-      prompt: fullPrompt,
-      n: 1,
-      size: size,
-      quality: options.quality || CONFIG.quality,
-    });
+  for (let attempt = 1; attempt <= CONFIG.maxRetries; attempt++) {
+    try {
+      const response = await openai.images.generate({
+        model: CONFIG.model,
+        prompt: fullPrompt,
+        n: 1,
+        size: CONFIG.size,
+        quality: options.quality || CONFIG.quality,
+      });
 
-    const imageUrl = response.data[0].url;
-    const revisedPrompt = response.data[0].revised_prompt;
+      const imageUrl = response.data[0].url;
+      const revisedPrompt = response.data[0].revised_prompt;
 
-    // Download and save
-    const outputDir = path.join(CONFIG.outputDir, type === 'enemy' ? 'enemies' : `${type}s`);
-    ensureDir(outputDir);
+      // Download and save
+      const outputDir = path.join(CONFIG.outputDir, getOutputSubdir(type));
+      ensureDir(outputDir);
 
-    const filepath = path.join(outputDir, `${id}.png`);
-    await downloadImage(imageUrl, filepath);
+      const filepath = path.join(outputDir, `${id}.png`);
+      await downloadImage(imageUrl, filepath);
 
-    console.log(`  Saved: ${filepath}`);
-    if (revisedPrompt && revisedPrompt !== fullPrompt) {
-      console.log(`  Note: DALL-E revised the prompt`);
+      console.log(`  Saved: ${filepath}`);
+      if (revisedPrompt && revisedPrompt !== fullPrompt) {
+        console.log(`  Note: DALL-E revised the prompt`);
+      }
+
+      return { success: true, filepath, revisedPrompt };
+
+    } catch (error) {
+      console.error(`  Attempt ${attempt}/${CONFIG.maxRetries} ERROR: ${error.message}`);
+      if (error.code === 'content_policy_violation') {
+        console.error(`  Content policy violation - skipping`);
+        return { success: false, error: error.message };
+      }
+      if (attempt < CONFIG.maxRetries) {
+        const backoff = attempt * 2000;
+        console.log(`  Retrying in ${backoff}ms...`);
+        await sleep(backoff);
+      }
     }
-
-    return { success: true, filepath, revisedPrompt };
-
-  } catch (error) {
-    console.error(`  ERROR: ${error.message}`);
-    if (error.code === 'content_policy_violation') {
-      console.error(`  Content policy violation - prompt may need adjustment`);
-    }
-    return { success: false, error: error.message };
   }
+
+  return { success: false, error: 'Max retries exceeded' };
 }
 
 // ============================================
@@ -589,11 +826,11 @@ async function generateImage(openai, prompt, type, id, options = {}) {
 // ============================================
 
 async function main() {
-  // Parse arguments
   const args = process.argv.slice(2);
   const options = {
     type: 'all',
     dryRun: args.includes('--dry-run'),
+    skipExisting: args.includes('--skip-existing'),
     quality: 'standard',
     only: null,
     start: null,
@@ -606,30 +843,27 @@ async function main() {
     if (arg.startsWith('--start=')) options.start = arg.split('=')[1];
   });
 
-  // Check API key
   if (!process.env.OPENAI_API_KEY && !options.dryRun) {
     console.error('ERROR: OPENAI_API_KEY environment variable not set');
-    console.error('Usage: OPENAI_API_KEY=your_key node scripts/generate-images.js');
+    console.error('Usage: OPENAI_API_KEY=your_key node scripts/generate-images.js [options]');
     process.exit(1);
   }
 
-  // Only initialize OpenAI if not doing a dry run
   const openai = options.dryRun ? null : new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
   console.log('='.repeat(60));
-  console.log('RALPH WIGGUM SPIRE ASCENT - AI IMAGE GENERATOR');
+  console.log('SPIRE ASCENT - DARK FANTASY ART GENERATOR');
   console.log('='.repeat(60));
   console.log(`Type: ${options.type}`);
-  console.log(`Quality: ${options.quality}`);
+  console.log(`Quality: ${options.quality} ($${options.quality === 'hd' ? '0.08' : '0.04'}/image)`);
   console.log(`Dry run: ${options.dryRun}`);
+  console.log(`Skip existing: ${options.skipExisting}`);
   if (options.only) console.log(`Only: ${options.only.join(', ')}`);
   if (options.start) console.log(`Starting from: ${options.start}`);
   console.log('='.repeat(60));
 
-  // Load progress
   const progress = loadProgress();
   console.log(`\nPreviously completed: ${progress.completed.length} images`);
-  console.log(`Previously failed: ${progress.failed.length} images`);
 
   // Build generation queue
   const queue = [];
@@ -638,34 +872,32 @@ async function main() {
     const key = `${type}/${id}`;
     if (progress.completed.includes(key)) return false;
     if (options.only && !options.only.includes(id)) return false;
+    if (options.skipExisting) {
+      const dir = path.join(CONFIG.outputDir, getOutputSubdir(type));
+      const extensions = ['.png', '.webp', '.jpg'];
+      for (const ext of extensions) {
+        if (fs.existsSync(path.join(dir, `${id}${ext}`))) return false;
+      }
+    }
     return true;
   };
 
   let startFound = !options.start;
 
-  if (options.type === 'all' || options.type === 'cards') {
-    Object.entries(CARD_PROMPTS).forEach(([id, data]) => {
-      if (!startFound && id === options.start) startFound = true;
-      if (startFound && shouldGenerate('card', id)) {
-        queue.push({ type: 'card', id, prompt: data.prompt });
-      }
-    });
-  }
+  const promptSets = {
+    cards: { prompts: CARD_PROMPTS, type: 'card' },
+    enemies: { prompts: ENEMY_PROMPTS, type: 'enemy' },
+    relics: { prompts: RELIC_PROMPTS, type: 'relic' },
+    potions: { prompts: POTION_PROMPTS, type: 'potion' },
+  };
 
-  if (options.type === 'all' || options.type === 'enemies') {
-    Object.entries(ENEMY_PROMPTS).forEach(([id, data]) => {
-      if (!startFound && id === options.start) startFound = true;
-      if (startFound && shouldGenerate('enemy', id)) {
-        queue.push({ type: 'enemy', id, prompt: data.prompt });
-      }
-    });
-  }
+  for (const [setName, { prompts, type }] of Object.entries(promptSets)) {
+    if (options.type !== 'all' && options.type !== setName) continue;
 
-  if (options.type === 'all' || options.type === 'relics') {
-    Object.entries(RELIC_PROMPTS).forEach(([id, data]) => {
+    Object.entries(prompts).forEach(([id, data]) => {
       if (!startFound && id === options.start) startFound = true;
-      if (startFound && shouldGenerate('relic', id)) {
-        queue.push({ type: 'relic', id, prompt: data.prompt });
+      if (startFound && shouldGenerate(type, id)) {
+        queue.push({ type, id, prompt: data.prompt });
       }
     });
   }
@@ -673,25 +905,24 @@ async function main() {
   console.log(`\nImages to generate: ${queue.length}`);
 
   if (queue.length === 0) {
-    console.log('Nothing to generate!');
+    console.log('Nothing to generate! All images exist or are completed.');
     return;
   }
 
-  // Estimate cost
   const costPerImage = options.quality === 'hd' ? 0.08 : 0.04;
-  const portraitCost = options.quality === 'hd' ? 0.12 : 0.08;
-  const cardCount = queue.filter(q => q.type === 'card').length;
-  const otherCount = queue.length - cardCount;
-  const estimatedCost = (cardCount * portraitCost) + (otherCount * costPerImage);
-
+  const estimatedCost = queue.length * costPerImage;
   console.log(`Estimated cost: $${estimatedCost.toFixed(2)}`);
+  console.log(`\nBreakdown:`);
+  console.log(`  Cards:   ${queue.filter(q => q.type === 'card').length}`);
+  console.log(`  Enemies: ${queue.filter(q => q.type === 'enemy').length}`);
+  console.log(`  Relics:  ${queue.filter(q => q.type === 'relic').length}`);
+  console.log(`  Potions: ${queue.filter(q => q.type === 'potion').length}`);
 
   if (!options.dryRun) {
     console.log('\nStarting generation in 3 seconds... (Ctrl+C to cancel)');
     await sleep(3000);
   }
 
-  // Generate images
   let successCount = 0;
   let failCount = 0;
 
@@ -715,18 +946,15 @@ async function main() {
       }
     }
 
-    // Save progress after each image
     if (!options.dryRun) {
       saveProgress(progress);
     }
 
-    // Rate limiting
     if (i < queue.length - 1 && !options.dryRun) {
       await sleep(CONFIG.rateLimitDelay);
     }
   }
 
-  // Summary
   console.log('\n' + '='.repeat(60));
   console.log('GENERATION COMPLETE');
   console.log('='.repeat(60));

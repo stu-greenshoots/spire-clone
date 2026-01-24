@@ -12,7 +12,10 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "validate": "eslint . && vitest run && vite build",
-    "validate:quick": "vitest run"
+    "validate:quick": "vitest run",
+    "generate-art": "node scripts/generate-images.js",
+    "generate-art:dry": "node scripts/generate-images.js --dry-run",
+    "compress-images": "node scripts/compress-images.js"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -33,6 +36,7 @@
     "globals": "^16.5.0",
     "jsdom": "^27.4.0",
     "openai": "^6.16.0",
+    "sharp": "^0.33.5",
     "vite": "^7.2.4",
     "vitest": "^4.0.17"
   }

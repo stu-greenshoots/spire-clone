@@ -1,6 +1,7 @@
 import { useState, useEffect, memo } from 'react';
 import { INTENT } from '../data/enemies';
-import { getEnemyArtInfo, getRalphEnemyName } from '../assets/art/art-config';
+import { getEnemyArtInfo } from '../assets/art/art-config';
+import { getEnemyImagePath, getEnemySizeForType, hasImage, preloadEnemyImage } from '../utils/assetLoader';
 
 // ASCII art representations for enemies
 const getEnemyArt = (enemyId, type) => {
@@ -116,18 +117,30 @@ const getIntentDisplay = (enemy) => {
   }
 };
 
-const Enemy = memo(function Enemy({ enemy, onClick, targeted, showRalphTheme = true, hideIntents = false }) {
+const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = false }) {
   const [isEntering, setIsEntering] = useState(true);
+  const [imageReady, setImageReady] = useState(() => hasImage(enemy.id));
   const hpPercentage = (enemy.currentHp / enemy.maxHp) * 100;
   const enemyArt = getEnemyArt(enemy.id, enemy.type);
   const intentDisplay = getIntentDisplay(enemy);
   const isBoss = enemy.type === 'boss';
   const isElite = enemy.type === 'elite';
 
-  // Ralph Wiggum theming
-  const ralphArtInfo = getEnemyArtInfo(enemy.id);
-  const ralphName = showRalphTheme ? getRalphEnemyName(enemy.id) : null;
-  const displayName = ralphName || enemy.name;
+  // Asset pipeline: lazy-load enemy image (don't block initial render)
+  useEffect(() => {
+    if (!hasImage(enemy.id)) {
+      preloadEnemyImage(enemy.id)
+        .then(() => setImageReady(true))
+        .catch(() => setImageReady(false));
+    }
+  }, [enemy.id]);
+
+  const artInfo = getEnemyArtInfo(enemy.id);
+  const displayName = enemy.name;
+
+  // Determine the asset pipeline image path and size
+  const enemyImagePath = getEnemyImagePath(enemy.id);
+  const enemyImageSize = getEnemySizeForType(enemy.type);
 
   // Boss/Elite entrance animation
   useEffect(() => {
@@ -270,8 +283,30 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, showRalphTheme = t
         position: 'relative',
         marginBottom: '6px'
       }}>
-        {/* Image or ASCII Art Container */}
-        {ralphArtInfo.hasImage ? (
+        {/* Priority: 1) Asset pipeline image, 2) Ralph art image, 3) ASCII art */}
+        {imageReady ? (
+          <div style={{
+            width: isBoss ? '100px' : isElite ? '85px' : '70px',
+            height: isBoss ? '100px' : isElite ? '85px' : '70px',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            border: `2px solid ${enemyArt.color}`,
+            boxShadow: `0 0 15px ${enemyArt.color}44`
+          }}>
+            <img
+              src={enemyImagePath}
+              alt={displayName}
+              width={enemyImageSize}
+              height={enemyImageSize}
+              loading="lazy"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover'
+              }}
+            />
+          </div>
+        ) : artInfo.hasImage ? (
           <div style={{
             width: isBoss ? '100px' : '70px',
             height: isBoss ? '100px' : '70px',
@@ -281,7 +316,7 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, showRalphTheme = t
             boxShadow: `0 0 15px ${enemyArt.color}44`
           }}>
             <img
-              src={ralphArtInfo.imageUrl}
+              src={artInfo.imageUrl}
               alt={displayName}
               style={{
                 width: '100%',
@@ -309,8 +344,8 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, showRalphTheme = t
           </div>
         )}
 
-        {/* Emoji overlay for mobile clarity (only when no image) */}
-        {!ralphArtInfo.hasImage && (
+        {/* Emoji overlay for mobile clarity (only when no image from either pipeline) */}
+        {!imageReady && !artInfo.hasImage && (
           <div style={{
             position: 'absolute',
             bottom: '-5px',

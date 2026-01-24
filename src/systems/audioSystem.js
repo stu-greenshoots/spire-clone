@@ -1,34 +1,490 @@
-const sounds = {};
-let muted = localStorage.getItem('audioMuted') === 'true';
-
-// Preload sounds
-const soundFiles = {
-  cardPlay: '/sounds/card-play.mp3',
-  hit: '/sounds/hit.mp3',
-  block: '/sounds/block.mp3',
-  enemyDeath: '/sounds/enemy-death.mp3',
-  goldPickup: '/sounds/gold.mp3',
+// Sound category and ID constants
+export const SOUNDS = {
+  combat: {
+    cardPlay: 'card_play',
+    cardDraw: 'card_draw',
+    attack: 'attack_hit',
+    block: 'block_gain',
+    enemyAttack: 'enemy_attack',
+    playerHurt: 'player_hurt',
+    enemyDeath: 'enemy_death',
+    buff: 'buff_apply',
+    debuff: 'debuff_apply',
+    heal: 'heal',
+    poison: 'poison_tick',
+    turnStart: 'turn_start',
+    turnEnd: 'turn_end',
+    victory: 'combat_victory'
+  },
+  ui: {
+    buttonClick: 'ui_click',
+    cardHover: 'card_hover',
+    menuOpen: 'menu_open',
+    goldGain: 'gold_gain',
+    relicPickup: 'relic_pickup',
+    error: 'ui_error'
+  },
+  ambient: {
+    mapAmbience: 'map_ambience',
+    shopAmbience: 'shop_ambience',
+    restAmbience: 'rest_ambience'
+  },
+  music: {
+    menu: 'music_menu',
+    combat: 'music_combat',
+    boss: 'music_boss',
+    map: 'music_map',
+    shop: 'music_shop',
+    event: 'music_event',
+    victory: 'music_victory'
+  }
 };
 
+const STORAGE_KEY = 'spire_audio_settings';
+
+class AudioManager {
+  constructor() {
+    // Volume levels (0.0 - 1.0)
+    this.masterVolume = 1.0;
+    this.sfxVolume = 0.8;
+    this.musicVolume = 0.5;
+    this.muted = false;
+
+    // Sound categories
+    this.categories = {
+      combat: {},
+      ui: {},
+      ambient: {},
+      music: {}
+    };
+
+    // Current music state
+    this.currentMusic = null;
+    this.musicFading = false;
+    this._fadeInterval = null;
+
+    // Audio cache
+    this._audioCache = {};
+
+    // Preload queue: tracks which sounds are eagerly vs lazily loaded
+    this._preloadQueue = {
+      eager: [],  // Loaded immediately (combat sounds)
+      lazy: []    // Loaded on-demand or when idle (ui, ambient, music)
+    };
+
+    // Phase-based music selection
+    this._phases = {};  // { phaseName: trackId }
+    this._currentPhase = null;
+
+    // Load persisted settings
+    this.loadSettings();
+  }
+
+  /**
+   * Get effective volume for a category
+   */
+  _getEffectiveVolume(category) {
+    if (this.muted) return 0;
+    const categoryMultiplier = (category === 'music') ? this.musicVolume : this.sfxVolume;
+    return this.masterVolume * categoryMultiplier;
+  }
+
+  /**
+   * Try to create and cache an Audio element for a sound ID.
+   * Returns null silently if the audio file doesn't exist.
+   */
+  _getAudio(soundId) {
+    if (this._audioCache[soundId]) {
+      return this._audioCache[soundId];
+    }
+    try {
+      const audio = new Audio(`/sounds/${soundId}.mp3`);
+      audio.preload = 'auto';
+      this._audioCache[soundId] = audio;
+      return audio;
+    } catch {
+      // Silent fallback - no errors when audio files don't exist
+      return null;
+    }
+  }
+
+  /**
+   * Play a sound effect
+   */
+  playSFX(soundId, category = 'combat') {
+    if (this.muted) return;
+
+    const volume = this._getEffectiveVolume(category);
+    if (volume <= 0) return;
+
+    const audio = this._getAudio(soundId);
+    if (!audio) return;
+
+    try {
+      audio.volume = volume;
+      audio.currentTime = 0;
+      audio.play().catch(() => {
+        // Silent fallback - audio play can fail in many environments
+      });
+    } catch {
+      // Silent fallback
+    }
+  }
+
+  /**
+   * Play a music track with optional loop and fade-in
+   */
+  playMusic(trackId, { loop = true, fadeIn = 1000 } = {}) {
+    // Stop current music first
+    if (this.currentMusic) {
+      this.stopMusic({ fadeOut: 0 });
+    }
+
+    const audio = this._getAudio(trackId);
+    if (!audio) return;
+
+    audio.loop = loop;
+    this.currentMusic = { trackId, audio };
+
+    const targetVolume = this._getEffectiveVolume('music');
+
+    if (fadeIn > 0 && targetVolume > 0) {
+      audio.volume = 0;
+      try {
+        audio.play().catch(() => {});
+      } catch {
+        return;
+      }
+      this._fadeAudio(audio, 0, targetVolume, fadeIn);
+    } else {
+      audio.volume = targetVolume;
+      try {
+        audio.play().catch(() => {});
+      } catch {
+        // Silent fallback
+      }
+    }
+  }
+
+  /**
+   * Stop the currently playing music with optional fade-out
+   */
+  stopMusic({ fadeOut = 1000 } = {}) {
+    if (!this.currentMusic) return;
+
+    const { audio } = this.currentMusic;
+
+    if (fadeOut > 0 && audio.volume > 0) {
+      this.musicFading = true;
+      this._fadeAudio(audio, audio.volume, 0, fadeOut, () => {
+        audio.pause();
+        audio.currentTime = 0;
+        this.currentMusic = null;
+        this.musicFading = false;
+      });
+    } else {
+      this._clearFade();
+      audio.pause();
+      audio.currentTime = 0;
+      this.currentMusic = null;
+      this.musicFading = false;
+    }
+  }
+
+  /**
+   * Crossfade from current music to a new track
+   */
+  crossfadeMusic(newTrackId, duration = 2000) {
+    const oldMusic = this.currentMusic;
+
+    if (!oldMusic) {
+      // No current music, just play the new one
+      this.playMusic(newTrackId, { fadeIn: duration / 2 });
+      return;
+    }
+
+    const { audio: oldAudio } = oldMusic;
+    this.musicFading = true;
+
+    // Fade out old track
+    this._fadeAudio(oldAudio, oldAudio.volume, 0, duration, () => {
+      oldAudio.pause();
+      oldAudio.currentTime = 0;
+    });
+
+    // Start new track with fade in
+    const newAudio = this._getAudio(newTrackId);
+    if (!newAudio) {
+      this.musicFading = false;
+      this.currentMusic = null;
+      return;
+    }
+
+    newAudio.loop = true;
+    newAudio.volume = 0;
+    this.currentMusic = { trackId: newTrackId, audio: newAudio };
+
+    try {
+      newAudio.play().catch(() => {});
+    } catch {
+      // Silent fallback
+    }
+
+    const targetVolume = this._getEffectiveVolume('music');
+    this._fadeAudio(newAudio, 0, targetVolume, duration, () => {
+      this.musicFading = false;
+    });
+  }
+
+  /**
+   * Fade audio volume from start to end over duration (ms)
+   */
+  _fadeAudio(audio, fromVolume, toVolume, duration, onComplete) {
+    this._clearFade();
+
+    const steps = 20;
+    const stepTime = duration / steps;
+    const volumeStep = (toVolume - fromVolume) / steps;
+    let currentStep = 0;
+
+    audio.volume = fromVolume;
+
+    this._fadeInterval = setInterval(() => {
+      currentStep++;
+      const newVolume = Math.max(0, Math.min(1, fromVolume + volumeStep * currentStep));
+      try {
+        audio.volume = newVolume;
+      } catch {
+        // Silent fallback
+      }
+
+      if (currentStep >= steps) {
+        this._clearFade();
+        try {
+          audio.volume = Math.max(0, Math.min(1, toVolume));
+        } catch {
+          // Silent fallback
+        }
+        if (onComplete) onComplete();
+      }
+    }, stepTime);
+  }
+
+  /**
+   * Clear any active fade interval
+   */
+  _clearFade() {
+    if (this._fadeInterval) {
+      clearInterval(this._fadeInterval);
+      this._fadeInterval = null;
+    }
+  }
+
+  /**
+   * Set master volume (0.0 - 1.0)
+   */
+  setMasterVolume(level) {
+    this.masterVolume = Math.max(0, Math.min(1, level));
+    this._updateCurrentMusicVolume();
+    this.saveSettings();
+  }
+
+  /**
+   * Set SFX volume (0.0 - 1.0)
+   */
+  setSFXVolume(level) {
+    this.sfxVolume = Math.max(0, Math.min(1, level));
+    this.saveSettings();
+  }
+
+  /**
+   * Set music volume (0.0 - 1.0)
+   */
+  setMusicVolume(level) {
+    this.musicVolume = Math.max(0, Math.min(1, level));
+    this._updateCurrentMusicVolume();
+    this.saveSettings();
+  }
+
+  /**
+   * Set muted state
+   */
+  setMuted(value) {
+    this.muted = Boolean(value);
+    this._updateCurrentMusicVolume();
+    this.saveSettings();
+  }
+
+  /**
+   * Toggle muted state
+   */
+  toggleMute() {
+    this.setMuted(!this.muted);
+    return this.muted;
+  }
+
+  /**
+   * Update volume on currently playing music
+   */
+  _updateCurrentMusicVolume() {
+    if (this.currentMusic && this.currentMusic.audio && !this.musicFading) {
+      const vol = this._getEffectiveVolume('music');
+      try {
+        this.currentMusic.audio.volume = vol;
+      } catch {
+        // Silent fallback
+      }
+    }
+  }
+
+  /**
+   * Save audio settings to localStorage
+   */
+  saveSettings() {
+    try {
+      const settings = {
+        masterVolume: this.masterVolume,
+        sfxVolume: this.sfxVolume,
+        musicVolume: this.musicVolume,
+        muted: this.muted
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+    } catch {
+      // Silent fallback if localStorage is unavailable
+    }
+  }
+
+  /**
+   * Load audio settings from localStorage
+   */
+  loadSettings() {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const settings = JSON.parse(stored);
+        if (typeof settings.masterVolume === 'number') {
+          this.masterVolume = Math.max(0, Math.min(1, settings.masterVolume));
+        }
+        if (typeof settings.sfxVolume === 'number') {
+          this.sfxVolume = Math.max(0, Math.min(1, settings.sfxVolume));
+        }
+        if (typeof settings.musicVolume === 'number') {
+          this.musicVolume = Math.max(0, Math.min(1, settings.musicVolume));
+        }
+        if (typeof settings.muted === 'boolean') {
+          this.muted = settings.muted;
+        }
+      }
+    } catch {
+      // Silent fallback if localStorage is unavailable or data is corrupt
+    }
+  }
+
+  /**
+   * Preload a list of sound IDs for faster playback
+   */
+  preload(soundIds) {
+    if (!Array.isArray(soundIds)) return;
+    soundIds.forEach(id => {
+      this._getAudio(id);
+    });
+  }
+
+  /**
+   * Initialize preload queue: combat sounds are eager (loaded immediately),
+   * other categories are lazy (loaded on first use or when idle).
+   */
+  initPreloadQueue() {
+    // Eager: combat sounds loaded immediately
+    const combatSounds = Object.values(SOUNDS.combat);
+    this._preloadQueue.eager = [...combatSounds];
+    this.preload(combatSounds);
+
+    // Lazy: ui, ambient, music sounds loaded on-demand
+    const lazySounds = [
+      ...Object.values(SOUNDS.ui),
+      ...Object.values(SOUNDS.ambient),
+      ...Object.values(SOUNDS.music)
+    ];
+    this._preloadQueue.lazy = [...lazySounds];
+  }
+
+  /**
+   * Load lazy sounds (call when idle or after initial load).
+   * Loads one batch at a time to avoid blocking.
+   */
+  loadLazySounds(batchSize = 5) {
+    const batch = this._preloadQueue.lazy.splice(0, batchSize);
+    if (batch.length > 0) {
+      this.preload(batch);
+    }
+    return this._preloadQueue.lazy.length;
+  }
+
+  /**
+   * Register phase-based music mappings.
+   * Phases allow automatic track selection based on game state.
+   * @param {Object} phaseMap - { phaseName: trackId }
+   * Example: { explore: 'music_map', combat: 'music_combat', boss: 'music_boss' }
+   */
+  setPhases(phaseMap) {
+    if (typeof phaseMap !== 'object' || phaseMap === null) return;
+    this._phases = { ...phaseMap };
+  }
+
+  /**
+   * Get the current phase name
+   */
+  getCurrentPhase() {
+    return this._currentPhase;
+  }
+
+  /**
+   * Transition to a named music phase.
+   * Automatically crossfades to the track associated with the phase.
+   * @param {string} phaseName - The phase to transition to
+   * @param {number} fadeDuration - Crossfade duration in ms
+   */
+  setPhase(phaseName, fadeDuration = 2000) {
+    if (this._currentPhase === phaseName) return;
+    const trackId = this._phases[phaseName];
+    if (!trackId) return;
+
+    this._currentPhase = phaseName;
+
+    if (this.currentMusic) {
+      this.crossfadeMusic(trackId, fadeDuration);
+    } else {
+      this.playMusic(trackId, { fadeIn: fadeDuration / 2 });
+    }
+  }
+
+  /**
+   * Get all registered phases
+   */
+  getPhases() {
+    return { ...this._phases };
+  }
+}
+
+export const audioManager = new AudioManager();
+
+// Legacy compatibility exports
 export function preloadSounds() {
-  Object.entries(soundFiles).forEach(([name, path]) => {
-    sounds[name] = new Audio(path);
-    sounds[name].preload = 'auto';
-  });
+  const combatSounds = Object.values(SOUNDS.combat);
+  audioManager.preload(combatSounds);
 }
 
 export function playSound(name) {
-  if (muted || !sounds[name]) return;
-  const sound = sounds[name];
-  sound.currentTime = 0;
-  sound.play().catch(() => {});
+  audioManager.playSFX(name, 'combat');
 }
 
 export function setMuted(value) {
-  muted = value;
-  localStorage.setItem('audioMuted', String(value));
+  audioManager.setMuted(value);
 }
 
 export function isMuted() {
-  return muted;
+  return audioManager.muted;
 }
+
+export default audioManager;

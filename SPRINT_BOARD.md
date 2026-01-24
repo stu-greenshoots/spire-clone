@@ -1,6 +1,6 @@
 # Sprint Board - Spire Ascent
 
-**Last Updated:** 2026-01-23
+**Last Updated:** 2026-01-24
 **Sprint:** 1 (Foundation & Feel)
 
 ---
@@ -8,32 +8,32 @@
 ## Phase 1: Foundation & Feel (Sprint 1-2)
 
 ### Architecture Track
-- [ ] **BE-01** | Back Ender | Split GameContext into domain reducers | Dependencies: None
+- [x] **BE-01** | Back Ender | Split GameContext into domain reducers | Dependencies: None
 - [ ] **BE-02** | Back Ender | Normalize game state (IDs not indices) | Dependencies: BE-01
 
 ### Content Track
-- [ ] **SL-01** | Story Line | Create 20 meaningful events | Dependencies: None
-- [ ] **SL-02** | Story Line | World building & card flavor text | Dependencies: None
+- [x] **SL-01** | Story Line | Create 20 meaningful events | Dependencies: None
+- [x] **SL-02** | Story Line | World building & card flavor text | Dependencies: None
 
 ### Quality Track
-- [ ] **QA-01** | Tester | Component test coverage (30+ tests) | Dependencies: None
-- [ ] **QA-02** | Tester | Balance testing framework (1000-run sim) | Dependencies: None
+- [x] **QA-01** | Tester | Component test coverage (30+ tests) | Dependencies: None
+- [x] **QA-02** | Tester | Balance testing framework (1000-run sim) | Dependencies: None
 
 ### Feel Track
-- [ ] **UX-01** | UX Guy | Combat feedback overhaul | Dependencies: None (stubs art/audio)
+- [x] **UX-01** | UX Guy | Combat feedback overhaul | Dependencies: None (stubs art/audio)
 - [ ] **UX-02** | UX Guy | Card info hierarchy & tooltips | Dependencies: None
 
 ### Art & Audio Track
-- [ ] **GD-01** | Graphic Designer | Enemy art pipeline & consistency | Dependencies: None
+- [x] **GD-01** | Graphic Designer | Enemy art pipeline & consistency | Dependencies: None
 - [ ] **GD-02** | Graphic Designer | Card frame & type visual system | Dependencies: GD-01
-- [ ] **AR-01** | Allrounder | Audio system expansion | Dependencies: None
+- [x] **AR-01** | Allrounder | Audio system expansion | Dependencies: None
 
 ### Junior Track
-- [ ] **JR-01** | Junior | Potion system implementation | Dependencies: None (data layer first)
+- [x] **JR-01** | Junior | Potion system implementation | Dependencies: None (data layer first)
 - [ ] **JR-02** | Junior | Card upgrade system polish | Dependencies: None
 
 ### Project Management
-- [ ] **PM-01** | PM | Sprint board & definition of done | Dependencies: None
+- [x] **PM-01** | PM | Sprint board & definition of done | Dependencies: None
 
 ---
 
@@ -68,18 +68,18 @@
 ### Morning Block (Parallel - Zero Conflicts)
 | Task | Owner | Touches | Status |
 |------|-------|---------|--------|
-| BE-01 | BE | src/context/ | Not Started |
-| SL-01 | SL | src/data/events.js (NEW) | Not Started |
-| QA-02 | QA | src/test/balance/ (NEW) | Not Started |
-| PM-01 | PM | markdown files, package.json | Not Started |
-| GD-01 | GD | public/images/, Enemy.jsx | Not Started |
-| AR-01 | AR | src/systems/audioSystem.js | Not Started |
+| BE-01 | BE | src/context/ | Done |
+| SL-01 | SL | src/data/events.js (NEW) | Done |
+| QA-02 | QA | src/test/balance/ (NEW) | Done |
+| PM-01 | PM | markdown files, package.json | Done |
+| GD-01 | GD | public/images/, Enemy.jsx | Done |
+| AR-01 | AR | src/systems/audioSystem.js | Done |
 
 ### Afternoon Block (After Morning Validation)
 | Task | Owner | Touches | Status |
 |------|-------|---------|--------|
-| JR-01 | JR | src/data/potions.js, src/systems/potionSystem.js (NEW) | Not Started |
-| UX-01 | UX | CombatScreen.jsx, App.css | Not Started |
-| QA-01 | QA | src/test/components/ (NEW) | Not Started |
-| SL-02 | SL | src/data/cards.js, enemies.js, relics.js | Not Started |
-| VALIDATION | PM | Full validate pass | Not Started |
+| JR-01 | JR | src/data/potions.js, src/systems/potionSystem.js (NEW) | Done |
+| UX-01 | UX | CombatScreen.jsx, App.css | Done |
+| QA-01 | QA | src/test/components/ (NEW) | Done |
+| SL-02 | SL | src/data/flavorText.js (NEW) | Done |
+| VALIDATION | PM | Full validate pass | Done |

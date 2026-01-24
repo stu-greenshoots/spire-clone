@@ -175,17 +175,18 @@ const CombatScreen = () => {
     }
   };
 
-  const handleEnemyClick = (index) => {
+  const handleEnemyClick = (enemyInstanceId) => {
     if (targetingMode && selectedCard) {
       // Trigger card play animation
       setCardPlaying(selectedCard.instanceId);
       setTimeout(() => {
         setCardPlaying(null);
       }, 300);
-      playCard(selectedCard, index);
+      playCard(selectedCard, enemyInstanceId);
     } else {
       // Show enemy info panel when not targeting
-      setShowEnemyInfo(enemies[index]);
+      const enemy = enemies.find(e => e.instanceId === enemyInstanceId);
+      setShowEnemyInfo(enemy);
     }
   };
 
@@ -230,13 +231,13 @@ const CombatScreen = () => {
       if (relativeY < containerHeight * 0.6) {
         // Find which enemy we're over
         let foundEnemy = null;
-        enemies.forEach((enemy, idx) => {
+        enemies.forEach((enemy) => {
           const enemyEl = enemyRefs.current[enemy.instanceId];
           if (enemyEl) {
             const enemyRect = enemyEl.getBoundingClientRect();
             if (clientX >= enemyRect.left && clientX <= enemyRect.right &&
                 clientY >= enemyRect.top && clientY <= enemyRect.bottom) {
-              foundEnemy = idx;
+              foundEnemy = enemy.instanceId;
             }
           }
         });
@@ -511,23 +512,23 @@ const CombatScreen = () => {
         )}
 
         {/* Render active enemies */}
-        {enemies.map((enemy, idx) => (
+        {enemies.map((enemy) => (
           <div
             key={enemy.instanceId}
             ref={el => enemyRefs.current[enemy.instanceId] = el}
             style={{
               animation: enemyHitStates[enemy.instanceId] ? 'enemyHit 0.5s ease-out' : 'none',
-              transform: dropTargetEnemy === idx ? 'scale(1.1)' : 'scale(1)',
+              transform: dropTargetEnemy === enemy.instanceId ? 'scale(1.1)' : 'scale(1)',
               transition: 'transform 0.15s ease',
-              zIndex: dropTargetEnemy === idx ? 10 : 1,
-              boxShadow: dropTargetEnemy === idx ? '0 0 30px rgba(255, 100, 100, 0.6)' : 'none',
+              zIndex: dropTargetEnemy === enemy.instanceId ? 10 : 1,
+              boxShadow: dropTargetEnemy === enemy.instanceId ? '0 0 30px rgba(255, 100, 100, 0.6)' : 'none',
               borderRadius: '12px'
             }}
           >
             <Enemy
               enemy={enemy}
-              onClick={() => handleEnemyClick(idx)}
-              targeted={(targetingMode && enemies.length > 1) || dropTargetEnemy === idx}
+              onClick={() => handleEnemyClick(enemy.instanceId)}
+              targeted={(targetingMode && enemies.length > 1) || dropTargetEnemy === enemy.instanceId}
               hideIntents={hideIntents}
             />
           </div>
