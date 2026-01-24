@@ -114,7 +114,7 @@ const MapScreen = () => {
   };
 
   // Build path data
-  const paths = useMemo(() => {
+  const paths = (() => {
     const result = [];
     map.forEach((floor, floorIdx) => {
       floor.forEach((node) => {
@@ -147,7 +147,7 @@ const MapScreen = () => {
       });
     });
     return result;
-  }, [map, currentFloor, layout.positions]);
+  })();
 
   return (
     <div style={{
