@@ -81,3 +81,15 @@ Junior Developer - Potion system, card upgrades, new content
 - Available for reviews or Sprint 3 prep
 
 ---
+
+### Sprint 2 Complete
+**Date:** 2026-01-24
+**Status:** All tasks merged. Sprint 2 DONE.
+**Summary:**
+- FIX-01: Potion UI integration — MERGED (PR #8)
+- JR-02: Card upgrades with preview — MERGED (PR #14)
+- FIX-05: Enemy block retention — MERGED (PR #15), added 7 retainBlock tests per co-pilot review
+**Satisfaction:** Happy with sprint 2. All my tasks complete, PRs reviewed and merged.
+**Ready for Sprint 3:** Yes. No assigned S3 tasks yet but available for JR-05 (enemy intent specificity).
+
+---

@@ -76,3 +76,15 @@ Allrounder - Audio, save/load, settings, honest assessment
 - All core AR Sprint 2 tasks complete
 
 ---
+
+### Sprint 2 Complete
+**Date:** 2026-01-24
+**Status:** All priority tasks merged. Sprint 2 DONE.
+**Summary:**
+- FIX-02: Save/load format mismatch — MERGED (PR #9)
+- AR-02: Save system overhaul — MERGED (PR #19), v4 format with checksums, auto-save, expanded run history
+- AR-03: Settings — Deferred to Sprint 3 (not blocking)
+**Satisfaction:** Happy with sprint 2. Save system is robust with integrity checking and auto-save.
+**Ready for Sprint 3:** Yes. AR-03 (settings) and AR-04 (audio investigation) queued.
+
+---

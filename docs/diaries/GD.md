@@ -63,3 +63,14 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 - Sprint 3: GD-05 (brightness pass) and GD-06 (sprite sheets) ready when sprint 3 starts
 
 ---
+
+### Sprint 2 Complete
+**Date:** 2026-01-24
+**Status:** All tasks merged. Sprint 2 DONE.
+**Summary:**
+- FIX-04: Asset format PNG/WebP fix — MERGED (PR #12)
+- GD-02: Card frame & type visual system — MERGED (PR #17), type-specific borders/gradients/rarity indicators
+**Satisfaction:** Happy with sprint 2. Card frames give much-needed visual distinction.
+**Ready for Sprint 3:** Yes. GD-05 (brightness pass) and GD-06 (sprite sheets) queued.
+
+---

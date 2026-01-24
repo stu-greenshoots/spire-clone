@@ -146,19 +146,21 @@ npm run build            # Production build
 9. **No unused imports/variables.** Lint must be clean.
 10. **No forward-referencing.** Don't call APIs that don't exist yet.
 
-## Current State (Sprint 2 - Phase B In Progress)
+## Current State (Sprint 2 - COMPLETE)
 
-- **Branch:** `sprint-2` (integration branch, deploys to GitHub Pages)
-- **P0 Bugs:** 0 open (all 3 fixed and merged: FIX-01, FIX-02, FIX-03)
-- **P1/P2 Bugs:** 2 open (enemy block FIX-05, test selectors FIX-06)
-- **Tests:** 809+ passing
+- **Branch:** `sprint-2` (integration branch, all PRs merged)
+- **P0 Bugs:** 0 open (FIX-01, FIX-02, FIX-03 merged)
+- **P1/P2 Bugs:** 0 open (FIX-04, FIX-05, FIX-06 merged)
+- **Tests:** 759 passing (27 test files)
 - **Lint:** 0 errors
 - **Build:** Passing
-- **Runtime:** Potions, save/load, card effects all WORKING
-- **Phase A:** COMPLETE (FIX-01, FIX-02, FIX-03, FIX-04 merged)
-- **Phase B:** In progress (UX-02, JR-02 in progress; BE-02, GD-02 pending)
+- **Runtime:** All systems functional
+- **Phase A:** COMPLETE (6 bug fixes merged: PRs #8-#12, #15-#16)
+- **Phase B:** COMPLETE (BE-02 #18, UX-02 #13, GD-02 #17, JR-02 #14)
+- **Phase C:** PARTIAL (AR-02 #19 merged; AR-03, QA-03 deferred to Sprint 3)
+- **Total PRs:** 11 merged into sprint-2
 - **Diaries:** `docs/diaries/{ROLE}.md` - update daily
-- **Review:** Game Zone magazine scored 58/100 (see review.html). Sprint 3 backlog derived from feedback.
+- **Next:** Sprint 3 (review feedback & polish, target 70+ score)
 
 ## Architecture Quick Reference
 
