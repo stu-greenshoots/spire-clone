@@ -19,6 +19,11 @@ For deeper context (read when relevant to your task):
 Each team member keeps a daily diary at `docs/diaries/{ROLE}.md` (e.g. `docs/diaries/BE.md`).
 Update your diary every session with what you did, blockers, and next steps.
 
+## Decision Log
+
+Decisions that affect shared interfaces, data formats, or process go through `docs/DECISIONS.md`.
+Propose → others review → PM resolves. No silent changes to things other people depend on.
+
 ## Git Flow
 
 ### Branch Structure
