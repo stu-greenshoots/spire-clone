@@ -33,3 +33,31 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 - Kick off Phase B tasks (FIX-04, BE-02, UX-02, GD-02, JR-02)
 
 ---
+
+### Magazine Review Notes (58/100)
+**Date:** 2026-01-24
+**Context:** Game Zone preview review — scored us 58/100. PR #11 raised with review.html.
+
+**What I did:**
+- Raised PR #11 with review.html (magazine-style feedback document)
+- Added PM comments mapping feedback to team owners with effort estimates
+- Added priority recommendation for Sprint 3 (ordered by impact-to-effort)
+- Brought in mentor for architectural guidance (tooltips, combat feedback, sprite sheets)
+- Updated all team diaries with review takeaways
+- Created Sprint 3 backlog in SPRINT_BOARD.md with 10 new tasks
+
+**Score breakdown:**
+- Gameplay: 7/10 (combat works, faithful to StS)
+- Presentation: 6/10 (too dark, no rarity distinction)
+- Stability: 4/10 (3 P0 bugs — all being fixed in Sprint 2)
+- UX/Polish: 5/10 (no tooltips, no feedback, no previews)
+
+**Sprint 3 path to 70+:**
+- Close P0s (Sprint 2) → Stability: 4→7
+- Brightness pass + card frames → Presentation: 6→7
+- Tooltips + damage previews + floating numbers → UX: 5→7
+- Projected: 68-72/100
+
+**Key insight from mentor:** 58/100 at alpha with 3 P0s is a reasonable starting point. The path from 58→75+ is mostly fixing existing issues, not building new things. Do not chase a score — chase a playable, polished core loop.
+
+---
