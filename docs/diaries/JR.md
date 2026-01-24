@@ -16,13 +16,17 @@ Junior Developer - Potion system, card upgrades, new content
 ## Entries
 
 ### Day 1
-**Date:**
-**Status:**
+**Date:** 2026-01-24
+**Status:** FIX-01 complete, PR pending
 **Done today:**
--
+- Implemented Discard button on PotionSlots popup
+- Wired DISCARD_POTION action through GameContext and useGame hook
+- Added 9 integration tests for usePotion and discardPotion
+- All tests pass (792 total), validate clean
 **Blockers:**
--
+- None
 **Tomorrow:**
--
+- Wait for FIX-01 PR review and merge
+- Start FIX-05 (enemy block retention) after Phase A merges
 
 ---
