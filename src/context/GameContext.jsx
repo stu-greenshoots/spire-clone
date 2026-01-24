@@ -299,8 +299,8 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'REST' });
   }, []);
 
-  const upgradeCard = useCallback((cardIndex) => {
-    dispatch({ type: 'UPGRADE_CARD', payload: { cardIndex } });
+  const upgradeCard = useCallback((cardId) => {
+    dispatch({ type: 'UPGRADE_CARD', payload: { cardId } });
   }, []);
 
   const skipEvent = useCallback(() => {
@@ -315,8 +315,8 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'OPEN_DATA_EDITOR' });
   }, []);
 
-  const selectCardFromPile = useCallback((card, index) => {
-    dispatch({ type: 'SELECT_CARD_FROM_PILE', payload: { card, index } });
+  const selectCardFromPile = useCallback((card) => {
+    dispatch({ type: 'SELECT_CARD_FROM_PILE', payload: { card } });
   }, []);
 
   const cancelCardSelection = useCallback(() => {
