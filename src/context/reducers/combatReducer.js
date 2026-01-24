@@ -2,7 +2,7 @@ import { handleSelectCard, handleCancelTarget } from './combat/selectCardAction'
 import { handlePlayCard } from './combat/playCardAction';
 import { handleEndTurn } from './combat/endTurnAction';
 import { GAME_PHASE } from '../GameContext';
-import { shuffleArray } from '../../utils/mapGenerator';
+import { handleExhaustTriggers } from '../../systems/effectProcessor';
 
 function handleSelectCardFromPile(state, action) {
   const { card } = action.payload;
@@ -86,31 +86,27 @@ function handleSelectCardFromPile(state, action) {
         const [exhaustedCard] = newHand.splice(cardIndex, 1);
         newExhaustPile.push(exhaustedCard);
         combatLog.push(`Exhausted ${exhaustedCard.name}`);
-        if (state.player.darkEmbrace) {
-          if (newDrawPile.length === 0 && newDiscardPile.length > 0) {
-            newDrawPile = shuffleArray(newDiscardPile);
-            newDiscardPile = [];
-          }
-          if (newDrawPile.length > 0) {
-            newHand.push(newDrawPile.shift());
-          }
-        }
-        if (state.player.feelNoPain > 0) {
-          return {
-            ...state,
-            phase: GAME_PHASE.COMBAT,
-            cardSelection: null,
-            hand: newHand,
-            discardPile: newDiscardPile,
-            drawPile: newDrawPile,
-            exhaustPile: newExhaustPile,
-            player: {
-              ...state.player,
-              block: state.player.block + state.player.feelNoPain
-            },
-            combatLog
-          };
-        }
+        const exhaustCtx = {
+          player: { ...state.player },
+          hand: newHand,
+          drawPile: newDrawPile,
+          discardPile: newDiscardPile,
+          exhaustPile: newExhaustPile,
+          relics: state.relics,
+          combatLog
+        };
+        handleExhaustTriggers(exhaustCtx);
+        return {
+          ...state,
+          phase: GAME_PHASE.COMBAT,
+          cardSelection: null,
+          hand: exhaustCtx.hand,
+          discardPile: exhaustCtx.discardPile,
+          drawPile: exhaustCtx.drawPile,
+          exhaustPile: exhaustCtx.exhaustPile,
+          player: exhaustCtx.player,
+          combatLog: exhaustCtx.combatLog
+        };
       }
       break;
     }

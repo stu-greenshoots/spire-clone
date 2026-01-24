@@ -4,14 +4,25 @@
 
 Before starting any work, read these files to understand current state:
 
-1. **SPRINT_BOARD.md** - Current sprint, task status, what's in progress
-2. **PROCESS.md** - Branch naming, PR workflow, commit conventions
-3. **DEFINITION_OF_DONE.md** - When is a task actually done (not just committed)
+1. **SPRINT_2_PLAN.md** - Sprint 2 kickoff plan, task assignments, process
+2. **SPRINT_BOARD.md** - Current sprint, task status, what's in progress
+3. **PROCESS.md** - Branch naming, PR workflow, commit conventions
+4. **DEFINITION_OF_DONE.md** - When is a task actually done (not just committed)
 
 For deeper context (read when relevant to your task):
 - **DEPENDENCIES.md** - Task ordering, conflict zones, what blocks what
 - **TEAM_PLAN.md** - Full phase breakdown, all task details
 - **GAME_REFERENCE.md** - Card/enemy/relic mechanics (for content tasks)
+
+## Diaries
+
+Each team member keeps a daily diary at `docs/diaries/{ROLE}.md` (e.g. `docs/diaries/BE.md`).
+Update your diary every session with what you did, blockers, and next steps.
+
+## Decision Log
+
+Decisions that affect shared interfaces, data formats, or process go through `docs/DECISIONS.md`.
+Propose → others review → PM resolves. No silent changes to things other people depend on.
 
 ## Git Flow
 
@@ -38,7 +49,7 @@ git checkout -b sprint-2/task-id-description
 # ... do work ...
 npm run validate                    # MUST pass before push
 git add <specific-files>
-git commit -m "TASK-ID: description"
+git commit --author="ROLE <role@spire-ascent.dev>" -m "TASK-ID: description"
 git push -u origin sprint-2/task-id-description
 # Open PR targeting sprint-2 branch
 ```
@@ -135,13 +146,21 @@ npm run build            # Production build
 9. **No unused imports/variables.** Lint must be clean.
 10. **No forward-referencing.** Don't call APIs that don't exist yet.
 
-## Current State (Sprint 2)
+## Current State (Sprint 2 - COMPLETE)
 
-- **P0 Bugs:** 3 open (potion UI, save format, card effect context)
-- **Tests:** 763 passing
+- **Branch:** `sprint-2` (integration branch, all PRs merged)
+- **P0 Bugs:** 0 open (FIX-01, FIX-02, FIX-03 merged)
+- **P1/P2 Bugs:** 0 open (FIX-04, FIX-05, FIX-06 merged)
+- **Tests:** 837 passing (29 test files)
 - **Lint:** 0 errors
 - **Build:** Passing
-- **Runtime:** Potions, save/load, and some card effects are BROKEN
+- **Runtime:** All systems functional
+- **Phase A:** COMPLETE (6 bug fixes merged: PRs #8-#12, #15-#16)
+- **Phase B:** COMPLETE (BE-02 #18, UX-02 #13, GD-02 #17, JR-02 #14)
+- **Phase C:** PARTIAL (AR-02 #19 merged; AR-03, QA-03 deferred to Sprint 3)
+- **Total PRs:** 11 merged into sprint-2
+- **Diaries:** `docs/diaries/{ROLE}.md` - update daily
+- **Next:** Sprint 3 (review feedback & polish, target 70+ score)
 
 ## Architecture Quick Reference
 

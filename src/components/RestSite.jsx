@@ -2,6 +2,39 @@ import { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import Card from './Card';
 
+// Helper to get stat differences between current and upgraded card
+const getUpgradeDiffs = (card) => {
+  if (!card || !card.upgradedVersion) return [];
+  const diffs = [];
+  const upgraded = card.upgradedVersion;
+
+  if (upgraded.damage !== undefined && upgraded.damage !== card.damage) {
+    diffs.push({ label: 'Damage', from: card.damage, to: upgraded.damage });
+  }
+  if (upgraded.block !== undefined && upgraded.block !== card.block) {
+    diffs.push({ label: 'Block', from: card.block || 0, to: upgraded.block });
+  }
+  if (upgraded.cost !== undefined && upgraded.cost !== card.cost) {
+    diffs.push({ label: 'Cost', from: card.cost, to: upgraded.cost });
+  }
+  if (upgraded.hits !== undefined && upgraded.hits !== card.hits) {
+    diffs.push({ label: 'Hits', from: card.hits, to: upgraded.hits });
+  }
+  if (upgraded.draw !== undefined && upgraded.draw !== card.draw) {
+    diffs.push({ label: 'Draw', from: card.draw || 0, to: upgraded.draw });
+  }
+  if (upgraded.effects && card.effects) {
+    card.effects.forEach((eff, i) => {
+      const upgEff = upgraded.effects[i];
+      if (upgEff && upgEff.amount !== eff.amount) {
+        const label = eff.type.charAt(0).toUpperCase() + eff.type.slice(1);
+        diffs.push({ label, from: eff.amount, to: upgEff.amount });
+      }
+    });
+  }
+  return diffs;
+};
+
 const RestSite = () => {
   const { state, rest, upgradeCard, liftGirya } = useGame();
   const { player, deck, relics } = state;
@@ -17,13 +50,14 @@ const RestSite = () => {
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [previewCard, setPreviewCard] = useState(null);
   const [previewIndex, setPreviewIndex] = useState(null);
+  const [hoverCard, setHoverCard] = useState(null);
 
   const healAmount = Math.floor(player.maxHp * 0.3);
   const upgradableCards = deck.filter(c => !c.upgraded && c.upgradedVersion);
 
-  const handleSelectForUpgrade = (card, cardIndex) => {
+  const handleSelectForUpgrade = (card) => {
     setPreviewCard(card);
-    setPreviewIndex(cardIndex);
+    setPreviewIndex(card.instanceId);
   };
 
   const handleConfirmUpgrade = () => {
@@ -86,20 +120,110 @@ const RestSite = () => {
           justifyContent: 'center',
           alignContent: 'flex-start'
         }}>
-          {deck.map((card, idx) => {
+          {deck.map((card) => {
             const canUpgrade = !card.upgraded && card.upgradedVersion;
+            const isHovered = hoverCard === card.instanceId;
             return (
               <div
                 key={card.instanceId}
-                onClick={() => canUpgrade && handleSelectForUpgrade(card, idx)}
+                onClick={() => canUpgrade && handleSelectForUpgrade(card)}
+                onMouseEnter={() => canUpgrade && setHoverCard(card.instanceId)}
+                onMouseLeave={() => setHoverCard(null)}
                 style={{
                   opacity: canUpgrade ? 1 : 0.4,
                   cursor: canUpgrade ? 'pointer' : 'default',
-                  transition: 'all 0.2s ease',
-                  transform: canUpgrade ? 'scale(1)' : 'scale(0.95)'
+                  transition: 'all 0.3s ease',
+                  transform: canUpgrade
+                    ? (isHovered ? 'scale(1.08) translateY(-4px)' : 'scale(1)')
+                    : 'scale(0.95)',
+                  position: 'relative',
+                  boxShadow: canUpgrade
+                    ? '0 0 8px rgba(255, 170, 60, 0.4), 0 0 16px rgba(255, 170, 60, 0.2)'
+                    : 'none',
+                  borderRadius: '12px'
                 }}
               >
+                {/* Upgrade glow indicator */}
+                {canUpgrade && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '-3px',
+                    left: '-3px',
+                    right: '-3px',
+                    bottom: '-3px',
+                    borderRadius: '12px',
+                    border: '2px solid rgba(255, 170, 60, 0.6)',
+                    boxShadow: isHovered
+                      ? '0 0 12px rgba(255, 170, 60, 0.7), inset 0 0 8px rgba(255, 170, 60, 0.15)'
+                      : '0 0 6px rgba(255, 170, 60, 0.3)',
+                    animation: isHovered ? 'none' : 'upgradeGlow 2s ease-in-out infinite',
+                    pointerEvents: 'none',
+                    zIndex: 1
+                  }} />
+                )}
                 <Card card={card} small />
+                {/* Hover comparison tooltip */}
+                {canUpgrade && isHovered && (() => {
+                  const diffs = getUpgradeDiffs(card);
+                  if (diffs.length === 0) return null;
+                  return (
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '100%',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      marginBottom: '8px',
+                      background: 'rgba(20, 15, 10, 0.97)',
+                      border: '2px solid #aa6644',
+                      borderRadius: '8px',
+                      padding: '8px 12px',
+                      whiteSpace: 'nowrap',
+                      zIndex: 100,
+                      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.8)',
+                      animation: 'fadeIn 0.15s ease-out'
+                    }}>
+                      <div style={{
+                        fontSize: '10px',
+                        color: '#FFD700',
+                        fontWeight: 'bold',
+                        marginBottom: '4px',
+                        textAlign: 'center',
+                        borderBottom: '1px solid rgba(170, 102, 68, 0.4)',
+                        paddingBottom: '4px'
+                      }}>
+                        {card.name} → {card.name}+
+                      </div>
+                      {diffs.map((diff, i) => (
+                        <div key={i} style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          gap: '12px',
+                          fontSize: '10px',
+                          marginTop: '3px'
+                        }}>
+                          <span style={{ color: '#aa8866' }}>{diff.label}:</span>
+                          <span>
+                            <span style={{ color: '#ff8888' }}>{diff.from}</span>
+                            <span style={{ color: '#666', margin: '0 3px' }}>→</span>
+                            <span style={{ color: '#88ff88', fontWeight: 'bold' }}>{diff.to}</span>
+                          </span>
+                        </div>
+                      ))}
+                      {/* Tooltip arrow */}
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '-6px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        width: 0,
+                        height: 0,
+                        borderLeft: '6px solid transparent',
+                        borderRight: '6px solid transparent',
+                        borderTop: '6px solid #aa6644'
+                      }} />
+                    </div>
+                  );
+                })()}
               </div>
             );
           })}
@@ -186,6 +310,40 @@ const RestSite = () => {
                   }} />
                 </div>
               </div>
+
+              {/* Stat Changes Summary */}
+              {(() => {
+                const diffs = getUpgradeDiffs(previewCard);
+                if (diffs.length === 0) return null;
+                return (
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '16px',
+                    marginBottom: '16px',
+                    flexWrap: 'wrap'
+                  }}>
+                    {diffs.map((diff, i) => (
+                      <div key={i} style={{
+                        background: 'rgba(0, 0, 0, 0.3)',
+                        border: '1px solid rgba(170, 102, 68, 0.4)',
+                        borderRadius: '8px',
+                        padding: '6px 12px',
+                        textAlign: 'center'
+                      }}>
+                        <div style={{ fontSize: '10px', color: '#aa8866', marginBottom: '2px' }}>
+                          {diff.label}
+                        </div>
+                        <div style={{ fontSize: '14px' }}>
+                          <span style={{ color: '#ff8888' }}>{diff.from}</span>
+                          <span style={{ color: '#666', margin: '0 4px' }}>→</span>
+                          <span style={{ color: '#88ff88', fontWeight: 'bold' }}>{diff.to}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
 
               {/* Buttons */}
               <div style={{

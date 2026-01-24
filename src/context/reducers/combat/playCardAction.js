@@ -6,13 +6,14 @@ import { calculateDamage, calculateBlock, applyDamageToTarget } from '../../../s
 import { createSplitSlimes } from '../../../systems/enemySystem';
 import { handleSpecialEffect, SUPPORTED_EFFECTS } from '../../../systems/cardEffects';
 import { triggerRelics } from '../../../systems/relicSystem';
+import { autoSave } from '../../../systems/saveSystem';
 
 export const handlePlayCard = (state, action) => {
   const { card, targetId } = action.payload;
-  // Resolve targetId (instanceId) to array index for backward compatibility
-  const targetIndex = targetId != null
-    ? state.enemies.findIndex(e => e.instanceId === targetId)
-    : 0;
+  // Resolve target by instanceId (fallback to first enemy if no target specified)
+  const resolvedTargetId = targetId != null
+    ? targetId
+    : (state.enemies[0] && state.enemies[0].instanceId);
 
   const isXCost = card.cost === -1 || card.special === 'xCost';
 
@@ -107,9 +108,10 @@ export const handlePlayCard = (state, action) => {
         if (aliveEnemies.length > 0) {
           const randomIdx = Math.floor(Math.random() * aliveEnemies.length);
           const targetEnemy = aliveEnemies[randomIdx];
-          const enemyIdx = newEnemies.findIndex(e => e.instanceId === targetEnemy.instanceId);
           const damage = calculateDamage(baseDamage, newPlayer, targetEnemy, damageOptions);
-          newEnemies[enemyIdx] = applyDamageToTarget(targetEnemy, damage);
+          newEnemies = newEnemies.map(e =>
+            e.instanceId === targetEnemy.instanceId ? applyDamageToTarget(e, damage) : e
+          );
           combatLog.push(`Dealt ${damage} damage to ${targetEnemy.name}`);
           if (targetEnemy.thorns > 0) {
             const thornsDmg = targetEnemy.thorns;
@@ -124,10 +126,12 @@ export const handlePlayCard = (state, action) => {
           }
         }
       } else {
-        const enemy = newEnemies[targetIndex];
+        const enemy = newEnemies.find(e => e.instanceId === resolvedTargetId);
         if (enemy && enemy.currentHp > 0) {
           const damage = calculateDamage(baseDamage, newPlayer, enemy, damageOptions);
-          newEnemies[targetIndex] = applyDamageToTarget(enemy, damage);
+          newEnemies = newEnemies.map(e =>
+            e.instanceId === resolvedTargetId ? applyDamageToTarget(e, damage) : e
+          );
           combatLog.push(`Dealt ${damage} damage to ${enemy.name}`);
           if (enemy.thorns > 0) {
             const thornsDmg = enemy.thorns;
@@ -158,8 +162,10 @@ export const handlePlayCard = (state, action) => {
       const aliveEnemies = newEnemies.filter(e => e.currentHp > 0);
       if (aliveEnemies.length > 0) {
         const randomIdx = Math.floor(Math.random() * aliveEnemies.length);
-        const enemyIdx = newEnemies.findIndex(e => e.instanceId === aliveEnemies[randomIdx].instanceId);
-        newEnemies[enemyIdx] = applyDamageToTarget(newEnemies[enemyIdx], newPlayer.juggernaut);
+        const jugTarget = aliveEnemies[randomIdx];
+        newEnemies = newEnemies.map(e =>
+          e.instanceId === jugTarget.instanceId ? applyDamageToTarget(e, newPlayer.juggernaut) : e
+        );
       }
     }
   }
@@ -194,21 +200,23 @@ export const handlePlayCard = (state, action) => {
           });
         }
       } else {
-        const enemy = newEnemies[targetIndex];
+        const enemy = newEnemies.find(e => e.instanceId === resolvedTargetId);
         if (enemy && enemy.currentHp > 0) {
-          const newEnemy = { ...enemy };
           const isEnemyDebuff = ['vulnerable', 'weak', 'strengthDown'].includes(effect.type);
-          if (isEnemyDebuff && newEnemy.artifact > 0) {
-            newEnemy.artifact--;
-            newEnemies[targetIndex] = newEnemy;
-            combatLog.push(`${enemy.name}'s Artifact blocked ${effect.type}!`);
-          } else {
-            if (effect.type === 'vulnerable') newEnemy.vulnerable = (newEnemy.vulnerable || 0) + effect.amount;
-            if (effect.type === 'weak') newEnemy.weak = (newEnemy.weak || 0) + effect.amount;
-            if (effect.type === 'strengthDown') newEnemy.strength = (newEnemy.strength || 0) - effect.amount;
-            newEnemies[targetIndex] = newEnemy;
-            combatLog.push(`Applied ${effect.amount} ${effect.type} to ${enemy.name}`);
-          }
+          newEnemies = newEnemies.map(e => {
+            if (e.instanceId !== resolvedTargetId) return e;
+            const updated = { ...e };
+            if (isEnemyDebuff && updated.artifact > 0) {
+              updated.artifact--;
+              combatLog.push(`${e.name}'s Artifact blocked ${effect.type}!`);
+            } else {
+              if (effect.type === 'vulnerable') updated.vulnerable = (updated.vulnerable || 0) + effect.amount;
+              if (effect.type === 'weak') updated.weak = (updated.weak || 0) + effect.amount;
+              if (effect.type === 'strengthDown') updated.strength = (updated.strength || 0) - effect.amount;
+              combatLog.push(`Applied ${effect.amount} ${effect.type} to ${e.name}`);
+            }
+            return updated;
+          });
         }
       }
     });
@@ -252,7 +260,8 @@ export const handlePlayCard = (state, action) => {
       discardPile: newDiscardPile,
       exhaustPile: newExhaustPile,
       combatLog,
-      targetIndex,
+      targetId: resolvedTargetId,
+      get targetIndex() { return this.enemies.findIndex(e => e.instanceId === resolvedTargetId); },
       relics: state.relics,
       deck: state.deck,
       state,
@@ -310,11 +319,11 @@ export const handlePlayCard = (state, action) => {
       combatLog.push('Time Eater ended your turn!');
       // Heal Time Eater
       if (result.heal) {
-        const idx = newEnemies.findIndex(e => e.instanceId === timeEaterEnemy.instanceId);
-        newEnemies[idx] = {
-          ...newEnemies[idx],
-          currentHp: Math.min(newEnemies[idx].maxHp, newEnemies[idx].currentHp + Math.floor(newEnemies[idx].maxHp * 0.02))
-        };
+        newEnemies = newEnemies.map(e =>
+          e.instanceId === timeEaterEnemy.instanceId
+            ? { ...e, currentHp: Math.min(e.maxHp, e.currentHp + Math.floor(e.maxHp * 0.02)) }
+            : e
+        );
       }
       // Discard remaining hand
       newHand.forEach(c => newDiscardPile.push(c));
@@ -349,8 +358,10 @@ export const handlePlayCard = (state, action) => {
   if (card.name.toLowerCase().includes('strike')) {
     const { effects, updatedRelics } = triggerRelics(relicsUpdated, 'onStrikePlayed', {});
     relicsUpdated = updatedRelics;
-    if (effects.damage > 0 && newEnemies[targetIndex]) {
-      newEnemies[targetIndex] = applyDamageToTarget(newEnemies[targetIndex], effects.damage);
+    if (effects.damage > 0) {
+      newEnemies = newEnemies.map(e =>
+        e.instanceId === resolvedTargetId ? applyDamageToTarget(e, effects.damage) : e
+      );
     }
   }
 
@@ -463,7 +474,7 @@ export const handlePlayCard = (state, action) => {
         : getRandomRelic(null, state.relics.map(r => r.id));
     }
 
-    return {
+    const victoryState = {
       ...state,
       phase: GAME_PHASE.COMBAT_REWARD,
       player: newPlayer,
@@ -482,6 +493,8 @@ export const handlePlayCard = (state, action) => {
         relicReward
       }
     };
+    autoSave(victoryState);
+    return victoryState;
   }
 
   return {
