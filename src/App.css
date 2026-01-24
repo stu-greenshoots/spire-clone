@@ -133,6 +133,12 @@ button:active {
   50% { filter: drop-shadow(0 0 10px currentColor); }
 }
 
+/* Upgrade glow pulse for upgradeable cards at rest site */
+@keyframes upgradeGlow {
+  0%, 100% { box-shadow: 0 0 6px rgba(255, 170, 60, 0.3); border-color: rgba(255, 170, 60, 0.5); }
+  50% { box-shadow: 0 0 14px rgba(255, 170, 60, 0.6), 0 0 4px rgba(255, 215, 0, 0.3); border-color: rgba(255, 170, 60, 0.8); }
+}
+
 /* Fade in animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
