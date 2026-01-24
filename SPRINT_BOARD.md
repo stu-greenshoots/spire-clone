@@ -118,14 +118,56 @@ Before merging sprint-2 to master:
 
 ---
 
-## Phase 2: Content & Depth (Sprint 3-4) - Backlog
+## Sprint 3: Review Feedback & Polish - Backlog
+
+**Source:** Game Zone Magazine preview review (58/100). See `review.html` and PR #11 comments for full context.
+**Goal:** Address reviewer feedback to reach 70+ score. Fix before feature.
+
+### Sprint 3 Phase A: Quick Wins (High impact, low effort)
 
 | Task | Owner | Size | Priority | Description |
 |------|-------|------|----------|-------------|
-| BE-03 | BE | L | P2 | Meta-progression system (unlocks, achievements) |
-| BE-04 | BE | M | P2 | Difficulty/ascension system (5+ levels) |
-| GD-03 | GD | L | P2 | Relic & potion art (47 relics + 15 potions) |
-| GD-04 | GD | M | P3 | Map visual overhaul |
+| GD-05 | GD | S | P1 | Theme brightness pass — raise background from #0a0a0f to ~#1a1a2e, CSS variable sweep |
+| PM-03 | PM/BE | XS | P1 | Hide Data Editor button in production build (env gate) |
+| UX-05 | UX/GD | S | P1 | Fix card text truncation — font sizing or auto-resize on overflow |
+
+### Sprint 3 Phase B: UX Infrastructure (Medium effort, high impact)
+
+| Task | Owner | Size | Priority | Description |
+|------|-------|------|----------|-------------|
+| UX-06 | UX | M | P1 | Tooltip infrastructure — generic Portal-based Tooltip component for cards, relics, potions, status effects |
+| UX-07 | UX | M | P1 | Combat feedback — floating damage/block/heal numbers via AnimationOverlay queue |
+| BE-05 | BE/UX | S | P1 | Damage preview with modifiers — card numbers reflect Vulnerable/Weak, turn green when boosted |
+| JR-05 | JR | S | P2 | Enemy intent specificity — show "Applying Weak 2" instead of generic "Debuff" |
+
+### Sprint 3 Phase C: Performance & Audio
+
+| Task | Owner | Size | Priority | Description |
+|------|-------|------|----------|-------------|
+| GD-06 | GD | M | P2 | Card art sprite sheet/atlas — reduce 100+ network requests to bundled sprites |
+| AR-04 | AR | S | P2 | Audio investigation — verify audioSystem.js plays audio, check Web Audio API autoplay policy |
+
+### Sprint 3 Validation Gate
+
+Before closing Sprint 3:
+- [ ] Theme is visibly brighter (not "black rectangle" on default monitor brightness)
+- [ ] Card names do not truncate on reward selection screen
+- [ ] Tooltips display on hover for cards, relics, and status effects
+- [ ] Floating damage numbers appear when attacks connect
+- [ ] Card damage preview updates with Vulnerable modifier
+- [ ] No Data Editor button visible in production build
+- [ ] Self-review against Game Zone feedback checklist before inviting re-review
+
+---
+
+## Phase 2: Content & Depth (Sprint 4-5) - Backlog
+
+| Task | Owner | Size | Priority | Description |
+|------|-------|------|----------|-------------|
+| BE-06 | BE | L | P2 | Meta-progression system (unlocks, achievements) |
+| BE-07 | BE | M | P2 | Difficulty/ascension system (5+ levels) |
+| GD-07 | GD | L | P2 | Relic & potion art (47 relics + 15 potions) |
+| GD-08 | GD | M | P3 | Map visual overhaul |
 | SL-03 | SL | M | P2 | Boss encounters & character dialogue |
 | JR-03 | JR | L | P2 | Act 2 content expansion (10 new enemies) |
 | JR-04 | JR | M | P2 | 15 new cards |
@@ -134,9 +176,9 @@ Before merging sprint-2 to master:
 
 | Task | Owner | Size | Priority | Description |
 |------|-------|------|----------|-------------|
-| UX-03 | UX | M | P3 | Deck viewer & run stats |
-| UX-04 | UX | M | P3 | Tutorial/first run experience |
-| GD-05 | GD | M | P3 | Visual effects & particles |
-| BE-05 | BE | M | P3 | Performance optimization |
-| AR-04 | AR | L | P3 | Mobile responsiveness |
+| UX-08 | UX | M | P3 | Deck viewer & run stats |
+| UX-09 | UX | M | P3 | Tutorial/first run experience |
+| GD-09 | GD | M | P3 | Visual effects & particles |
+| BE-08 | BE | M | P3 | Performance optimization |
+| AR-05 | AR | L | P3 | Mobile responsiveness |
 | QA-04 | QA | M | P3 | Pre-release QA pass |

@@ -32,3 +32,18 @@ Back Ender - Architecture, state management, performance
 - Start BE-02 (normalize state with entity IDs) after Phase A merges
 
 ---
+
+### Magazine Review Notes (58/100)
+**Date:** 2026-01-24
+**Context:** Game Zone preview review — see `review.html` and PR #11
+
+**My takeaways:**
+- FIX-03 validated by review: card effects crash confirmed. Fix is done, awaiting merge.
+- **Sprint 3 task (BE-05):** Damage preview needs to reflect modifiers (Vulnerable/Weak). Currently shows base damage (6) when effective is (9). In StS the number turns green when boosted.
+  - Approach: Extract a shared `calculateEffectiveDamage(card, target, playerState, modifiers)` utility that both effect execution and preview call. Prevents duplication and makes tooltip calculations reliable.
+  - Touches: combatSystem, card rendering pipeline
+- **Sprint 3 task (PM-03):** Data Editor button visible in production. Trivial env gate — `import.meta.env.PROD` check.
+- Mentor advice on tooltips: Portal-based generic component. When I normalize state (BE-02), ensure modifier application is deterministic so tooltip damage calculations are reliable.
+- Audio is silent — AR should investigate autoplay policy.
+
+---

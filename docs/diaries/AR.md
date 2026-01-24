@@ -32,3 +32,17 @@ Allrounder - Audio, save/load, settings, honest assessment
 - Start AR-02 (save overhaul with auto-save) after Phase A merges
 
 ---
+
+### Magazine Review Notes (58/100)
+**Date:** 2026-01-24
+**Context:** Game Zone preview review — confirms save/load broken, notes audio silent
+
+**My takeaways:**
+- FIX-02 validated by review: "Saving and loading a run will corrupt game state." Fix is done (v3 format with ID serialization), awaiting merge.
+- **Audio is SILENT.** Reviewer says: "no audio actually played - the system appears to be wired up but silent. The mute button's presence suggests sound was intended."
+  - Sprint 3 task **AR-04:** Investigate audio system.
+  - Likely culprit: Web Audio API autoplay policy. Modern browsers require `AudioContext.resume()` after a user gesture. The mute button existing suggests the system was built with this in mind but may not be calling `resume()` on first user click.
+  - Diagnosis plan: (1) Check audio files exist in public/, (2) Verify paths in audioSystem.js, (3) Check AudioContext initialization, (4) Test if `resume()` is called after user gesture.
+- Settings (AR-03) could include theme brightness as a user preference — supports GD's brightness pass with a user-controllable slider.
+
+---
