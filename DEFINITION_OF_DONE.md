@@ -1,7 +1,7 @@
 # Definition of Done - Spire Ascent
 
 **Updated:** 2026-01-24 (Post-Sprint 1 Retrospective)
-**Key Learning:** Tests passing != feature working. See BRAINSTORM_SESSION_2.md.
+**Key Learning:** Tests passing != feature working.
 
 ## For All Tasks
 

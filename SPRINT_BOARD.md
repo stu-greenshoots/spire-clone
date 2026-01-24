@@ -8,7 +8,7 @@
 
 ## Sprint 1 Retrospective (Foundation & Feel)
 
-**Status:** Code committed, NOT fully validated. See BRAINSTORM_SESSION_2.md for details.
+**Status:** Code committed, NOT fully validated.
 
 ### Sprint 1 Tasks - Validation Status
 
