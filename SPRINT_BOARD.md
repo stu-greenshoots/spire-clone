@@ -81,40 +81,41 @@
 ### Day 1: P0 Bug Fixes (Parallel - independent files)
 | Task | Branch | Files Touched | Status |
 |------|--------|---------------|--------|
-| FIX-01 | sprint-2/fix-potion-integration | GameContext.jsx, useGame.jsx, PotionSlots.jsx | Pending |
-| FIX-02 | sprint-2/fix-save-system | saveSystem.js, metaReducer.js | Pending |
-| FIX-03 | sprint-2/fix-card-effect-context | cardEffects.js, combatReducer.js | Pending |
+| FIX-01 | fix-01-potion-integration | GameContext.jsx, PotionSlots.jsx | MERGED (PR #8) |
+| FIX-02 | fix-02-save-system | saveSystem.js, metaReducer.js | MERGED (PR #9) |
+| FIX-03 | fix-03-card-effect-context | combatReducer.js | MERGED (PR #10) |
 
 ### Day 1-2: P1 Fixes + Features (After P0 merged)
 | Task | Branch | Files Touched | Status |
 |------|--------|---------------|--------|
-| FIX-04 | sprint-2/fix-asset-format | assetLoader.js | Pending |
-| BE-02 | sprint-2/be-02-normalize-state | context/, data/ | Pending |
-| AR-02 | sprint-2/ar-02-save-overhaul | saveSystem.js, metaReducer.js | Pending |
+| FIX-04 | fix-04-asset-format | assetLoader.js | MERGED (PR #12) |
+| BE-02 | be-02-normalize-state | context/, data/ | Pending |
+| AR-02 | ar-02-save-overhaul | saveSystem.js, metaReducer.js | Pending |
 
 ### Day 2-3: P2 Tasks (After P1 merged)
 | Task | Branch | Files Touched | Status |
 |------|--------|---------------|--------|
-| FIX-05 | sprint-2/fix-enemy-block | enemies.js, effectProcessor.js | Pending |
-| FIX-06 | sprint-2/fix-test-selectors | Enemy.test.jsx, Enemy.jsx | Pending |
-| UX-02 | sprint-2/ux-02-card-tooltips | Card.jsx, CombatScreen.jsx | Pending |
-| JR-02 | sprint-2/jr-02-card-upgrades | RestSite.jsx, cards.js | Pending |
-| GD-02 | sprint-2/gd-02-card-frames | Card.jsx, App.css | Pending |
-| AR-03 | sprint-2/ar-03-settings | Settings.jsx | Pending |
-| QA-03 | sprint-2/qa-03-e2e-tests | tests/e2e/ (NEW) | Pending |
+| FIX-05 | fix-05-enemy-block | enemies.js, effectProcessor.js | Pending |
+| FIX-06 | fix-06-test-selectors | Enemy.test.jsx, Enemy.jsx | Pending |
+| UX-02 | ux-02-card-tooltips | CombatScreen.jsx | In Progress |
+| JR-02 | jr-02-card-upgrades | RestSite.jsx | In Progress |
+| GD-02 | gd-02-card-frames | Card.jsx, App.css | Pending |
+| AR-03 | ar-03-settings | Settings.jsx | Pending |
+| QA-03 | qa-03-e2e-tests | tests/e2e/ (NEW) | Pending |
 
 ---
 
 ## Sprint 2 Validation Gate
 
 Before merging sprint-2 to master:
-- [ ] All P0 bugs fixed and validated at runtime
-- [ ] `npm run validate` passes
+- [x] All P0 bugs fixed and validated at runtime (FIX-01, FIX-02, FIX-03 merged)
+- [x] `npm run validate` passes (778+ tests green)
 - [ ] Full game playthrough without crashes
-- [ ] Potion use works in combat
-- [ ] Save/load round-trips correctly
-- [ ] Card effects with ctx.hand work
-- [ ] All new PRs follow PROCESS.md conventions
+- [x] Potion use works in combat (FIX-01)
+- [x] Save/load round-trips correctly (FIX-02)
+- [x] Card effects with ctx.hand work (FIX-03)
+- [x] All new PRs follow PROCESS.md conventions
+- [x] Asset format fixed (FIX-04)
 
 ---
 
