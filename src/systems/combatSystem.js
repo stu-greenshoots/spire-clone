@@ -245,12 +245,16 @@ export const applyDamageToTarget = (target, damage) => {
  * @param {boolean} [card.randomTarget] - Whether to hit a random enemy
  * @param {Object} player - The player object
  * @param {Array} enemies - Array of enemy objects
- * @param {number} targetIndex - Index of the target enemy (for single target)
+ * @param {number|string} targetIndexOrId - Index or instanceId of the target enemy (for single target)
  * @param {Object} options - Damage calculation options
  * @param {Array} combatLog - Array to push combat log messages
  * @returns {Object} Object with updated enemies array and combat log
  */
-export const processCardDamage = (card, player, enemies, targetIndex, options, combatLog) => {
+export const processCardDamage = (card, player, enemies, targetIndexOrId, options, combatLog) => {
+  // Resolve targetId (instanceId string) to array index for backward compatibility
+  const targetIndex = typeof targetIndexOrId === 'string'
+    ? enemies.findIndex(e => e.instanceId === targetIndexOrId)
+    : targetIndexOrId;
   let newEnemies = [...enemies];
   const hits = card.hits || 1;
   const baseDamage = typeof card.damage === 'object'
@@ -327,12 +331,16 @@ export const processCardBlock = (card, player, enemies, combatLog) => {
  * @param {Array} effects - Array of effect objects from the card
  * @param {Object} player - The player object
  * @param {Array} enemies - Array of enemy objects
- * @param {number} targetIndex - Index of target enemy
+ * @param {number|string} targetIndexOrId - Index or instanceId of target enemy
  * @param {boolean} targetAll - Whether card targets all enemies
  * @param {Array} combatLog - Array to push combat log messages
  * @returns {Object} Object with updated player, enemies, and combat log
  */
-export const applyCardEffects = (effects, player, enemies, targetIndex, targetAll, combatLog) => {
+export const applyCardEffects = (effects, player, enemies, targetIndexOrId, targetAll, combatLog) => {
+  // Resolve targetId (instanceId string) to array index for backward compatibility
+  const targetIndex = typeof targetIndexOrId === 'string'
+    ? enemies.findIndex(e => e.instanceId === targetIndexOrId)
+    : targetIndexOrId;
   let newPlayer = { ...player };
   let newEnemies = [...enemies];
 

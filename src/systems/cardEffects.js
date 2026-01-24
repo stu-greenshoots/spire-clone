@@ -142,6 +142,25 @@ const simplePlayerEffects = {
   },
   doubleNextAttacks2: (card, ctx) => {
     ctx.player.doubleTap += 2;
+  },
+  doubleNextAttacks3: (card, ctx) => {
+    ctx.player.doubleTap += 3;
+  },
+  combustStack: (card, ctx) => {
+    // Stacks with existing combust
+    const existingCombust = ctx.player.combust;
+    if (existingCombust) {
+      ctx.player.combust = {
+        hpLoss: existingCombust.hpLoss + (card.hpLoss || 1),
+        damage: existingCombust.damage + (card.damage || 5)
+      };
+    } else {
+      ctx.player.combust = { hpLoss: card.hpLoss || 1, damage: card.damage || 5 };
+    }
+    ctx.combatLog.push(`Combust stacked: ${ctx.player.combust.damage} damage per turn`);
+  },
+  blockPerAttackEvolved: (card, ctx) => {
+    ctx.player.rage = card.rageBlock || 5;
   }
 };
 
@@ -425,6 +444,49 @@ const complexEffects = {
 
   loseHpGainEnergy: (card, ctx) => {
     complexEffects.hpForEnergy(card, ctx);
+  },
+
+  tempStrengthDown: (card, ctx) => {
+    const enemy = ctx.enemies[ctx.targetIndex];
+    if (enemy && enemy.currentHp > 0) {
+      const reduction = card.strengthReduction || 9;
+      ctx.enemies[ctx.targetIndex] = {
+        ...enemy,
+        strength: (enemy.strength || 0) - reduction,
+        tempStrengthLoss: (enemy.tempStrengthLoss || 0) + reduction
+      };
+      ctx.combatLog.push(`${enemy.name} lost ${reduction} Strength this turn`);
+    }
+  },
+
+  costReduceOnHpLoss: (card, ctx) => {
+    // Damage is dealt normally by the combat system using card.damage
+    // The cost reduction is tracked on the card and handled by the combat system
+    ctx.combatLog.push(`Blood for Blood dealt damage`);
+  },
+
+  damagePerStatus: (card, ctx) => {
+    const statusCount = ctx.hand.filter(c => c.type === CARD_TYPES.STATUS || c.type === CARD_TYPES.CURSE).length;
+    if (statusCount > 0) {
+      const baseDamage = card.damage || 6;
+      ctx.enemies = ctx.enemies.map(enemy => {
+        if (enemy.currentHp <= 0) return enemy;
+        const totalDamage = calculateDamage(baseDamage * statusCount, ctx.player, enemy, { relics: ctx.relics });
+        ctx.combatLog.push(`Fire Breath dealt ${totalDamage} to ${enemy.name} (${statusCount} status cards)`);
+        return applyDamageToTarget(enemy, totalDamage);
+      });
+    } else {
+      ctx.combatLog.push('Fire Breath: no Status cards in hand');
+    }
+  },
+
+  gainStrengthOnKill: (card, ctx) => {
+    const enemy = ctx.enemies[ctx.targetIndex];
+    if (enemy && enemy.currentHp <= 0) {
+      const strengthGain = card.strengthGain || 3;
+      ctx.player.strength += strengthGain;
+      ctx.combatLog.push(`Gained ${strengthGain} Strength from kill`);
+    }
   }
 };
 
@@ -567,6 +629,29 @@ const cardSelectionEffects = {
           ...ctx.state,
           phase: ctx.GAME_PHASE.CARD_SELECT_HAND,
           cardSelection: { type: 'exhaustChoose', sourceCard: card },
+          player: ctx.player,
+          enemies: ctx.enemies,
+          hand: ctx.hand,
+          discardPile: ctx.discardPile,
+          drawPile: ctx.drawPile,
+          exhaustPile: ctx.exhaustPile,
+          selectedCard: null,
+          targetingMode: false,
+          combatLog: ctx.combatLog
+        }
+      };
+    }
+    return null;
+  },
+
+  exhaustForDraw: (card, ctx) => {
+    if (ctx.hand.length > 0) {
+      return {
+        earlyReturn: true,
+        earlyReturnState: {
+          ...ctx.state,
+          phase: ctx.GAME_PHASE.CARD_SELECT_HAND,
+          cardSelection: { type: 'exhaustForDraw', sourceCard: card, drawCount: card.draw || 2 },
           player: ctx.player,
           enemies: ctx.enemies,
           hand: ctx.hand,

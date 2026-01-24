@@ -263,9 +263,18 @@ export const processPlayerTurnStart = (player) => {
 export const processEnemyTurnStart = (enemies, combatLog = []) => {
   return enemies.map(enemy => {
     const e = { ...enemy };
-    e.block = 0;
+    // Barricade/retainBlock: don't clear block for enemies with barricade
+    if (!e.barricade && !e.retainBlock) {
+      e.block = 0;
+    }
     if (e.vulnerable > 0) e.vulnerable--;
     if (e.weak > 0) e.weak--;
+    // Restore temp strength loss (Dark Shackles wears off)
+    if (e.tempStrengthLoss > 0) {
+      e.strength = (e.strength || 0) + e.tempStrengthLoss;
+      combatLog.push(`${e.name} regained ${e.tempStrengthLoss} Strength`);
+      e.tempStrengthLoss = 0;
+    }
     if (e.ritual > 0) {
       e.strength = (e.strength || 0) + e.ritual;
       combatLog.push(`${e.name} gains ${e.ritual} Strength from Ritual`);

@@ -3,7 +3,22 @@
     "allow": [
       "Bash(wc:*)",
       "Bash(find:*)",
-      "Bash(du -sh:*)"
+      "Bash(du -sh:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run build:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npm run validate:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nPM-01: Add sprint board, definition of done, dependencies, and validate scripts\n\nSets up project coordination infrastructure:\n- SPRINT_BOARD.md with all tasks, owners, statuses, and execution order\n- DEFINITION_OF_DONE.md with acceptance criteria per task category\n- DEPENDENCIES.md with mermaid dependency graph and conflict zones\n- npm run validate \\(lint + test + build\\) and validate:quick \\(test only\\)\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(python3 -c \"import sys,json; d=json.loads\\(sys.stdin.read\\(\\)\\); c=d.get\\(''''message'''',{}\\).get\\(''''content'''',[]\\); print\\(next\\(\\(x[''''text''''][:200] for x in c if x.get\\(''''type''''\\)==''''text''''\\),''''working...''''\\)\\)\")",
+      "Bash(gh auth status:*)",
+      "Bash(gh auth login:*)",
+      "Bash(gh repo create:*)",
+      "Bash(gh auth refresh:*)",
+      "Bash(git push:*)",
+      "Bash(gh auth:*)",
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
