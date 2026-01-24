@@ -15,13 +15,20 @@ Back Ender - Architecture, state management, performance
 ## Entries
 
 ### Day 1
-**Date:**
-**Status:**
+**Date:** 2026-01-24
+**Status:** FIX-03 complete, PR pending
 **Done today:**
--
+- Fixed exhaust trigger handling in combatReducer's exhaustChoose case
+- Replaced inline Dark Embrace + Feel No Pain logic with centralized handleExhaustTriggers
+- This fixes missing Dead Branch trigger when cards are exhausted via card selection
+- Added import of handleExhaustTriggers from effectProcessor
+- Proper hand context now passed to all exhaust triggers
+- 5 new tests covering all exhaust trigger combinations via card selection
+- All tests pass, validate clean
 **Blockers:**
--
+- None
 **Tomorrow:**
--
+- Wait for FIX-03 PR review and merge
+- Start BE-02 (normalize state with entity IDs) after Phase A merges
 
 ---
