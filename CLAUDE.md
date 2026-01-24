@@ -6,13 +6,10 @@ Before starting any work, read these files to understand current state:
 
 1. **SPRINT_BOARD.md** - Current sprint, task status, what's in progress
 2. **PROCESS.md** - Branch naming, PR workflow, commit conventions
-3. **IMPROVEMENT_PLAN.md** - Known bugs, what's validated vs broken
-4. **DEFINITION_OF_DONE.md** - When is a task actually done (not just committed)
+3. **DEFINITION_OF_DONE.md** - When is a task actually done (not just committed)
 
 For deeper context (read when relevant to your task):
 - **DEPENDENCIES.md** - Task ordering, conflict zones, what blocks what
-- **BRAINSTORM_SESSION_2.md** - Why process changed, what went wrong in sprint 1
-- **BRAINSTORM_OUTCOME.md** - Original team planning, ralph loop strategies
 - **TEAM_PLAN.md** - Full phase breakdown, all task details
 - **GAME_REFERENCE.md** - Card/enemy/relic mechanics (for content tasks)
 

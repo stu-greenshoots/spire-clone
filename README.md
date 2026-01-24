@@ -1,104 +1,92 @@
 # Spire Ascent
 
-A roguelike deck-building game inspired by Slay the Spire, built with React 19 and Vite.
+A single-player deckbuilding roguelike inspired by Slay the Spire, built with React and Vite.
+
+## About
+
+Spire Ascent is a browser-based card game where you climb a procedurally generated spire, building a deck of cards, collecting relics, and fighting enemies across three acts culminating in a final boss encounter.
+
+This project is developed entirely by a team of AI agents, each specializing in a different aspect of game development. The agents collaborate through structured sprints, code reviews, and pull requests — simulating a real development team workflow using Claude Code.
+
+## The Team
+
+| Name | Role | Focus Area |
+|------|------|------------|
+| **Morgan** | Project Manager | Sprint coordination, CI/CD, process |
+| **Sasha** | Architect | State management, reducers, performance |
+| **Riley** | Gameplay Engineer | Potions, card upgrades, content |
+| **Alex** | Systems Engineer | Audio, save/load, settings |
+| **Jordan** | UX Engineer | Combat animations, tooltips, visual polish |
+| **Taylor** | Art Director | Asset pipeline, image optimization, card frames |
+| **Cameron** | Narrative Designer | Events, flavour text, world building |
+| **Quinn** | QA Lead | Test suites, balance simulator, coverage |
 
 ## Features
 
-- **81 unique cards** - Attacks, skills, powers, and curses
-- **34 enemies** - From slimes to elite warriors to powerful bosses
-- **47 relics** - Passive items that modify gameplay
-- **Procedural maps** - Different paths with combat, events, shops, and rest sites
-- **Touch & mouse support** - Drag cards to play or tap to select targets
+- **81 unique cards** across attack, skill, and power types
+- **34 enemies** with unique AI movesets across 3 acts
+- **47 relics** with trigger-based passive effects
+- **Procedural maps** with branching paths, events, shops, and rest sites
+- **Status effects** — strength, dexterity, vulnerable, weak, poison, and more
+- **Potion system** with combat and out-of-combat usage
+- **Save/load** system with persistent progress
+- **Touch and mouse** support
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js 18+
-- npm or yarn
-
-### Installation
-
 ```bash
-# Clone the repository
-git clone <repo-url>
-cd spire-clone
-
-# Install dependencies
 npm install
-
-# Start development server
-npm run dev
+npm run dev           # Dev server at localhost:5173
 ```
 
-The game will be available at `http://localhost:5173`
-
-### Building for Production
+## Development
 
 ```bash
-npm run build
-npm run preview
+npm run validate      # Lint + test + build (pre-push gate)
+npm run test:run      # Run tests once
+npm run test:coverage # Tests with coverage report
+npm run lint          # ESLint check
+npm run build         # Production build
 ```
 
-## Game Controls
+## How It Works
 
-- **Click/tap a card** to select it
-- **Drag cards** to the enemy area to play
-- **Click enemies** to view their info or select as target
-- **End Turn button** completes your turn
-- **Draw/Discard/Exhaust piles** - tap to view contents
+Each team member operates within defined file boundaries and follows a sprint-based workflow:
+
+1. Tasks are planned on the sprint board
+2. Each task gets its own branch (`sprint-N/task-id-description`)
+3. PRs target the sprint integration branch, not master
+4. CI must pass and changes are smoke-tested before merge
+5. Sprint branches merge to master at the end of each sprint
+
+The agents coordinate through shared planning documents, enforce code ownership boundaries, and review each other's work.
+
+## Tech Stack
+
+- **React 19** — UI framework
+- **Vite 7** — Build tool and dev server
+- **Vitest** — Testing framework (763 tests)
+- **GitHub Actions** — CI/CD pipeline
+- **GitHub Pages** — Hosting
 
 ## Project Structure
 
 ```
 src/
 ├── components/       # React UI components
-│   ├── CombatScreen.jsx
-│   ├── MapScreen.jsx
-│   └── ...
-├── context/          # Game state management
-│   └── GameContext.jsx
-├── data/             # Game content definitions
-│   ├── cards.js      # Card definitions
-│   ├── enemies.js    # Enemy definitions
-│   └── relics.js     # Relic definitions
+├── context/          # Game state management (reducers)
+├── data/             # Content definitions (cards, enemies, relics, events)
+├── systems/          # Game logic (combat, cards, potions, audio, save)
 ├── hooks/            # Custom React hooks
-├── constants/        # Shared constants
-└── test/             # Test files
+├── utils/            # Utilities (asset loading, map generation)
+└── test/             # Test suites
 ```
-
-## Development
-
-### Running Tests
-
-```bash
-# Run tests in watch mode
-npm test
-
-# Run tests once
-npm run test:run
-
-# Run tests with coverage
-npm run test:coverage
-```
-
-### Linting
-
-```bash
-npm run lint
-```
-
-## Tech Stack
-
-- **React 19** - UI framework
-- **Vite 7** - Build tool and dev server
-- **Vitest** - Testing framework
-- **ESLint** - Code linting
 
 ## Documentation
 
-- [GAME_REFERENCE.md](./GAME_REFERENCE.md) - Complete game mechanics documentation
-- [AUDIT_MATRIX.md](./AUDIT_MATRIX.md) - Implementation status tracking
+- [GAME_REFERENCE.md](./GAME_REFERENCE.md) — Complete game mechanics
+- [SPRINT_BOARD.md](./SPRINT_BOARD.md) — Current sprint status
+- [PROCESS.md](./PROCESS.md) — Development workflow
 
 ## License
 
