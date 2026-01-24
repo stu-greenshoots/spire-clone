@@ -49,10 +49,15 @@ git checkout -b sprint-N/task-id-description
 - Keep changes focused on ONE task
 
 ### 3. Opening a PR
-- Target: `sprint-N` branch (NOT master)
+- Target: `sprint-N` branch (NOT master, NEVER master)
 - Title format: `TASK-ID: Description`
 - Fill out PR template completely
 - Max ~300 lines changed (split larger tasks)
+
+### Deploy Pipeline
+- Deploys trigger automatically on push to `sprint-N`
+- Every merged PR = live deploy to GitHub Pages
+- Master only gets updated at sprint end (integration merge)
 
 ### 4. Review & Merge
 - CI must pass (lint + test + build)

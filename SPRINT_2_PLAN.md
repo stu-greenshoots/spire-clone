@@ -4,6 +4,8 @@
 **Start Date:** 2026-01-24
 **Goal:** Fix all P0 runtime bugs, close remaining Phase 1 gaps, lay groundwork for Phase 2.
 **Branch:** `sprint-2`
+**PR Target:** All PRs merge into `sprint-2` (never master directly)
+**Deploys:** GitHub Pages deploys from `sprint-2` on every push
 **Principle:** Fix before feature. Validate before merge. Ship stable, not fast.
 
 ---
