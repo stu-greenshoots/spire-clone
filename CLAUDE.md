@@ -151,7 +151,7 @@ npm run build            # Production build
 - **Branch:** `sprint-2` (integration branch, all PRs merged)
 - **P0 Bugs:** 0 open (FIX-01, FIX-02, FIX-03 merged)
 - **P1/P2 Bugs:** 0 open (FIX-04, FIX-05, FIX-06 merged)
-- **Tests:** 759 passing (27 test files)
+- **Tests:** 837 passing (29 test files)
 - **Lint:** 0 errors
 - **Build:** Passing
 - **Runtime:** All systems functional
