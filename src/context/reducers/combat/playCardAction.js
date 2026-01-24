@@ -6,6 +6,7 @@ import { calculateDamage, calculateBlock, applyDamageToTarget } from '../../../s
 import { createSplitSlimes } from '../../../systems/enemySystem';
 import { handleSpecialEffect, SUPPORTED_EFFECTS } from '../../../systems/cardEffects';
 import { triggerRelics } from '../../../systems/relicSystem';
+import { autoSave } from '../../../systems/saveSystem';
 
 export const handlePlayCard = (state, action) => {
   const { card, targetId } = action.payload;
@@ -473,7 +474,7 @@ export const handlePlayCard = (state, action) => {
         : getRandomRelic(null, state.relics.map(r => r.id));
     }
 
-    return {
+    const victoryState = {
       ...state,
       phase: GAME_PHASE.COMBAT_REWARD,
       player: newPlayer,
@@ -492,6 +493,8 @@ export const handlePlayCard = (state, action) => {
         relicReward
       }
     };
+    autoSave(victoryState);
+    return victoryState;
   }
 
   return {

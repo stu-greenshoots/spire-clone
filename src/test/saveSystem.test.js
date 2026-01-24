@@ -73,7 +73,7 @@ describe('Save System', () => {
   });
 
   describe('saveGame', () => {
-    it('saves state in version 3 format with ID-based serialization', () => {
+    it('saves state in version 4 format with ID-based serialization and checksum', () => {
       const deck = getStarterDeck();
       const state = {
         player: { currentHp: 70, maxHp: 80, gold: 50, strength: 2, dexterity: 1 },
@@ -91,7 +91,9 @@ describe('Save System', () => {
       expect(result).toBe(true);
 
       const raw = JSON.parse(localStorage.getItem('spireAscent_save'));
-      expect(raw.version).toBe(3);
+      expect(raw.version).toBe(4);
+      expect(raw.checksum).toBeDefined();
+      expect(typeof raw.checksum).toBe('number');
       // Deck should be serialized as ID objects, not full card objects
       expect(raw.state.deck[0]).toHaveProperty('id');
       expect(raw.state.deck[0]).not.toHaveProperty('damage');

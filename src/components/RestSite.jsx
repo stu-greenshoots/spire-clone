@@ -120,7 +120,7 @@ const RestSite = () => {
           justifyContent: 'center',
           alignContent: 'flex-start'
         }}>
-          {deck.map((card, idx) => {
+          {deck.map((card) => {
             const canUpgrade = !card.upgraded && card.upgradedVersion;
             const isHovered = hoverCard === card.instanceId;
             return (
