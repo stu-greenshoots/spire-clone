@@ -4,7 +4,7 @@ import { shuffleArray } from '../../../utils/mapGenerator';
 import { applyDamageToTarget as combatApplyDamageToTarget } from '../../../systems/combatSystem';
 import { getEnemyIntent, createSplitSlimes, createSummonedEnemy } from '../../../systems/enemySystem';
 import { triggerRelics, getPassiveRelicEffects } from '../../../systems/relicSystem';
-import { deleteSave } from '../../../systems/saveSystem';
+import { deleteSave, autoSave } from '../../../systems/saveSystem';
 import { processEnemyTurns } from './enemyTurnAction';
 
 const applyDamageToTarget = combatApplyDamageToTarget;
@@ -245,7 +245,7 @@ export const handleEndTurn = (state) => {
     });
     newPlayer.currentHp = Math.min(newPlayer.maxHp, newPlayer.currentHp + endEffects.heal);
 
-    return {
+    const victoryState = {
       ...state,
       phase: GAME_PHASE.COMBAT_REWARD,
       player: newPlayer,
@@ -257,6 +257,8 @@ export const handleEndTurn = (state) => {
         cardRewards
       }
     };
+    autoSave(victoryState);
+    return victoryState;
   }
 
   // ========== START NEW PLAYER TURN ==========

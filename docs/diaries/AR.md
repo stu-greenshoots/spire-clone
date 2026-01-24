@@ -46,3 +46,33 @@ Allrounder - Audio, save/load, settings, honest assessment
 - Settings (AR-03) could include theme brightness as a user preference — supports GD's brightness pass with a user-controllable slider.
 
 ---
+
+### Day 3 - AR-02 Complete
+**Date:** 2026-01-24
+**Status:** AR-02 complete, PR pending
+**Done today:**
+- Save system v4 with integrity checking:
+  - Added checksum to save data (simple hash of key state values)
+  - Load verifies checksum — logs warning on mismatch but still loads (advisory)
+  - Corrupted saves auto-cleared on load failure
+  - Phase now persisted in save data for proper state restoration
+- Auto-save system:
+  - New `autoSave()` function with 1-second debounce
+  - Triggers on combat victories (both playCard and endTurn victory paths)
+  - Prevents data loss on unexpected tab close during combat rewards
+- Run history improvements:
+  - Expanded stats: act, potionCount, elitesKilled, bossesKilled, duration
+  - History now keeps last 20 runs (up from 10)
+- Updated save test: version 4, checksum assertions
+- Cleaned up RestSite lint warning (unused idx param from BE-02)
+**Architecture:**
+- Auto-save is additive (supplements existing manual saves at map moves/upgrades)
+- Checksum is advisory only — corrupt data can still load for user recovery
+- Debounce prevents localStorage spam in rapid state transitions
+**Blockers:**
+- None
+**Next:**
+- AR-03 (Settings) if time permits
+- All core AR Sprint 2 tasks complete
+
+---
