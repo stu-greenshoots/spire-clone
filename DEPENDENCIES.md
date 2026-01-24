@@ -31,11 +31,11 @@ graph TD
 
     PM01[PM-01: Sprint Docs]
 
-    %% Cross-track soft dependencies (dashed)
-    GD01 -.->|assets| UX01
-    AR01 -.->|audio hooks| UX01
-    BE01 -.->|new structure| JR01
-    JR01 -.->|potion effects| SL01
+    %% Cross-track soft dependencies (dashed = can stub/work around)
+    GD01 -.->|assets optional| UX01
+    AR01 -.->|audio hooks optional| UX01
+    BE01 -.->|new structure optional| JR01
+    JR01 -.->|potion effects future| SL01
 
     %% Phase gates
     BE01 --> BE05[BE-05: Performance]
@@ -54,12 +54,21 @@ graph TD
     class BE01 critical
 ```
 
+## Key Dependency Corrections (from Brainstorm)
+
+| Original Assumption | Correction | Raised By |
+|---------------------|-----------|-----------|
+| QA-01 depends on BE-01 | **NO.** QA-01 is independent - tests current interface as regression suite | BE, QA |
+| UX-01 depends on GD-01 and AR-01 | **Soft dependency only.** UX stubs art/audio with placeholders | UX |
+| JR-01 depends on BE-01 | **Soft dependency.** JR builds data layer now, BE migrates later | BE, JR |
+| SL-01 references potions | **Defer.** Events use only currently working effects; potion events added after JR-01 | SL |
+
 ## Conflict Zones
 
 Files that multiple tasks touch - must be sequential:
 
-| File | Who Wants It | Resolution Order |
-|------|-------------|-----------------|
+| File | Who Wants It | Agreed Resolution Order |
+|------|-------------|------------------------|
 | `GameContext.jsx` | BE (rewrite), JR (potions), UX (hooks) | BE-01 first, then JR, then UX |
 | `CombatScreen.jsx` | UX (animations), JR (potion UI) | UX-01 first, JR after |
 | `src/data/cards.js` | SL (flavor), JR (new cards) | SL-02 first, JR-04 after |
@@ -71,7 +80,14 @@ Files that multiple tasks touch - must be sequential:
 BE-01 → BE-02 → JR-01 integration → UX-01 integration → QA validation
 ```
 
-BE-01 (Context Split) is the single critical-path item. All other morning block tasks are independent and can proceed regardless of BE-01 status.
+BE-01 (Context Split) is the single critical-path item for architecture. However, for **investor demo priority**, the critical path is:
+
+```
+AR-01 (audio) + UX-01 (feedback) + GD-01 (art) → Visible/audible polish
+```
+
+> **Decision:** FEEL over architecture for demo. Architecture enables long-term velocity
+> but doesn't impress investors. Both tracks run in parallel.
 
 ## Parallel Safety
 
@@ -79,6 +95,16 @@ Morning block tasks touch completely independent files:
 - BE-01: `src/context/` (restructure)
 - SL-01: `src/data/events.js` (new file)
 - QA-02: `src/test/balance/` (new directory)
+- QA-01: `src/test/components/` (new directory)
 - PM-01: `*.md` files, `package.json` scripts
 - GD-01: `public/images/`, `src/components/Enemy.jsx`, `src/utils/assetLoader.js`
 - AR-01: `src/systems/audioSystem.js`, `src/components/Settings.jsx`
+
+## Size Warnings
+
+| Task | Listed Size | Actual Risk | Reason |
+|------|-------------|-------------|--------|
+| AR-04 | M | Potentially L | CombatScreen interaction model rewrite for touch, not just CSS |
+| BE-01 | L | L (confirmed) | 2,352 lines, cross-referencing reducers, 289 tests to preserve |
+| GD-01 | L | L + manual | Art generation is non-deterministic; pipeline is automatable, curation is not |
+| AR-01 | L | L + manual | System is automatable; sourcing 25 CC0 audio files is manual curation |
