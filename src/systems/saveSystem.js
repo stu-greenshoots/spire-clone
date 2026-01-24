@@ -1,5 +1,6 @@
 const SAVE_KEY = 'spireAscent_save';
 const HISTORY_KEY = 'spireAscent_runHistory';
+const SAVE_VERSION = 4;
 
 /**
  * Serialize a card to its save-friendly format.
@@ -42,8 +43,9 @@ const serializePotion = (potion) => {
 export const saveGame = (state) => {
   try {
     const saveData = {
-      version: 3,
+      version: SAVE_VERSION,
       timestamp: Date.now(),
+      checksum: null,
       state: {
         player: {
           currentHp: state.player.currentHp,
@@ -59,9 +61,12 @@ export const saveGame = (state) => {
         act: state.act,
         map: state.map,
         currentNode: state.currentNode,
-        ascension: state.ascension || 0
+        ascension: state.ascension || 0,
+        phase: state.phase || null
       }
     };
+    // Simple checksum for corruption detection
+    saveData.checksum = computeChecksum(saveData.state);
     localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
     return true;
   } catch (e) {
@@ -76,12 +81,19 @@ export const loadGame = () => {
     if (!raw) return null;
     const saveData = JSON.parse(raw);
     if (!validateSave(saveData)) {
-      console.warn('Corrupted save detected');
+      console.warn('Corrupted save detected, clearing');
+      localStorage.removeItem(SAVE_KEY);
       return null;
+    }
+    // Verify checksum if present (v4+)
+    if (saveData.checksum && computeChecksum(saveData.state) !== saveData.checksum) {
+      console.warn('Save checksum mismatch, data may be corrupted');
+      // Still allow loading — checksum is advisory, not blocking
     }
     return saveData.state;
   } catch (e) {
     console.error('Load failed:', e);
+    localStorage.removeItem(SAVE_KEY);
     return null;
   }
 };
@@ -128,6 +140,38 @@ export const deleteSave = () => {
   localStorage.removeItem(SAVE_KEY);
 };
 
+/**
+ * Simple checksum for save corruption detection.
+ * Uses a basic hash of key state values — not cryptographic, just a sanity check.
+ */
+const computeChecksum = (state) => {
+  const values = [
+    state.player.currentHp,
+    state.player.maxHp,
+    state.player.gold,
+    state.currentFloor,
+    state.act,
+    state.deck.length,
+    state.relics.length,
+    (state.potions || []).length
+  ];
+  return values.reduce((hash, val) => ((hash << 5) - hash + (val || 0)) | 0, 0);
+};
+
+/**
+ * Auto-save: called after significant game state changes.
+ * Wraps saveGame with a debounce check to prevent rapid repeated saves.
+ */
+let lastAutoSave = 0;
+const AUTO_SAVE_INTERVAL = 1000; // Minimum ms between auto-saves
+
+export const autoSave = (state) => {
+  const now = Date.now();
+  if (now - lastAutoSave < AUTO_SAVE_INTERVAL) return false;
+  lastAutoSave = now;
+  return saveGame(state);
+};
+
 const validateSave = (saveData) => {
   if (!saveData || !saveData.state) return false;
   if (!saveData.version) return false;
@@ -151,15 +195,20 @@ export const addRunToHistory = (runData) => {
       date: new Date().toISOString(),
       won: runData.won,
       floor: runData.floor,
+      act: runData.act || 1,
       deckSize: runData.deckSize || 0,
       relicCount: runData.relicCount || 0,
+      potionCount: runData.potionCount || 0,
       gold: runData.gold || 0,
       ascension: runData.ascension || 0,
       causeOfDeath: runData.causeOfDeath || null,
-      enemiesKilled: runData.enemiesKilled || 0
+      enemiesKilled: runData.enemiesKilled || 0,
+      elitesKilled: runData.elitesKilled || 0,
+      bossesKilled: runData.bossesKilled || 0,
+      duration: runData.duration || 0
     });
-    // Keep only last 10
-    const trimmed = history.slice(0, 10);
+    // Keep only last 20
+    const trimmed = history.slice(0, 20);
     localStorage.setItem(HISTORY_KEY, JSON.stringify(trimmed));
   } catch { /* ignore */ }
 };
