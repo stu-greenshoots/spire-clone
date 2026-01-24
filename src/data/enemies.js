@@ -240,6 +240,7 @@ export const ALL_ENEMIES = [
     type: 'elite',
     act: 1,
     emoji: '🛡️',
+    retainBlock: true,
     metallicize: 10,
     asleep: true,
     wakeThreshold: 3, // Wakes after 3 turns even if not attacked
@@ -459,6 +460,7 @@ export const ALL_ENEMIES = [
     type: 'normal',
     act: 2,
     emoji: '🐚',
+    retainBlock: true,
     moveset: [
       { id: 'shell', intent: INTENT.DEFEND, block: 14, message: 'Shell' },
       { id: 'suck', intent: INTENT.ATTACK_BUFF, damage: 10, special: 'healSelf', healAmount: 5, message: 'Suck' },
@@ -638,6 +640,7 @@ export const ALL_ENEMIES = [
     type: 'boss',
     act: 1,
     emoji: '🛡️👹',
+    retainBlock: true,
     modeShift: true,
     moveset: [
       { id: 'chargingUp', intent: INTENT.DEFEND, block: 9, message: 'Charging Up' },
@@ -693,6 +696,7 @@ export const ALL_ENEMIES = [
     type: 'boss',
     act: 2,
     emoji: '🏆',
+    retainBlock: true,
     moveset: [
       { id: 'defensiveStance', intent: INTENT.DEFEND_BUFF, block: 15, effects: [{ type: 'metallicize', amount: 5 }], message: 'Defensive Stance' },
       { id: 'faceSlap', intent: INTENT.ATTACK_DEBUFF, damage: 12, effects: [{ type: 'frail', amount: 2, target: 'player' }, { type: 'vulnerable', amount: 2, target: 'player' }], message: 'Face Slap' },
