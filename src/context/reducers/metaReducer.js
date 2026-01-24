@@ -110,8 +110,8 @@ export const metaReducer = (state, action) => {
     }
 
     case 'UPGRADE_CARD': {
-      const { cardIndex } = action.payload;
-      const card = state.deck[cardIndex];
+      const { cardId } = action.payload;
+      const card = state.deck.find(c => c.instanceId === cardId);
       if (!card || card.upgraded || !card.upgradedVersion) {
         const noUpgradeState = {
           ...state,
@@ -128,8 +128,9 @@ export const metaReducer = (state, action) => {
         name: card.name + '+'
       };
 
-      const newDeck = [...state.deck];
-      newDeck[cardIndex] = upgradedCard;
+      const newDeck = state.deck.map(c =>
+        c.instanceId === cardId ? upgradedCard : c
+      );
 
       const upgradeState = {
         ...state,

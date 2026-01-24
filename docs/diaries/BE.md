@@ -47,3 +47,32 @@ Back Ender - Architecture, state management, performance
 - Audio is silent — AR should investigate autoplay policy.
 
 ---
+
+### Day 3 - BE-02 Complete
+**Date:** 2026-01-24
+**Status:** BE-02 complete, PR pending
+**Done today:**
+- Normalized enemy references in playCardAction.js:
+  - Replaced `targetIndex` array index with `resolvedTargetId` instanceId
+  - All single-target damage/effects now use `.map()` with instanceId matching
+  - Random target (Juggernaut, random damage cards) normalized to map pattern
+  - Time Eater heal uses map instead of index mutation
+  - Strike Dummy relic uses map instead of index mutation
+  - effectCtx provides `targetId` as primary, `targetIndex` as backward-compatible getter
+- Normalized enemyTurnAction.js:
+  - Heal ally (Mystic) uses map with instanceId instead of lowestIdx mutation
+- Normalized card upgrade API:
+  - `upgradeCard(cardIndex)` → `upgradeCard(cardId)` using instanceId
+  - metaReducer uses `deck.find(c => c.instanceId === cardId)` instead of `deck[cardIndex]`
+  - RestSite passes card.instanceId instead of array index
+  - GameContext `selectCardFromPile` removed unused `index` param
+**Architecture:**
+- cardEffects.js still uses ctx.targetIndex internally (backward-compat getter bridges the gap)
+- Full normalization of cardEffects would be a separate task (50+ index refs)
+- Public API is now fully ID-based: no component passes array indices
+**Blockers:**
+- None
+**Next:**
+- All BE Sprint 2 tasks complete (FIX-03 merged, BE-02 PR pending)
+
+---

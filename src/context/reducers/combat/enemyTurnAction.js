@@ -186,20 +186,19 @@ export const processEnemyTurns = (ctx) => {
       const healAmount = enemy._healAlly;
       // Find the lowest HP ally that isn't itself
       let lowestAlly = null;
-      let lowestIdx = -1;
-      newEnemies.forEach((ally, idx) => {
+      newEnemies.forEach((ally) => {
         if (ally.instanceId !== enemy.instanceId && ally.currentHp > 0 && ally.currentHp < ally.maxHp) {
           if (!lowestAlly || ally.currentHp < lowestAlly.currentHp) {
             lowestAlly = ally;
-            lowestIdx = idx;
           }
         }
       });
-      if (lowestAlly && lowestIdx >= 0) {
-        newEnemies[lowestIdx] = {
-          ...newEnemies[lowestIdx],
-          currentHp: Math.min(newEnemies[lowestIdx].maxHp, newEnemies[lowestIdx].currentHp + healAmount)
-        };
+      if (lowestAlly) {
+        newEnemies = newEnemies.map(e =>
+          e.instanceId === lowestAlly.instanceId
+            ? { ...e, currentHp: Math.min(e.maxHp, e.currentHp + healAmount) }
+            : e
+        );
         combatLog.push(`${enemy.name} healed ${lowestAlly.name} for ${healAmount} HP`);
       }
       const { _healAlly, ...cleanEnemy } = enemy;

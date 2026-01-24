@@ -55,9 +55,9 @@ const RestSite = () => {
   const healAmount = Math.floor(player.maxHp * 0.3);
   const upgradableCards = deck.filter(c => !c.upgraded && c.upgradedVersion);
 
-  const handleSelectForUpgrade = (card, cardIndex) => {
+  const handleSelectForUpgrade = (card) => {
     setPreviewCard(card);
-    setPreviewIndex(cardIndex);
+    setPreviewIndex(card.instanceId);
   };
 
   const handleConfirmUpgrade = () => {
@@ -126,7 +126,7 @@ const RestSite = () => {
             return (
               <div
                 key={card.instanceId}
-                onClick={() => canUpgrade && handleSelectForUpgrade(card, idx)}
+                onClick={() => canUpgrade && handleSelectForUpgrade(card)}
                 onMouseEnter={() => canUpgrade && setHoverCard(card.instanceId)}
                 onMouseLeave={() => setHoverCard(null)}
                 style={{
