@@ -8,7 +8,7 @@ Junior Developer - Potion system, card upgrades, new content
 
 ## Sprint 2 Tasks
 - FIX-01: Potion UI integration (P0)
-- FIX-05: Enemy block retention (P0)
+- FIX-05: Enemy block retention (P2)
 - JR-02: Card upgrades (P1)
 
 ---

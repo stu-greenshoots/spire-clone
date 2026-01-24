@@ -84,12 +84,13 @@ These files are touched by multiple tasks. Resolve in order shown:
 ```bash
 git checkout sprint-2
 git pull origin sprint-2
-git checkout -b sprint-2/{task-id}-{description}
+git checkout -b {task-id}-{description}
 # ... work ...
 npm run validate
-git push -u origin sprint-2/{task-id}-{description}
+git push -u origin {task-id}-{description}
 # Open PR targeting sprint-2
 ```
+**Note:** Flat branch names only (no `sprint-2/` prefix). See DEC-013.
 
 ### Commit format
 ```
