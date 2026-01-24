@@ -4,14 +4,20 @@
 
 Before starting any work, read these files to understand current state:
 
-1. **SPRINT_BOARD.md** - Current sprint, task status, what's in progress
-2. **PROCESS.md** - Branch naming, PR workflow, commit conventions
-3. **DEFINITION_OF_DONE.md** - When is a task actually done (not just committed)
+1. **SPRINT_2_PLAN.md** - Sprint 2 kickoff plan, task assignments, process
+2. **SPRINT_BOARD.md** - Current sprint, task status, what's in progress
+3. **PROCESS.md** - Branch naming, PR workflow, commit conventions
+4. **DEFINITION_OF_DONE.md** - When is a task actually done (not just committed)
 
 For deeper context (read when relevant to your task):
 - **DEPENDENCIES.md** - Task ordering, conflict zones, what blocks what
 - **TEAM_PLAN.md** - Full phase breakdown, all task details
 - **GAME_REFERENCE.md** - Card/enemy/relic mechanics (for content tasks)
+
+## Diaries
+
+Each team member keeps a daily diary at `docs/diaries/{ROLE}.md` (e.g. `docs/diaries/BE.md`).
+Update your diary every session with what you did, blockers, and next steps.
 
 ## Git Flow
 
@@ -135,13 +141,17 @@ npm run build            # Production build
 9. **No unused imports/variables.** Lint must be clean.
 10. **No forward-referencing.** Don't call APIs that don't exist yet.
 
-## Current State (Sprint 2)
+## Current State (Sprint 2 - Ready to Start)
 
+- **Branch:** `sprint-2` (integration branch created, pushed to origin)
 - **P0 Bugs:** 3 open (potion UI, save format, card effect context)
+- **P1/P2 Bugs:** 3 open (asset format, enemy block, test selectors)
 - **Tests:** 763 passing
 - **Lint:** 0 errors
 - **Build:** Passing
 - **Runtime:** Potions, save/load, and some card effects are BROKEN
+- **Diaries:** `docs/diaries/{ROLE}.md` - update daily
+- **Plan:** See SPRINT_2_PLAN.md for full task breakdown
 
 ## Architecture Quick Reference
 
