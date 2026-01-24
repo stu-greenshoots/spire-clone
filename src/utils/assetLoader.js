@@ -21,13 +21,23 @@ const imageCache = new Map();
 const preloadingSet = new Set();
 
 /**
- * Get the expected image path for an enemy ID.
+ * Get the expected image path for an enemy ID in PNG format.
  * Convention: public/images/enemies/{enemyId}.png
  * @param {string} enemyId - The enemy identifier (e.g., 'cultist', 'jaw_worm')
- * @returns {string} The path to the enemy image relative to public root
+ * @returns {string} The path to the enemy PNG image relative to public root
  */
 export function getEnemyImagePath(enemyId) {
   return `/images/enemies/${enemyId}.png`;
+}
+
+/**
+ * Get the WebP image path for an enemy ID.
+ * Convention: public/images/enemies/{enemyId}.webp
+ * @param {string} enemyId - The enemy identifier (e.g., 'cultist', 'jaw_worm')
+ * @returns {string} The path to the enemy WebP image relative to public root
+ */
+export function getEnemyImagePathWebP(enemyId) {
+  return `/images/enemies/${enemyId}.webp`;
 }
 
 /**
@@ -91,25 +101,35 @@ export function preloadImage(path) {
 
 /**
  * Check if an image exists (has been successfully loaded) for a given enemy ID.
+ * Checks for both WebP and PNG formats in the cache.
  * This is synchronous and checks the cache only.
  * Call preloadEnemyImage first to populate the cache.
  * @param {string} enemyId - The enemy identifier
  * @returns {boolean} True if image is cached and loaded successfully
  */
 export function hasImage(enemyId) {
-  const path = getEnemyImagePath(enemyId);
-  const cached = imageCache.get(path);
-  return cached ? cached.loaded : false;
+  const webpPath = getEnemyImagePathWebP(enemyId);
+  const cachedWebP = imageCache.get(webpPath);
+  if (cachedWebP && cachedWebP.loaded) return true;
+
+  const pngPath = getEnemyImagePath(enemyId);
+  const cachedPng = imageCache.get(pngPath);
+  return cachedPng ? cachedPng.loaded : false;
 }
 
 /**
  * Preload the image for a specific enemy by ID.
+ * Tries WebP format first, falls back to PNG if WebP is not available.
  * @param {string} enemyId - The enemy identifier
  * @returns {Promise<string>} Resolves with the image path on success
  */
 export function preloadEnemyImage(enemyId) {
-  const path = getEnemyImagePath(enemyId);
-  return preloadImage(path);
+  const webpPath = getEnemyImagePathWebP(enemyId);
+  const pngPath = getEnemyImagePath(enemyId);
+
+  return preloadImage(webpPath).catch(() => {
+    return preloadImage(pngPath);
+  });
 }
 
 /**
