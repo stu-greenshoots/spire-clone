@@ -233,7 +233,7 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
 
       {/* Intent Display */}
       {!hideIntents ? (
-        <div style={{
+        <div data-testid="enemy-intent" style={{
           display: 'flex',
           alignItems: 'center',
           gap: '6px',
@@ -359,7 +359,7 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
       </div>
 
       {/* Enemy Name */}
-      <div style={{
+      <div data-testid="enemy-name" style={{
         color: isBoss ? '#ff88aa' : isElite ? '#ffcc66' : 'white',
         fontSize: isBoss ? '13px' : '11px',
         fontWeight: 'bold',
@@ -395,7 +395,7 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
           boxShadow: `0 0 8px ${hpColors.glow}, inset 0 1px 0 rgba(255, 255, 255, 0.3)`
         }} />
         {/* HP Text */}
-        <div style={{
+        <div data-testid="enemy-hp" style={{
           position: 'absolute',
           top: 0,
           left: 0,
@@ -415,7 +415,7 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
 
       {/* Block Display */}
       {enemy.block > 0 && (
-        <div style={{
+        <div data-testid="enemy-block" style={{
           marginTop: '6px',
           display: 'flex',
           alignItems: 'center',

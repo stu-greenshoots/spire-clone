@@ -279,6 +279,20 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
   const costOrbClass = getCostOrbClass(card);
   const rarityClass = getRarityClass(card);
 
+  // Get the type-specific accent color for the left border
+  const getTypeAccentColor = () => {
+    switch (card.type) {
+      case CARD_TYPES.ATTACK: return 'rgba(200, 50, 50, 0.85)';
+      case CARD_TYPES.SKILL: return 'rgba(50, 100, 200, 0.85)';
+      case CARD_TYPES.POWER: return 'rgba(200, 170, 50, 0.85)';
+      case CARD_TYPES.CURSE: return 'rgba(120, 40, 160, 0.7)';
+      case CARD_TYPES.STATUS: return 'rgba(100, 100, 100, 0.7)';
+      default: return 'rgba(100, 100, 100, 0.5)';
+    }
+  };
+
+  const typeAccent = getTypeAccentColor();
+
   return (
     <div
       className={frameClass}
@@ -288,6 +302,7 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
         height: `${cardHeight}px`,
         background: `linear-gradient(180deg, ${colors.main}22 0%, ${colors.dark} 100%)`,
         border: selected ? `3px solid #FFD700` : `2px solid ${rarity.color}`,
+        borderLeft: selected ? `3px solid #FFD700` : `4px solid ${typeAccent}`,
         borderRadius: '10px',
         padding: '3px',
         display: 'flex',
@@ -297,7 +312,7 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
         color: 'white',
         boxShadow: selected
           ? `0 0 20px rgba(255, 215, 0, 0.8), 0 8px 25px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.2)`
-          : `0 4px 15px rgba(0, 0, 0, 0.4), 0 2px 5px ${rarity.glow}, inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
+          : `0 4px 15px rgba(0, 0, 0, 0.4), 0 2px 5px ${rarity.glow}, inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 3px 0 8px ${colors.main}33`,
         transform: selected ? 'scale(1.12) translateY(-15px)' : 'scale(1)',
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
@@ -306,15 +321,28 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
         overflow: 'hidden'
       }}
     >
-      {/* Card Frame Gradient Overlay */}
+      {/* Card Frame Gradient Overlay with type-tinted top edge */}
       <div style={{
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        background: `linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.2) 100%)`,
+        background: `linear-gradient(135deg, ${colors.main}18 0%, transparent 40%, rgba(0,0,0,0.2) 100%)`,
         borderRadius: '8px',
+        pointerEvents: 'none'
+      }} />
+
+      {/* Type accent glow strip at the top */}
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: small ? '2px' : '3px',
+        background: `linear-gradient(90deg, transparent 0%, ${colors.main} 30%, ${colors.light} 50%, ${colors.main} 70%, transparent 100%)`,
+        borderRadius: '8px 8px 0 0',
+        opacity: 0.7,
         pointerEvents: 'none'
       }} />
 
@@ -404,7 +432,10 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
         textTransform: 'uppercase',
         letterSpacing: '1px',
         marginTop: '1px',
-        fontWeight: '600'
+        fontWeight: '600',
+        background: `linear-gradient(90deg, transparent 0%, ${colors.main}25 30%, ${colors.main}25 70%, transparent 100%)`,
+        padding: small ? '1px 2px' : '1px 4px',
+        borderRadius: '2px'
       }}>
         {card.type}
       </div>

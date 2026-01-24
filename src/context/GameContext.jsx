@@ -223,6 +223,13 @@ const gameReducer = (state, action) => {
       return newState;
     }
 
+    case 'DISCARD_POTION': {
+      const { slotIndex } = action.payload;
+      const potion = state.potions[slotIndex];
+      if (!potion) return state;
+      return removePotion(state, slotIndex);
+    }
+
     case 'DELETE_SAVE': {
       return metaReducer(state, action);
     }
@@ -292,8 +299,8 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'REST' });
   }, []);
 
-  const upgradeCard = useCallback((cardIndex) => {
-    dispatch({ type: 'UPGRADE_CARD', payload: { cardIndex } });
+  const upgradeCard = useCallback((cardId) => {
+    dispatch({ type: 'UPGRADE_CARD', payload: { cardId } });
   }, []);
 
   const skipEvent = useCallback(() => {
@@ -308,8 +315,8 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'OPEN_DATA_EDITOR' });
   }, []);
 
-  const selectCardFromPile = useCallback((card, index) => {
-    dispatch({ type: 'SELECT_CARD_FROM_PILE', payload: { card, index } });
+  const selectCardFromPile = useCallback((card) => {
+    dispatch({ type: 'SELECT_CARD_FROM_PILE', payload: { card } });
   }, []);
 
   const cancelCardSelection = useCallback(() => {
@@ -340,6 +347,10 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'USE_POTION', payload: { slotIndex, targetIndex } });
   }, []);
 
+  const discardPotion = useCallback((slotIndex) => {
+    dispatch({ type: 'DISCARD_POTION', payload: { slotIndex } });
+  }, []);
+
   const value = {
     state,
     startGame,
@@ -367,7 +378,8 @@ export const GameProvider = ({ children }) => {
     saveGameState,
     loadGameState,
     deleteSaveState,
-    usePotion
+    usePotion,
+    discardPotion
   };
 
   return (

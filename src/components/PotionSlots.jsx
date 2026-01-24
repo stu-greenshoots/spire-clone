@@ -4,7 +4,7 @@ import { canUsePotion } from '../systems/potionSystem';
 import { POTION_COLORS, getPotionImage } from '../assets/art/art-config';
 
 const PotionSlots = () => {
-  const { state, usePotion: applyPotion } = useGame();
+  const { state, usePotion: applyPotion, discardPotion } = useGame();
   const { potions, phase } = state;
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [targetingSlot, setTargetingSlot] = useState(null);
@@ -253,6 +253,28 @@ const PotionSlots = () => {
                       : 'Cannot use now'}
                   </div>
                 )}
+
+                <button
+                  onClick={() => {
+                    discardPotion(index);
+                    setSelectedSlot(null);
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '4px 10px',
+                    marginTop: '6px',
+                    background: 'linear-gradient(180deg, #44444488 0%, #33333388 100%)',
+                    border: '1px solid #666',
+                    borderRadius: '6px',
+                    color: '#aaa',
+                    fontSize: '10px',
+                    cursor: 'pointer',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px'
+                  }}
+                >
+                  Discard
+                </button>
               </div>
             )}
           </div>
