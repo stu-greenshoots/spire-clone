@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useGame, GAME_PHASE } from '../context/GameContext';
 import Card from './Card';
+import PotionSlots from './PotionSlots';
+import { getRelicImage } from '../assets/art/art-config';
 import { isMuted, setMuted } from '../systems/audioSystem';
 
 const PersistentHeader = () => {
@@ -216,29 +218,53 @@ const PersistentHeader = () => {
           }}>Relics:</span>
 
           {relics && relics.length > 0 ? (
-            relics.map((relic, index) => (
-              <div
-                key={relic.id || index}
-                onClick={() => handleRelicClick(relic)}
-                style={{
-                  fontSize: '20px',
-                  cursor: 'pointer',
-                  filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5))',
-                  transition: 'all 0.2s ease',
-                  transform: selectedRelic?.id === relic.id ? 'scale(1.2)' : 'scale(1)',
-                  padding: '2px 4px',
-                  borderRadius: '6px',
-                  background: selectedRelic?.id === relic.id ? 'rgba(255, 215, 0, 0.3)' : 'transparent',
-                  border: selectedRelic?.id === relic.id ? '2px solid #FFD700' : '2px solid transparent'
-                }}
-                title={relic.name}
-              >
-                {relic.emoji}
-              </div>
-            ))
+            relics.map((relic, index) => {
+              const relicImg = getRelicImage(relic.id);
+              return (
+                <div
+                  key={relic.id || index}
+                  onClick={() => handleRelicClick(relic)}
+                  style={{
+                    cursor: 'pointer',
+                    filter: 'drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5))',
+                    transition: 'all 0.2s ease',
+                    transform: selectedRelic?.id === relic.id ? 'scale(1.2)' : 'scale(1)',
+                    padding: '2px',
+                    borderRadius: '6px',
+                    background: selectedRelic?.id === relic.id ? 'rgba(255, 215, 0, 0.3)' : 'transparent',
+                    border: selectedRelic?.id === relic.id ? '2px solid #FFD700' : '2px solid transparent',
+                    width: '28px',
+                    height: '28px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}
+                  title={relic.name}
+                >
+                  {relicImg ? (
+                    <img src={relicImg} alt={relic.name} style={{ width: '24px', height: '24px', borderRadius: '4px', objectFit: 'cover' }} />
+                  ) : (
+                    <span style={{ fontSize: '18px' }}>{relic.emoji}</span>
+                  )}
+                </div>
+              );
+            })
           ) : (
             <span style={{ color: '#555', fontSize: '11px', fontStyle: 'italic' }}>None yet</span>
           )}
+        </div>
+
+        {/* Row 3: Potions */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '6px 16px',
+          borderTop: '1px solid #2a2235',
+          background: 'rgba(0, 0, 0, 0.15)',
+          minHeight: '44px'
+        }}>
+          <PotionSlots />
         </div>
       </div>
 

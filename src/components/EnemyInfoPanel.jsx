@@ -1,5 +1,4 @@
 import { INTENT } from '../data/enemies';
-import { getRalphEnemyName } from '../assets/art/art-config';
 
 // Status effect descriptions for enemies
 const STATUS_DESCRIPTIONS = {
@@ -98,12 +97,11 @@ const INTENT_DESCRIPTIONS = {
   [INTENT.UNKNOWN]: 'Intent unknown'
 };
 
-const EnemyInfoPanel = ({ enemy, onClose, showRalphTheme = true }) => {
+const EnemyInfoPanel = ({ enemy, onClose }) => {
   if (!enemy) return null;
 
   const hpPercentage = (enemy.currentHp / enemy.maxHp) * 100;
-  const ralphName = showRalphTheme ? getRalphEnemyName(enemy.id) : null;
-  const displayName = ralphName || enemy.name;
+  const displayName = enemy.name;
   const isBoss = enemy.type === 'boss';
   const isElite = enemy.type === 'elite';
 

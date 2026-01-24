@@ -600,14 +600,14 @@ Here's my real concern list:
 
 ## Action Items for Tonight (Pre-Sprint)
 
-- [ ] **PM:** Verify `npm test` and `npm run build` both pass cleanly right now
-- [ ] **ALL:** Read the files you'll be modifying tomorrow. Know what you're walking into.
-- [ ] **BE:** Draft the action type groupings (which actions go to which reducer)
+- [x] **PM:** Verify `npm test` and `npm run build` both pass cleanly right now
+- [x] **ALL:** Read the files you'll be modifying tomorrow. Know what you're walking into.
+- [x] **BE:** Draft the action type groupings (which actions go to which reducer)
 - [ ] **AR:** Identify the 10 highest-priority sounds and find CC0 sources
-- [ ] **QA:** Write the balance simulator test expectations (what's a "reasonable" result)
-- [ ] **SL:** Draft 5 events tonight as proof of concept for the data format
-- [ ] **PM:** Write the ralph loop prompts (this doc) and have team review (DONE - this doc)
-- [ ] **GD:** Decide art style and generate 1 test image to validate pipeline assumptions
+- [x] **QA:** Write the balance simulator test expectations (what's a "reasonable" result)
+- [x] **SL:** Draft 5 events tonight as proof of concept for the data format
+- [x] **PM:** Write the ralph loop prompts (this doc) and have team review (DONE - this doc)
+- [x] **GD:** Decide art style and generate 1 test image to validate pipeline assumptions
 
 ---
 
