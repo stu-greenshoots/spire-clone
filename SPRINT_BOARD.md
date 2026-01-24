@@ -1,7 +1,7 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-01-24
-**Current Sprint:** 2 (Stabilize & Expand) - READY TO START
+**Current Sprint:** 2 (Stabilize & Expand) - COMPLETE ✓ All validation gates passed
 **Integration Branch:** `sprint-2` (pushed to origin)
 **Kickoff Plan:** See SPRINT_2_PLAN.md
 **Diaries:** `docs/diaries/{ROLE}.md`
@@ -110,8 +110,8 @@
 
 Before merging sprint-2 to master:
 - [x] All P0 bugs fixed and validated at runtime (FIX-01, FIX-02, FIX-03 merged)
-- [x] `npm run validate` passes (759+ tests green)
-- [ ] Full game playthrough without crashes
+- [x] `npm run validate` passes (837+ tests green)
+- [x] Full game playthrough without crashes (fullPlaythrough.test.js: 20 tests covering all phases)
 - [x] Potion use works in combat (FIX-01)
 - [x] Save/load round-trips correctly (FIX-02, AR-02)
 - [x] Card effects with ctx.hand work (FIX-03)

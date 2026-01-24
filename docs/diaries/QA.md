@@ -74,3 +74,21 @@ Tester - Component tests, balance simulator, E2E tests
 **Ready for Sprint 3:** Yes. QA-03 (E2E with Playwright) carries forward.
 
 ---
+
+### Sprint 2 Validation Gate Sign-off
+**Date:** 2026-01-24
+**Status:** SIGNED OFF - All validation gates passed
+**Done:**
+- Wrote fullPlaythrough.test.js: 20 comprehensive tests exercising all game phases
+  - Menu → Map → Combat (card play, targeting, end turn) → Rewards → Rest → Events → Potions
+  - Multi-floor progression (3 floors of combat without crashes)
+  - Full game lifecycle (menu → play → die → menu)
+  - Girya, strength/block potions, cancel target, proceed to map
+- Fixed unused `shuffleArray` import in combatReducer.js (lint warning cleanup)
+- Added `autoSave` to saveSystem mock (AR-02 added this export)
+- Final test count: 837 tests passing across 29 test files
+- Lint: 0 errors, 0 warnings
+- Build: passing
+**Verdict:** Full game playthrough validated without crashes. All validation gate items checked.
+
+---
