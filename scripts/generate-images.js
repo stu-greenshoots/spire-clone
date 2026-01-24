@@ -87,7 +87,7 @@ const CARD_PROMPTS = {
     prompt: 'A warriors extended armored forearm with kinetic energy waves radiating from it, momentum lines trailing behind, dark arena setting'
   },
   headbutt: {
-    prompt: 'A helmeted warrior lunging forward in a charge pose, energy emanating from the visor, stars and concussive rings around the helmet'
+    prompt: 'A heavy iron helmet with concussive energy rings radiating from the front, stars and kinetic force waves emanating, dark atmosphere'
   },
   ironWave: {
     prompt: 'A warrior holding both sword and shield, a wave of iron-grey energy flowing between the two weapons, defensive yet powerful stance'
@@ -111,7 +111,7 @@ const CARD_PROMPTS = {
     prompt: 'A heavily armored warrior mid-leap with momentum energy trailing behind, massive weight and gravitational force visible as distortion waves'
   },
   clash: {
-    prompt: 'Two swords crossed together with a shower of sparks at the contact point, intense energy at the intersection, dramatic lighting'
+    prompt: 'Two glowing blades crossed in an X formation with bright sparks at the intersection point, dramatic golden light, dark background'
   },
   heavyBlade: {
     prompt: 'An impossibly large dark iron greatsword being lifted overhead, veins of molten energy along the blade, immense power'
@@ -145,7 +145,7 @@ const CARD_PROMPTS = {
     prompt: 'A dark ethereal greatsword wreathed in nightmare energy, pulsing with red-black power, ominous crimson aurora in the sky above'
   },
   dropkick: {
-    prompt: 'A warrior leaping through the air in a dynamic flying kick pose, kinetic energy trail from boots, dramatic motion blur'
+    prompt: 'Armored boots surrounded by kinetic energy trails mid-air, dramatic motion blur and speed lines, dynamic aerial momentum'
   },
   hemokinesis: {
     prompt: 'Crimson magical energy swirling from a warriors open palms upward, tendrils of arcane power forming a sphere'
@@ -210,7 +210,7 @@ const CARD_PROMPTS = {
     prompt: 'A warriors vision turning crimson with fury, gaining energy from pure rage, red-tinted perspective, power rising'
   },
   shockwave: {
-    prompt: 'A warrior slamming the ground with a fist, concentric shockwave rings spreading outward across cracked stone floor'
+    prompt: 'Concentric rings of force energy spreading outward across a cracked stone floor, ground tremor effect, seismic waves visualized'
   },
   spotWeakness: {
     prompt: 'A warriors trained eye with a glowing tactical monocle, analyzing a glowing weak point in the air, strategic assessment'
@@ -230,7 +230,7 @@ const CARD_PROMPTS = {
     prompt: 'Hellish fire erupting from a warriors outstretched hands in all directions, cards burning as fuel, massive infernal firestorm'
   },
   immolate: {
-    prompt: 'A warrior engulfed in controlled flames, fire radiating outward in all directions, self-immolation as a source of power'
+    prompt: 'A magical figure of pure flame standing tall, fire radiating outward in all directions, living embodiment of fire magic'
   },
   reaper: {
     prompt: 'A spectral scythe emanating dark and green healing energy simultaneously, death and life intertwined in one weapon, ethereal'
@@ -250,7 +250,7 @@ const CARD_PROMPTS = {
     prompt: 'A warrior shattering their own limitations, strength doubling, chains breaking, power surge beyond natural limits'
   },
   offering: {
-    prompt: 'A warrior offering their own essence at a dark altar, receiving glowing cards and energy orbs in return, sacrificial ritual'
+    prompt: 'A dark stone altar with glowing energy orbs and arcane cards floating above it, mystical exchange ritual, ethereal light'
   },
 
   // === POWERS ===
@@ -264,7 +264,7 @@ const CARD_PROMPTS = {
     prompt: 'A warrior in a primal stance drawing cards from dark energy around them, savage wisdom, raw instinctive power'
   },
   combust: {
-    prompt: 'Internal combustion building within a warrior, flames erupting from cracks in their armor, living furnace of contained fire'
+    prompt: 'A suit of armor with inner fire glowing through the joints and seams, magical furnace energy visible within, contained inferno'
   },
   corruption: {
     prompt: 'Dark corruption spreading through a warriors armor, skills becoming free but ephemeral, power at a cost'
@@ -279,7 +279,7 @@ const CARD_PROMPTS = {
     prompt: 'Mutations and adaptations occurring in real-time, status cards triggering evolution, biological enhancement'
   },
   feelNoPain: {
-    prompt: 'A warrior numbed to all pain, exhausted cards becoming protective energy, transcending suffering'
+    prompt: 'A stoic figure surrounded by dissolving cards transforming into protective golden energy shields, serene transcendence'
   },
   fireBreathing: {
     prompt: 'A warrior with draconic features, flames flickering from their mouth, fiery aura surrounding them'
