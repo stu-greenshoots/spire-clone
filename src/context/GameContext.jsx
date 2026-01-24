@@ -223,6 +223,13 @@ const gameReducer = (state, action) => {
       return newState;
     }
 
+    case 'DISCARD_POTION': {
+      const { slotIndex } = action.payload;
+      const potion = state.potions[slotIndex];
+      if (!potion) return state;
+      return removePotion(state, slotIndex);
+    }
+
     case 'DELETE_SAVE': {
       return metaReducer(state, action);
     }
@@ -340,6 +347,10 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'USE_POTION', payload: { slotIndex, targetIndex } });
   }, []);
 
+  const discardPotion = useCallback((slotIndex) => {
+    dispatch({ type: 'DISCARD_POTION', payload: { slotIndex } });
+  }, []);
+
   const value = {
     state,
     startGame,
@@ -367,7 +378,8 @@ export const GameProvider = ({ children }) => {
     saveGameState,
     loadGameState,
     deleteSaveState,
-    usePotion
+    usePotion,
+    discardPotion
   };
 
   return (
