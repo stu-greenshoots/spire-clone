@@ -9,28 +9,28 @@
 ## Phase 1: Foundation & Feel (Sprint 1-2)
 
 ### Architecture Track
-- [ ] **BE-01** | Back Ender | Split GameContext into domain reducers | Size: L | Priority: P1 | Dependencies: None
+- [ ] **BE-01** | Back Ender | Split GameContext into domain reducers | Size: L | Priority: P1 | Dependencies: None | Status: Changes Requested
 - [ ] **BE-02** | Back Ender | Normalize game state (IDs not indices) | Size: M | Priority: P2 | Dependencies: BE-01
 
 ### Content Track
-- [ ] **SL-01** | Story Line | Create 20 meaningful events | Size: M | Priority: P1 | Dependencies: None
-- [ ] **SL-02** | Story Line | World building & card flavor text | Size: M | Priority: P2 | Dependencies: None
+- [ ] **SL-01** | Story Line | Create 20 meaningful events | Size: M | Priority: P1 | Dependencies: None | Status: Changes Requested
+- [ ] **SL-02** | Story Line | World building & card flavor text | Size: M | Priority: P2 | Dependencies: None | Status: Changes Requested
 
 ### Quality Track
-- [ ] **QA-01** | Tester | Component test coverage (30+ tests) | Size: M | Priority: P1 | Dependencies: None
-- [ ] **QA-02** | Tester | Balance testing framework (1000-run sim) | Size: M | Priority: P1 | Dependencies: None
+- [ ] **QA-01** | Tester | Component test coverage (30+ tests) | Size: M | Priority: P1 | Dependencies: None | Status: Changes Requested
+- [ ] **QA-02** | Tester | Balance testing framework (1000-run sim) | Size: M | Priority: P1 | Dependencies: None | Status: Changes Requested
 
 ### Feel Track
-- [ ] **UX-01** | UX Guy | Combat feedback overhaul | Size: L | Priority: P1 | Dependencies: None (stubs art/audio)
+- [ ] **UX-01** | UX Guy | Combat feedback overhaul | Size: L | Priority: P1 | Dependencies: None (stubs art/audio) | Status: Changes Requested
 - [ ] **UX-02** | UX Guy | Card info hierarchy & tooltips | Size: M | Priority: P2 | Dependencies: None
 
 ### Art & Audio Track
-- [ ] **GD-01** | Graphic Designer | Enemy art pipeline & consistency | Size: L | Priority: P1 | Dependencies: None
+- [ ] **GD-01** | Graphic Designer | Enemy art pipeline & consistency | Size: L | Priority: P1 | Dependencies: None | Status: Changes Requested
 - [ ] **GD-02** | Graphic Designer | Card frame & type visual system | Size: M | Priority: P2 | Dependencies: GD-01
-- [ ] **AR-01** | Allrounder | Audio system expansion | Size: L | Priority: P1 | Dependencies: None
+- [ ] **AR-01** | Allrounder | Audio system expansion | Size: L | Priority: P1 | Dependencies: None | Status: Changes Requested
 
 ### Junior Track
-- [ ] **JR-01** | Junior | Potion system implementation | Size: L | Priority: P1 | Dependencies: None (data layer first)
+- [ ] **JR-01** | Junior | Potion system implementation | Size: L | Priority: P1 | Dependencies: None (data layer first) | Status: Changes Requested
 - [ ] **JR-02** | Junior | Card upgrade system polish | Size: S | Priority: P2 | Dependencies: None
 
 ### Project Management
@@ -72,21 +72,21 @@
 ### Morning Block (Parallel - Zero File Conflicts)
 | Task | Owner | Touches | Size | Status |
 |------|-------|---------|------|--------|
-| BE-01 | BE | src/context/ | L | Not Started |
-| SL-01 | SL | src/data/events.js (NEW) | M | Not Started |
-| QA-02 | QA | src/test/balance/ (NEW) | M | Not Started |
-| QA-01 | QA | src/test/components/ (NEW) | M | Not Started |
+| BE-01 | BE | src/context/ | L | Changes Requested |
+| SL-01 | SL | src/data/events.js (NEW) | M | Changes Requested |
+| QA-02 | QA | src/test/balance/ (NEW) | M | Changes Requested |
+| QA-01 | QA | src/test/components/ (NEW) | M | Changes Requested |
 | PM-01 | PM | markdown files, package.json | S | Done |
-| GD-01 | GD | public/images/, Enemy.jsx | L | Not Started |
-| AR-01 | AR | src/systems/audioSystem.js | L | Not Started |
+| GD-01 | GD | public/images/, Enemy.jsx | L | Changes Requested |
+| AR-01 | AR | src/systems/audioSystem.js | L | Changes Requested |
 
 ### Afternoon Block (After Morning Validation)
 | Task | Owner | Touches | Size | Status |
 |------|-------|---------|------|--------|
-| JR-01 | JR | src/data/potions.js, src/systems/potionSystem.js (NEW) | L | Not Started |
-| UX-01 | UX | CombatScreen.jsx, App.css | L | Not Started |
-| SL-02 | SL | src/data/cards.js, enemies.js, relics.js | M | Not Started |
-| VALIDATION | PM | Full validate pass | S | Not Started |
+| JR-01 | JR | src/data/potions.js, src/systems/potionSystem.js (NEW) | L | Changes Requested |
+| UX-01 | UX | CombatScreen.jsx, App.css | L | Changes Requested |
+| SL-02 | SL | src/data/cards.js, enemies.js, relics.js | M | Changes Requested |
+| VALIDATION | PM | Full validate pass | S | Blocked |
 
 ---
 

@@ -415,6 +415,82 @@ export const ALL_ENEMIES = [
       return enemy.moveset[1];
     }
   },
+  {
+    id: 'mystic',
+    name: 'Mystic',
+    hp: { min: 50, max: 56 },
+    type: 'normal',
+    act: 2,
+    emoji: '🔮',
+    moveset: [
+      { id: 'heal', intent: INTENT.BUFF, special: 'healAlly', healAmount: 12, message: 'Heal' },
+      { id: 'attack', intent: INTENT.ATTACK, damage: 8, message: 'Attack' }
+    ],
+    ai: (enemy, turn, _lastMove, _index, allies) => {
+      // Heals if any ally is below 50% HP, otherwise attacks
+      if (allies && allies.some(a => a.instanceId !== enemy.instanceId && a.currentHp > 0 && a.currentHp < a.maxHp * 0.5)) {
+        return enemy.moveset[0];
+      }
+      return enemy.moveset[1];
+    }
+  },
+  {
+    id: 'snecko',
+    name: 'Snecko',
+    hp: { min: 60, max: 66 },
+    type: 'normal',
+    act: 2,
+    emoji: '🐍',
+    moveset: [
+      { id: 'bite', intent: INTENT.ATTACK, damage: 15, message: 'Bite' },
+      { id: 'tailWhip', intent: INTENT.ATTACK_DEBUFF, damage: 8, effects: [{ type: 'frail', amount: 2, target: 'player' }], message: 'Tail Whip' }
+    ],
+    ai: (enemy, turn, _lastMove) => {
+      // Alternates between bite and tail whip
+      if (turn % 2 === 0) return enemy.moveset[0];
+      return enemy.moveset[1];
+    },
+    confuse: true
+  },
+  {
+    id: 'shelledParasite',
+    name: 'Shelled Parasite',
+    hp: { min: 68, max: 72 },
+    type: 'normal',
+    act: 2,
+    emoji: '🐚',
+    moveset: [
+      { id: 'shell', intent: INTENT.DEFEND, block: 14, message: 'Shell' },
+      { id: 'suck', intent: INTENT.ATTACK_BUFF, damage: 10, special: 'healSelf', healAmount: 5, message: 'Suck' },
+      { id: 'doubleTap', intent: INTENT.ATTACK, damage: 6, times: 2, message: 'Double Tap' }
+    ],
+    ai: (enemy, turn, _lastMove) => {
+      // Shells first turn, then alternates between suck and double tap
+      if (turn === 0) return enemy.moveset[0];
+      if (turn % 2 === 1) return enemy.moveset[1];
+      return enemy.moveset[2];
+    }
+  },
+  {
+    id: 'sphericGuardian',
+    name: 'Spheric Guardian',
+    hp: { min: 44, max: 48 },
+    type: 'normal',
+    act: 2,
+    emoji: '🔵',
+    barricade: true,
+    moveset: [
+      { id: 'slam', intent: INTENT.ATTACK, damage: 10, message: 'Slam' },
+      { id: 'activate', intent: INTENT.DEFEND_BUFF, block: 25, effects: [{ type: 'strength', amount: 2 }], message: 'Activate' },
+      { id: 'harden', intent: INTENT.DEFEND, block: 15, message: 'Harden' }
+    ],
+    ai: (enemy, turn, lastMove) => {
+      // Starts with activate, then cycles between slam and harden
+      if (turn === 0) return enemy.moveset[1];
+      if (lastMove?.id === 'slam' || lastMove?.id === 'activate') return enemy.moveset[2];
+      return enemy.moveset[0];
+    }
+  },
 
   // ========== ACT 3 ENEMIES ==========
   {
@@ -764,8 +840,8 @@ export const createEnemyInstance = (enemy, index = 0) => {
 
 // Weak enemies suitable for multi-spawn encounters (low damage, manageable HP)
 const WEAK_ENEMIES = ['louse_red', 'louse_green', 'slime_small', 'spike_slime_small', 'fungiBeast'];
-const MEDIUM_ENEMIES = ['slime_medium', 'spike_slime_medium', 'cultist'];
-const STRONG_NORMAL_ENEMIES = ['jawWorm', 'looter', 'chosen', 'snakePlant', 'centurion', 'slaverBlue', 'writhing_mass', 'orbWalker', 'spiker'];
+const MEDIUM_ENEMIES = ['slime_medium', 'spike_slime_medium', 'cultist', 'mystic', 'byrd'];
+const STRONG_NORMAL_ENEMIES = ['jawWorm', 'looter', 'chosen', 'snakePlant', 'centurion', 'slaverBlue', 'snecko', 'shelledParasite', 'sphericGuardian', 'writhing_mass', 'orbWalker', 'spiker'];
 
 export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) => {
   const type = isElite ? 'elite' : 'normal';

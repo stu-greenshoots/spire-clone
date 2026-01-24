@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { getRandomCard, RARITY, ALL_CARDS } from '../data/cards';
 import { getRandomRelic } from '../data/relics';
+import { events as DATA_EVENTS } from '../data/events';
 
 const EVENTS = [
   {
@@ -97,23 +98,57 @@ const EVENTS = [
 ];
 
 const EventScreen = () => {
-  const { state, skipEvent: _skipEvent, proceedToMap } = useGame();
-  const { player, deck, relics } = state;
+  const { state, applyEventChoice } = useGame();
+  const { player } = state;
 
   const [playerState, setPlayerState] = useState({ ...player });
-  const [deckState, setDeckState] = useState([...deck]);
-  const [relicState, setRelicState] = useState([...relics]);
+  const [deckState, setDeckState] = useState([...state.deck]);
+  const [relicState, setRelicState] = useState([...state.relics]);
+  const [pendingEffects, setPendingEffects] = useState(null);
   const [result, setResult] = useState(null);
 
-  const event = useMemo(() => {
-    return EVENTS[Math.floor(Math.random() * EVENTS.length)];
+  // Use data-driven events when available, fall back to inline events
+  const allEvents = useMemo(() => {
+    if (DATA_EVENTS && DATA_EVENTS.length > 0) return DATA_EVENTS;
+    return EVENTS;
   }, []);
+
+  const event = useMemo(() => {
+    return allEvents[Math.floor(Math.random() * allEvents.length)];
+  }, [allEvents]);
 
   const handleOption = (option) => {
     let message = '';
     let newPlayerState = { ...playerState };
     let newDeckState = [...deckState];
     let newRelicState = [...relicState];
+
+    // Handle data-driven events (effect is an object, not a string)
+    if (typeof option.effect === 'object' && option.effect !== null) {
+      const fx = option.effect;
+      if (fx.loseGold) newPlayerState.gold = Math.max(0, newPlayerState.gold - fx.loseGold);
+      if (fx.gainGold) newPlayerState.gold += fx.gainGold;
+      if (fx.heal) newPlayerState.currentHp = Math.min(newPlayerState.maxHp, newPlayerState.currentHp + fx.heal);
+      if (fx.damage) newPlayerState.currentHp = Math.max(1, newPlayerState.currentHp - fx.damage);
+      if (fx.loseHp) newPlayerState.currentHp = Math.max(1, newPlayerState.currentHp - fx.loseHp);
+      if (fx.loseHpPercent) {
+        const loss = Math.floor(newPlayerState.maxHp * fx.loseHpPercent / 100);
+        newPlayerState.currentHp = Math.max(1, newPlayerState.currentHp - loss);
+      }
+      if (fx.gainMaxHp) {
+        newPlayerState.maxHp += fx.gainMaxHp;
+        newPlayerState.currentHp += fx.gainMaxHp;
+      }
+      if (fx.upgradeRandomCard) {
+        setPendingEffects({ upgradeRandomCard: true });
+      }
+      message = option.result || 'You made your choice.';
+      setPlayerState(newPlayerState);
+      setDeckState(newDeckState);
+      setRelicState(newRelicState);
+      setResult(message);
+      return;
+    }
 
     switch (option.effect) {
       case 'nothing':
@@ -244,15 +279,24 @@ const EventScreen = () => {
   };
 
   const handleContinue = () => {
-    // Apply changes to actual game state
-    state.player.gold = playerState.gold;
-    state.player.currentHp = playerState.currentHp;
-    state.player.maxHp = playerState.maxHp;
-    state.deck.length = 0;
-    state.deck.push(...deckState);
-    state.relics.length = 0;
-    state.relics.push(...relicState);
-    proceedToMap();
+    // Build effects object from the diff between local state and original
+    const effects = {};
+    const goldDiff = playerState.gold - player.gold;
+    if (goldDiff > 0) effects.gainGold = goldDiff;
+    if (goldDiff < 0) effects.loseGold = Math.abs(goldDiff);
+
+    const hpDiff = playerState.currentHp - player.currentHp;
+    if (hpDiff > 0) effects.heal = hpDiff;
+    if (hpDiff < 0) effects.damage = Math.abs(hpDiff);
+
+    const maxHpDiff = playerState.maxHp - player.maxHp;
+    if (maxHpDiff > 0) effects.gainMaxHp = maxHpDiff;
+
+    if (pendingEffects) {
+      if (pendingEffects.upgradeRandomCard) effects.upgradeRandomCard = true;
+    }
+
+    applyEventChoice(effects);
   };
 
   return (
@@ -325,9 +369,9 @@ const EventScreen = () => {
           width: '100%',
           maxWidth: '320px'
         }}>
-          {event.options.map((option, idx) => {
+          {(event.choices || event.options).map((option, idx) => {
             const canAfford = !option.cost ||
-              (option.effect.includes('gold') ? playerState.gold >= option.cost : playerState.currentHp > option.cost);
+              (typeof option.effect === 'string' && option.effect.includes('gold') ? playerState.gold >= option.cost : playerState.currentHp > option.cost);
 
             return (
               <button

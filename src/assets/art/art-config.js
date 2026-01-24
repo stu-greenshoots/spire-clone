@@ -1,12 +1,9 @@
 /**
- * Art Configuration for Ralph Wiggum's Spire Ascent
+ * Art Configuration for Spire Ascent
  *
- * This file manages image assets for cards, enemies, and relics.
- * When images exist, they'll be used. Otherwise, fallback to CSS/ASCII art.
+ * This file manages image assets for cards, enemies, relics, and potions.
+ * Supports WebP (preferred) and PNG fallback formats.
  */
-
-// Import prompts for reference
-import { CARD_ART_PROMPTS, ENEMY_ART_PROMPTS, RELIC_ART_PROMPTS } from '../art-prompts';
 
 // ============================================
 // CARD ART CONFIGURATION
@@ -18,17 +15,13 @@ import { CARD_ART_PROMPTS, ENEMY_ART_PROMPTS, RELIC_ART_PROMPTS } from '../art-p
  * @returns {string|null} - Image URL or null if not found
  */
 export const getCardImage = (cardId) => {
-  // Try to dynamically import the image
   try {
-    // These paths would be populated as you add images
-    const images = import.meta.glob('./cards/*.{png,jpg,jpeg,webp}', { eager: true });
-    // Find exact match by filename (without extension)
+    const images = import.meta.glob('./cards/*.{webp,png,jpg,jpeg}', { eager: true });
     const imagePath = Object.keys(images).find(path => {
       const filename = path.split('/').pop().split('.')[0];
       return filename.toLowerCase() === cardId.toLowerCase();
     });
     if (!imagePath) return null;
-    // Vite 5+ returns the URL directly, older versions use .default
     const imageModule = images[imagePath];
     return typeof imageModule === 'string' ? imageModule : imageModule.default;
   } catch {
@@ -37,19 +30,13 @@ export const getCardImage = (cardId) => {
 };
 
 /**
- * Get card art info (image or prompt data)
+ * Get card art info
  */
 export const getCardArtInfo = (cardId) => {
   const image = getCardImage(cardId);
-  const promptData = CARD_ART_PROMPTS[cardId];
-
   return {
     hasImage: !!image,
     imageUrl: image,
-    prompt: promptData?.prompt || null,
-    ralphQuote: promptData?.ralphQuote || null,
-    description: promptData?.description || null,
-    name: promptData?.name || null
   };
 };
 
@@ -59,7 +46,7 @@ export const getCardArtInfo = (cardId) => {
 
 export const getEnemyImage = (enemyId) => {
   try {
-    const images = import.meta.glob('./enemies/*.{png,jpg,jpeg,webp}', { eager: true });
+    const images = import.meta.glob('./enemies/*.{webp,png,jpg,jpeg}', { eager: true });
     const imagePath = Object.keys(images).find(path => {
       const filename = path.split('/').pop().split('.')[0];
       return filename.toLowerCase() === enemyId.toLowerCase();
@@ -74,14 +61,9 @@ export const getEnemyImage = (enemyId) => {
 
 export const getEnemyArtInfo = (enemyId) => {
   const image = getEnemyImage(enemyId);
-  const promptData = ENEMY_ART_PROMPTS[enemyId];
-
   return {
     hasImage: !!image,
     imageUrl: image,
-    prompt: promptData?.prompt || null,
-    name: promptData?.name || null,
-    description: promptData?.description || null
   };
 };
 
@@ -91,7 +73,7 @@ export const getEnemyArtInfo = (enemyId) => {
 
 export const getRelicImage = (relicId) => {
   try {
-    const images = import.meta.glob('./relics/*.{png,jpg,jpeg,webp}', { eager: true });
+    const images = import.meta.glob('./relics/*.{webp,png,jpg,jpeg}', { eager: true });
     const imagePath = Object.keys(images).find(path => {
       const filename = path.split('/').pop().split('.')[0];
       return filename.toLowerCase() === relicId.toLowerCase();
@@ -106,96 +88,29 @@ export const getRelicImage = (relicId) => {
 
 export const getRelicArtInfo = (relicId) => {
   const image = getRelicImage(relicId);
-  const promptData = RELIC_ART_PROMPTS[relicId];
-
   return {
     hasImage: !!image,
     imageUrl: image,
-    prompt: promptData?.prompt || null,
-    name: promptData?.name || null,
-    description: promptData?.description || null
   };
 };
 
 // ============================================
-// RALPH WIGGUM THEME NAMES
+// POTION ART CONFIGURATION
 // ============================================
 
-/**
- * Get the Ralph Wiggum-themed name for an enemy
- */
-export const getRalphEnemyName = (enemyId) => {
-  const promptData = ENEMY_ART_PROMPTS[enemyId];
-  return promptData?.name || null;
-};
-
-/**
- * Get the Ralph Wiggum-themed name for a relic
- */
-export const getRalphRelicName = (relicId) => {
-  const promptData = RELIC_ART_PROMPTS[relicId];
-  return promptData?.name || null;
-};
-
-// ============================================
-// RALPH QUOTES
-// ============================================
-
-export const RALPH_QUOTES = {
-  victory: [
-    "I won! I'm a winner!",
-    "The leprechaun said I'd win!",
-    "I'm a unitard of victory!",
-    "I beat them with my brain!",
-    "Yay! More purple berries!"
-  ],
-  defeat: [
-    "I'm learnding... to lose.",
-    "Ow, my everything!",
-    "The doctor said this would happen.",
-    "I taste like failure!",
-    "My cat's breath smells like losing."
-  ],
-  combat: [
-    "Hi, bad guys!",
-    "I'm helping!",
-    "This is my sandbox!",
-    "I'm a furniture!",
-    "Slow down, danger!"
-  ],
-  cardPlay: [
-    "Go banana!",
-    "I'm doing it!",
-    "The leprechaun approves!",
-    "My brain says yes!",
-    "Wheeee!"
-  ],
-  damage: [
-    "That's my face!",
-    "I bent my wookie!",
-    "Not the nose!",
-    "I can taste blood!",
-    "Ow, my special area!"
-  ],
-  block: [
-    "I'm unpoppable!",
-    "My tummy protects me!",
-    "Nothing can touch Ralph!",
-    "I'm a wall!",
-    "Bonk deflected!"
-  ],
-  heal: [
-    "I feel better about my feelings!",
-    "My boo-boos are gone!",
-    "Juice makes me strong!",
-    "I'm full of health!",
-    "More life for Ralph!"
-  ]
-};
-
-export const getRandomRalphQuote = (category = 'combat') => {
-  const quotes = RALPH_QUOTES[category] || RALPH_QUOTES.combat;
-  return quotes[Math.floor(Math.random() * quotes.length)];
+export const getPotionImage = (potionId) => {
+  try {
+    const images = import.meta.glob('./potions/*.{webp,png,jpg,jpeg}', { eager: true });
+    const imagePath = Object.keys(images).find(path => {
+      const filename = path.split('/').pop().split('.')[0];
+      return filename.toLowerCase() === potionId.toLowerCase();
+    });
+    if (!imagePath) return null;
+    const imageModule = images[imagePath];
+    return typeof imageModule === 'string' ? imageModule : imageModule.default;
+  } catch {
+    return null;
+  }
 };
 
 // ============================================
@@ -203,28 +118,35 @@ export const getRandomRalphQuote = (category = 'combat') => {
 // ============================================
 
 export const THEME_CONFIG = {
-  // Enable/disable Ralph theming
-  useRalphNames: true,
-  useRalphQuotes: true,
-  showQuotesOnActions: true,
-
-  // Color scheme (Simpsons yellow theme)
+  // Color scheme (dark fantasy)
   colors: {
-    primary: '#FFD90F', // Simpsons yellow
-    secondary: '#FF7F00', // Orange
-    accent: '#00A8FF', // Sky blue
-    danger: '#C41E3A', // Red
-    success: '#228B22', // Green
-    background: '#1a1a2e', // Dark blue
-    text: '#FFFFFF'
-  },
-
-  // Animation settings
-  animations: {
-    cardPlayQuote: true,
-    damageQuote: true,
-    victoryQuote: true
+    primary: '#C9A84C', // Antique gold
+    secondary: '#8B4513', // Saddle brown
+    accent: '#6A5ACD', // Slate blue
+    danger: '#8B0000', // Dark red
+    success: '#2E8B57', // Sea green
+    background: '#0a0a12', // Near black
+    text: '#E8E0D0' // Parchment
   }
+};
+
+// Potion visual colors for UI rendering
+export const POTION_COLORS = {
+  fire_potion: { primary: '#ff4400', secondary: '#ff8800', glow: 'rgba(255, 68, 0, 0.4)' },
+  block_potion: { primary: '#4488ff', secondary: '#88bbff', glow: 'rgba(68, 136, 255, 0.4)' },
+  energy_potion: { primary: '#ffdd00', secondary: '#ffff88', glow: 'rgba(255, 221, 0, 0.4)' },
+  explosive_potion: { primary: '#ff6600', secondary: '#ff9944', glow: 'rgba(255, 102, 0, 0.4)' },
+  weak_potion: { primary: '#44aa44', secondary: '#88dd88', glow: 'rgba(68, 170, 68, 0.4)' },
+  health_potion: { primary: '#cc0000', secondary: '#ff4444', glow: 'rgba(204, 0, 0, 0.4)' },
+  strength_potion: { primary: '#cc2222', secondary: '#ff6666', glow: 'rgba(204, 34, 34, 0.4)' },
+  dexterity_potion: { primary: '#22aa66', secondary: '#66ddaa', glow: 'rgba(34, 170, 102, 0.4)' },
+  speed_potion: { primary: '#4466cc', secondary: '#88aaff', glow: 'rgba(68, 102, 204, 0.4)' },
+  fear_potion: { primary: '#8844aa', secondary: '#bb88dd', glow: 'rgba(136, 68, 170, 0.4)' },
+  fairy_potion: { primary: '#ffcc00', secondary: '#ffee88', glow: 'rgba(255, 204, 0, 0.5)' },
+  cultist_potion: { primary: '#6622aa', secondary: '#9944dd', glow: 'rgba(102, 34, 170, 0.4)' },
+  duplication_potion: { primary: '#aaaacc', secondary: '#ddddff', glow: 'rgba(170, 170, 204, 0.4)' },
+  essence_of_steel: { primary: '#888899', secondary: '#bbbbcc', glow: 'rgba(136, 136, 153, 0.4)' },
+  heart_of_iron: { primary: '#666677', secondary: '#9999aa', glow: 'rgba(102, 102, 119, 0.4)' },
 };
 
 export default {
@@ -234,9 +156,7 @@ export default {
   getEnemyArtInfo,
   getRelicImage,
   getRelicArtInfo,
-  getRalphEnemyName,
-  getRalphRelicName,
-  getRandomRalphQuote,
-  RALPH_QUOTES,
-  THEME_CONFIG
+  getPotionImage,
+  THEME_CONFIG,
+  POTION_COLORS
 };
