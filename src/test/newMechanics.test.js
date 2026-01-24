@@ -16,6 +16,7 @@
 import { describe, it, expect } from 'vitest';
 import { ALL_CARDS, getCardById, CARD_TYPES } from '../data/cards';
 import { ALL_ENEMIES, createEnemyInstance, getEnemyById } from '../data/enemies';
+import { handleEndTurn } from '../context/reducers/combat/endTurnAction';
 import { applyDamageToTarget, calculateDamage } from '../systems/combatSystem';
 import { handleSpecialEffect } from '../systems/cardEffects';
 import {
@@ -940,5 +941,69 @@ describe('Spot Weakness intent check', () => {
     const card = { damage: 0, special: 'strIfAttacking', strength: 3 };
     handleSpecialEffect('strIfAttacking', card, ctx);
     expect(ctx.player.strength).toBe(0);
+  });
+});
+
+describe('Enemy Block Retention (FIX-05)', () => {
+  const createMinimalCombatState = (enemies) => ({
+    player: {
+      currentHp: 50, maxHp: 80, block: 0, energy: 3, maxEnergy: 3,
+      strength: 0, dexterity: 0, vulnerable: 0, weak: 0, frail: 0,
+      powers: [], statusEffects: []
+    },
+    enemies,
+    hand: [],
+    drawPile: [getCardById('strike'), getCardById('strike'), getCardById('defend'), getCardById('defend'), getCardById('strike')],
+    discardPile: [],
+    exhaustPile: [],
+    relics: [],
+    turn: 1,
+    combatLog: [],
+    roomType: 'combat'
+  });
+
+  it('should clear block for normal enemies without retainBlock', () => {
+    const jawWorm = createEnemyInstance(getEnemyById('jawWorm'));
+    jawWorm.block = 10;
+    const state = createMinimalCombatState([jawWorm]);
+    const result = handleEndTurn(state);
+    expect(result.enemies[0].block).toBe(0);
+  });
+
+  it('should NOT clear block for enemies with retainBlock', () => {
+    const lagavulin = createEnemyInstance(getEnemyById('lagavulin'));
+    lagavulin.block = 15;
+    const state = createMinimalCombatState([lagavulin]);
+    const result = handleEndTurn(state);
+    expect(result.enemies[0].block).toBe(15);
+  });
+
+  it('should NOT clear block for enemies with barricade flag', () => {
+    const enemy = createEnemyInstance(getEnemyById('jawWorm'));
+    enemy.barricade = true;
+    enemy.block = 8;
+    const state = createMinimalCombatState([enemy]);
+    const result = handleEndTurn(state);
+    expect(result.enemies[0].block).toBe(8);
+  });
+
+  it('Lagavulin should have retainBlock in enemy data', () => {
+    const lagavulin = getEnemyById('lagavulin');
+    expect(lagavulin.retainBlock).toBe(true);
+  });
+
+  it('Shelled Parasite should have retainBlock in enemy data', () => {
+    const shelledParasite = getEnemyById('shelledParasite');
+    expect(shelledParasite.retainBlock).toBe(true);
+  });
+
+  it('The Guardian should have retainBlock in enemy data', () => {
+    const guardian = getEnemyById('theGuardian');
+    expect(guardian.retainBlock).toBe(true);
+  });
+
+  it('The Champ should have retainBlock in enemy data', () => {
+    const champ = getEnemyById('theChamp');
+    expect(champ.retainBlock).toBe(true);
   });
 });

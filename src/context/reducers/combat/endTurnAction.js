@@ -370,7 +370,10 @@ export const handleEndTurn = (state) => {
   // Clear enemy block and decrement debuffs
   newEnemies = newEnemies.map(enemy => {
     const e = { ...enemy };
-    e.block = 0;
+    // Barricade/retainBlock: don't clear block for enemies that retain it
+    if (!e.barricade && !e.retainBlock) {
+      e.block = 0;
+    }
     if (e.vulnerable > 0) e.vulnerable--;
     if (e.weak > 0) e.weak--;
     if (e.ritual > 0) {
