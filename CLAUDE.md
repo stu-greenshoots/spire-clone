@@ -146,17 +146,19 @@ npm run build            # Production build
 9. **No unused imports/variables.** Lint must be clean.
 10. **No forward-referencing.** Don't call APIs that don't exist yet.
 
-## Current State (Sprint 2 - Ready to Start)
+## Current State (Sprint 2 - Phase B In Progress)
 
-- **Branch:** `sprint-2` (integration branch created, pushed to origin)
-- **P0 Bugs:** 3 open (potion UI, save format, card effect context)
-- **P1/P2 Bugs:** 3 open (asset format, enemy block, test selectors)
-- **Tests:** 763 passing
+- **Branch:** `sprint-2` (integration branch, deploys to GitHub Pages)
+- **P0 Bugs:** 0 open (all 3 fixed and merged: FIX-01, FIX-02, FIX-03)
+- **P1/P2 Bugs:** 2 open (enemy block FIX-05, test selectors FIX-06)
+- **Tests:** 809+ passing
 - **Lint:** 0 errors
 - **Build:** Passing
-- **Runtime:** Potions, save/load, and some card effects are BROKEN
+- **Runtime:** Potions, save/load, card effects all WORKING
+- **Phase A:** COMPLETE (FIX-01, FIX-02, FIX-03, FIX-04 merged)
+- **Phase B:** In progress (UX-02, JR-02 in progress; BE-02, GD-02 pending)
 - **Diaries:** `docs/diaries/{ROLE}.md` - update daily
-- **Plan:** See SPRINT_2_PLAN.md for full task breakdown
+- **Review:** Game Zone magazine scored 58/100 (see review.html). Sprint 3 backlog derived from feedback.
 
 ## Architecture Quick Reference
 
