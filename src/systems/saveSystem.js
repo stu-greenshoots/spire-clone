@@ -1,27 +1,64 @@
 const SAVE_KEY = 'spireAscent_save';
 const HISTORY_KEY = 'spireAscent_runHistory';
 
+/**
+ * Serialize a card to its save-friendly format.
+ * Stores only the ID, upgrade state, and instance ID.
+ */
+const serializeCard = (card) => {
+  if (!card) return null;
+  const serialized = { id: card.id, instanceId: card.instanceId };
+  if (card.upgraded) {
+    serialized.upgraded = true;
+  }
+  return serialized;
+};
+
+/**
+ * Serialize a relic to its save-friendly format.
+ * Stores the ID plus any runtime state (counters, used flags, etc).
+ */
+const serializeRelic = (relic) => {
+  if (!relic) return null;
+  const serialized = { id: relic.id };
+  // Preserve runtime state that varies per-run
+  if (relic.counter !== undefined) serialized.counter = relic.counter;
+  if (relic.liftCount !== undefined) serialized.liftCount = relic.liftCount;
+  if (relic.used !== undefined) serialized.used = relic.used;
+  if (relic.usesRemaining !== undefined) serialized.usesRemaining = relic.usesRemaining;
+  if (relic.usedThisCombat !== undefined) serialized.usedThisCombat = relic.usedThisCombat;
+  return serialized;
+};
+
+/**
+ * Serialize a potion to its save-friendly format.
+ * Potions have no runtime state beyond their ID.
+ */
+const serializePotion = (potion) => {
+  if (!potion) return null;
+  return { id: potion.id };
+};
+
 export const saveGame = (state) => {
   try {
     const saveData = {
-      version: 2,
+      version: 3,
       timestamp: Date.now(),
       state: {
-        player: state.player,
-        deck: state.deck,
-        drawPile: state.drawPile,
-        hand: state.hand,
-        discardPile: state.discardPile,
-        exhaustPile: state.exhaustPile,
-        relics: state.relics,
-        potions: state.potions,
-        enemies: state.enemies,
+        player: {
+          currentHp: state.player.currentHp,
+          maxHp: state.player.maxHp,
+          gold: state.player.gold,
+          strength: state.player.strength || 0,
+          dexterity: state.player.dexterity || 0
+        },
+        deck: (state.deck || []).map(serializeCard).filter(Boolean),
+        relics: (state.relics || []).map(serializeRelic).filter(Boolean),
+        potions: (state.potions || []).map(serializePotion).filter(Boolean),
         currentFloor: state.currentFloor,
         act: state.act,
         map: state.map,
         currentNode: state.currentNode,
-        phase: state.phase,
-        turn: state.turn,
         ascension: state.ascension || 0
       }
     };
@@ -84,6 +121,9 @@ export const getSavePreview = () => {
   }
 };
 
+// Exported for testing
+export { serializeCard, serializeRelic, serializePotion };
+
 export const deleteSave = () => {
   localStorage.removeItem(SAVE_KEY);
 };
@@ -96,6 +136,10 @@ const validateSave = (saveData) => {
   if (!s.deck || !Array.isArray(s.deck)) return false;
   if (!s.relics || !Array.isArray(s.relics)) return false;
   if (typeof s.currentFloor !== 'number') return false;
+  // v3 format: deck items must have an id field
+  if (saveData.version >= 3 && s.deck.length > 0) {
+    if (typeof s.deck[0] !== 'object' || !s.deck[0].id) return false;
+  }
   return true;
 };
 

@@ -1,10 +1,68 @@
 import { GAME_PHASE } from '../GameContext';
 import { getStarterDeck, getCardById } from '../../data/cards';
 import { getStarterRelic, getRelicById } from '../../data/relics';
+import { getPotionById } from '../../data/potions';
 import { generateMap } from '../../utils/mapGenerator';
 import { saveGame, loadGame, deleteSave } from '../../systems/saveSystem';
 import { getPassiveRelicEffects } from '../../systems/relicSystem';
 import { createInitialState } from '../GameContext';
+
+/**
+ * Reconstruct a full card object from its serialized form.
+ * @param {{ id: string, instanceId?: string, upgraded?: boolean }} savedCard
+ * @param {number} index - fallback for instanceId
+ * @returns {Object|null} Full card object or null if not found
+ */
+const deserializeCard = (savedCard, index) => {
+  if (!savedCard || !savedCard.id) return null;
+  const baseCard = getCardById(savedCard.id);
+  if (!baseCard) return null;
+
+  let card = { ...baseCard };
+
+  // Apply upgrade if it was upgraded when saved
+  if (savedCard.upgraded && baseCard.upgradedVersion) {
+    card = {
+      ...card,
+      ...baseCard.upgradedVersion,
+      upgraded: true,
+      name: baseCard.name + '+'
+    };
+  }
+
+  card.instanceId = savedCard.instanceId || `${savedCard.id}_${index}`;
+  return card;
+};
+
+/**
+ * Reconstruct a full relic object from its serialized form.
+ * @param {{ id: string, counter?: number, liftCount?: number, used?: boolean, usesRemaining?: number, usedThisCombat?: boolean }} savedRelic
+ * @returns {Object|null} Full relic object or null if not found
+ */
+const deserializeRelic = (savedRelic) => {
+  if (!savedRelic || !savedRelic.id) return null;
+  const baseRelic = getRelicById(savedRelic.id);
+  if (!baseRelic) return null;
+
+  const relic = { ...baseRelic };
+  // Restore runtime state
+  if (savedRelic.counter !== undefined) relic.counter = savedRelic.counter;
+  if (savedRelic.liftCount !== undefined) relic.liftCount = savedRelic.liftCount;
+  if (savedRelic.used !== undefined) relic.used = savedRelic.used;
+  if (savedRelic.usesRemaining !== undefined) relic.usesRemaining = savedRelic.usesRemaining;
+  if (savedRelic.usedThisCombat !== undefined) relic.usedThisCombat = savedRelic.usedThisCombat;
+  return relic;
+};
+
+/**
+ * Reconstruct a full potion object from its serialized form.
+ * @param {{ id: string }} savedPotion
+ * @returns {Object|null} Full potion object or null if not found
+ */
+const deserializePotion = (savedPotion) => {
+  if (!savedPotion || !savedPotion.id) return null;
+  return getPotionById(savedPotion.id) || null;
+};
 
 export const metaReducer = (state, action) => {
   switch (action.type) {
@@ -134,35 +192,40 @@ export const metaReducer = (state, action) => {
       const saveData = loadGame();
       if (!saveData) return state;
 
-      // Reconstruct deck from card IDs
-      const deck = saveData.deck.map((cardId, index) => {
-        const baseCard = getCardById(cardId);
-        if (!baseCard) return null;
-        return { ...baseCard, instanceId: `${cardId}_${index}` };
-      }).filter(Boolean);
+      // Reconstruct deck from serialized card data
+      const deck = (saveData.deck || [])
+        .map((savedCard, index) => deserializeCard(savedCard, index))
+        .filter(Boolean);
 
-      // Reconstruct relics from relic IDs
-      const relics = saveData.relics.map(relicId => {
-        const baseRelic = getRelicById(relicId);
-        if (!baseRelic) return null;
-        return { ...baseRelic };
-      }).filter(Boolean);
+      // Reconstruct relics from serialized relic data
+      const relics = (saveData.relics || [])
+        .map(savedRelic => deserializeRelic(savedRelic))
+        .filter(Boolean);
+
+      // Reconstruct potions from serialized potion data
+      const potions = (saveData.potions || [])
+        .map(savedPotion => deserializePotion(savedPotion))
+        .filter(Boolean);
 
       return {
         ...createInitialState(),
         phase: GAME_PHASE.MAP,
         player: {
           ...createInitialState().player,
-          currentHp: saveData.player.hp,
+          currentHp: saveData.player.currentHp,
           maxHp: saveData.player.maxHp,
           gold: saveData.player.gold,
+          strength: saveData.player.strength || 0,
+          dexterity: saveData.player.dexterity || 0,
         },
         deck,
         relics,
+        potions,
         map: saveData.map,
         currentNode: saveData.currentNode,
-        currentFloor: saveData.floor,
+        currentFloor: saveData.currentFloor,
         act: saveData.act,
+        ascension: saveData.ascension || 0,
       };
     }
 
