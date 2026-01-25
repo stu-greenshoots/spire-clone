@@ -180,11 +180,11 @@
 
 ### Sprint 4 Validation Gate
 
-- [ ] Map auto-scrolls to player position on load and floor change
-- [ ] Player can always see where they are on the map
-- [ ] Victory screen shows as overlay with combat visible behind
-- [ ] Enemy turns animate one-by-one with visible feedback
-- [ ] Each enemy shows "attacking" indicator during their turn
+- [x] Map auto-scrolls to player position on load and floor change
+- [x] Player can always see where they are on the map
+- [x] Victory screen shows as overlay with combat visible behind
+- [x] Enemy turns animate one-by-one with visible feedback
+- [x] Each enemy shows "attacking" indicator during their turn
 - [ ] Floating damage numbers appear for enemy attacks
 - [ ] E2E tests pass with updated screenshots
 - [ ] Full playthrough feels "polished" not "alpha"
