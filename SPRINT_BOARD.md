@@ -158,7 +158,7 @@
 |------|-------|------|-------------|--------|
 | VP-05 | UX | M | Victory as overlay on combat screen | MERGED (PR #34) |
 | VP-06 | UX | S | Defeated enemies visual (faded/grey) | MERGED (PR #34) |
-| VP-07 | UX | XS | Smooth victory transition animation | Pending |
+| VP-07 | UX | XS | Smooth victory transition animation | MERGED (PR #36) |
 
 ### Phase C: Enemy Turn Animations (Priority)
 
