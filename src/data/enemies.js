@@ -620,6 +620,10 @@ export const ALL_ENEMIES = [
     type: 'boss',
     act: 1,
     emoji: '👑🟢',
+    personality: 'Alien hunger - a formless entity driven by instinct older than thought',
+    intro: 'The mass quivers. Something vast and formless regards you not with malice, but with hunger older than thought.',
+    midFight: 'The creature shudders, its form rippling. It does not understand pain, only the need to consume.',
+    deathQuote: 'The progenitor dissolves, releasing the echoes of a thousand devoured climbers in its final tremor.',
     moveset: [
       { id: 'goop', intent: INTENT.DEBUFF, special: 'addSlimed', amount: 3, message: 'Goop Spray' },
       { id: 'preparing', intent: INTENT.UNKNOWN, message: 'Preparing...' },
@@ -642,6 +646,10 @@ export const ALL_ENEMIES = [
     emoji: '🛡️👹',
     retainBlock: true,
     modeShift: true,
+    personality: 'Mechanical stoic - an ancient construct bound by protocol',
+    intro: 'UNAUTHORIZED ASCENT DETECTED. INITIATING DEFENSIVE PROTOCOLS.',
+    midFight: 'SYSTEM DAMAGE ACKNOWLEDGED. SWITCHING OPERATIONAL MODE.',
+    deathQuote: 'GUARDIAN... OFFLINE... SPIRE... UNDEFENDED...',
     moveset: [
       { id: 'chargingUp', intent: INTENT.DEFEND, block: 9, message: 'Charging Up' },
       { id: 'fierceBash', intent: INTENT.ATTACK, damage: 32, message: 'Fierce Bash' },
@@ -671,6 +679,10 @@ export const ALL_ENEMIES = [
     type: 'boss',
     act: 1,
     emoji: '👻🔥',
+    personality: 'Melancholic ancient - a hollow warrior who regards combat with weary pity',
+    intro: 'Six flames orbit a hollow shell of what was once a warrior. It regards you with something like pity.',
+    midFight: 'You burn brightly... but all flames gutter in the end.',
+    deathQuote: 'At last... the cold...',
     moveset: [
       { id: 'activate', intent: INTENT.UNKNOWN, special: 'activate', message: 'Activate' },
       { id: 'divider', intent: INTENT.ATTACK, damage: 6, times: 6, special: 'divider', message: 'Divider' },
