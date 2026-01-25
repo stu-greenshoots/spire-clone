@@ -15,7 +15,11 @@
     "validate:quick": "vitest run",
     "generate-art": "node scripts/generate-images.js",
     "generate-art:dry": "node scripts/generate-images.js --dry-run",
-    "compress-images": "node scripts/compress-images.js"
+    "compress-images": "node scripts/compress-images.js",
+    "test:e2e": "npx playwright test --config=tests/e2e/playwright.config.js",
+    "test:e2e:headed": "npx playwright test --config=tests/e2e/playwright.config.js --headed",
+    "test:e2e:screenshots": "SCREENSHOT_DIR=screenshots npx playwright test --config=tests/e2e/playwright.config.js",
+    "test:e2e:debug": "npx playwright test --config=tests/e2e/playwright.config.js --debug"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -23,6 +27,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@playwright/test": "^1.58.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/react": "^19.2.5",

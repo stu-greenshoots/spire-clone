@@ -171,6 +171,7 @@ const MainMenu = () => {
         {/* Continue Run Button - only show if save exists */}
         {saveExists && (
           <button
+            data-testid="btn-continue"
             onClick={loadGameState}
             onMouseEnter={() => setHoveringContinue(true)}
             onMouseLeave={() => setHoveringContinue(false)}
@@ -216,6 +217,7 @@ const MainMenu = () => {
 
         {/* New Game Button */}
         <button
+          data-testid="btn-new-game"
           onClick={() => {
             deleteSaveState();
             startGame();
