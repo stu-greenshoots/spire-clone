@@ -150,7 +150,7 @@
 | VP-01 | UX | M | Map auto-scroll to player position | MERGED (PR #33) |
 | VP-02 | UX | S | "You are here" indicator | MERGED (PR #33) |
 | VP-03 | UX | S | Map position indicator (floor X of 15) | MERGED (PR #33) |
-| VP-04 | UX | XS | Remember scroll position on return | Pending |
+| VP-04 | UX | XS | Remember scroll position on return | MERGED (PR #37) |
 
 ### Phase B: Victory Overlay (Priority)
 
@@ -187,7 +187,7 @@
 - [x] Each enemy shows "attacking" indicator during their turn
 - [x] Floating damage numbers appear for enemy attacks
 - [ ] E2E tests pass with updated screenshots
-- [ ] Full playthrough feels "polished" not "alpha"
+- [x] Full playthrough feels "polished" not "alpha"
 
 ---
 
