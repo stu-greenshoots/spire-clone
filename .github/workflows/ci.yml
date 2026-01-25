@@ -89,8 +89,7 @@ jobs:
         run: mkdir -p screenshots
 
       - name: Run E2E tests
-        run: npm run test:e2e
-        continue-on-error: true
+        run: npm run test:e2e:screenshots
 
       - name: Upload E2E screenshots
         uses: actions/upload-artifact@v4

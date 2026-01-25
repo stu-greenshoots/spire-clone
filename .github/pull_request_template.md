@@ -26,7 +26,7 @@
 {What did you actually click/try in the running game? What did you verify works?}
 
 ### Checklist
-- [ ] Branch follows naming convention (`sprint-N/task-id-description`)
+- [ ] Branch follows naming convention (`task-id-description`)
 - [ ] Commit messages prefixed with task ID
 - [ ] No new files over 500 lines
 - [ ] No TODO/FIXME without task reference
