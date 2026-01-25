@@ -2,7 +2,8 @@ import { GAME_PHASE } from '../GameContext';
 import { getStarterDeck, getCardById } from '../../data/cards';
 import { getStarterRelic, getRelicById } from '../../data/relics';
 import { getPotionById } from '../../data/potions';
-import { getEnemyById } from '../../data/enemies';
+import { getEnemyById, createEnemyInstance } from '../../data/enemies';
+import { getEnemyIntent } from '../../systems/enemySystem';
 import { generateMap } from '../../utils/mapGenerator';
 import { saveGame, loadGame, deleteSave } from '../../systems/saveSystem';
 import { getPassiveRelicEffects } from '../../systems/relicSystem';
@@ -332,34 +333,32 @@ export const metaReducer = (state, action) => {
       const enemies = (scenario.enemies || [])
         .map((enemy, index) => {
           if (typeof enemy === 'string') {
+            // Enemy is just an ID string - create a fresh instance
             const baseEnemy = getEnemyById(enemy);
             if (!baseEnemy) return null;
-            return {
-              ...baseEnemy,
-              currentHp: baseEnemy.hp,
-              maxHp: baseEnemy.hp,
-              block: 0,
-              instanceId: `${enemy}_${index}`,
-              vulnerable: 0,
-              weak: 0,
-              strength: 0,
-              moveIndex: 0
-            };
+            const instance = createEnemyInstance(baseEnemy, index);
+            instance.intentData = getEnemyIntent(instance, 0);
+            return instance;
           }
           if (enemy.id) {
+            // Enemy is an object with an ID - create instance and override with scenario data
             const baseEnemy = getEnemyById(enemy.id);
             if (!baseEnemy) return null;
-            return {
-              ...baseEnemy,
-              currentHp: enemy.currentHp ?? baseEnemy.hp,
-              maxHp: enemy.maxHp ?? baseEnemy.hp,
-              block: enemy.block ?? 0,
-              instanceId: enemy.instanceId || `${enemy.id}_${index}`,
-              vulnerable: enemy.vulnerable ?? 0,
-              weak: enemy.weak ?? 0,
-              strength: enemy.strength ?? 0,
-              moveIndex: enemy.moveIndex ?? 0
-            };
+            const instance = createEnemyInstance(baseEnemy, index);
+
+            // Override with scenario-specific values
+            if (enemy.currentHp !== undefined) instance.currentHp = enemy.currentHp;
+            if (enemy.maxHp !== undefined) instance.maxHp = enemy.maxHp;
+            if (enemy.block !== undefined) instance.block = enemy.block;
+            if (enemy.instanceId !== undefined) instance.instanceId = enemy.instanceId;
+            if (enemy.vulnerable !== undefined) instance.vulnerable = enemy.vulnerable;
+            if (enemy.weak !== undefined) instance.weak = enemy.weak;
+            if (enemy.strength !== undefined) instance.strength = enemy.strength;
+            if (enemy.moveIndex !== undefined) instance.moveIndex = enemy.moveIndex;
+
+            // Calculate intent based on current move
+            instance.intentData = getEnemyIntent(instance, instance.moveIndex || 0);
+            return instance;
           }
           return null;
         })
