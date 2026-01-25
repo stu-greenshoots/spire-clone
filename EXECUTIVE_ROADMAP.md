@@ -276,9 +276,9 @@ Transform from functional prototype into award-winning indie game that rivals Sl
 **Strategic Note:** "Juice" is what makes good games feel great. This sprint adds that final layer of polish.
 
 ### Sprint 12: Pre-Release Hardening (SHIP PREP)
-**Theme:** Production-ready quality assurance  
+**Theme:** Production-ready quality assurance + Multi-platform builds  
 **Status:** Planned  
-**Duration:** 2 weeks
+**Duration:** 2-3 weeks
 
 **Core Deliverables:**
 - **QA-04** (P0): Full regression test pass
@@ -288,6 +288,11 @@ Transform from functional prototype into award-winning indie game that rivals Sl
   - All events resolve
 - **BE-09** (P0): Starting bonus selection (Neow-like)
 - **AR-05b** (P0): Mobile responsiveness final pass
+- **BE-14** (P0): **Platform build pipelines**
+  - Tauri desktop builds (Windows/Mac/Linux)
+  - Capacitor mobile builds (iOS/Android)
+  - PWA service worker configuration
+  - App store assets and metadata prep
 - **GD-07b** (P1): Relic & potion art (62 icons)
 - **BE-10b** (P1): Performance optimization pass
 - **QA-10** (P1): Automated visual regression suite
@@ -300,8 +305,11 @@ Transform from functional prototype into award-winning indie game that rivals Sl
 - [ ] All relic/potion icons present
 - [ ] Performance dashboard shows no red flags
 - [ ] Visual regression tests passing
+- [ ] **Desktop builds tested on Windows/Mac/Linux**
+- [ ] **Mobile builds tested on iOS/Android**
+- [ ] **PWA installable from browser**
 
-**Strategic Note:** This sprint is about confidence. Game must be stable enough for public launch.
+**Strategic Note:** This sprint delivers production-ready 1.0 across all platforms. Desktop/mobile builds unlock Steam, iOS App Store, and Google Play distribution.
 
 ---
 
