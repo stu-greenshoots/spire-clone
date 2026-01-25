@@ -535,6 +535,18 @@ button:active {
   }
 }
 
+/* Tooltip fade in animation (UX-02) */
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
 /* Responsive font sizes */
 @media (max-width: 360px) {
   html {
