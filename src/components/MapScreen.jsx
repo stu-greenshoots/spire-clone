@@ -1,5 +1,5 @@
 import { useGame } from '../context/GameContext';
-import { useMemo } from 'react';
+import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 
 // SVG icon paths for each node type
 const NODE_ICONS = {
@@ -57,8 +57,19 @@ const BOSS_RADIUS = 30;
 const MapScreen = () => {
   const { state, selectNode } = useGame();
   const { map, currentFloor, deck } = state;
+  const containerRef = useRef(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   const totalFloors = map.length;
+
+  // Track scroll position for mini-map indicator
+  const handleScroll = useCallback((e) => {
+    const container = e.target;
+    const maxScroll = container.scrollHeight - container.clientHeight;
+    if (maxScroll > 0) {
+      setScrollPosition(container.scrollTop / maxScroll);
+    }
+  }, []);
 
   // Calculate SVG dimensions and node positions
   const layout = useMemo(() => {
@@ -86,6 +97,19 @@ const MapScreen = () => {
 
     return { width, height, positions };
   }, [map, totalFloors]);
+
+  // Auto-scroll to current floor on mount and floor change
+  useEffect(() => {
+    if (containerRef.current && currentFloor >= 0) {
+      const floorY = layout.positions[map[currentFloor]?.[0]?.id]?.y;
+      if (floorY) {
+        containerRef.current.scrollTo({
+          top: floorY - containerRef.current.clientHeight / 2,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [currentFloor, layout.positions, map]);
 
   const isNodeAccessible = (node) => {
     if (currentFloor === -1) {
@@ -180,6 +204,29 @@ const MapScreen = () => {
         }}>
           The Spire
         </h2>
+        {/* Floor Position Indicator */}
+        <div
+          data-testid="floor-indicator"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: 'rgba(0, 0, 0, 0.4)',
+            padding: '4px 10px',
+            borderRadius: '12px',
+            border: '1px solid #2a2235'
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 14 14">
+            <path d="M7 1L12 13H2L7 1z" fill="none" stroke="#DAA520" strokeWidth="1.5"/>
+            <line x1="4" y1="10" x2="10" y2="10" stroke="#DAA520" strokeWidth="1" opacity="0.5"/>
+            <line x1="5" y1="7" x2="9" y2="7" stroke="#DAA520" strokeWidth="1" opacity="0.5"/>
+            <line x1="6" y1="4" x2="8" y2="4" stroke="#DAA520" strokeWidth="1" opacity="0.5"/>
+          </svg>
+          <span style={{ color: '#DAA520', fontSize: '12px', fontWeight: 'bold' }}>
+            Floor {Math.max(1, currentFloor + 1)} of {totalFloors}
+          </span>
+        </div>
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -198,12 +245,18 @@ const MapScreen = () => {
         </div>
       </div>
 
-      {/* SVG Map */}
-      <div style={{
-        flex: 1,
-        overflow: 'auto',
-        position: 'relative'
-      }}>
+      {/* SVG Map with Scroll Position Bar */}
+      <div style={{ flex: 1, display: 'flex', minHeight: 0, position: 'relative' }}>
+        {/* Main Map Container */}
+        <div
+          ref={containerRef}
+          onScroll={handleScroll}
+          style={{
+            flex: 1,
+            overflow: 'auto',
+            position: 'relative'
+          }}
+        >
         <svg
           width={layout.width}
           height={layout.height}
@@ -444,6 +497,92 @@ const MapScreen = () => {
             });
           })}
         </svg>
+        </div>
+
+        {/* Scroll Position Bar / Mini-map */}
+        <div
+          data-testid="scroll-position-bar"
+          style={{
+            width: '24px',
+            background: 'linear-gradient(180deg, #1a0a2e 0%, #0a0812 100%)',
+            borderLeft: '1px solid #2a2235',
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '8px 4px',
+            position: 'relative'
+          }}
+        >
+          {/* Mini tower representation */}
+          <div style={{
+            flex: 1,
+            background: 'rgba(40, 30, 60, 0.3)',
+            borderRadius: '4px',
+            position: 'relative',
+            minHeight: '100px'
+          }}>
+            {/* Floor markers */}
+            {Array.from({ length: totalFloors }, (_, i) => {
+              const floorProgress = 1 - (i / (totalFloors - 1));
+              const isCurrentFloor = i === Math.max(0, currentFloor);
+              const isVisited = i <= currentFloor;
+              return (
+                <div
+                  key={i}
+                  style={{
+                    position: 'absolute',
+                    left: '2px',
+                    right: '2px',
+                    top: `${floorProgress * 100}%`,
+                    height: '2px',
+                    background: isCurrentFloor ? '#DAA520' : isVisited ? '#4a4a6a' : '#2a2a3a',
+                    borderRadius: '1px',
+                    transform: 'translateY(-1px)',
+                    boxShadow: isCurrentFloor ? '0 0 4px #DAA520' : 'none'
+                  }}
+                />
+              );
+            })}
+
+            {/* Current view position indicator */}
+            <div
+              style={{
+                position: 'absolute',
+                left: '-2px',
+                right: '-2px',
+                top: `${scrollPosition * 100}%`,
+                height: '20px',
+                background: 'rgba(218, 165, 32, 0.2)',
+                border: '1px solid rgba(218, 165, 32, 0.5)',
+                borderRadius: '3px',
+                transform: 'translateY(-10px)',
+                pointerEvents: 'none'
+              }}
+            />
+          </div>
+
+          {/* Boss icon at top */}
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '4px',
+            color: '#CC2222',
+            fontSize: '10px'
+          }}>
+            <svg width="12" height="12" viewBox="0 0 14 14">
+              <path d={NODE_ICONS.boss.path} fill="#CC2222" />
+            </svg>
+          </div>
+
+          {/* Start label at bottom */}
+          <div style={{
+            textAlign: 'center',
+            marginTop: '4px',
+            color: '#44AA44',
+            fontSize: '8px',
+            fontWeight: 'bold'
+          }}>
+            START
+          </div>
+        </div>
       </div>
 
       {/* Legend */}
