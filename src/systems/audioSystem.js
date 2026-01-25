@@ -76,8 +76,56 @@ class AudioManager {
     this._phases = {};  // { phaseName: trackId }
     this._currentPhase = null;
 
+    // AR-04: User gesture tracking for autoplay policy compliance
+    this._userGestureReceived = false;
+    this._pendingAudioQueue = []; // Queued sounds waiting for user gesture
+
     // Load persisted settings
     this.loadSettings();
+
+    // Set up user gesture listener for autoplay policy
+    this._initUserGestureListener();
+  }
+
+  /**
+   * AR-04: Set up one-time listener for user gesture to enable audio.
+   * Modern browsers require a user gesture before audio can play.
+   */
+  _initUserGestureListener() {
+    const enableAudio = () => {
+      if (this._userGestureReceived) return;
+      this._userGestureReceived = true;
+
+      // Resume any suspended AudioContext (if we use Web Audio API later)
+      // For now, just mark that we can play audio
+
+      // Play any queued sounds
+      this._pendingAudioQueue.forEach(({ type, args }) => {
+        if (type === 'sfx') {
+          this._playSFXInternal(...args);
+        } else if (type === 'music') {
+          this._playMusicInternal(...args);
+        }
+      });
+      this._pendingAudioQueue = [];
+
+      // Remove listeners after first gesture
+      document.removeEventListener('click', enableAudio);
+      document.removeEventListener('keydown', enableAudio);
+      document.removeEventListener('touchstart', enableAudio);
+    };
+
+    // Listen for any user gesture
+    document.addEventListener('click', enableAudio, { once: true, passive: true });
+    document.addEventListener('keydown', enableAudio, { once: true, passive: true });
+    document.addEventListener('touchstart', enableAudio, { once: true, passive: true });
+  }
+
+  /**
+   * Check if audio is ready to play (user gesture received)
+   */
+  isReady() {
+    return this._userGestureReceived;
   }
 
   /**
@@ -109,11 +157,24 @@ class AudioManager {
   }
 
   /**
-   * Play a sound effect
+   * Play a sound effect (queues if user gesture not yet received)
    */
   playSFX(soundId, category = 'combat') {
     if (this.muted) return;
 
+    // AR-04: Queue sound if user hasn't interacted yet
+    if (!this._userGestureReceived) {
+      this._pendingAudioQueue.push({ type: 'sfx', args: [soundId, category] });
+      return;
+    }
+
+    this._playSFXInternal(soundId, category);
+  }
+
+  /**
+   * Internal SFX playback (called after user gesture verified)
+   */
+  _playSFXInternal(soundId, category = 'combat') {
     const volume = this._getEffectiveVolume(category);
     if (volume <= 0) return;
 
@@ -132,9 +193,22 @@ class AudioManager {
   }
 
   /**
-   * Play a music track with optional loop and fade-in
+   * Play a music track with optional loop and fade-in (queues if user gesture not yet received)
    */
-  playMusic(trackId, { loop = true, fadeIn = 1000 } = {}) {
+  playMusic(trackId, options = {}) {
+    // AR-04: Queue music if user hasn't interacted yet
+    if (!this._userGestureReceived) {
+      this._pendingAudioQueue.push({ type: 'music', args: [trackId, options] });
+      return;
+    }
+
+    this._playMusicInternal(trackId, options);
+  }
+
+  /**
+   * Internal music playback (called after user gesture verified)
+   */
+  _playMusicInternal(trackId, { loop = true, fadeIn = 1000 } = {}) {
     // Stop current music first
     if (this.currentMusic) {
       this.stopMusic({ fadeOut: 0 });
