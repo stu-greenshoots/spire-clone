@@ -6,7 +6,7 @@ import { getKeywordsInText } from '../data/keywords';
  * Wraps a card element and shows a tooltip above it after a short delay.
  * UX-02: Lightweight, CSS-positioned, does not block input.
  */
-const CardTooltip = ({ card, player, children }) => {
+const CardTooltip = ({ card, player, targetEnemy, children }) => {
   const [visible, setVisible] = useState(false);
   const timerRef = useRef(null);
 
@@ -24,15 +24,18 @@ const CardTooltip = ({ card, player, children }) => {
     setVisible(false);
   }, []);
 
-  // Compute effective damage including strength and weak
+  // Compute effective damage including strength, weak, and target's vulnerable
   const getEffectiveDamage = () => {
     if (!card.damage || typeof card.damage !== 'number') return null;
     const strengthMult = card.strengthMultiplier || 1;
     let dmg = card.damage + (player?.strength || 0) * strengthMult;
     if (player?.weak > 0) dmg = Math.floor(dmg * 0.75);
+    // Apply vulnerable from target enemy (50% more damage)
+    const hasVulnerable = targetEnemy && targetEnemy.vulnerable > 0;
+    if (hasVulnerable) dmg = Math.floor(dmg * 1.5);
     dmg = Math.max(0, dmg);
     const hits = card.hits || 1;
-    return { perHit: dmg, hits, total: dmg * hits };
+    return { perHit: dmg, hits, total: dmg * hits, hasVulnerable };
   };
 
   // Compute effective block including dexterity and frail
@@ -124,6 +127,11 @@ const CardTooltip = ({ card, player, children }) => {
               {player && player.weak > 0 && (
                 <div style={{ color: '#f88', fontSize: '10px', marginTop: '1px' }}>
                   -25% from Weak
+                </div>
+              )}
+              {damage.hasVulnerable && (
+                <div style={{ color: '#ff9944', fontSize: '10px', marginTop: '1px' }}>
+                  +50% vs Vulnerable
                 </div>
               )}
               {card.targetAll && (
