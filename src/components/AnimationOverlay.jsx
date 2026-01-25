@@ -1,6 +1,71 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ANIMATION_TYPE } from '../constants/animationTypes';
 
+// Enemy Turn Indicator component
+const EnemyTurnIndicator = ({ enemyTurn, onSkip }) => {
+  if (!enemyTurn) return null;
+
+  return (
+    <div
+      data-testid="enemy-turn-indicator"
+      style={{
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        background: 'linear-gradient(180deg, rgba(80, 20, 20, 0.95) 0%, rgba(40, 10, 10, 0.98) 100%)',
+        border: '2px solid #aa4444',
+        borderRadius: '12px',
+        padding: '16px 28px',
+        boxShadow: '0 0 30px rgba(200, 50, 50, 0.4), 0 8px 32px rgba(0, 0, 0, 0.6)',
+        zIndex: 1001,
+        animation: 'enemyTurnIndicatorPulse 0.8s ease-in-out infinite',
+        pointerEvents: 'auto',
+        cursor: 'pointer',
+        minWidth: '200px',
+        textAlign: 'center'
+      }}
+      onClick={onSkip}
+      title="Click to skip"
+    >
+      <div style={{
+        color: '#ffcccc',
+        fontSize: '12px',
+        textTransform: 'uppercase',
+        letterSpacing: '2px',
+        marginBottom: '6px',
+        opacity: 0.8
+      }}>
+        Enemy Turn
+      </div>
+      <div style={{
+        color: '#ffffff',
+        fontSize: '18px',
+        fontWeight: 'bold',
+        textShadow: '0 0 10px rgba(255, 100, 100, 0.6)',
+        marginBottom: '4px'
+      }}>
+        {enemyTurn.name}
+      </div>
+      <div style={{
+        color: '#ff9999',
+        fontSize: '14px',
+        fontStyle: 'italic'
+      }}>
+        is {enemyTurn.action}
+      </div>
+      <div style={{
+        color: '#888',
+        fontSize: '10px',
+        marginTop: '8px',
+        opacity: 0.6
+      }}>
+        (click to skip)
+      </div>
+    </div>
+  );
+};
+
 // Floating number component
 const FloatingNumber = ({ animation, onComplete }) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -84,7 +149,7 @@ const FloatingNumber = ({ animation, onComplete }) => {
 };
 
 // Main Animation Overlay Component
-const AnimationOverlay = ({ animations, onAnimationComplete }) => {
+const AnimationOverlay = ({ animations, onAnimationComplete, activeEnemyTurn, onSkipEnemyTurn, highlightedEnemyId: _highlightedEnemyId }) => {
   const handleComplete = useCallback((id) => {
     if (onAnimationComplete) {
       onAnimationComplete(id);
@@ -111,8 +176,13 @@ const AnimationOverlay = ({ animations, onAnimationComplete }) => {
           onComplete={handleComplete}
         />
       ))}
+      <EnemyTurnIndicator
+        enemyTurn={activeEnemyTurn}
+        onSkip={onSkipEnemyTurn}
+      />
     </div>
   );
 };
 
+export { EnemyTurnIndicator };
 export default AnimationOverlay;
