@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { memo, useState, useRef, useCallback } from 'react';
+import { memo, useState, useRef, useCallback, useEffect } from 'react';
 
 /**
  * Tooltip - Generic Portal-based tooltip component.
@@ -222,6 +222,15 @@ export const SimpleTooltip = memo(function SimpleTooltip({
       timerRef.current = null;
     }
     setVisible(false);
+  }, []);
+
+  // Cleanup timer on unmount to prevent memory leak
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
   }, []);
 
   return (
