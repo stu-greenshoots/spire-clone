@@ -233,20 +233,49 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Phase 2: Content & Depth (Sprint 6+) - Backlog
+## Sprint 6: User Feedback & Bug Fixes - PROPOSED
+
+**Goal:** Address critical user feedback from user-feedback.md
+**Source:** See `FUTURE_SPRINTS_PLAN.md` for full analysis
+**Status:** Draft - awaiting team review
+
+### Key Items from User Feedback
 
 | Task | Owner | Size | Priority | Description |
 |------|-------|------|----------|-------------|
-| JR-03 | JR | L | P2 | Act 2 content expansion (10 new enemies) |
-| GD-07 | GD | L | P2 | Relic & potion art (47 relics + 15 potions) |
-| GD-08 | GD | M | P3 | Map visual overhaul |
+| BE-10 | BE | M | P0 | **BUG** - Buff/debuff persistence (status effects decrement at wrong time) |
+| UX-10 | UX | L | P0 | Comprehensive UX audit - document all "amateur" elements |
+| BE-09 | BE | M | P1 | Starting bonus selection (Neow-like system) |
+| UX-11 | UX | S | P1 | Non-intrusive block indicator (no layout jumping) |
+| QA-06 | QA | M | P1 | Balance pass - enemy/boss difficulty, rare card rates |
+| UX-12 | UX | S | P2 | Smart card targeting (block cards don't need enemy target) |
+| GD-10 | GD | L | P2 | Title screen art |
 
-## Phase 3: Polish & Ship (Sprint 7+) - Backlog
+---
+
+## Sprint 7: Content & Map - PROPOSED
+
+**Goal:** Act 2 content and map route planning improvements
+**Source:** See `FUTURE_SPRINTS_PLAN.md`
 
 | Task | Owner | Size | Priority | Description |
 |------|-------|------|----------|-------------|
-| UX-09 | UX | M | P3 | Tutorial/first run experience |
-| GD-09 | GD | M | P3 | Visual effects & particles |
-| BE-08 | BE | M | P3 | Performance optimization |
-| AR-05 | AR | L | P3 | Mobile responsiveness |
-| QA-04 | QA | M | P3 | Pre-release QA pass |
+| UX-13 | UX | M | P0 | Map path planning - show all routes from current position |
+| JR-03 | JR | L | P0 | Act 2 content expansion (10 new enemies) |
+| GD-07 | GD | L | P1 | Relic & potion art (47 relics + 15 potions) |
+| GD-08 | GD | M | P1 | Map visual overhaul |
+
+---
+
+## Sprint 8: Tutorial & Ship Prep - PROPOSED
+
+**Goal:** Prepare for wider release
+**Source:** See `FUTURE_SPRINTS_PLAN.md`
+
+| Task | Owner | Size | Priority | Description |
+|------|-------|------|----------|-------------|
+| UX-09 | UX | M | P0 | Tutorial/first run experience |
+| QA-04 | QA | M | P0 | Pre-release QA pass |
+| AR-05 | AR | L | P1 | Mobile responsiveness |
+| GD-09 | GD | M | P1 | Visual effects & particles |
+| BE-08 | BE | M | P2 | Performance optimization |
