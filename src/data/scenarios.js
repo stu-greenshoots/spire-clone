@@ -28,7 +28,7 @@ export const SCENARIOS = {
       energy: 3,
       maxEnergy: 3
     },
-    enemies: ['jaw_worm'],
+    enemies: ['jawWorm'],
     hand: ['strike', 'strike', 'defend', 'defend', 'bash'],
     deck: ['strike', 'strike', 'strike', 'defend', 'defend', 'defend', 'defend', 'bash'],
     relics: ['burning_blood'],
@@ -74,7 +74,7 @@ export const SCENARIOS = {
       energy: 3,
       maxEnergy: 3
     },
-    enemies: [{ id: 'the_guardian', currentHp: 240, maxHp: 240 }],
+    enemies: [{ id: 'theGuardian', currentHp: 240, maxHp: 240 }],
     hand: ['strike', 'strike', 'defend', 'defend', 'bash'],
     deck: [
       'strike', 'strike', 'strike',
@@ -98,7 +98,7 @@ export const SCENARIOS = {
       energy: 3,
       maxEnergy: 3
     },
-    enemies: [{ id: 'slime_boss', currentHp: 140, maxHp: 140 }],
+    enemies: [{ id: 'slimeBoss', currentHp: 140, maxHp: 140 }],
     hand: ['strike', 'strike', 'cleave', 'defend', 'bash'],
     deck: [
       'strike', 'strike', 'strike',
@@ -146,7 +146,7 @@ export const SCENARIOS = {
       energy: 3,
       maxEnergy: 3
     },
-    enemies: [{ id: 'gremlin_nob', currentHp: 82, maxHp: 82, strength: 2 }],
+    enemies: [{ id: 'gremlinNob', currentHp: 82, maxHp: 82, strength: 2 }],
     hand: ['strike', 'strike', 'defend', 'defend', 'bash'],
     deck: ['strike', 'strike', 'defend', 'defend', 'bash'],
     relics: ['burning_blood'],
@@ -166,7 +166,7 @@ export const SCENARIOS = {
       energy: 4,
       maxEnergy: 4
     },
-    enemies: ['jaw_worm'],
+    enemies: ['jawWorm'],
     hand: [
       'strike', 'strike', 'strike', 'strike',
       'defend', 'defend', 'defend',
@@ -216,7 +216,7 @@ export const SCENARIOS = {
       energy: 3,
       maxEnergy: 3
     },
-    enemies: [{ id: 'gremlin_nob', currentHp: 82, maxHp: 82 }],
+    enemies: [{ id: 'gremlinNob', currentHp: 82, maxHp: 82 }],
     hand: ['strike', 'strike', 'strike', 'defend', 'bash'],
     deck: ['strike', 'strike', 'strike', 'defend', 'defend', 'bash'],
     relics: ['burning_blood'],
@@ -373,7 +373,7 @@ export const SCENARIOS = {
       maxEnergy: 4,
       strength: 3
     },
-    enemies: ['jaw_worm'],
+    enemies: ['jawWorm'],
     hand: ['strike', 'strike', 'defend', 'defend', 'bash'],
     deck: ['strike', 'strike', 'defend', 'defend', 'bash'],
     relics: [
@@ -397,7 +397,7 @@ export const SCENARIOS = {
       energy: 3,
       maxEnergy: 3
     },
-    enemies: ['jaw_worm'],
+    enemies: ['jawWorm'],
     hand: ['thunderclap', 'searing_blow', 'infernal_blade', 'blood_for_blood', 'body_slam'],
     deck: ['thunderclap', 'searing_blow', 'infernal_blade'],
     relics: ['burning_blood'],
