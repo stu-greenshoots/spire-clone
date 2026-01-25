@@ -1,5 +1,6 @@
 import { useGame } from '../context/GameContext';
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
+import DeckViewer from './DeckViewer';
 
 // SVG icon paths for each node type
 const NODE_ICONS = {
@@ -56,10 +57,28 @@ const BOSS_RADIUS = 30;
 
 const MapScreen = () => {
   const { state, selectNode } = useGame();
-  const { map, currentFloor, deck } = state;
+  const { map, currentFloor, deck, relics } = state;
   const containerRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const lastKnownFloorRef = useRef(null);
+  const [isDeckViewerOpen, setIsDeckViewerOpen] = useState(false);
+
+  // Keyboard shortcut: 'D' key toggles deck viewer
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Don't trigger if user is typing in an input
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      if (e.key === 'd' || e.key === 'D') {
+        setIsDeckViewerOpen(prev => !prev);
+      }
+      // Escape closes deck viewer
+      if (e.key === 'Escape' && isDeckViewerOpen) {
+        setIsDeckViewerOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isDeckViewerOpen]);
 
   const totalFloors = map.length;
 
@@ -263,22 +282,38 @@ const MapScreen = () => {
             Floor {Math.max(1, currentFloor + 1)} of {totalFloors}
           </span>
         </div>
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          background: 'rgba(0, 0, 0, 0.4)',
-          padding: '4px 10px',
-          borderRadius: '12px',
-          border: '1px solid #2a2235'
-        }}>
+        <button
+          onClick={() => setIsDeckViewerOpen(true)}
+          data-testid="deck-viewer-button"
+          title="View Deck (D)"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            background: 'rgba(0, 0, 0, 0.4)',
+            padding: '4px 10px',
+            borderRadius: '12px',
+            border: '1px solid #2a2235',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+            outline: 'none'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.background = 'rgba(100, 100, 200, 0.2)';
+            e.currentTarget.style.borderColor = '#4a4a8a';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.background = 'rgba(0, 0, 0, 0.4)';
+            e.currentTarget.style.borderColor = '#2a2235';
+          }}
+        >
           <svg width="14" height="14" viewBox="0 0 14 14">
             <rect x="2" y="1" width="10" height="12" rx="1" fill="none" stroke="#6a6a8a" strokeWidth="1.5"/>
             <line x1="5" y1="4" x2="9" y2="4" stroke="#6a6a8a" strokeWidth="1"/>
             <line x1="5" y1="7" x2="9" y2="7" stroke="#6a6a8a" strokeWidth="1"/>
           </svg>
           <span style={{ color: '#8888bb', fontSize: '12px', fontWeight: 'bold' }}>{deck.length}</span>
-        </div>
+        </button>
       </div>
 
       {/* SVG Map with Scroll Position Bar */}
@@ -643,6 +678,15 @@ const MapScreen = () => {
           </div>
         ))}
       </div>
+
+      {/* Deck Viewer Modal */}
+      {isDeckViewerOpen && (
+        <DeckViewer
+          deck={deck}
+          relics={relics}
+          onClose={() => setIsDeckViewerOpen(false)}
+        />
+      )}
     </div>
   );
 };

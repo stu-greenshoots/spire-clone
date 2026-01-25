@@ -6,6 +6,8 @@ import { generateMap } from '../../utils/mapGenerator';
 import { saveGame, loadGame, deleteSave } from '../../systems/saveSystem';
 import { getPassiveRelicEffects } from '../../systems/relicSystem';
 import { createInitialState } from '../GameContext';
+import { loadProgression, updateRunStats, saveProgression } from '../../systems/progressionSystem';
+import { getAscensionStartGold } from '../../systems/ascensionSystem';
 
 /**
  * Reconstruct a full card object from its serialized form.
@@ -69,9 +71,13 @@ export const metaReducer = (state, action) => {
     case 'START_GAME': {
       // Delete any existing save when starting new game
       deleteSave();
+      const ascensionLevel = action.payload?.ascensionLevel || 0;
       const deck = getStarterDeck();
       const starterRelic = getStarterRelic();
       const map = generateMap(1);
+
+      // Apply ascension starting gold modifier (Ascension 6+)
+      const startingGold = getAscensionStartGold(ascensionLevel);
 
       return {
         ...createInitialState(),
@@ -79,7 +85,12 @@ export const metaReducer = (state, action) => {
         deck,
         relics: [starterRelic],
         map,
-        currentFloor: -1
+        currentFloor: -1,
+        ascension: ascensionLevel,
+        player: {
+          ...createInitialState().player,
+          gold: startingGold
+        }
       };
     }
 
@@ -235,6 +246,41 @@ export const metaReducer = (state, action) => {
 
     case 'DELETE_SAVE': {
       deleteSave();
+      return state;
+    }
+
+    case 'UPDATE_PROGRESSION': {
+      // Called on game over (win or loss) to update meta-progression
+      const { won, causeOfDeath } = action.payload;
+      const progression = loadProgression();
+      const currentAscension = state.ascension || 0;
+
+      // Build run data from current state and runStats
+      const runData = {
+        won,
+        floor: state.currentFloor + 1, // Convert 0-based to 1-based
+        enemiesKilled: state.runStats?.enemiesKilled || 0,
+        goldEarned: state.runStats?.goldEarned || 0,
+        damageDealt: state.runStats?.damageDealt || 0,
+        cardsPlayed: state.runStats?.cardsPlayed || 0,
+        defeatedEnemies: state.runStats?.defeatedEnemies || [],
+        relics: state.relics,
+        deckSize: state.deck?.length || 0,
+        ascension: currentAscension,
+        causeOfDeath: won ? null : causeOfDeath
+      };
+
+      // Update progression (this also saves to localStorage)
+      const updatedProgression = updateRunStats(progression, runData);
+
+      // Unlock next ascension level on win
+      // - First win unlocks Ascension 1
+      // - Winning at current highest unlocks next level
+      if (won && currentAscension >= updatedProgression.highestAscension) {
+        updatedProgression.highestAscension = currentAscension + 1;
+        saveProgression(updatedProgression);
+      }
+
       return state;
     }
 

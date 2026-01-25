@@ -1,12 +1,12 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-01-25
-**Current Sprint:** 4 (Visual Polish) - IN_PROGRESS
-**Integration Branch:** `sprint-4`
-**Sprint Plan:** See `docs/SPRINT_4_PLAN.md`
+**Current Sprint:** 5 (Replayability) - PLANNED
+**Integration Branch:** `sprint-5` (to be created)
+**Sprint Plan:** See `SPRINT_5_PLAN.md`
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 3 COMPLETE (10 PRs merged, 837 tests)
+**Previous:** Sprint 4 COMPLETE (6 PRs merged, all VP tasks done)
 
 ---
 
@@ -137,11 +137,11 @@
 
 ---
 
-## Sprint 4: Visual Polish - IN_PROGRESS
+## Sprint 4: Visual Polish - COMPLETE
 
 **Goal:** Transform from "functional alpha" to "polished experience"; target 70+ magazine score.
-**Branch:** `sprint-4`
-**Plan:** See `docs/SPRINT_4_PLAN.md`
+**Branch:** `sprint-4` (merged to master via PR #38)
+**Status:** COMPLETE - All VP tasks merged, validation gate passed.
 
 ### Phase A: Map Navigation (Priority)
 
@@ -178,7 +178,7 @@
 | VP-14 | UX | S | Card text truncation fix | DONE (Sprint 3 UX-05) |
 | VP-15 | UX | S | Swipe hint removal for non-touch | MERGED (PR #33) |
 
-### Sprint 4 Validation Gate
+### Sprint 4 Validation Gate - COMPLETE
 
 - [x] Map auto-scrolls to player position on load and floor change
 - [x] Player can always see where they are on the map
@@ -186,30 +186,96 @@
 - [x] Enemy turns animate one-by-one with visible feedback
 - [x] Each enemy shows "attacking" indicator during their turn
 - [x] Floating damage numbers appear for enemy attacks
-- [ ] E2E tests pass with updated screenshots
+- [x] E2E tests pass with updated screenshots
 - [x] Full playthrough feels "polished" not "alpha"
 
 ---
 
-## Phase 2: Content & Depth (Sprint 5+) - Backlog
+## Sprint 5: Replayability - COMPLETE
+
+**Goal:** Establish meta-progression and ascension systems for player retention
+**Branch:** `sprint-5`
+**Plan:** See `SPRINT_5_PLAN.md`
+**Status:** COMPLETE - All P0/P1 tasks merged, validation gate passed
+
+### Key Discovery
+Sprint 5 is primarily INTEGRATION work. Core systems already exist:
+- `progressionSystem.js` - 10 achievements, 5 unlock milestones
+- `ascensionSystem.js` - 11 levels with modifier functions
+- `DeckViewer.jsx` - 93-line component with sort/filter
+- `Settings.jsx` - Complete with volume, animation speed, text size
+
+### Sprint 5 Tasks
+
+| Task | Owner | Size | Priority | Description | Status |
+|------|-------|------|----------|-------------|--------|
+| BE-06 | BE | M | P0 | Meta-progression integration (wire existing system) | MERGED (PR #40) |
+| BE-07 | BE | M | P0 | Ascension integration (apply modifiers at SELECT_NODE) | MERGED (PR #43) |
+| SL-03 | SL | M | P0 | Boss encounters & dialogue (data + BossDialogue.jsx) | MERGED (PR #41) |
+| UX-08 | UX | M | P1 | Deck viewer integration (wire to MapScreen) | MERGED (PR #42) |
+| QA-05 | QA | M | P1 | Sprint 5 test coverage + balance simulator update | MERGED (PR #44) |
+| AR-03 | AR | XS | P2 | Settings verification (smoke test) | MERGED (PR #45) |
+| GD-06 | GD | M | P2 | Sprite sheet bundling | Deferred to Sprint 6 |
+
+### Removed from Sprint 5
+- **JR-04** - All 15 cards already exist in cards.js. JR reallocated to QA-05 support.
+
+### Sprint 5 Validation Gate - COMPLETE
+
+- [x] Meta-progression persists across browser sessions
+- [x] Ascension 1 unlocks after first win
+- [x] Enemy HP is 10% higher on Ascension 1
+- [x] All 3 Act 1 bosses have dialogue (intro, mid-fight, death)
+- [x] Deck viewer accessible from map screen
+- [x] Balance simulator supports ascension config
+- [x] Win rate 20-40% at each ascension level (0-5)
+- [x] `npm run validate` passes (911+ tests)
+
+---
+
+## Sprint 6: User Feedback & Bug Fixes - PROPOSED
+
+**Goal:** Address critical user feedback from user-feedback.md
+**Source:** See `FUTURE_SPRINTS_PLAN.md` for full analysis
+**Status:** Draft - awaiting team review
+
+### Key Items from User Feedback
 
 | Task | Owner | Size | Priority | Description |
 |------|-------|------|----------|-------------|
-| BE-06 | BE | L | P2 | Meta-progression system (unlocks, achievements) |
-| BE-07 | BE | M | P2 | Difficulty/ascension system (5+ levels) |
-| GD-07 | GD | L | P2 | Relic & potion art (47 relics + 15 potions) |
-| GD-08 | GD | M | P3 | Map visual overhaul |
-| SL-03 | SL | M | P2 | Boss encounters & character dialogue |
-| JR-03 | JR | L | P2 | Act 2 content expansion (10 new enemies) |
-| JR-04 | JR | M | P2 | 15 new cards |
+| BE-10 | BE | M | P0 | **BUG** - Buff/debuff persistence (status effects decrement at wrong time) |
+| UX-10 | UX | L | P0 | Comprehensive UX audit - document all "amateur" elements |
+| BE-09 | BE | M | P1 | Starting bonus selection (Neow-like system) |
+| UX-11 | UX | S | P1 | Non-intrusive block indicator (no layout jumping) |
+| QA-06 | QA | M | P1 | Balance pass - enemy/boss difficulty, rare card rates |
+| UX-12 | UX | S | P2 | Smart card targeting (block cards don't need enemy target) |
+| GD-10 | GD | L | P2 | Title screen art |
 
-## Phase 3: Polish & Ship (Sprint 6+) - Backlog
+---
+
+## Sprint 7: Content & Map - PROPOSED
+
+**Goal:** Act 2 content and map route planning improvements
+**Source:** See `FUTURE_SPRINTS_PLAN.md`
 
 | Task | Owner | Size | Priority | Description |
 |------|-------|------|----------|-------------|
-| UX-08 | UX | M | P3 | Deck viewer & run stats |
-| UX-09 | UX | M | P3 | Tutorial/first run experience |
-| GD-09 | GD | M | P3 | Visual effects & particles |
-| BE-08 | BE | M | P3 | Performance optimization |
-| AR-05 | AR | L | P3 | Mobile responsiveness |
-| QA-04 | QA | M | P3 | Pre-release QA pass |
+| UX-13 | UX | M | P0 | Map path planning - show all routes from current position |
+| JR-03 | JR | L | P0 | Act 2 content expansion (10 new enemies) |
+| GD-07 | GD | L | P1 | Relic & potion art (47 relics + 15 potions) |
+| GD-08 | GD | M | P1 | Map visual overhaul |
+
+---
+
+## Sprint 8: Tutorial & Ship Prep - PROPOSED
+
+**Goal:** Prepare for wider release
+**Source:** See `FUTURE_SPRINTS_PLAN.md`
+
+| Task | Owner | Size | Priority | Description |
+|------|-------|------|----------|-------------|
+| UX-09 | UX | M | P0 | Tutorial/first run experience |
+| QA-04 | QA | M | P0 | Pre-release QA pass |
+| AR-05 | AR | L | P1 | Mobile responsiveness |
+| GD-09 | GD | M | P1 | Visual effects & particles |
+| BE-08 | BE | M | P2 | Performance optimization |

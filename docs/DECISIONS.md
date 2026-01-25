@@ -48,76 +48,67 @@ Decisions that skip this process and break things get reverted.
 
 ## Open Proposals
 
+(none)
+
+---
+
+## Accepted
+
 ### DEC-014: Progression data storage format
-**Proposed by:** BE | **Date:** 2026-01-25 | **Status:** Open
+**Proposed by:** BE | **Date:** 2026-01-25 | **Status:** Accepted
 
-**Proposal:** Store progression data in localStorage under `spireAscent_progression` key as a versioned JSON structure:
-```javascript
-{
-  version: 1,
-  totalRuns: number,
-  wins: number,
-  losses: number,
-  highestFloor: number,
-  totalEnemiesKilled: number,
-  cardsPlayed: { [cardId]: number },
-  relicsCollected: { [relicId]: number },
-  enemiesDefeated: { [enemyId]: number },
-  unlockedCards: string[],
-  achievements: string[]
-}
-```
+**Proposal:** Store progression data in localStorage under `spireAscent_progression` key as a versioned JSON structure. Use existing implementation in progressionSystem.js which includes additional fields: `highestAscension`, `totalGoldEarned`, `totalDamageDealt`, `runHistory`.
 
-**Impact:** `src/systems/progressionSystem.js` (NEW), `src/context/reducers/metaReducer.js`. AR needs to ensure save system doesn't conflict.
+**Impact:** `src/systems/progressionSystem.js` (EXISTS), `src/context/reducers/metaReducer.js`.
 
 **Reviews:**
 - BE: approve - clean separation from run saves, versioned for future changes
-- AR: (pending review)
-- PM: (pending review)
+- AR: approve - no conflict with existing save keys (`spireAscent_save`, `spireAscent_runHistory`)
+- PM: approve - separate namespace is correct
 
-**Resolution:** (pending)
+**Resolution:** Accepted - Sprint 5 planning session 2026-01-25. AR confirmed no localStorage conflict. Use existing implementation in progressionSystem.js.
 
 ---
 
 ### DEC-015: Ascension modifier application timing
-**Proposed by:** BE | **Date:** 2026-01-25 | **Status:** Open
+**Proposed by:** BE | **Date:** 2026-01-25 | **Status:** Accepted
 
 **Proposal:** Apply ascension modifiers at combat initialization time (in `mapReducer.js SELECT_NODE`), not per-action. Enemy HP scaled once when enemies spawn, not recalculated each turn. This keeps combat logic simple and avoids mid-combat modifier drift.
 
-**Impact:** `src/context/reducers/mapReducer.js`, `src/systems/ascensionSystem.js` (NEW).
+**Impact:** `src/context/reducers/mapReducer.js`, `src/systems/ascensionSystem.js` (EXISTS).
 
 **Reviews:**
 - BE: approve - simpler implementation, matches StS behavior
-- JR: (pending review - needs to know if JR-03 enemies need to handle scaling)
-- PM: (pending review)
+- JR: approve - JR-03 enemies just need base stats; scaling is automatic
+- PM: approve - prevents mid-combat bugs
 
-**Resolution:** (pending)
+**Resolution:** Accepted - Sprint 5 planning session 2026-01-25. BE documents in ascensionSystem.js that all modifiers apply at spawn time.
 
 ---
 
 ### DEC-016: Boss dialogue display method
-**Proposed by:** SL | **Date:** 2026-01-25 | **Status:** Open
+**Proposed by:** SL | **Date:** 2026-01-25 | **Status:** Accepted
 
 **Proposal:** Display boss dialogue as a semi-transparent overlay at the top of the combat screen (not a blocking modal). Dialogue appears for 2-3 seconds, then fades out. Player can dismiss early by clicking. Dialogue does NOT pause combat animations or block input.
 
-**Impact:** `src/components/BossIntro.jsx` (NEW), `src/components/CombatScreen.jsx`.
+**Impact:** `src/components/BossDialogue.jsx` (NEW), `src/components/CombatScreen.jsx`.
 
 **Reviews:**
 - SL: approve - non-blocking keeps the game feeling responsive
-- UX: (pending review - needs to confirm this doesn't conflict with tooltip system)
-- PM: (pending review)
+- UX: approve - no conflict with tooltip system (tooltips are bottom, dialogue is top)
+- PM: approve - follows VictoryOverlay.jsx pattern
 
-**Resolution:** (pending)
+**Resolution:** Accepted - Sprint 5 planning session 2026-01-25. SL implements BossDialogue.jsx following VictoryOverlay pattern. Triggers: intro (combat start), mid-fight (50% HP), death (defeat).
 
 ---
 
 ### DEC-017: Act 2 enemy encounter weighting
-**Proposed by:** JR | **Date:** 2026-01-25 | **Status:** Open
+**Proposed by:** JR | **Date:** 2026-01-25 | **Status:** Accepted (implementation deferred)
 
 **Proposal:** Act 2 encounter pools use weighted selection:
 - Normal encounters: 60% common (Centurion, Mystic, Byrd), 30% uncommon (Snecko, Chosen), 10% rare (Shelled Parasite, Reptomancer)
 - Elite encounters: 50/50 split between Book of Stabbing and Gremlin Leader
-- Boss: Automaton only (single Act 2 boss for Sprint 4)
+- Boss: Automaton only (single Act 2 boss initially)
 
 Weights stored in `src/data/encounters.js` for easy tuning.
 
@@ -125,15 +116,12 @@ Weights stored in `src/data/encounters.js` for easy tuning.
 
 **Reviews:**
 - JR: approve - allows balance tuning without code changes
-- QA: (pending review - needs to update balance simulator)
-- PM: (pending review)
+- QA: approve - will update balance simulator when JR-03 lands
+- PM: approve - schema approved, implementation deferred to Sprint 6 when JR-03 (Act 2 enemies) is built
 
-**Resolution:** (pending)
-
+**Resolution:** Accepted - Sprint 5 planning session 2026-01-25. Implementation deferred to Sprint 6. QA to update balance simulator spec when JR-03 task is created.
 
 ---
-
-## Accepted
 
 ### DEC-001: Daily diaries instead of standups
 **Proposed by:** PM | **Date:** 2026-01-24 | **Status:** Accepted

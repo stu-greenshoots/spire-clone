@@ -227,3 +227,80 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 4. Individual work → `engineer-{role}.md` (role-specific tasks)
 
 ---
+
+### User Feedback Analysis & Future Sprints Planning
+**Date:** 2026-01-25
+**Status:** Draft plan created
+
+**What I did:**
+- Read user-feedback.md (11 feedback items from users)
+- Cross-referenced with existing backlog (TEAM_PLAN.md, SPRINT_BOARD.md)
+- Identified items already addressed in Sprint 4 (sequential enemy turns, victory overlay)
+- Identified critical bug: buff/debuff persistence issue (BE-10)
+- Created FUTURE_SPRINTS_PLAN.md with Sprint 6, 7, 8 proposals
+
+**User Feedback Summary:**
+| Priority | Item | Status |
+|----------|------|--------|
+| P0 | Buff/debuff persistence bug | NEW BUG - BE-10 |
+| P0 | Sequential enemy turns | DONE (Sprint 4 VP-08) |
+| P1 | Map path visibility | Partially done (S4), needs S7 work |
+| P1 | Starting bonus selection (Neow-like) | NEW - BE-09 |
+| P1 | UX deep dive audit | NEW - UX-10 |
+| P1 | Balance (enemies too hard, rare cards too common) | QA-06 |
+| P1 | Block indicator layout jumping | NEW - UX-11 |
+| P2 | Victory screen size | Addressed (S4 VP-05) |
+| P2 | Title screen art | NEW - GD-10 |
+| P2 | Smart card targeting | NEW - UX-12 |
+
+**Sprint Roadmap Created:**
+- Sprint 5: Replayability (PLANNED - ready for execution)
+- Sprint 6: User Feedback & Bug Fixes (PROPOSED)
+- Sprint 7: Content & Map Polish (PROPOSED)
+- Sprint 8: Tutorial & Ship Prep (PROPOSED)
+
+**Key Decision Points:**
+1. Should BE-10 (buff/debuff bug) interrupt Sprint 5, or wait for Sprint 6?
+2. How comprehensive should UX-10 (UX audit) be?
+3. Starting bonus options for BE-09?
+
+**Next Steps:**
+1. Complete Sprint 5 as planned
+2. Get team input on Sprint 6 priorities
+3. Determine if BE-10 is P0 blocker for Sprint 5
+
+**Output:** FUTURE_SPRINTS_PLAN.md created with full analysis
+
+---
+
+### Sprint 5 Completion
+**Date:** 2026-01-25
+**Status:** COMPLETE - All P0/P1 tasks merged
+
+**Merged PRs:**
+| PR | Task | Author | Description |
+|----|------|--------|-------------|
+| #40 | BE-06 | BE | Meta-progression integration |
+| #41 | SL-03 | SL | Boss encounters & dialogue |
+| #42 | UX-08 | UX | Deck viewer integration |
+| #43 | BE-07 | BE | Ascension integration |
+| #44 | QA-05 | QA | Test coverage + E2E fix |
+| #45 | AR-03 | AR | Settings verification |
+
+**Deferred:**
+- GD-06 (sprite sheet bundling) - deferred to Sprint 6
+
+**Validation Gate:** COMPLETE
+- 911+ tests passing
+- All features working at runtime
+- Meta-progression persists
+- Ascension system functional
+- Boss dialogue displays correctly
+- Deck viewer accessible from map
+
+**Next:**
+1. Update draft PR #39 with completion status
+2. Create final integration PR sprint-5 → master
+3. Begin Sprint 6 planning
+
+---

@@ -4,6 +4,11 @@ import { shuffleArray, generateMap } from '../../utils/mapGenerator';
 import { triggerRelics, getPassiveRelicEffects } from '../../systems/relicSystem';
 import { getEnemyIntent } from '../../systems/enemySystem';
 import { saveGame, deleteSave } from '../../systems/saveSystem';
+import {
+  applyAscensionToEnemies,
+  shouldAddWoundAtCombatStart,
+  createWoundCard
+} from '../../systems/ascensionSystem';
 
 export const mapReducer = (state, action) => {
   switch (action.type) {
@@ -20,9 +25,22 @@ export const mapReducer = (state, action) => {
       );
 
       if (node.type === 'combat' || node.type === 'elite') {
-        const enemies = getEncounter(state.act, floor, 0.1, node.type === 'elite');
+        let enemies = getEncounter(state.act, floor, 0.1, node.type === 'elite');
+
+        // Apply ascension modifiers to enemies (DEC-015: apply at SELECT_NODE)
+        const ascensionLevel = state.ascension || 0;
+        enemies = applyAscensionToEnemies(enemies, ascensionLevel, node.type);
+
         const deck = [...state.deck];
         let drawPile = shuffleArray(deck.map(c => ({ ...c })));
+
+        // Add Wound to draw pile for Ascension 2+
+        if (shouldAddWoundAtCombatStart(ascensionLevel)) {
+          const woundCard = createWoundCard(`wound_asc_${Date.now()}`);
+          drawPile.push(woundCard);
+          // Re-shuffle to randomize wound position
+          drawPile = shuffleArray(drawPile);
+        }
 
         // Innate: move innate cards to front of draw pile
         const innateCards = drawPile.filter(c => c.innate);
@@ -144,9 +162,22 @@ export const mapReducer = (state, action) => {
       }
 
       if (node.type === 'boss') {
-        const enemies = getBossEncounter(state.act);
+        let enemies = getBossEncounter(state.act);
+
+        // Apply ascension modifiers to boss (DEC-015: apply at SELECT_NODE)
+        const ascensionLevel = state.ascension || 0;
+        enemies = applyAscensionToEnemies(enemies, ascensionLevel, 'boss');
+
         const deck = [...state.deck];
         let drawPile = shuffleArray(deck.map(c => ({ ...c })));
+
+        // Add Wound to draw pile for Ascension 2+
+        if (shouldAddWoundAtCombatStart(ascensionLevel)) {
+          const woundCard = createWoundCard(`wound_asc_${Date.now()}`);
+          drawPile.push(woundCard);
+          // Re-shuffle to randomize wound position
+          drawPile = shuffleArray(drawPile);
+        }
 
         // Innate: move innate cards to front of draw pile
         const innateCardsBoss = drawPile.filter(c => c.innate);

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useGame } from '../context/GameContext';
 import { hasSave } from '../systems/saveSystem';
+import { loadProgression } from '../systems/progressionSystem';
+import { getAscensionDescription, getMaxAscension } from '../systems/ascensionSystem';
 
 const MainMenu = () => {
   const { startGame, loadGameState, deleteSaveState, openDataEditor } = useGame();
@@ -9,10 +11,16 @@ const MainMenu = () => {
   const [hoveringContinue, setHoveringContinue] = useState(false);
   const [hoveringEditor, setHoveringEditor] = useState(false);
   const [saveExists, setSaveExists] = useState(false);
+  const [selectedAscension, setSelectedAscension] = useState(0);
+  const [unlockedAscension, setUnlockedAscension] = useState(0);
 
-  // Check for save on mount
+  // Check for save and unlocked ascension on mount
   useEffect(() => {
     setSaveExists(hasSave());
+    const progression = loadProgression();
+    // Unlock Ascension 1 after first win, then +1 for each subsequent win at highest level
+    const maxUnlocked = Math.min(progression.highestAscension, getMaxAscension());
+    setUnlockedAscension(maxUnlocked);
   }, []);
 
   // Animate title glow
@@ -215,12 +223,76 @@ const MainMenu = () => {
           </button>
         )}
 
+        {/* Ascension Selector - only show if player has unlocked ascension */}
+        {unlockedAscension > 0 && (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            marginBottom: '10px'
+          }}>
+            <button
+              onClick={() => setSelectedAscension(Math.max(0, selectedAscension - 1))}
+              disabled={selectedAscension === 0}
+              style={{
+                background: selectedAscension === 0 ? '#444' : '#666',
+                color: selectedAscension === 0 ? '#888' : 'white',
+                border: 'none',
+                borderRadius: '50%',
+                width: '30px',
+                height: '30px',
+                fontSize: '18px',
+                cursor: selectedAscension === 0 ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              -
+            </button>
+            <div style={{
+              minWidth: '140px',
+              textAlign: 'center',
+              color: selectedAscension === 0 ? '#ccbbdd' : '#FFD700',
+              fontSize: '14px',
+              fontWeight: 'bold',
+              textShadow: selectedAscension > 0 ? '0 0 10px rgba(255, 215, 0, 0.5)' : 'none'
+            }}>
+              {selectedAscension === 0 ? 'Normal' : `Ascension ${selectedAscension}`}
+              <div style={{
+                fontSize: '10px',
+                color: '#999',
+                fontWeight: 'normal',
+                marginTop: '2px'
+              }}>
+                {getAscensionDescription(selectedAscension)}
+              </div>
+            </div>
+            <button
+              onClick={() => setSelectedAscension(Math.min(unlockedAscension, selectedAscension + 1))}
+              disabled={selectedAscension >= unlockedAscension}
+              style={{
+                background: selectedAscension >= unlockedAscension ? '#444' : '#666',
+                color: selectedAscension >= unlockedAscension ? '#888' : 'white',
+                border: 'none',
+                borderRadius: '50%',
+                width: '30px',
+                height: '30px',
+                fontSize: '18px',
+                cursor: selectedAscension >= unlockedAscension ? 'not-allowed' : 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              +
+            </button>
+          </div>
+        )}
+
         {/* New Game Button */}
         <button
           data-testid="btn-new-game"
           onClick={() => {
             deleteSaveState();
-            startGame();
+            startGame(selectedAscension);
           }}
           onMouseEnter={() => setHovering(true)}
           onMouseLeave={() => setHovering(false)}

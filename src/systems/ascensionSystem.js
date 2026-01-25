@@ -66,3 +66,49 @@ export const getAscensionCardRewardCount = (ascensionLevel) => {
   const modifiers = getAscensionModifiers(ascensionLevel);
   return modifiers.fewerRewards ? 2 : 3;
 };
+
+/**
+ * Apply ascension HP/strength modifiers to an array of enemies.
+ * @param {Array} enemies - Array of enemy objects
+ * @param {number} level - Ascension level
+ * @param {string} nodeType - Type of node ('combat', 'elite', 'boss')
+ * @returns {Array} Modified enemies with ascension bonuses applied
+ */
+export const applyAscensionToEnemies = (enemies, level, nodeType) => {
+  if (level === 0 || !enemies || enemies.length === 0) return enemies;
+
+  const modifiers = getAscensionModifiers(level);
+
+  return enemies.map(enemy => {
+    // Set enemy type based on node type if not already set
+    const enemyWithType = { ...enemy, type: enemy.type || nodeType };
+    return applyAscensionToEnemy(enemyWithType, modifiers);
+  });
+};
+
+/**
+ * Check if a Wound card should be added to draw pile at combat start.
+ * @param {number} level - Ascension level
+ * @returns {boolean} True if level >= 2 (startWithWound modifier)
+ */
+export const shouldAddWoundAtCombatStart = (level) => {
+  const modifiers = getAscensionModifiers(level);
+  return modifiers.startWithWound === true;
+};
+
+/**
+ * Create a Wound status card with a unique instance ID.
+ * @param {string} instanceId - Unique identifier for this card instance
+ * @returns {Object} Wound card object
+ */
+export const createWoundCard = (instanceId) => ({
+  id: 'wound',
+  name: 'Wound',
+  type: 'status',
+  rarity: 'curse',
+  cost: -2,
+  description: 'Unplayable.',
+  unplayable: true,
+  upgraded: false,
+  instanceId
+});

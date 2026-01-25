@@ -94,6 +94,7 @@ export const createInitialState = () => ({
   enemies: [],
   currentFloor: 0,
   act: 1,
+  ascension: 0,
   map: null,
   currentNode: null,
   selectedCard: null,
@@ -106,7 +107,17 @@ export const createInitialState = () => ({
   combatLog: [],
   // Card selection state
   cardSelection: null, // { type: 'discardToDrawTop'|'handToDrawTop'|'upgradeInHand'|'copyCardInHand'|'retrieveExhausted', sourceCard: card }
-  pendingCardPlay: null // For cards that need selection before completing
+  pendingCardPlay: null, // For cards that need selection before completing
+  // Run stats tracking (for meta-progression)
+  runStats: {
+    cardsPlayed: 0,
+    cardsPlayedById: {},
+    damageDealt: 0,
+    enemiesKilled: 0,
+    defeatedEnemies: [], // Array of enemy IDs killed this run
+    goldEarned: 0,
+    floor: 0
+  }
 });
 
 // Re-export combat calculation functions for testing (implementations in combatSystem.js)
@@ -234,6 +245,10 @@ const gameReducer = (state, action) => {
       return metaReducer(state, action);
     }
 
+    case 'UPDATE_PROGRESSION': {
+      return metaReducer(state, action);
+    }
+
     default:
       return state;
   }
@@ -243,8 +258,8 @@ const gameReducer = (state, action) => {
 export const GameProvider = ({ children }) => {
   const [state, dispatch] = useReducer(gameReducer, createInitialState());
 
-  const startGame = useCallback(() => {
-    dispatch({ type: 'START_GAME' });
+  const startGame = useCallback((ascensionLevel = 0) => {
+    dispatch({ type: 'START_GAME', payload: { ascensionLevel } });
   }, []);
 
   const selectNode = useCallback((nodeId) => {
