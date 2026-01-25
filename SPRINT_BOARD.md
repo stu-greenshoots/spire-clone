@@ -147,9 +147,9 @@
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| VP-01 | UX | M | Map auto-scroll to player position | Pending |
-| VP-02 | UX | S | "You are here" indicator | Pending |
-| VP-03 | UX | S | Map position indicator (floor X of 15) | Pending |
+| VP-01 | UX | M | Map auto-scroll to player position | MERGED (PR #33) |
+| VP-02 | UX | S | "You are here" indicator | MERGED (PR #33) |
+| VP-03 | UX | S | Map position indicator (floor X of 15) | MERGED (PR #33) |
 | VP-04 | UX | XS | Remember scroll position on return | Pending |
 
 ### Phase B: Victory Overlay (Priority)
