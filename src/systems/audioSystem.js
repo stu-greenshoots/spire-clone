@@ -115,10 +115,10 @@ class AudioManager {
       document.removeEventListener('touchstart', enableAudio);
     };
 
-    // Listen for any user gesture
-    document.addEventListener('click', enableAudio, { once: true, passive: true });
-    document.addEventListener('keydown', enableAudio, { once: true, passive: true });
-    document.addEventListener('touchstart', enableAudio, { once: true, passive: true });
+    // Listen for any user gesture (manually removed after first trigger)
+    document.addEventListener('click', enableAudio, { passive: true });
+    document.addEventListener('keydown', enableAudio, { passive: true });
+    document.addEventListener('touchstart', enableAudio, { passive: true });
   }
 
   /**
