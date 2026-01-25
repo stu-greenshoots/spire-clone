@@ -3,6 +3,7 @@ import { useGame } from '../context/GameContext';
 import { hasSave } from '../systems/saveSystem';
 import { loadProgression } from '../systems/progressionSystem';
 import { getAscensionDescription, getMaxAscension } from '../systems/ascensionSystem';
+import StateBuilder from './StateBuilder';
 
 const MainMenu = () => {
   const { startGame, loadGameState, deleteSaveState, openDataEditor } = useGame();
@@ -10,6 +11,8 @@ const MainMenu = () => {
   const [hovering, setHovering] = useState(false);
   const [hoveringContinue, setHoveringContinue] = useState(false);
   const [hoveringEditor, setHoveringEditor] = useState(false);
+  const [hoveringStateBuilder, setHoveringStateBuilder] = useState(false);
+  const [showStateBuilder, setShowStateBuilder] = useState(false);
   const [saveExists, setSaveExists] = useState(false);
   const [selectedAscension, setSelectedAscension] = useState(0);
   const [unlockedAscension, setUnlockedAscension] = useState(0);
@@ -365,6 +368,37 @@ const MainMenu = () => {
             Data Editor
           </button>
         )}
+
+        {/* State Builder Button - only show in development */}
+        {import.meta.env.DEV && (
+          <button
+            onClick={() => setShowStateBuilder(true)}
+            onMouseEnter={() => setHoveringStateBuilder(true)}
+            onMouseLeave={() => setHoveringStateBuilder(false)}
+            style={{
+              background: hoveringStateBuilder
+                ? 'linear-gradient(180deg, #dd8844 0%, #bb6633 50%, #994422 100%)'
+                : 'linear-gradient(180deg, #cc7733 0%, #aa5522 50%, #883311 100%)',
+              color: 'white',
+              border: '2px solid #ee9955',
+              padding: '12px 40px',
+              fontSize: '16px',
+              borderRadius: '25px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              boxShadow: hoveringStateBuilder
+                ? '0 0 30px rgba(255, 150, 80, 0.5), 0 6px 20px rgba(0, 0, 0, 0.4)'
+                : '0 0 20px rgba(200, 100, 50, 0.3), 0 4px 15px rgba(0, 0, 0, 0.3)',
+              touchAction: 'manipulation',
+              transition: 'all 0.3s ease',
+              transform: hoveringStateBuilder ? 'scale(1.05) translateY(-2px)' : 'scale(1)'
+            }}
+          >
+            State Builder
+          </button>
+        )}
       </div>
 
       {/* Features Grid - Improved layout */}
@@ -403,6 +437,11 @@ const MainMenu = () => {
           50% { opacity: 1; }
         }
       `}</style>
+
+      {/* State Builder Modal */}
+      {showStateBuilder && (
+        <StateBuilder onClose={() => setShowStateBuilder(false)} />
+      )}
     </div>
   );
 };

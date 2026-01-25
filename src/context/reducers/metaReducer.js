@@ -2,6 +2,7 @@ import { GAME_PHASE } from '../GameContext';
 import { getStarterDeck, getCardById } from '../../data/cards';
 import { getStarterRelic, getRelicById } from '../../data/relics';
 import { getPotionById } from '../../data/potions';
+import { getEnemyById } from '../../data/enemies';
 import { generateMap } from '../../utils/mapGenerator';
 import { saveGame, loadGame, deleteSave } from '../../systems/saveSystem';
 import { getPassiveRelicEffects } from '../../systems/relicSystem';
@@ -247,6 +248,164 @@ export const metaReducer = (state, action) => {
     case 'DELETE_SAVE': {
       deleteSave();
       return state;
+    }
+
+    case 'LOAD_SCENARIO': {
+      // Load a test scenario - allows jumping to any game state
+      const scenario = action.payload;
+      if (!scenario) return state;
+
+      // Reconstruct deck from card IDs or full card objects
+      const deck = (scenario.deck || [])
+        .map((card, index) => {
+          if (typeof card === 'string') {
+            // Card ID string - look up the card
+            const baseCard = getCardById(card);
+            if (!baseCard) return null;
+            return { ...baseCard, instanceId: `${card}_scenario_${index}` };
+          }
+          // Already a card object with at least an id
+          if (card.id) {
+            const baseCard = getCardById(card.id);
+            if (!baseCard) return null;
+            return {
+              ...baseCard,
+              ...card,
+              instanceId: card.instanceId || `${card.id}_scenario_${index}`
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
+
+      // Reconstruct hand from card IDs
+      const hand = (scenario.hand || [])
+        .map((card, index) => {
+          if (typeof card === 'string') {
+            const baseCard = getCardById(card);
+            if (!baseCard) return null;
+            return { ...baseCard, instanceId: `${card}_hand_${index}` };
+          }
+          if (card.id) {
+            const baseCard = getCardById(card.id);
+            if (!baseCard) return null;
+            return {
+              ...baseCard,
+              ...card,
+              instanceId: card.instanceId || `${card.id}_hand_${index}`
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
+
+      // Reconstruct relics
+      const relics = (scenario.relics || [])
+        .map(relic => {
+          if (typeof relic === 'string') {
+            return getRelicById(relic);
+          }
+          if (relic.id) {
+            const baseRelic = getRelicById(relic.id);
+            if (!baseRelic) return null;
+            return { ...baseRelic, ...relic };
+          }
+          return null;
+        })
+        .filter(Boolean);
+
+      // Reconstruct potions
+      const potions = (scenario.potions || [null, null, null])
+        .map(potion => {
+          if (!potion) return null;
+          if (typeof potion === 'string') {
+            return getPotionById(potion);
+          }
+          if (potion.id) {
+            return getPotionById(potion.id);
+          }
+          return null;
+        });
+      while (potions.length < 3) potions.push(null);
+
+      // Reconstruct enemies
+      const enemies = (scenario.enemies || [])
+        .map((enemy, index) => {
+          if (typeof enemy === 'string') {
+            const baseEnemy = getEnemyById(enemy);
+            if (!baseEnemy) return null;
+            return {
+              ...baseEnemy,
+              currentHp: baseEnemy.hp,
+              maxHp: baseEnemy.hp,
+              block: 0,
+              instanceId: `${enemy}_${index}`,
+              vulnerable: 0,
+              weak: 0,
+              strength: 0,
+              moveIndex: 0
+            };
+          }
+          if (enemy.id) {
+            const baseEnemy = getEnemyById(enemy.id);
+            if (!baseEnemy) return null;
+            return {
+              ...baseEnemy,
+              currentHp: enemy.currentHp ?? baseEnemy.hp,
+              maxHp: enemy.maxHp ?? baseEnemy.hp,
+              block: enemy.block ?? 0,
+              instanceId: enemy.instanceId || `${enemy.id}_${index}`,
+              vulnerable: enemy.vulnerable ?? 0,
+              weak: enemy.weak ?? 0,
+              strength: enemy.strength ?? 0,
+              moveIndex: enemy.moveIndex ?? 0
+            };
+          }
+          return null;
+        })
+        .filter(Boolean);
+
+      // Build the scenario state
+      const baseState = createInitialState();
+      const scenarioPhase = scenario.phase ?
+        GAME_PHASE[scenario.phase.toUpperCase()] || GAME_PHASE.COMBAT :
+        GAME_PHASE.COMBAT;
+
+      return {
+        ...baseState,
+        phase: scenarioPhase,
+        player: {
+          ...baseState.player,
+          ...(scenario.player || {}),
+          currentHp: scenario.player?.currentHp ?? baseState.player.currentHp,
+          maxHp: scenario.player?.maxHp ?? baseState.player.maxHp,
+          gold: scenario.player?.gold ?? baseState.player.gold,
+          energy: scenario.player?.energy ?? baseState.player.energy,
+          maxEnergy: scenario.player?.maxEnergy ?? baseState.player.maxEnergy,
+          block: scenario.player?.block ?? 0,
+          strength: scenario.player?.strength ?? 0,
+          dexterity: scenario.player?.dexterity ?? 0,
+          vulnerable: scenario.player?.vulnerable ?? 0,
+          weak: scenario.player?.weak ?? 0,
+          frail: scenario.player?.frail ?? 0,
+          artifact: scenario.player?.artifact ?? 0
+        },
+        deck,
+        hand,
+        drawPile: [], // Scenarios start with specified hand
+        discardPile: [],
+        exhaustPile: [],
+        relics,
+        potions,
+        enemies,
+        currentFloor: scenario.floor ?? scenario.currentFloor ?? 1,
+        act: scenario.act ?? 1,
+        ascension: scenario.ascension ?? 0,
+        map: scenario.map ?? generateMap(scenario.act ?? 1),
+        turn: scenario.turn ?? 1,
+        targetingMode: false,
+        selectedCard: null
+      };
     }
 
     case 'UPDATE_PROGRESSION': {

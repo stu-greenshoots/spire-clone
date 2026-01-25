@@ -7,6 +7,7 @@ import GameOverScreen from './components/GameOverScreen';
 import VictoryScreen from './components/VictoryScreen';
 import PersistentHeader from './components/PersistentHeader';
 import PlayerStatusBar from './components/PlayerStatusBar';
+import DevTools from './components/DevTools';
 import './App.css';
 
 // Lazy load heavy screens for better initial load performance
@@ -62,6 +63,7 @@ const GameContent = () => {
 
   return (
     <div className="game-container">
+      <DevTools />
       {!hideChrome && <PersistentHeader />}
       <Suspense fallback={<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888' }}>Loading...</div>}>
         {renderPhase()}
