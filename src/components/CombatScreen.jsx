@@ -516,6 +516,7 @@ const CombatScreen = () => {
         {enemies.map((enemy) => (
           <div
             key={enemy.instanceId}
+            data-testid={`enemy-${enemy.instanceId}`}
             ref={el => enemyRefs.current[enemy.instanceId] = el}
             style={{
               animation: enemyHitStates[enemy.instanceId] ? 'enemyHit 0.5s ease-out' : 'none',
@@ -586,7 +587,9 @@ const CombatScreen = () => {
         flexDirection: 'column'
       }}>
         {/* Scrollable card container */}
-        <div style={{
+        <div
+          data-testid="hand-area"
+          style={{
           padding: '12px 10px',
           paddingBottom: '5px',
           overflowX: 'auto',
@@ -774,6 +777,7 @@ const CombatScreen = () => {
 
         {/* End Turn Button */}
         <button
+          data-testid="btn-end-turn"
           onClick={endTurn}
           style={{
             padding: '12px 30px',
