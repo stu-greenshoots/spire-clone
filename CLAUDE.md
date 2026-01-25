@@ -5,15 +5,15 @@
 Before starting any work, read these files to understand current state:
 
 1. **SPRINT_BOARD.md** - Current sprint, task status, what's in progress
-2. **docs/GIT_FLOW.md** - Complete git workflow (MANDATORY for all engineers)
-3. **DEFINITION_OF_DONE.md** - When is a task actually done (not just committed)
-4. **Your diary** - `docs/diaries/{ROLE}.md` - Your previous context and notes
+2. **docs/ENGINEER_GUIDE.md** - Common engineer workflow, git, reviews, checklists
+3. **Your diary** - `docs/diaries/{ROLE}.md` - Your previous context and notes
+4. **Your engineer command** - `.claude/commands/engineer-{role}.md` - Role-specific checks
 
 For deeper context (read when relevant to your task):
+- **docs/GIT_FLOW.md** - Detailed git workflow reference
 - **SPRINT_4_PLAN.md** - Current sprint plan, task assignments, delivery order
 - **PROCESS.md** - Branch naming, PR workflow, commit conventions
 - **DEPENDENCIES.md** - Task ordering, conflict zones, what blocks what
-- **TEAM_PLAN.md** - Full phase breakdown, all task details
 - **GAME_REFERENCE.md** - Card/enemy/relic mechanics (for content tasks)
 
 ## Commands
