@@ -1457,3 +1457,45 @@ button:active {
   transform: scale(0.95);
   transition: all 0.3s ease;
 }
+
+
+/* ==================== VICTORY TRANSITION (VP-07) ==================== */
+
+@keyframes victorySlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes victoryContentAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.victory-overlay-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.victory-content-panel {
+  animation: victorySlideUp 0.4s ease-out 0.1s both;
+}
+
+.victory-reward-button {
+  animation: victoryContentAppear 0.3s ease-out backwards;
+}
+
+.victory-reward-button:nth-child(1) { animation-delay: 0.2s; }
+.victory-reward-button:nth-child(2) { animation-delay: 0.3s; }
+.victory-reward-button:nth-child(3) { animation-delay: 0.4s; }
+

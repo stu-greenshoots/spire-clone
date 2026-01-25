@@ -125,8 +125,8 @@ const RewardScreen = ({ isOverlay = false }) => {
   // Main rewards screen (COMBAT_REWARD phase)
   if (isOverlay) {
     return (
-      <div style={overlayContainerStyle}>
-        <div style={overlayContentStyle}>
+      <div className="victory-overlay-container" style={overlayContainerStyle}>
+        <div className="victory-content-panel" style={overlayContentStyle}>
           {/* Victory Header */}
           <div style={{
             padding: '25px 20px',
@@ -419,6 +419,7 @@ const RewardScreen = ({ isOverlay = false }) => {
 // Reward Button Component
 const RewardButton = ({ icon, title, subtitle, onClick, color, testId }) => (
   <button
+    className="victory-reward-button"
     data-testid={testId}
     onClick={onClick}
     style={{
