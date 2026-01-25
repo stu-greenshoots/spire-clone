@@ -407,18 +407,22 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
       <div style={{
         background: `linear-gradient(90deg, ${colors.dark}00 0%, ${colors.dark} 15%, ${colors.dark} 85%, ${colors.dark}00 100%)`,
         padding: small ? '2px 4px' : '3px 6px',
-        marginTop: '2px'
+        marginTop: '2px',
+        minHeight: small ? '12px' : '16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
         <div style={{
           fontWeight: 'bold',
-          fontSize: small ? '8px' : '10px',
+          fontSize: card.name.length > 14 ? (small ? '7px' : '9px') : (small ? '8px' : '10px'),
           textAlign: 'center',
           color: '#fff',
           textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          letterSpacing: '0.5px'
+          letterSpacing: card.name.length > 14 ? '0.3px' : '0.5px',
+          lineHeight: '1.1',
+          wordBreak: 'break-word',
+          hyphens: 'auto'
         }}>
           {card.name}
         </div>
