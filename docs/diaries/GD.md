@@ -1,4 +1,4 @@
-# GD Diary - Sprint 2
+# GD Diary - Sprint 3
 
 ## Role
 Graphic Designer - Art pipeline, asset optimization, visual consistency
@@ -6,9 +6,9 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 ## Owned Files
 `public/images/`, `src/utils/assetLoader.js`, `scripts/compress-images.js`
 
-## Sprint 2 Tasks
-- FIX-04: Asset format PNG/WebP inconsistency (P0)
-- GD-02: Card frames (P1)
+## Sprint 3 Tasks
+- GD-05: Theme brightness pass (Day 1, P1)
+- GD-06: Card art sprite sheets (Day 4+, P2)
 
 ---
 
@@ -72,5 +72,32 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 - GD-02: Card frame & type visual system — MERGED (PR #17), type-specific borders/gradients/rarity indicators
 **Satisfaction:** Happy with sprint 2. Card frames give much-needed visual distinction.
 **Ready for Sprint 3:** Yes. GD-05 (brightness pass) and GD-06 (sprite sheets) queued.
+
+---
+
+### Sprint 3 Kickoff
+**Date:** 2026-01-25
+**Status:** Sprint 3 ACTIVE
+
+**My tasks:**
+- **GD-05 (Day 1, P1):** Theme brightness pass
+  - Raise background from #0a0a0f to ~#1a1a2e
+  - Implement CSS custom properties per DEC-007
+  - Sweep all hardcoded hex values into :root variables
+  - Files: App.css, theme.css (or new file)
+  - Can run parallel with PM-03 and UX-05
+
+- **GD-06 (Day 4+, P2):** Card art sprite sheets
+  - Reduce 100+ network requests to ~10-12 sprite sheets
+  - Build-time composition with Sharp
+  - Generate JSON manifest for card ID → sheet position
+  - Files: scripts/compress-images.js, assetLoader.js
+  - Per DEC-008: investigate CSS background-position vs `<img>` clip approach
+
+**Dependencies:**
+- GD-05 has no blockers (Day 1 parallel)
+- GD-06 depends on Phase A completion
+
+**Ready to start:** GD-05 immediately
 
 ---

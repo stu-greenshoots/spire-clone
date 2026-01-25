@@ -1,4 +1,4 @@
-# UX Diary - Sprint 2
+# UX Diary - Sprint 3
 
 ## Role
 UX Guy - Combat feedback, tooltips, visual polish
@@ -6,8 +6,10 @@ UX Guy - Combat feedback, tooltips, visual polish
 ## Owned Files
 `src/components/CombatScreen.jsx`, `src/components/AnimationOverlay.jsx`, `src/hooks/useAnimations.js`
 
-## Sprint 2 Tasks
-- UX-02: Card tooltips (P1)
+## Sprint 3 Tasks
+- UX-05: Card text truncation fix (Day 1, P1)
+- UX-06: Tooltip infrastructure (Day 2, P1)
+- UX-07: Combat feedback/floating numbers (Day 3, P1)
 
 ---
 
@@ -56,5 +58,39 @@ UX Guy - Combat feedback, tooltips, visual polish
 - UX-02: Card tooltips — MERGED (PR #13)
 **Satisfaction:** Happy with sprint 2. Tooltip groundwork laid for Sprint 3 infrastructure expansion.
 **Ready for Sprint 3:** Yes. UX-05 (text truncation), UX-06 (tooltip infra), UX-07 (combat feedback) queued.
+
+---
+
+### Sprint 3 Kickoff
+**Date:** 2026-01-25
+**Status:** Sprint 3 ACTIVE
+
+**My tasks:**
+- **UX-05 (Day 1, P1):** Card text truncation fix
+  - Fix "Infernal Blade" → "Infernal Bla..." on selection screen
+  - CSS-only fix: font sizing or auto-resize on overflow
+  - Files: App.css, Card.jsx
+  - Can run parallel with GD-05 and PM-03
+
+- **UX-06 (Day 2, P1):** Tooltip infrastructure
+  - Generic Portal-based Tooltip component per DEC-006
+  - React Portal to document.body (avoids z-index issues)
+  - 150-200ms show delay
+  - Data-driven content from cards.js, relics.js, etc.
+  - Files: NEW Tooltip.jsx, NEW useTooltip.js
+  - Critical path: BE-05 and UX-07 depend on this
+
+- **UX-07 (Day 3, P1):** Combat feedback/floating numbers
+  - Queue-based animation via AnimationOverlay
+  - Floating damage/block/heal numbers
+  - Fire-and-forget, never block input
+  - Files: AnimationOverlay.jsx, useAnimations.js
+
+**Dependencies:**
+- UX-05 has no blockers (Day 1 parallel)
+- UX-06 depends on Phase A completion
+- UX-07 depends on UX-06 completion
+
+**Ready to start:** UX-05 immediately
 
 ---
