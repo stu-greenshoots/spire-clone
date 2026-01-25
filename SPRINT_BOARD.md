@@ -164,7 +164,7 @@
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| VP-08 | BE/UX | L | Sequential enemy turns with visible delay | Pending |
+| VP-08 | BE/UX | L | Sequential enemy turns with visible delay | MERGED (PR #33) |
 | VP-09 | UX | M | Enemy action indicator (highlight active) | Pending |
 | VP-10 | UX | S | Floating damage numbers for enemy attacks | Pending |
 | VP-11 | UX | S | Block applied visual for enemies | Pending |
