@@ -2,6 +2,9 @@ import { test, expect } from '../fixtures/game.fixture.js';
 import { SELECTORS } from '../helpers/selectors.js';
 
 test.describe('Full Game Flow', () => {
+  // Set extended timeout for combat with sequential enemy animations (VP-08)
+  test.setTimeout(90000);
+
   test('main menu -> start game -> combat -> reward -> map', async ({ gamePage, gameActions }) => {
     // 1. Main menu visible
     await expect(gamePage.locator(SELECTORS.mainMenuTitle)).toBeVisible();
