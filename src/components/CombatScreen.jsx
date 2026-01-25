@@ -98,8 +98,14 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   // Track player damage and healing - setState is intentional for animation triggers
   useEffect(() => {
     if (player.currentHp < prevPlayerHp.current) {
+      const damage = prevPlayerHp.current - player.currentHp;
       setPlayerHit(true);
       setTimeout(() => setPlayerHit(false), 500);
+      // Add floating damage number for enemy attacks on player
+      if (containerRef.current) {
+        // Position near player stats area (bottom left)
+        addAnimation(ANIMATION_TYPE.DAMAGE, damage, 80, 120);
+      }
     } else if (player.currentHp > prevPlayerHp.current) {
       // Player healed - add floating heal number
       const healed = player.currentHp - prevPlayerHp.current;
