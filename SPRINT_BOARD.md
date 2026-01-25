@@ -191,12 +191,12 @@
 
 ---
 
-## Sprint 5: Replayability - PLANNED
+## Sprint 5: Replayability - COMPLETE
 
 **Goal:** Establish meta-progression and ascension systems for player retention
-**Branch:** `sprint-5` (to be created from master)
+**Branch:** `sprint-5`
 **Plan:** See `SPRINT_5_PLAN.md`
-**Status:** Planning complete, awaiting approval
+**Status:** COMPLETE - All P0/P1 tasks merged, validation gate passed
 
 ### Key Discovery
 Sprint 5 is primarily INTEGRATION work. Core systems already exist:
@@ -209,27 +209,27 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
-| BE-06 | BE | M | P0 | Meta-progression integration (wire existing system) | PLANNED |
-| BE-07 | BE | M | P0 | Ascension integration (apply modifiers at SELECT_NODE) | PLANNED |
-| SL-03 | SL | M | P0 | Boss encounters & dialogue (data + BossDialogue.jsx) | PLANNED |
-| UX-08 | UX | M | P1 | Deck viewer integration (wire to MapScreen) | PLANNED |
-| QA-05 | QA | M | P1 | Sprint 5 test coverage + balance simulator update | PLANNED |
-| AR-03 | AR | XS | P2 | Settings verification (already complete, smoke test) | PLANNED |
-| GD-06 | GD | M | P2 | Sprite sheet bundling (if time permits) | PLANNED |
+| BE-06 | BE | M | P0 | Meta-progression integration (wire existing system) | MERGED (PR #40) |
+| BE-07 | BE | M | P0 | Ascension integration (apply modifiers at SELECT_NODE) | MERGED (PR #43) |
+| SL-03 | SL | M | P0 | Boss encounters & dialogue (data + BossDialogue.jsx) | MERGED (PR #41) |
+| UX-08 | UX | M | P1 | Deck viewer integration (wire to MapScreen) | MERGED (PR #42) |
+| QA-05 | QA | M | P1 | Sprint 5 test coverage + balance simulator update | MERGED (PR #44) |
+| AR-03 | AR | XS | P2 | Settings verification (smoke test) | MERGED (PR #45) |
+| GD-06 | GD | M | P2 | Sprite sheet bundling | Deferred to Sprint 6 |
 
 ### Removed from Sprint 5
 - **JR-04** - All 15 cards already exist in cards.js. JR reallocated to QA-05 support.
 
-### Sprint 5 Validation Gate
+### Sprint 5 Validation Gate - COMPLETE
 
-- [ ] Meta-progression persists across browser sessions
-- [ ] Ascension 1 unlocks after first win
-- [ ] Enemy HP is 10% higher on Ascension 1
-- [ ] All 3 Act 1 bosses have dialogue (intro, mid-fight, death)
-- [ ] Deck viewer accessible from map screen
-- [ ] Balance simulator supports ascension config
-- [ ] Win rate 20-40% at each ascension level (0-5)
-- [ ] `npm run validate` passes (850+ tests expected)
+- [x] Meta-progression persists across browser sessions
+- [x] Ascension 1 unlocks after first win
+- [x] Enemy HP is 10% higher on Ascension 1
+- [x] All 3 Act 1 bosses have dialogue (intro, mid-fight, death)
+- [x] Deck viewer accessible from map screen
+- [x] Balance simulator supports ascension config
+- [x] Win rate 20-40% at each ascension level (0-5)
+- [x] `npm run validate` passes (911+ tests)
 
 ---
 
