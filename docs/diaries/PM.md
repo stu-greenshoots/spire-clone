@@ -1,4 +1,4 @@
-# PM Diary - Sprint 3
+# PM Diary - Sprint 4
 
 ## Role
 Project Manager - Sprint coordination, process, CI/CD, PR management
@@ -112,5 +112,118 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 **My task:** PM-03 (hide Data Editor in production) - XS size, Day 1
 
 **Team readiness:** All members have clear assignments. No blocking dependencies on Day 1 tasks.
+
+---
+
+### Sprint 4 Kickoff
+**Date:** 2026-01-25
+**Status:** Sprint 4 ACTIVE
+
+**What I did:**
+- Created sprint-4 branch from master
+- Pushed sprint-4 to origin
+- Updated SPRINT_BOARD.md status to IN_PROGRESS
+- Created task tracking for all 12 remaining VP tasks
+- Set up task dependencies (VP-02/04 blocked by VP-01, VP-06/07 by VP-05, etc.)
+
+**Sprint 4 Goal:** Visual polish to reach 70+ magazine score
+
+**Tasks remaining (VP-12, VP-13, VP-14 done in Sprint 3):**
+- Phase A: VP-01, VP-02, VP-03, VP-04 (Map navigation)
+- Phase B: VP-05, VP-06, VP-07 (Victory overlay)
+- Phase C: VP-08, VP-09, VP-10, VP-11 (Enemy turn animations)
+- Phase D: VP-15 (Swipe hint removal)
+
+**Parallel tracks:**
+- Map work (Phase A) can run parallel to Victory overlay (Phase B)
+- VP-08 (sequential enemy turns) is the largest task (Size: L)
+
+**Next:** Coordinate team to start parallel work on VP-01 (UX) and VP-05 (UX)
+
+---
+
+### Process Refinement (Sprint 4)
+**Date:** 2026-01-25
+**Status:** Documentation updated
+
+**Issues identified after 4 sprints:**
+1. Sprint branch doesn't get its draft PR at start with checklists
+2. PRs sit without being reviewed and merged
+3. Reviews are superficial, no real substance
+4. Engineers not taking on roles properly - commits not authored correctly
+5. CI not always checked before merge
+
+**Changes made:**
+
+1. **Created `docs/GIT_FLOW.md`**
+   - Extracted complete git workflow to standalone reference doc
+   - All engineers read this before every task
+   - Includes complete Copilot and Mentor review templates
+   - Emphasizes author flag requirement
+
+2. **Created individual engineer commands (`.claude/commands/engineer-{role}.md`):**
+   - BE, JR, AR, UX, GD, SL, QA each have dedicated command
+   - Sets role identity ("You ARE the {role}")
+   - Requires diary reading FIRST
+   - Includes role-specific checks
+   - Mandates proper author flag usage
+
+3. **Updated `pm-sprint.md` to:**
+   - Create draft PR with full task checklist at sprint start
+   - Update PR checklist as tasks merge
+   - Check for and process pending PRs before spawning new engineers
+   - Include substantive review templates
+   - Use engineer commands when spawning sub-agents
+
+4. **Updated `PROCESS.md` with:**
+   - Key documents reference table
+   - Engineer Responsibility section (full lifecycle ownership)
+   - Stronger emphasis on author flag requirement
+
+5. **Updated `CLAUDE.md` to:**
+   - Reference new docs/GIT_FLOW.md
+   - Include engineer commands table
+   - Simplified git flow section (details in GIT_FLOW.md)
+
+**Key principle:** Each engineer OWNS their work end-to-end. Not just completing tasks - being the role.
+
+**Expected outcomes:**
+- Draft PR exists from day 1 of each sprint
+- No PRs sitting unreviewed
+- Reviews catch real issues (security, bugs, architecture)
+- All commits properly authored
+- CI verified before every merge
+
+---
+
+### Additional Commands Added
+**Date:** 2026-01-25
+**Status:** Documentation complete
+
+**Created `pm-plan.md` - Sprint Planning Command:**
+- Collaborative planning process (not PM dictating)
+- PM + Mentor draft initial plan
+- Each engineer spawned for input (parallel groups)
+- Team iterates until alignment
+- Creates sprint plan, updates docs, creates infrastructure
+- Phases: Context → Draft → Team Input → Synthesis → Finalize
+
+**Created `mentor.md` - Lead Engineer Command:**
+- Authority for final technical decisions
+- Unblocks stuck PRs
+- Performs definitive Mentor reviews
+- Documents decisions in DECISIONS.md
+- Emergency unblock protocol
+- Quality enforcement
+
+**Updated references:**
+- CLAUDE.md - Added orchestration commands table, "when to use" guide
+- PROCESS.md - Added commands section to key documents
+
+**Command Usage Flow:**
+1. New sprint → `pm-plan.md` (collaborative planning)
+2. Sprint execution → `pm-sprint.md` (daily orchestration)
+3. Blockers/decisions → `mentor.md` (unblock and decide)
+4. Individual work → `engineer-{role}.md` (role-specific tasks)
 
 ---

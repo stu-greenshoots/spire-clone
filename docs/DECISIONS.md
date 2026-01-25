@@ -10,6 +10,21 @@ Decisions that affect the team get proposed, reviewed, and accepted or rejected 
 
 Decisions that skip this process and break things get reverted.
 
+## Decision Authority
+
+| Decision Type | Who Decides | Process |
+|---------------|-------------|---------|
+| Within a single task | Engineer | Document in PR |
+| Cross-file changes | Engineer + Owner | Coordinate first |
+| Shared interface changes | Mentor | Proposal required |
+| Architecture changes | Mentor | Proposal required |
+| Process changes | PM + Mentor | Proposal required |
+| Sprint scope changes | PM + Mentor | Document in sprint plan |
+| Quality gate exceptions | Mentor only | Proposal required |
+| Blocked/urgent decisions | Mentor | Can decide immediately, document after |
+
+**Mentor Authority:** When decisions are blocked or urgent, invoke the Mentor (`mentor.md`). The Mentor can make immediate decisions and document afterward. This prevents analysis paralysis while maintaining accountability.
+
 ---
 
 ## Template

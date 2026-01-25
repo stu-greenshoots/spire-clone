@@ -1,9 +1,35 @@
 import { useGame, GAME_PHASE } from '../context/GameContext';
 import Card from './Card';
 
-const RewardScreen = () => {
+const RewardScreen = ({ isOverlay = false }) => {
   const { state, collectGold, collectRelic, openCardRewards, selectCardReward, skipCardReward, proceedToMap } = useGame();
   const { phase, combatRewards, cardRewards, player } = state;
+
+  // Overlay styles for victory screen
+  const overlayContainerStyle = isOverlay ? {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 100,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'rgba(0, 0, 0, 0.7)',
+    animation: 'fadeIn 0.3s ease-out'
+  } : {};
+
+  const overlayContentStyle = isOverlay ? {
+    background: 'linear-gradient(180deg, rgba(20, 30, 20, 0.98) 0%, rgba(10, 20, 10, 0.98) 100%)',
+    borderRadius: '20px',
+    border: '2px solid #FFD700',
+    boxShadow: '0 0 40px rgba(255, 215, 0, 0.3)',
+    maxWidth: '400px',
+    width: '90%',
+    maxHeight: '85vh',
+    overflow: 'auto'
+  } : {};
 
   if (phase === GAME_PHASE.CARD_REWARD && cardRewards) {
     return (
@@ -12,9 +38,10 @@ const RewardScreen = () => {
         flexDirection: 'column',
         flex: 1,
         minHeight: 0,
-        background: 'linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 50%, #0a0a1a 100%)',
+        background: isOverlay ? 'rgba(0, 0, 0, 0.85)' : 'linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 50%, #0a0a1a 100%)',
         overflow: 'hidden',
-        paddingTop: '90px'
+        paddingTop: isOverlay ? '20px' : '90px',
+        ...(isOverlay ? { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 100 } : {})
       }}>
         {/* Header */}
         <div style={{
@@ -90,6 +117,139 @@ const RewardScreen = () => {
           >
              Skip Reward
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Main rewards screen (COMBAT_REWARD phase)
+  if (isOverlay) {
+    return (
+      <div className="victory-overlay-container" style={overlayContainerStyle}>
+        <div className="victory-content-panel" style={overlayContentStyle}>
+          {/* Victory Header */}
+          <div style={{
+            padding: '25px 20px',
+            textAlign: 'center',
+            borderBottom: '1px solid rgba(255, 215, 0, 0.3)'
+          }}>
+            <div style={{
+              fontSize: '50px',
+              marginBottom: '10px',
+              animation: 'celebrate 2s ease-in-out infinite'
+            }}>
+              {'\uD83C\uDFC6'}
+            </div>
+            <h2 style={{
+              color: '#FFD700',
+              fontSize: '28px',
+              marginBottom: '5px',
+              textShadow: '0 0 20px rgba(255, 215, 0, 0.5)',
+              letterSpacing: '3px',
+              margin: 0
+            }}>
+              VICTORY!
+            </h2>
+            <p style={{ color: '#88aa88', fontSize: '13px', marginTop: '8px' }}>
+              Choose your rewards
+            </p>
+          </div>
+
+          {/* Rewards */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            padding: '20px'
+          }}>
+            {/* Gold Reward */}
+            {combatRewards?.gold > 0 && (
+              <RewardButton
+                testId="reward-gold"
+                icon={'\uD83D\uDCB0'}
+                title={`${combatRewards.gold} Gold`}
+                subtitle="Add to your purse"
+                onClick={collectGold}
+                color="#FFD700"
+              />
+            )}
+
+            {/* Relic Reward */}
+            {combatRewards?.relicReward && (
+              <RewardButton
+                icon={combatRewards.relicReward.emoji}
+                title={combatRewards.relicReward.name}
+                subtitle={combatRewards.relicReward.description}
+                onClick={collectRelic}
+                color="#44AAFF"
+              />
+            )}
+
+            {/* Card Reward */}
+            {combatRewards?.cardRewards && combatRewards.cardRewards.length > 0 && (
+              <RewardButton
+                testId="reward-cards"
+                icon={'\uD83C\uDCCF'}
+                title="Add Card to Deck"
+                subtitle="Choose from 3 cards"
+                onClick={openCardRewards}
+                color="#AA4444"
+              />
+            )}
+          </div>
+
+          {/* Proceed Button */}
+          <div style={{
+            padding: '15px 20px',
+            borderTop: '1px solid rgba(255, 215, 0, 0.2)'
+          }}>
+            <button
+              data-testid="btn-proceed-map"
+              onClick={proceedToMap}
+              style={{
+                width: '100%',
+                padding: '16px',
+                background: 'linear-gradient(180deg, #aa2020 0%, #881515 50%, #661010 100%)',
+                color: 'white',
+                border: '2px solid #cc4444',
+                borderRadius: '20px',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                letterSpacing: '1px',
+                boxShadow: '0 4px 20px rgba(170, 32, 32, 0.4)',
+                touchAction: 'manipulation'
+              }}
+            >
+               Continue
+            </button>
+
+            {/* Stats */}
+            <div style={{
+              marginTop: '12px',
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '20px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <span style={{ fontSize: '13px' }}>{'\u2764\uFE0F'}</span>
+                <span style={{
+                  color: player.currentHp / player.maxHp > 0.5 ? '#44aa44' : '#aa4444',
+                  fontSize: '12px',
+                  fontWeight: 'bold'
+                }}>
+                  {player.currentHp}/{player.maxHp}
+                </span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <span style={{ fontSize: '13px' }}>{'\uD83D\uDCB0'}</span>
+                <span style={{ color: '#FFD700', fontSize: '12px', fontWeight: 'bold' }}>
+                  {player.gold}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -259,6 +419,7 @@ const RewardScreen = () => {
 // Reward Button Component
 const RewardButton = ({ icon, title, subtitle, onClick, color, testId }) => (
   <button
+    className="victory-reward-button"
     data-testid={testId}
     onClick={onClick}
     style={{

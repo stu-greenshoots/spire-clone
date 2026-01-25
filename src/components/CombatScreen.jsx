@@ -11,7 +11,7 @@ import { CARD_TYPES } from '../data/cards';
 import CardTooltip from './CardTooltip';
 import { getPassiveRelicEffects } from '../systems/combatSystem';
 
-const CombatScreen = () => {
+const CombatScreen = ({ showDefeatedEnemies = false }) => {
   const { state, selectCard, playCard, cancelTarget, endTurn, selectCardFromPile, cancelCardSelection } = useGame();
   const { player, enemies, hand, drawPile, discardPile, exhaustPile, selectedCard, targetingMode, turn, phase, cardSelection } = state;
 
@@ -19,6 +19,8 @@ const CombatScreen = () => {
   const [showEnemyInfo, setShowEnemyInfo] = useState(null);
   const [enemyHitStates, setEnemyHitStates] = useState({});
   const [dyingEnemies, setDyingEnemies] = useState({});
+  // Store defeated enemies for victory overlay display
+  const [defeatedEnemies, setDefeatedEnemies] = useState([]);
   const [_playerHit, setPlayerHit] = useState(false);
   const [energySpent, setEnergySpent] = useState(false);
   const [cardPlaying, setCardPlaying] = useState(null);
@@ -96,8 +98,14 @@ const CombatScreen = () => {
   // Track player damage and healing - setState is intentional for animation triggers
   useEffect(() => {
     if (player.currentHp < prevPlayerHp.current) {
+      const damage = prevPlayerHp.current - player.currentHp;
       setPlayerHit(true);
       setTimeout(() => setPlayerHit(false), 500);
+      // Add floating damage number for enemy attacks on player
+      if (containerRef.current) {
+        // Position near player stats area (bottom left)
+        addAnimation(ANIMATION_TYPE.DAMAGE, damage, 80, 120);
+      }
     } else if (player.currentHp > prevPlayerHp.current) {
       // Player healed - add floating heal number
       const healed = player.currentHp - prevPlayerHp.current;
@@ -137,13 +145,18 @@ const CombatScreen = () => {
     if (removedEnemyIds.length > 0) {
       // Mark these enemies as dying with their data
       const newDyingEnemies = {};
+      const newDefeatedEnemies = [];
       removedEnemyIds.forEach(id => {
         const enemyData = prevEnemyData.current[id];
         if (enemyData) {
           newDyingEnemies[id] = { ...enemyData, currentHp: 0 };
+          // Also store for defeated display
+          newDefeatedEnemies.push({ ...enemyData, currentHp: 0 });
         }
       });
       setDyingEnemies(prev => ({ ...prev, ...newDyingEnemies }));
+      // Accumulate defeated enemies for victory overlay
+      setDefeatedEnemies(prev => [...prev, ...newDefeatedEnemies]);
 
       // Clear dying enemies after animation
       setTimeout(() => {
@@ -553,6 +566,25 @@ const CombatScreen = () => {
             />
           </div>
         ))}
+
+        {/* Render defeated enemies for victory overlay */}
+        {showDefeatedEnemies && defeatedEnemies.map((enemy) => (
+          <div
+            key={`defeated-${enemy.instanceId}`}
+            className="enemy--defeated"
+            style={{
+              pointerEvents: 'none'
+            }}
+          >
+            <Enemy
+              enemy={enemy}
+              onClick={() => {}}
+              targeted={false}
+              hideIntents={true}
+              defeated={true}
+            />
+          </div>
+        ))}
       </div>
 
       {/* Targeting Indicator */}
@@ -672,12 +704,15 @@ const CombatScreen = () => {
               minWidth: '40px',
               boxShadow: '0 0 5px rgba(255, 255, 255, 0.2)'
             }} />
-            <span style={{
-              marginLeft: 'auto',
-              color: '#666',
-              fontSize: '10px',
-              paddingRight: '5px'
-            }}>
+            <span
+              className="swipe-hint"
+              style={{
+                marginLeft: 'auto',
+                color: '#666',
+                fontSize: '10px',
+                paddingRight: '5px'
+              }}
+            >
               ← swipe →
             </span>
           </div>

@@ -1,9 +1,9 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-01-25
-**Current Sprint:** 4 (Visual Polish) - PLANNING
-**Integration Branch:** `sprint-3` (Sprint 3 merged to master via PR #31)
-**Next Sprint Plan:** See `docs/SPRINT_4_PLAN.md`
+**Current Sprint:** 4 (Visual Polish) - IN_PROGRESS
+**Integration Branch:** `sprint-4`
+**Sprint Plan:** See `docs/SPRINT_4_PLAN.md`
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
 **Previous:** Sprint 3 COMPLETE (10 PRs merged, 837 tests)
@@ -137,37 +137,37 @@
 
 ---
 
-## Sprint 4: Visual Polish - PLANNING
+## Sprint 4: Visual Polish - IN_PROGRESS
 
 **Goal:** Transform from "functional alpha" to "polished experience"; target 70+ magazine score.
-**Branch:** `sprint-4` (to be created)
+**Branch:** `sprint-4`
 **Plan:** See `docs/SPRINT_4_PLAN.md`
 
 ### Phase A: Map Navigation (Priority)
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| VP-01 | UX | M | Map auto-scroll to player position | Pending |
-| VP-02 | UX | S | "You are here" indicator | Pending |
-| VP-03 | UX | S | Map position indicator (floor X of 15) | Pending |
-| VP-04 | UX | XS | Remember scroll position on return | Pending |
+| VP-01 | UX | M | Map auto-scroll to player position | MERGED (PR #33) |
+| VP-02 | UX | S | "You are here" indicator | MERGED (PR #33) |
+| VP-03 | UX | S | Map position indicator (floor X of 15) | MERGED (PR #33) |
+| VP-04 | UX | XS | Remember scroll position on return | MERGED (PR #37) |
 
 ### Phase B: Victory Overlay (Priority)
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| VP-05 | UX | M | Victory as overlay on combat screen | Pending |
-| VP-06 | UX | S | Defeated enemies visual (faded/grey) | Pending |
-| VP-07 | UX | XS | Smooth victory transition animation | Pending |
+| VP-05 | UX | M | Victory as overlay on combat screen | MERGED (PR #34) |
+| VP-06 | UX | S | Defeated enemies visual (faded/grey) | MERGED (PR #34) |
+| VP-07 | UX | XS | Smooth victory transition animation | MERGED (PR #36) |
 
 ### Phase C: Enemy Turn Animations (Priority)
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| VP-08 | BE/UX | L | Sequential enemy turns with visible delay | Pending |
-| VP-09 | UX | M | Enemy action indicator (highlight active) | Pending |
-| VP-10 | UX | S | Floating damage numbers for enemy attacks | Pending |
-| VP-11 | UX | S | Block applied visual for enemies | Pending |
+| VP-08 | BE/UX | L | Sequential enemy turns with visible delay | MERGED (PR #33) |
+| VP-09 | UX | M | Enemy action indicator (highlight active) | MERGED (PR #33) |
+| VP-10 | UX | S | Floating damage numbers for enemy attacks | MERGED (PR #35) |
+| VP-11 | UX | S | Block applied visual for enemies | MERGED (PR #33) |
 
 ### Phase D: Quick Polish (Lower Priority)
 
@@ -176,18 +176,18 @@
 | VP-12 | PM | XS | Hide DATA EDITOR in production | DONE (Sprint 3 PM-03) |
 | VP-13 | GD | S | Theme brightness pass | DONE (Sprint 3 GD-05) |
 | VP-14 | UX | S | Card text truncation fix | DONE (Sprint 3 UX-05) |
-| VP-15 | UX | S | Swipe hint removal for non-touch | Pending |
+| VP-15 | UX | S | Swipe hint removal for non-touch | MERGED (PR #33) |
 
 ### Sprint 4 Validation Gate
 
-- [ ] Map auto-scrolls to player position on load and floor change
-- [ ] Player can always see where they are on the map
-- [ ] Victory screen shows as overlay with combat visible behind
-- [ ] Enemy turns animate one-by-one with visible feedback
-- [ ] Each enemy shows "attacking" indicator during their turn
-- [ ] Floating damage numbers appear for enemy attacks
+- [x] Map auto-scrolls to player position on load and floor change
+- [x] Player can always see where they are on the map
+- [x] Victory screen shows as overlay with combat visible behind
+- [x] Enemy turns animate one-by-one with visible feedback
+- [x] Each enemy shows "attacking" indicator during their turn
+- [x] Floating damage numbers appear for enemy attacks
 - [ ] E2E tests pass with updated screenshots
-- [ ] Full playthrough feels "polished" not "alpha"
+- [x] Full playthrough feels "polished" not "alpha"
 
 ---
 
