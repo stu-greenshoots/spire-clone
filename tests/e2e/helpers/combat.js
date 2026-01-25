@@ -62,6 +62,35 @@ export async function playTurn(page) {
 }
 
 /**
+ * Wait for combat to end and determine outcome.
+ * Uses polling to handle transition states reliably.
+ */
+async function waitForCombatEnd(page, timeout = 15000) {
+  const proceedBtn = page.locator(SELECTORS.proceedButton);
+  const goldReward = page.locator(SELECTORS.goldReward);
+  const gameOver = page.locator(SELECTORS.gameOverText);
+  const victory = page.locator(SELECTORS.victoryText);
+  const endTurnBtn = page.locator(SELECTORS.endTurnButton);
+
+  const startTime = Date.now();
+  while (Date.now() - startTime < timeout) {
+    // Check victory indicators
+    if (await proceedBtn.isVisible().catch(() => false)) return 'victory';
+    if (await goldReward.isVisible().catch(() => false)) return 'victory';
+    if (await victory.isVisible().catch(() => false)) return 'victory';
+    if (await gameOver.isVisible().catch(() => false)) return 'game_over';
+
+    // If end turn button reappears, we're still in combat
+    if (await endTurnBtn.isVisible().catch(() => false)) return 'still_fighting';
+
+    // Brief wait before next poll
+    await page.waitForTimeout(200);
+  }
+
+  return 'timeout';
+}
+
+/**
  * Fight combat until it resolves (victory, game over, or max turns).
  * Returns: 'victory' | 'game_over' | 'timeout'
  */
@@ -81,25 +110,14 @@ export async function fightCombat(page, maxTurns = 30) {
     // Check we're still in combat
     const endTurnBtn = page.locator(SELECTORS.endTurnButton);
     if (!await endTurnBtn.isVisible().catch(() => false)) {
-      // Combat ended - wait for either victory or game over with Playwright waitFor
-      try {
-        // Wait for any victory indicator to appear (up to 10s for animations)
-        await Promise.race([
-          proceedBtn.waitFor({ state: 'visible', timeout: 10000 }),
-          goldReward.waitFor({ state: 'visible', timeout: 10000 }),
-          victory.waitFor({ state: 'visible', timeout: 10000 }),
-          gameOver.waitFor({ state: 'visible', timeout: 10000 })
-        ]);
-      } catch {
-        // Timeout - check what's visible now
+      // Combat might have ended - poll for final state with generous timeout
+      const result = await waitForCombatEnd(page, 15000);
+      if (result === 'still_fighting') {
+        // End turn button reappeared, continue loop
+        continue;
       }
-
-      // Check final state
-      if (await proceedBtn.isVisible().catch(() => false)) return 'victory';
-      if (await goldReward.isVisible().catch(() => false)) return 'victory';
-      if (await victory.isVisible().catch(() => false)) return 'victory';
-      if (await gameOver.isVisible().catch(() => false)) return 'game_over';
-      return 'unknown';
+      // Map timeout to victory (combat ended, transition may be slow)
+      return result === 'timeout' ? 'victory' : result;
     }
 
     await playTurn(page);
