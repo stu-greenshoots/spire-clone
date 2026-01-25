@@ -626,13 +626,14 @@ const CombatScreen = () => {
                 flexShrink: 0
               }}
             >
-              <CardTooltip card={card} player={player}>
+              <CardTooltip card={card} player={player} targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}>
                 <Card
                   card={card}
                   onClick={() => !isDragging && handleCardClick(card)}
                   selected={isSelected}
                   disabled={!canPlayCard(card)}
                   player={player}
+                  targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}
                 />
               </CardTooltip>
             </div>
@@ -703,6 +704,13 @@ const CombatScreen = () => {
             selected={true}
             disabled={false}
             player={player}
+            targetEnemy={
+              draggingCard.type === CARD_TYPES.ATTACK
+                ? (dropTargetEnemy !== null
+                    ? enemies.find(e => e.instanceId === dropTargetEnemy)
+                    : enemies.length === 1 ? enemies[0] : null)
+                : null
+            }
           />
         </div>
       )}
