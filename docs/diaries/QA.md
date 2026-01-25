@@ -1,4 +1,4 @@
-# QA Diary - Sprint 3
+# QA Diary - Sprint 5
 
 ## Role
 Tester - Component tests, balance simulator, E2E tests
@@ -6,12 +6,52 @@ Tester - Component tests, balance simulator, E2E tests
 ## Owned Files
 `src/test/`, test infrastructure
 
-## Sprint 3 Tasks
-- QA-03: E2E tests with Playwright (Day 4+, P2) - carried from Sprint 2
+## Sprint 5 Tasks
+- QA-05: Sprint 5 test coverage + E2E timeout fix (P1)
 
 ---
 
 ## Entries
+
+### QA-05 Complete - Sprint 5 Test Coverage
+**Date:** 2026-01-25
+**Status:** QA-05 complete, PR #44 ready for review
+
+**Done today:**
+1. **Fixed E2E timeout issue:**
+   - Replaced fixed 4s wait in combat.js helper with dynamic `waitForEnemyTurnComplete()` polling function
+   - Handles sequential enemy turns (VP-08) which can take 600ms per enemy
+   - Polls for end turn button or combat end conditions with 8s max wait
+   - Extended full-run.spec.js timeout to 90s for longer combat sequences
+
+2. **Added ascension support to balance simulator:**
+   - Added `ascension` config option (0-10) to `simulateRun` function
+   - Applies HP multipliers, elite/boss buffs via `applyAscensionToEnemies`
+   - Adds Wound card to deck at ascension 2+
+   - Applies reduced healing percent at ascension 4+
+   - Added 5 new unit tests for ascension support
+
+3. **Validated and committed Sprint 5 test files:**
+   - `src/test/progressionSystem.test.js` - 43 unit tests for meta-progression (BE-06)
+   - `tests/e2e/specs/boss-dialogue.spec.js` - 5 E2E tests for boss dialogue (SL-03)
+   - `tests/e2e/specs/progression.spec.js` - 4 E2E tests for progression persistence
+
+**Test counts:**
+- progressionSystem.test.js: 43 tests passing
+- ascensionSystem.test.js: 34 tests passing (existing)
+- balance/simulator.test.js: 24 tests passing (5 new for ascension)
+- E2E specs: 3 new files added
+
+**Validation:** `npm run validate` passes - lint clean, all tests pass, build succeeds
+
+**Blockers:** None
+
+**Copilot Review:** PASSED - No HIGH/MEDIUM issues found
+**Mentor Review:** APPROVED
+
+**PR:** https://github.com/stu-greenshoots/spire-clone/pull/44
+
+---
 
 ### Magazine Review Notes (58/100)
 **Date:** 2026-01-24

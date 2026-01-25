@@ -57,7 +57,42 @@ export async function playTurn(page) {
     await endTurnBtn.click({ force: true });
     // Wait for enemy turn animations to complete
     // VP-08 adds sequential enemy turns (600ms per enemy), so wait longer
-    await page.waitForTimeout(4000);
+    // With up to 5 enemies at 600ms each, plus transition time, use dynamic wait
+    await waitForEnemyTurnComplete(page);
+  }
+}
+
+/**
+ * Wait for enemy turn animations to complete.
+ * Uses polling instead of fixed timeout to handle variable enemy counts.
+ * Sequential enemy turns (VP-08) can take 600ms per enemy.
+ */
+async function waitForEnemyTurnComplete(page, maxWait = 8000) {
+  const startTime = Date.now();
+  const endTurnBtn = page.locator(SELECTORS.endTurnButton);
+  const proceedBtn = page.locator(SELECTORS.proceedButton);
+  const gameOver = page.locator(SELECTORS.gameOverText);
+  const victory = page.locator(SELECTORS.victoryText);
+  const goldReward = page.locator(SELECTORS.goldReward);
+
+  // Give animations time to start
+  await page.waitForTimeout(500);
+
+  while (Date.now() - startTime < maxWait) {
+    // Check if combat ended
+    if (await proceedBtn.isVisible().catch(() => false)) return;
+    if (await gameOver.isVisible().catch(() => false)) return;
+    if (await victory.isVisible().catch(() => false)) return;
+    if (await goldReward.isVisible().catch(() => false)) return;
+
+    // Check if it's our turn again (end turn button visible and enabled)
+    if (await endTurnBtn.isVisible().catch(() => false)) {
+      // Small buffer to ensure enemy animations are truly done
+      await page.waitForTimeout(200);
+      return;
+    }
+
+    await page.waitForTimeout(200);
   }
 }
 

@@ -16,6 +16,14 @@ import {
   calculateEnemyDamage,
   applyDamageToPlayer
 } from '../../systems/combatSystem.js';
+import {
+  getAscensionModifiers,
+  getAscensionStartGold,
+  getAscensionHealPercent,
+  applyAscensionToEnemies,
+  shouldAddWoundAtCombatStart,
+  createWoundCard
+} from '../../systems/ascensionSystem.js';
 
 /**
  * Simple seeded random number generator (mulberry32)
@@ -713,7 +721,8 @@ function _simulateCombatInner(playerState, enemies, deck, rng, maxTurns, drawPer
  * @param {number} [config.seed] - RNG seed for deterministic results
  * @param {number} [config.eliteChance=0.1] - Chance of elite encounter
  * @param {number} [config.healPerFloor=0] - HP healed between floors (rest simulation)
- * @returns {Object} Run result: { survived, floorsCleared, finalHp, combatStats }
+ * @param {number} [config.ascension=0] - Ascension level (0-10, affects enemy HP, debuffs, etc.)
+ * @returns {Object} Run result: { survived, floorsCleared, finalHp, combatStats, ascension }
  */
 export function simulateRun(config = {}) {
   const floors = config.floors || 14;
@@ -721,8 +730,14 @@ export function simulateRun(config = {}) {
   const rng = createRng(seed);
   const eliteChance = config.eliteChance != null ? config.eliteChance : 0.1;
   const healPerFloor = config.healPerFloor || 0;
+  const ascension = config.ascension || 0;
 
+  // Get starter deck - add Wound card at ascension 2+
   const deck = getStarterDeck();
+  if (shouldAddWoundAtCombatStart(ascension)) {
+    deck.push(createWoundCard(`wound_asc_${Date.now()}`));
+  }
+
   const player = createPlayerState(config);
 
   const combatStats = [];
@@ -733,11 +748,18 @@ export function simulateRun(config = {}) {
     const origRandom = Math.random;
     Math.random = () => rng();
     let enemies;
+    let nodeType = 'combat';
     try {
       const isElite = rng() < eliteChance;
+      nodeType = isElite ? 'elite' : 'combat';
       enemies = getEncounter(1, floor, eliteChance, isElite);
     } finally {
       Math.random = origRandom;
+    }
+
+    // Apply ascension modifiers to enemies
+    if (ascension > 0) {
+      enemies = applyAscensionToEnemies(enemies, ascension, nodeType);
     }
 
     // Run combat
@@ -759,16 +781,19 @@ export function simulateRun(config = {}) {
         survived: false,
         floorsCleared,
         finalHp: 0,
-        combatStats
+        combatStats,
+        ascension
       };
     }
 
     // Update player HP from combat result
     player.currentHp = result.hpRemaining;
 
-    // Heal between floors
+    // Heal between floors (use ascension heal percent if applicable)
     if (healPerFloor > 0) {
-      player.currentHp = Math.min(player.maxHp, player.currentHp + healPerFloor);
+      const healPercent = getAscensionHealPercent(ascension);
+      const healAmount = Math.floor(player.maxHp * healPercent);
+      player.currentHp = Math.min(player.maxHp, player.currentHp + Math.min(healPerFloor, healAmount));
     }
 
     floorsCleared++;
@@ -778,7 +803,8 @@ export function simulateRun(config = {}) {
     survived: true,
     floorsCleared,
     finalHp: player.currentHp,
-    combatStats
+    combatStats,
+    ascension
   };
 }
 
