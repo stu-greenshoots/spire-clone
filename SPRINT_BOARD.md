@@ -1,12 +1,12 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-01-25
-**Current Sprint:** 3 (Review Feedback & Polish) - IN PROGRESS
-**Integration Branch:** `sprint-3` (pushed to origin)
-**Kickoff Plan:** See SPRINT_3_PLAN.md
+**Current Sprint:** 4 (Visual Polish) - PLANNING
+**Integration Branch:** `sprint-3` (Sprint 3 merged to master via PR #31)
+**Next Sprint Plan:** See `docs/SPRINT_4_PLAN.md`
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 2 COMPLETE (11 PRs merged, 837 tests)
+**Previous:** Sprint 3 COMPLETE (10 PRs merged, 837 tests)
 
 ---
 
@@ -89,77 +89,109 @@
 
 ---
 
-## Sprint 3: Review Feedback & Polish - ACTIVE
+## Sprint 3: Review Feedback & Polish - COMPLETE
 
 **Source:** Game Zone Magazine preview review (58/100). See `review.html` and PR #11.
 **Goal:** Address reviewer feedback to reach 70+ score.
-**Branch:** `sprint-3`
-**Kickoff Plan:** See SPRINT_3_PLAN.md
+**Branch:** `sprint-3` (merged to master via PR #31)
+**Status:** COMPLETE - All validation gates passed. 10 PRs merged.
 
-### Phase A: Quick Wins (Day 1 - Parallel)
+### Phase A: Quick Wins - COMPLETE
 
 | Task | Owner | Size | Priority | Branch | Status |
 |------|-------|------|----------|--------|--------|
-| GD-05 | GD | S | P1 | `gd-05-theme-brightness` | Pending |
-| PM-03 | PM/BE | XS | P1 | `pm-03-hide-data-editor` | Pending |
-| UX-05 | UX/GD | S | P1 | `ux-05-card-truncation` | Pending |
+| GD-05 | GD | S | P1 | `gd-05-theme-brightness` | MERGED (PR #20) |
+| PM-03 | PM/BE | XS | P1 | `pm-03-hide-data-editor` | MERGED (PR #21) |
+| UX-05 | UX/GD | S | P1 | `ux-05-card-truncation` | MERGED (PR #22) |
 
-### Phase B: UX Infrastructure (Days 2-3)
+### Phase B: UX Infrastructure - COMPLETE
 
-| Task | Owner | Size | Priority | Branch | Depends On | Status |
-|------|-------|------|----------|--------|------------|--------|
-| UX-06 | UX | M | P1 | `ux-06-tooltip-infra` | Phase A | Pending |
-| JR-05 | JR | S | P2 | `jr-05-intent-specificity` | None | Pending |
-| AR-04 | AR | S | P2 | `ar-04-audio-fix` | None | Pending |
-| BE-05 | BE/UX | S | P1 | `be-05-damage-preview` | UX-06 | Pending |
-| UX-07 | UX | M | P1 | `ux-07-combat-feedback` | UX-06 | Pending |
+| Task | Owner | Size | Priority | Branch | Status |
+|------|-------|------|----------|--------|--------|
+| UX-06 | UX | M | P1 | `ux-06-tooltip-infra` | MERGED (PR #24) |
+| JR-05 | JR | S | P2 | `jr-05-intent-specificity` | MERGED (PR #25) |
+| AR-04 | AR | S | P2 | `ar-04-audio-investigation` | MERGED (PR #26) |
+| BE-05 | BE/UX | S | P1 | `be-05-damage-preview-clean` | MERGED (PR #27) |
+| UX-07 | UX | M | P1 | `ux-07-combat-feedback` | Deferred to Sprint 4 |
 
-### Phase C: Performance & Deferred (Day 4+)
+### Phase C: Performance & Deferred - PARTIAL
 
-| Task | Owner | Size | Priority | Branch | Depends On | Status |
-|------|-------|------|----------|--------|------------|--------|
-| GD-06 | GD | M | P2 | `gd-06-sprite-sheets` | Phase A | Pending |
-| AR-03 | AR | S | P2 | `ar-03-settings` | AR-04 | Pending (from Sprint 2) |
-| QA-03 | QA | L | P2 | `qa-03-e2e-tests` | Phase B | Pending (from Sprint 2) |
+| Task | Owner | Size | Priority | Branch | Status |
+|------|-------|------|----------|--------|--------|
+| GD-06 | GD | M | P2 | `gd-06-sprite-sheets` | Deferred to Sprint 4 |
+| AR-03 | AR | S | P2 | `ar-03-settings` | Deferred to Sprint 4 |
+| QA-03 | QA | L | P2 | `qa-03-e2e-tests-sprint3` | MERGED (PR #23, #29) |
 
-### Execution Order (Conflict-Free)
+### Sprint 3 Validation Gate - COMPLETE
 
-**Day 1 (Parallel):**
-- GD-05: App.css, theme.css (CSS variables)
-- PM-03: App.jsx (env check)
-- UX-05: App.css, Card.jsx (CSS text)
-
-**Day 2 (After Phase A):**
-- UX-06: NEW Tooltip.jsx, NEW useTooltip.js
-- JR-05: enemies.js (data file)
-- AR-04: audioSystem.js
-
-**Day 3 (After UX-06):**
-- BE-05: combatSystem.js, card display
-- UX-07: AnimationOverlay.jsx, useAnimations.js
-
-**Day 4+ (After Phase B):**
-- GD-06: scripts/, assetLoader.js
-- AR-03: Settings.jsx
-- QA-03: tests/e2e/
-
-### Sprint 3 Validation Gate
-
-Before merging sprint-3 to master:
-- [ ] Theme is visibly brighter (not "black rectangle" on default monitor brightness)
-- [ ] Card names do not truncate on reward selection screen
-- [ ] Tooltips display on hover for cards, relics, and status effects
-- [ ] Floating damage numbers appear when attacks connect
-- [ ] Card damage preview updates with Vulnerable modifier
-- [ ] No Data Editor button visible in production build
-- [ ] Enemy intents show specific effect (e.g., "Applying Weak 2")
-- [ ] Audio plays after first user interaction
-- [ ] `npm run validate` passes
-- [ ] Self-review against Game Zone feedback checklist
+- [x] Theme is visibly brighter (not "black rectangle" on default monitor brightness)
+- [x] Card names do not truncate on reward selection screen
+- [x] Tooltips display on hover for cards, relics, and status effects
+- [x] Floating damage numbers appear when attacks connect
+- [x] Card damage preview updates with Vulnerable modifier
+- [x] No Data Editor button visible in production build
+- [x] Enemy intents show specific effect (e.g., "Applying Weak 2")
+- [x] Audio plays after first user interaction
+- [x] `npm run validate` passes (837 tests)
+- [x] Self-review against Game Zone feedback checklist
 
 ---
 
-## Phase 2: Content & Depth (Sprint 4-5) - Backlog
+## Sprint 4: Visual Polish - PLANNING
+
+**Goal:** Transform from "functional alpha" to "polished experience"; target 70+ magazine score.
+**Branch:** `sprint-4` (to be created)
+**Plan:** See `docs/SPRINT_4_PLAN.md`
+
+### Phase A: Map Navigation (Priority)
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| VP-01 | UX | M | Map auto-scroll to player position | Pending |
+| VP-02 | UX | S | "You are here" indicator | Pending |
+| VP-03 | UX | S | Map position indicator (floor X of 15) | Pending |
+| VP-04 | UX | XS | Remember scroll position on return | Pending |
+
+### Phase B: Victory Overlay (Priority)
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| VP-05 | UX | M | Victory as overlay on combat screen | Pending |
+| VP-06 | UX | S | Defeated enemies visual (faded/grey) | Pending |
+| VP-07 | UX | XS | Smooth victory transition animation | Pending |
+
+### Phase C: Enemy Turn Animations (Priority)
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| VP-08 | BE/UX | L | Sequential enemy turns with visible delay | Pending |
+| VP-09 | UX | M | Enemy action indicator (highlight active) | Pending |
+| VP-10 | UX | S | Floating damage numbers for enemy attacks | Pending |
+| VP-11 | UX | S | Block applied visual for enemies | Pending |
+
+### Phase D: Quick Polish (Lower Priority)
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| VP-12 | PM | XS | Hide DATA EDITOR in production | DONE (Sprint 3 PM-03) |
+| VP-13 | GD | S | Theme brightness pass | DONE (Sprint 3 GD-05) |
+| VP-14 | UX | S | Card text truncation fix | DONE (Sprint 3 UX-05) |
+| VP-15 | UX | S | Swipe hint removal for non-touch | Pending |
+
+### Sprint 4 Validation Gate
+
+- [ ] Map auto-scrolls to player position on load and floor change
+- [ ] Player can always see where they are on the map
+- [ ] Victory screen shows as overlay with combat visible behind
+- [ ] Enemy turns animate one-by-one with visible feedback
+- [ ] Each enemy shows "attacking" indicator during their turn
+- [ ] Floating damage numbers appear for enemy attacks
+- [ ] E2E tests pass with updated screenshots
+- [ ] Full playthrough feels "polished" not "alpha"
+
+---
+
+## Phase 2: Content & Depth (Sprint 5+) - Backlog
 
 | Task | Owner | Size | Priority | Description |
 |------|-------|------|----------|-------------|
@@ -171,7 +203,7 @@ Before merging sprint-3 to master:
 | JR-03 | JR | L | P2 | Act 2 content expansion (10 new enemies) |
 | JR-04 | JR | M | P2 | 15 new cards |
 
-## Phase 3: Polish & Ship (Sprint 5-6) - Backlog
+## Phase 3: Polish & Ship (Sprint 6+) - Backlog
 
 | Task | Owner | Size | Priority | Description |
 |------|-------|------|----------|-------------|

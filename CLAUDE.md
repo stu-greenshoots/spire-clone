@@ -179,21 +179,19 @@ npm run build            # Production build
 10. **No forward-referencing.** Don't call APIs that don't exist yet.
 11. **NEVER auto-merge PRs.** Wait for Copilot review → address findings → wait for Mentor approval → then merge.
 
-## Current State (Sprint 3 - In Progress)
+## Current State (Sprint 4 - Planning)
 
-- **Branch:** `sprint-3` (integration branch, deploys to GitHub Pages)
-- **Previous Sprint:** Sprint 2 COMPLETE (11 PRs merged, all validation gates passed)
+- **Branch:** `master` (Sprint 3 merged via PR #31)
+- **Previous Sprint:** Sprint 3 COMPLETE (10 PRs merged, all validation gates passed)
 - **Tests:** 837 passing (29 test files)
 - **Lint:** 0 errors
 - **Build:** Passing
-- **Runtime:** All systems functional (potions, save/load, card effects, tooltips, upgrades)
-- **Review Score:** 58/100 (Game Zone Magazine) - Sprint 3 targets 70+
+- **Runtime:** All systems functional (potions, save/load, card effects, tooltips, upgrades, damage preview)
+- **Review Score:** 58/100 (Game Zone Magazine) - awaiting re-review after Sprint 3 polish
 - **Diaries:** `docs/diaries/{ROLE}.md` - update daily
-- **Sprint 3 Goal:** Address magazine review feedback to reach 70+ score
-- **Phase A:** COMPLETE (GD-05, PM-03, UX-05 merged - PRs #20, #21, #22)
-- **Phase B:** IN PROGRESS (UX-06, JR-05, AR-04, BE-05, UX-07 - Days 2-3)
-- **Phase C:** Pending (GD-06, AR-03, QA-03 - Day 4+)
-- **Next:** Phase B tasks - create PRs and wait for Copilot + Mentor review before merging
+- **Sprint 4 Plan:** See `docs/SPRINT_4_PLAN.md` (15 visual polish tasks VP-01 to VP-15)
+- **Sprint 4 Focus:** Map auto-scroll, victory overlay, sequential enemy turns, visual polish
+- **Next:** Create `sprint-4` integration branch and begin Phase A tasks
 
 ## Architecture Quick Reference
 
