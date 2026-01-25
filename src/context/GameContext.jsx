@@ -94,6 +94,7 @@ export const createInitialState = () => ({
   enemies: [],
   currentFloor: 0,
   act: 1,
+  ascension: 0,
   map: null,
   currentNode: null,
   selectedCard: null,
@@ -257,8 +258,8 @@ const gameReducer = (state, action) => {
 export const GameProvider = ({ children }) => {
   const [state, dispatch] = useReducer(gameReducer, createInitialState());
 
-  const startGame = useCallback(() => {
-    dispatch({ type: 'START_GAME' });
+  const startGame = useCallback((ascensionLevel = 0) => {
+    dispatch({ type: 'START_GAME', payload: { ascensionLevel } });
   }, []);
 
   const selectNode = useCallback((nodeId) => {
