@@ -176,7 +176,7 @@
 | VP-12 | PM | XS | Hide DATA EDITOR in production | DONE (Sprint 3 PM-03) |
 | VP-13 | GD | S | Theme brightness pass | DONE (Sprint 3 GD-05) |
 | VP-14 | UX | S | Card text truncation fix | DONE (Sprint 3 UX-05) |
-| VP-15 | UX | S | Swipe hint removal for non-touch | Pending |
+| VP-15 | UX | S | Swipe hint removal for non-touch | MERGED (PR #33) |
 
 ### Sprint 4 Validation Gate
 
