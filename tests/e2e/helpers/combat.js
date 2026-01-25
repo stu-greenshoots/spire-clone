@@ -56,7 +56,8 @@ export async function playTurn(page) {
   if (await endTurnBtn.isVisible().catch(() => false)) {
     await endTurnBtn.click({ force: true });
     // Wait for enemy turn animations to complete
-    await page.waitForTimeout(2000);
+    // VP-08 adds sequential enemy turns (600ms per enemy), so wait longer
+    await page.waitForTimeout(4000);
   }
 }
 
@@ -80,10 +81,18 @@ export async function fightCombat(page, maxTurns = 30) {
     // Check we're still in combat
     const endTurnBtn = page.locator(SELECTORS.endTurnButton);
     if (!await endTurnBtn.isVisible().catch(() => false)) {
-      await page.waitForTimeout(500);
-      // Re-check after brief wait
+      // Wait for victory overlay animation to appear
+      await page.waitForTimeout(1500);
+      // Re-check after wait for overlay animations
       if (await proceedBtn.isVisible().catch(() => false)) return 'victory';
       if (await goldReward.isVisible().catch(() => false)) return 'victory';
+      if (await victory.isVisible().catch(() => false)) return 'victory';
+      if (await gameOver.isVisible().catch(() => false)) return 'game_over';
+      // One more wait in case overlay is still animating
+      await page.waitForTimeout(1000);
+      if (await proceedBtn.isVisible().catch(() => false)) return 'victory';
+      if (await goldReward.isVisible().catch(() => false)) return 'victory';
+      if (await victory.isVisible().catch(() => false)) return 'victory';
       if (await gameOver.isVisible().catch(() => false)) return 'game_over';
       return 'unknown';
     }
