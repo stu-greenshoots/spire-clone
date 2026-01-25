@@ -1,4 +1,4 @@
-# BE Diary - Sprint 2
+# BE Diary - Sprint 3
 
 ## Role
 Back Ender - Architecture, state management, performance
@@ -6,9 +6,8 @@ Back Ender - Architecture, state management, performance
 ## Owned Files
 `src/context/`, `src/context/reducers/`
 
-## Sprint 2 Tasks
-- FIX-03: Card effect context (P0)
-- BE-02: Normalize state (P1)
+## Sprint 3 Tasks
+- BE-05: Damage preview with modifiers (Day 3, P1)
 
 ---
 
@@ -89,15 +88,26 @@ Back Ender - Architecture, state management, performance
 
 ---
 
-### Sprint 2 Validation Gate Sign-off
-**Date:** 2026-01-24
-**Status:** SIGNED OFF
-**Review:**
-- Confirmed BE-02 state normalization works correctly in full playthrough tests
-- Multi-floor progression exercises instanceId-based targeting without crashes
-- Card effects with ctx.hand (FIX-03) confirmed working through combat loop tests
-- useGame hook shape stable — all 20 actions exercised in fullPlaythrough.test.js
-- Removed unused `shuffleArray` import from combatReducer.js (artifact from normalization work)
-**Verdict:** Architecture is stable. No regressions detected. Ready to merge sprint-2 → master.
+### Sprint 3 Kickoff
+**Date:** 2026-01-25
+**Status:** Sprint 3 ACTIVE
+
+**My task:**
+- **BE-05 (Day 3, P1):** Damage preview with modifiers
+  - Card numbers reflect Vulnerable/Weak modifiers
+  - Numbers turn green when boosted (like StS)
+  - Extract shared `calculateEffectiveDamage(card, target, playerState, modifiers)` per DEC-004
+  - Pure function used by both combat execution and UI preview
+  - Files: combatSystem.js, card display components
+
+**Dependencies:**
+- Depends on UX-06 (tooltip infrastructure) for display pattern
+- Can coordinate with UX for card rendering integration
+
+**Architecture notes:**
+- Ensure modifier application is deterministic for reliable calculations
+- cardEffects.js still uses ctx.targetIndex internally (Sprint 3+ full normalization)
+
+**Ready to start:** Day 3 (after UX-06 merged)
 
 ---

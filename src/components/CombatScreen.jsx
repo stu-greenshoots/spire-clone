@@ -516,6 +516,7 @@ const CombatScreen = () => {
         {enemies.map((enemy) => (
           <div
             key={enemy.instanceId}
+            data-testid={`enemy-${enemy.instanceId}`}
             ref={el => enemyRefs.current[enemy.instanceId] = el}
             style={{
               animation: enemyHitStates[enemy.instanceId] ? 'enemyHit 0.5s ease-out' : 'none',
@@ -586,7 +587,9 @@ const CombatScreen = () => {
         flexDirection: 'column'
       }}>
         {/* Scrollable card container */}
-        <div style={{
+        <div
+          data-testid="hand-area"
+          style={{
           padding: '12px 10px',
           paddingBottom: '5px',
           overflowX: 'auto',
@@ -623,13 +626,14 @@ const CombatScreen = () => {
                 flexShrink: 0
               }}
             >
-              <CardTooltip card={card} player={player}>
+              <CardTooltip card={card} player={player} targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}>
                 <Card
                   card={card}
                   onClick={() => !isDragging && handleCardClick(card)}
                   selected={isSelected}
                   disabled={!canPlayCard(card)}
                   player={player}
+                  targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}
                 />
               </CardTooltip>
             </div>
@@ -700,6 +704,13 @@ const CombatScreen = () => {
             selected={true}
             disabled={false}
             player={player}
+            targetEnemy={
+              draggingCard.type === CARD_TYPES.ATTACK
+                ? (dropTargetEnemy !== null
+                    ? enemies.find(e => e.instanceId === dropTargetEnemy)
+                    : enemies.length === 1 ? enemies[0] : null)
+                : null
+            }
           />
         </div>
       )}
@@ -774,6 +785,7 @@ const CombatScreen = () => {
 
         {/* End Turn Button */}
         <button
+          data-testid="btn-end-turn"
           onClick={endTurn}
           style={{
             padding: '12px 30px',

@@ -32,7 +32,7 @@ const MainMenu = () => {
       height: '100%',
       padding: '20px',
       textAlign: 'center',
-      background: 'radial-gradient(ellipse at center bottom, #1a1a3a 0%, #0a0a1a 40%, #050510 100%)',
+      background: 'radial-gradient(ellipse at center bottom, #2a2a4a 0%, #1a1a2e 40%, #12121f 100%)',
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -171,6 +171,7 @@ const MainMenu = () => {
         {/* Continue Run Button - only show if save exists */}
         {saveExists && (
           <button
+            data-testid="btn-continue"
             onClick={loadGameState}
             onMouseEnter={() => setHoveringContinue(true)}
             onMouseLeave={() => setHoveringContinue(false)}
@@ -216,6 +217,7 @@ const MainMenu = () => {
 
         {/* New Game Button */}
         <button
+          data-testid="btn-new-game"
           onClick={() => {
             deleteSaveState();
             startGame();
@@ -261,34 +263,36 @@ const MainMenu = () => {
           </span>
         </button>
 
-        {/* Data Editor Button */}
-        <button
-          onClick={openDataEditor}
-          onMouseEnter={() => setHoveringEditor(true)}
-          onMouseLeave={() => setHoveringEditor(false)}
-          style={{
-            background: hoveringEditor
-              ? 'linear-gradient(180deg, #4488dd 0%, #3366bb 50%, #225599 100%)'
-              : 'linear-gradient(180deg, #3377cc 0%, #2255aa 50%, #114488 100%)',
-            color: 'white',
-            border: '2px solid #6699ee',
-            padding: '12px 40px',
-            fontSize: '16px',
-            borderRadius: '25px',
-            cursor: 'pointer',
-            fontWeight: 'bold',
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-            boxShadow: hoveringEditor
-              ? '0 0 30px rgba(80, 130, 255, 0.5), 0 6px 20px rgba(0, 0, 0, 0.4)'
-              : '0 0 20px rgba(50, 100, 200, 0.3), 0 4px 15px rgba(0, 0, 0, 0.3)',
-            touchAction: 'manipulation',
-            transition: 'all 0.3s ease',
-            transform: hoveringEditor ? 'scale(1.05) translateY(-2px)' : 'scale(1)'
-          }}
-        >
-          Data Editor
-        </button>
+        {/* Data Editor Button - only show in development */}
+        {import.meta.env.DEV && (
+          <button
+            onClick={openDataEditor}
+            onMouseEnter={() => setHoveringEditor(true)}
+            onMouseLeave={() => setHoveringEditor(false)}
+            style={{
+              background: hoveringEditor
+                ? 'linear-gradient(180deg, #4488dd 0%, #3366bb 50%, #225599 100%)'
+                : 'linear-gradient(180deg, #3377cc 0%, #2255aa 50%, #114488 100%)',
+              color: 'white',
+              border: '2px solid #6699ee',
+              padding: '12px 40px',
+              fontSize: '16px',
+              borderRadius: '25px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              letterSpacing: '2px',
+              textTransform: 'uppercase',
+              boxShadow: hoveringEditor
+                ? '0 0 30px rgba(80, 130, 255, 0.5), 0 6px 20px rgba(0, 0, 0, 0.4)'
+                : '0 0 20px rgba(50, 100, 200, 0.3), 0 4px 15px rgba(0, 0, 0, 0.3)',
+              touchAction: 'manipulation',
+              transition: 'all 0.3s ease',
+              transform: hoveringEditor ? 'scale(1.05) translateY(-2px)' : 'scale(1)'
+            }}
+          >
+            Data Editor
+          </button>
+        )}
       </div>
 
       {/* Features Grid - Improved layout */}

@@ -160,7 +160,7 @@ const renderDescriptionWithKeywords = (text, small) => {
   });
 };
 
-const Card = memo(function Card({ card, onClick, selected, disabled, small, player }) {
+const Card = memo(function Card({ card, onClick, selected, disabled, small, player, targetEnemy }) {
   const artInfo = getCardArtInfo(card.id);
 
   const getCardColor = () => {
@@ -186,7 +186,7 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
   const rarity = getRarityColor();
   const cardArt = getCardArt(card);
 
-  // Compute adjusted damage/block values based on player stats
+  // Compute adjusted damage/block values based on player stats and target modifiers
   const getAdjustedDescription = () => {
     if (!player || !card.description) return { text: card.description, modified: false };
 
@@ -198,6 +198,10 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
       const strengthMult = card.strengthMultiplier || 1;
       let adjustedDmg = card.damage + (player.strength || 0) * strengthMult;
       if (player.weak > 0) adjustedDmg = Math.floor(adjustedDmg * 0.75);
+      // Apply vulnerable from target enemy (50% more damage)
+      if (targetEnemy && targetEnemy.vulnerable > 0) {
+        adjustedDmg = Math.floor(adjustedDmg * 1.5);
+      }
       adjustedDmg = Math.max(0, adjustedDmg);
 
       if (adjustedDmg !== card.damage) {
@@ -243,6 +247,10 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
       const strengthMult = card.strengthMultiplier || 1;
       let adj = card.damage + (player.strength || 0) * strengthMult;
       if (player.weak > 0) adj = Math.floor(adj * 0.75);
+      // Apply vulnerable from target enemy
+      if (targetEnemy && targetEnemy.vulnerable > 0) {
+        adj = Math.floor(adj * 1.5);
+      }
       if (adj > card.damage) return '#88ff88';
       if (adj < card.damage) return '#ff8888';
     }
@@ -257,7 +265,7 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
   };
   const descColor = getDescColor();
 
-  // Calculate damage preview value
+  // Calculate damage preview value including target modifiers
   const getDamagePreview = () => {
     if (!card.damage || typeof card.damage !== 'number') return null;
     const strengthMult = card.strengthMultiplier || 1;
@@ -265,6 +273,10 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
     if (player) {
       dmg = card.damage + (player.strength || 0) * strengthMult;
       if (player.weak > 0) dmg = Math.floor(dmg * 0.75);
+    }
+    // Apply vulnerable from target enemy (50% more damage)
+    if (targetEnemy && targetEnemy.vulnerable > 0) {
+      dmg = Math.floor(dmg * 1.5);
     }
     return Math.max(0, dmg);
   };
@@ -407,18 +419,22 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
       <div style={{
         background: `linear-gradient(90deg, ${colors.dark}00 0%, ${colors.dark} 15%, ${colors.dark} 85%, ${colors.dark}00 100%)`,
         padding: small ? '2px 4px' : '3px 6px',
-        marginTop: '2px'
+        marginTop: '2px',
+        minHeight: small ? '12px' : '16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
         <div style={{
           fontWeight: 'bold',
-          fontSize: small ? '8px' : '10px',
+          fontSize: card.name.length > 14 ? (small ? '7px' : '9px') : (small ? '8px' : '10px'),
           textAlign: 'center',
           color: '#fff',
           textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          letterSpacing: '0.5px'
+          letterSpacing: card.name.length > 14 ? '0.3px' : '0.5px',
+          lineHeight: '1.1',
+          wordBreak: 'break-word',
+          hyphens: 'auto'
         }}>
           {card.name}
         </div>

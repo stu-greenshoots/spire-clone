@@ -84,6 +84,9 @@ describe('AudioManager', () => {
     audioManager._preloadQueue = { eager: [], lazy: [] };
     audioManager._phases = {};
     audioManager._currentPhase = null;
+    // AR-04: Simulate user gesture so tests can play audio immediately
+    audioManager._userGestureReceived = true;
+    audioManager._pendingAudioQueue = [];
     if (audioManager._fadeInterval) {
       clearInterval(audioManager._fadeInterval);
       audioManager._fadeInterval = null;

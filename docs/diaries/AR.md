@@ -1,4 +1,4 @@
-# AR Diary - Sprint 2
+# AR Diary - Sprint 3
 
 ## Role
 Allrounder - Audio, save/load, settings, honest assessment
@@ -6,10 +6,9 @@ Allrounder - Audio, save/load, settings, honest assessment
 ## Owned Files
 `src/systems/audioSystem.js`, `src/systems/saveSystem.js`, `src/components/Settings.jsx`
 
-## Sprint 2 Tasks
-- FIX-02: Save/load format mismatch (P0)
-- AR-02: Save system overhaul (P2)
-- AR-03: Settings & accessibility (P2)
+## Sprint 3 Tasks
+- AR-04: Audio investigation (Day 2, P2)
+- AR-03: Settings & accessibility (Day 4+, P2) - carried from Sprint 2
 
 ---
 
@@ -86,5 +85,43 @@ Allrounder - Audio, save/load, settings, honest assessment
 - AR-03: Settings — Deferred to Sprint 3 (not blocking)
 **Satisfaction:** Happy with sprint 2. Save system is robust with integrity checking and auto-save.
 **Ready for Sprint 3:** Yes. AR-03 (settings) and AR-04 (audio investigation) queued.
+
+---
+
+### Sprint 3 Kickoff
+**Date:** 2026-01-25
+**Status:** Sprint 3 ACTIVE
+
+**My tasks:**
+- **AR-04 (Day 2, P2):** Audio investigation
+  - Fix "wired up but silent" audio system
+  - Per DEC-009: defer AudioContext creation until first user gesture
+  - One-time event listener on document for click/keypress
+  - Queue audio calls before initialization
+  - Files: audioSystem.js only (self-contained)
+
+- **AR-03 (Day 4+, P2):** Settings & accessibility
+  - Volume slider (depends on AR-04 being fixed first)
+  - Animation speed control
+  - Text size options
+  - Theme brightness slider (coordinates with GD-05)
+  - Files: Settings.jsx
+
+**Dependencies:**
+- AR-04 has no hard blockers (can start Day 2)
+- AR-03 depends on AR-04 completion
+
+**Audio fix approach (per DEC-009):**
+```javascript
+// On first user click/keypress:
+document.addEventListener('click', function initAudio() {
+  audioContext = new AudioContext();
+  audioContext.resume();
+  // Play any queued audio
+  document.removeEventListener('click', initAudio);
+}, { once: true });
+```
+
+**Ready to start:** AR-04 on Day 2
 
 ---

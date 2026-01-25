@@ -1,4 +1,4 @@
-# QA Diary - Sprint 2
+# QA Diary - Sprint 3
 
 ## Role
 Tester - Component tests, balance simulator, E2E tests
@@ -6,9 +6,8 @@ Tester - Component tests, balance simulator, E2E tests
 ## Owned Files
 `src/test/`, test infrastructure
 
-## Sprint 2 Tasks
-- FIX-06: Test selectors (P2)
-- QA-03: E2E tests (P2)
+## Sprint 3 Tasks
+- QA-03: E2E tests with Playwright (Day 4+, P2) - carried from Sprint 2
 
 ---
 
@@ -75,20 +74,36 @@ Tester - Component tests, balance simulator, E2E tests
 
 ---
 
-### Sprint 2 Validation Gate Sign-off
-**Date:** 2026-01-24
-**Status:** SIGNED OFF - All validation gates passed
-**Done:**
-- Wrote fullPlaythrough.test.js: 20 comprehensive tests exercising all game phases
-  - Menu → Map → Combat (card play, targeting, end turn) → Rewards → Rest → Events → Potions
-  - Multi-floor progression (3 floors of combat without crashes)
-  - Full game lifecycle (menu → play → die → menu)
-  - Girya, strength/block potions, cancel target, proceed to map
-- Fixed unused `shuffleArray` import in combatReducer.js (lint warning cleanup)
-- Added `autoSave` to saveSystem mock (AR-02 added this export)
-- Final test count: 837 tests passing across 29 test files
-- Lint: 0 errors, 0 warnings
-- Build: passing
-**Verdict:** Full game playthrough validated without crashes. All validation gate items checked.
+### Sprint 3 Kickoff
+**Date:** 2026-01-25
+**Status:** Sprint 3 ACTIVE
+
+**My task:**
+- **QA-03 (Day 4+, P2):** E2E test suite with Playwright
+  - Per DEC-010: start with 3 critical scenarios (amended from 5)
+  - Required before sprint-3 merges to master:
+    1. Complete a combat encounter
+    2. Save and reload a run
+    3. Play a card that references hand context
+
+  - Additional scenarios (once infrastructure is stable):
+    4. Use a potion in combat
+    5. Navigate 3+ floors on the map
+
+  - Files: tests/e2e/ (NEW directory)
+
+**Dependencies:**
+- Benefits from Phase B completion (more UI to test)
+- Can start scaffolding early but full scenarios need working features
+
+**Test approach:**
+- Playwright browser automation (not mocked context)
+- Real user interactions: click, hover, verify DOM state
+- Screenshot evidence on failure
+- Integrate with `npm run validate` gate
+
+**Lesson from Sprint 1:** 763 unit tests masked 3 P0 runtime bugs. E2E tests catch what unit tests miss.
+
+**Ready to start:** Day 4+ (after Phase B)
 
 ---

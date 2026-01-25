@@ -4,7 +4,7 @@
 
 Before starting any work, read these files to understand current state:
 
-1. **SPRINT_2_PLAN.md** - Sprint 2 kickoff plan, task assignments, process
+1. **SPRINT_3_PLAN.md** - Sprint 3 kickoff plan, task assignments, delivery order
 2. **SPRINT_BOARD.md** - Current sprint, task status, what's in progress
 3. **PROCESS.md** - Branch naming, PR workflow, commit conventions
 4. **DEFINITION_OF_DONE.md** - When is a task actually done (not just committed)
@@ -13,6 +13,7 @@ For deeper context (read when relevant to your task):
 - **DEPENDENCIES.md** - Task ordering, conflict zones, what blocks what
 - **TEAM_PLAN.md** - Full phase breakdown, all task details
 - **GAME_REFERENCE.md** - Card/enemy/relic mechanics (for content tasks)
+- **review.html** - Game Zone Magazine feedback (58/100) that drives Sprint 3
 
 ## Diaries
 
@@ -44,15 +45,15 @@ master                              (stable, protected)
 
 ### Workflow Per Task
 ```bash
-git checkout sprint-2
-git pull origin sprint-2
+git checkout sprint-3
+git pull origin sprint-3
 git checkout -b task-id-description
 # ... do work ...
 npm run validate                    # MUST pass before push
 git add <specific-files>
 git commit --author="ROLE <role@spire-ascent.dev>" -m "TASK-ID: description"
 git push -u origin task-id-description
-# Open PR targeting sprint-2 branch
+# Open PR targeting sprint-3 branch
 ```
 
 ### Commit Messages
@@ -73,6 +74,35 @@ JR-03: Add 5 Act 2 normal enemies with movesets
 - Smoke test documented
 - Use the template in `.github/pull_request_template.md`
 
+### PR Review Process (MANDATORY)
+
+**DO NOT AUTO-MERGE PRs. EVER.**
+
+After opening a PR, follow this exact sequence:
+
+1. **Create PR** → Stop here. Do not merge.
+2. **Wait for Copilot review** → GitHub Copilot automatically reviews PRs (if enabled in repo settings)
+3. **Address all HIGH/MEDIUM Copilot findings** → Fix issues, push updates
+4. **Wait for Mentor review** → Mentor (Lead Engineer) reviews and approves
+5. **Merge only after Mentor approval** → Or let Mentor merge
+
+**Copilot Review Notes:**
+- Copilot review is configured via repository rulesets (Settings > Rules > Rulesets)
+- It does NOT trigger on initial PR creation - only on subsequent pushes
+- **To trigger Copilot review after creating a PR:**
+  ```bash
+  git commit --allow-empty -m "chore: trigger Copilot review"
+  git push origin <branch-name>
+  ```
+- If Copilot review still isn't appearing, ensure "Automatically request Copilot code review" is enabled in repo rulesets
+
+**Why this matters:**
+- Copilot catches bugs, security issues, and code quality problems
+- Mentor ensures architectural consistency and catches integration issues
+- Auto-merging bypasses quality gates and introduces bugs
+
+**If you merge without review, you are breaking the process.**
+
 ## Team Members
 
 Each "team member" is a role with owned files and responsibilities. When working as a specific role, stay within your file boundaries.
@@ -80,47 +110,48 @@ Each "team member" is a role with owned files and responsibilities. When working
 ### PM (Project Manager)
 - **Owns:** `*.md` docs, `package.json` scripts, `.github/`
 - **Focus:** Sprint coordination, process, CI/CD, PR management
-- **Current tasks:** Review open PRs (#13, #14), maintain sprint board, resolve open decisions
+- **Sprint 3 tasks:** PM-03 (hide Data Editor in production)
 
 ### BE (Back Ender)
 - **Owns:** `src/context/`, `src/context/reducers/`
 - **Focus:** Architecture, state management, performance
-- **Current tasks:** BE-02 (normalize state)
+- **Sprint 3 tasks:** BE-05 (damage preview with modifiers)
 - **Rule:** Same public interfaces - useGame hook shape must not change without team discussion
 
 ### JR (Junior Developer)
-- **Owns:** `src/data/potions.js`, `src/systems/potionSystem.js`, `src/components/PotionSlots.jsx`
+- **Owns:** `src/data/potions.js`, `src/data/enemies.js`, `src/systems/potionSystem.js`, `src/components/PotionSlots.jsx`
 - **Focus:** Potion system, card upgrades, new content
-- **Current tasks:** JR-02 (card upgrades - PR #14 open), FIX-05 (enemy block)
+- **Sprint 3 tasks:** JR-05 (enemy intent specificity)
 - **Rule:** Build against existing APIs. If a function doesn't exist in the hook, don't call it - wire it up first.
 
 ### AR (Allrounder)
 - **Owns:** `src/systems/audioSystem.js`, `src/systems/saveSystem.js`, `src/components/Settings.jsx`
 - **Focus:** Audio, save/load, settings, honest assessment
-- **Current tasks:** AR-02 (save overhaul), AR-03 (settings)
+- **Sprint 3 tasks:** AR-04 (audio investigation), AR-03 (settings - deferred from Sprint 2)
 - **Rule:** Data formats must match between save and load. Serialize IDs, not full objects.
 
 ### UX (UX Guy)
 - **Owns:** `src/components/CombatScreen.jsx`, `src/components/AnimationOverlay.jsx`, `src/hooks/useAnimations.js`
 - **Focus:** Combat feedback, tooltips, visual polish
-- **Current tasks:** UX-02 (card tooltips - PR #13 open)
+- **Sprint 3 tasks:** UX-05 (card truncation), UX-06 (tooltip infra), UX-07 (combat feedback)
 - **Rule:** Animations must not block input. Speed multiplier always respected.
 
 ### GD (Graphic Designer)
 - **Owns:** `public/images/`, `src/utils/assetLoader.js`, `scripts/compress-images.js`
 - **Focus:** Art pipeline, asset optimization, visual consistency
-- **Current tasks:** GD-02 (card frames)
+- **Sprint 3 tasks:** GD-05 (theme brightness), GD-06 (sprite sheets)
 - **Rule:** Always provide fallback when assets missing. Lazy-load images.
 
 ### SL (Story Line)
 - **Owns:** `src/data/events.js`, `src/data/flavorText.js`
 - **Focus:** Events, world building, narrative, dialogue
+- **Sprint 3 tasks:** Support role (reviews, smoke testing, tooltip content)
 - **Rule:** Only reference effects/systems that currently exist. No forward-referencing unbuilt features.
 
 ### QA (Tester)
 - **Owns:** `src/test/`, test infrastructure
 - **Focus:** Component tests, balance simulator, E2E tests
-- **Current tasks:** FIX-06 (test selectors), QA-03 (E2E tests)
+- **Sprint 3 tasks:** QA-03 (E2E tests - deferred from Sprint 2)
 - **Rule:** Tests validate behavior against real interfaces. Use data-testid, not fragile regex.
 
 ## Key Commands
@@ -146,23 +177,23 @@ npm run build            # Production build
 8. **Max 300 lines per PR.** Split larger tasks into sub-tasks.
 9. **No unused imports/variables.** Lint must be clean.
 10. **No forward-referencing.** Don't call APIs that don't exist yet.
+11. **NEVER auto-merge PRs.** Wait for Copilot review → address findings → wait for Mentor approval → then merge.
 
-## Current State (Sprint 2 - COMPLETE)
+## Current State (Sprint 3 - In Progress)
 
-- **Branch:** `sprint-2` (integration branch, all PRs merged)
-- **P0 Bugs:** 0 open (FIX-01, FIX-02, FIX-03 merged)
-- **P1/P2 Bugs:** 0 open (FIX-04, FIX-05, FIX-06 merged)
+- **Branch:** `sprint-3` (integration branch, deploys to GitHub Pages)
+- **Previous Sprint:** Sprint 2 COMPLETE (11 PRs merged, all validation gates passed)
 - **Tests:** 837 passing (29 test files)
 - **Lint:** 0 errors
 - **Build:** Passing
-- **Runtime:** Potions, save/load, card effects all WORKING
-- **All PRs merged:** 11 PRs into sprint-2 branch
-- **Phase A:** COMPLETE
-- **Phase B:** COMPLETE
-- **Phase C:** PARTIAL (AR-03, QA-03 deferred to Sprint 3)
+- **Runtime:** All systems functional (potions, save/load, card effects, tooltips, upgrades)
+- **Review Score:** 58/100 (Game Zone Magazine) - Sprint 3 targets 70+
 - **Diaries:** `docs/diaries/{ROLE}.md` - update daily
-- **Review:** Game Zone magazine scored 58/100 (see review.html). Sprint 3 backlog derived from feedback.
-- **Decisions:** All resolved (DEC-001 through DEC-013)
+- **Sprint 3 Goal:** Address magazine review feedback to reach 70+ score
+- **Phase A:** COMPLETE (GD-05, PM-03, UX-05 merged - PRs #20, #21, #22)
+- **Phase B:** IN PROGRESS (UX-06, JR-05, AR-04, BE-05, UX-07 - Days 2-3)
+- **Phase C:** Pending (GD-06, AR-03, QA-03 - Day 4+)
+- **Next:** Phase B tasks - create PRs and wait for Copilot + Mentor review before merging
 
 ## Architecture Quick Reference
 
