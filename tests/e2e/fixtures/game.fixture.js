@@ -21,12 +21,13 @@ export const test = base.extend({
       selectFirstNode: async () => {
         // Find accessible map nodes (cursor: pointer indicates clickable)
         // Use force:true because SVG nodes have continuous animations
+        // Use getComputedStyle instead of inline style for more reliable detection
         const nodes = page.locator('[data-testid^="map-node-"]');
         const count = await nodes.count();
 
         for (let i = 0; i < count; i++) {
           const node = nodes.nth(i);
-          const cursor = await node.evaluate(el => el.style.cursor);
+          const cursor = await node.evaluate(el => getComputedStyle(el).cursor);
           if (cursor === 'pointer') {
             await node.click({ force: true });
             await page.waitForTimeout(500);

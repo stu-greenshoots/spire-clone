@@ -13,7 +13,7 @@ export const SELECTORS = {
   endTurnButton: '[data-testid="btn-end-turn"]',
   handArea: '[data-testid="hand-area"]',
   enemy: '[data-testid^="enemy-"]',
-  targetingBanner: 'text=SELECT TARGET',
+  targetingBanner: 'text=/SELECT TARGET/i',  // Regex match for "SELECT TARGET - Tap to Cancel"
 
   // Rewards
   goldReward: '[data-testid="reward-gold"]',
@@ -24,5 +24,5 @@ export const SELECTORS = {
 
   // Game Over / Victory
   victoryText: 'text=VICTORY',
-  gameOverText: 'text=GAME OVER',
+  gameOverText: 'text=DEFEAT',  // GameOverScreen shows "DEFEAT" not "GAME OVER"
 };

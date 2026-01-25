@@ -45,6 +45,10 @@ test.describe('Full Game Flow', () => {
       // Game over is a valid test outcome (player died in combat)
       await expect(gamePage.locator(SELECTORS.gameOverText)).toBeVisible({ timeout: 5000 });
       await gameActions.screenshot('04-game-over');
+    } else if (outcome === 'unknown') {
+      // Unknown state - combat entered unexpected state, log for debugging
+      await gameActions.screenshot('04-unknown-state');
+      console.warn('Combat ended in unknown state - may indicate a bug');
     }
     // timeout outcome means combat took too long - test still passes but with screenshot
   });
