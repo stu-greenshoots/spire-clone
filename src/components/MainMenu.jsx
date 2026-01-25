@@ -32,7 +32,7 @@ const MainMenu = () => {
       height: '100%',
       padding: '20px',
       textAlign: 'center',
-      background: 'radial-gradient(ellipse at center bottom, #1a1a3a 0%, #0a0a1a 40%, #050510 100%)',
+      background: 'radial-gradient(ellipse at center bottom, #2a2a4a 0%, #1a1a2e 40%, #12121f 100%)',
       position: 'relative',
       overflow: 'hidden'
     }}>

@@ -9,7 +9,7 @@ html, body {
   height: 100%;
   overflow: hidden;
   font-family: 'Segoe UI', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: #0a0a0f;
+  background-color: #1a1a2e;
   color: white;
 }
 
@@ -27,7 +27,7 @@ html, body {
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: radial-gradient(ellipse at center top, #1a1a3e 0%, #0a0a1a 50%, #050510 100%);
+  background: radial-gradient(ellipse at center top, #2a2a4e 0%, #1a1a2e 50%, #12121f 100%);
   overflow: hidden;
 }
 
@@ -57,7 +57,7 @@ button:active {
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a2a;
+  background: #252538;
   border-radius: 4px;
 }
 
@@ -653,8 +653,8 @@ button:active {
   width: 90%;
   max-width: 700px;
   max-height: 85vh;
-  background: linear-gradient(180deg, #1a1a2e 0%, #0a0a1a 100%);
-  border: 1px solid #333;
+  background: linear-gradient(180deg, #252540 0%, #1a1a2e 100%);
+  border: 1px solid #444;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -1069,7 +1069,7 @@ button:active {
 
 .tooltip-popup {
   position: absolute;
-  background: #1a1a2c;
+  background: #252540;
   border: 1px solid #555;
   padding: 8px;
   border-radius: 4px;
