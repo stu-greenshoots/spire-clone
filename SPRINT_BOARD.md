@@ -167,7 +167,7 @@
 | VP-08 | BE/UX | L | Sequential enemy turns with visible delay | MERGED (PR #33) |
 | VP-09 | UX | M | Enemy action indicator (highlight active) | MERGED (PR #33) |
 | VP-10 | UX | S | Floating damage numbers for enemy attacks | MERGED (PR #35) |
-| VP-11 | UX | S | Block applied visual for enemies | Pending |
+| VP-11 | UX | S | Block applied visual for enemies | MERGED (PR #33) |
 
 ### Phase D: Quick Polish (Lower Priority)
 
