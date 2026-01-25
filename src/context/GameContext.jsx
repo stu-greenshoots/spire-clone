@@ -249,6 +249,10 @@ const gameReducer = (state, action) => {
       return metaReducer(state, action);
     }
 
+    case 'LOAD_SCENARIO': {
+      return metaReducer(state, action);
+    }
+
     default:
       return state;
   }
@@ -366,6 +370,10 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'DISCARD_POTION', payload: { slotIndex } });
   }, []);
 
+  const loadScenario = useCallback((scenario) => {
+    dispatch({ type: 'LOAD_SCENARIO', payload: scenario });
+  }, []);
+
   const value = {
     state,
     startGame,
@@ -394,7 +402,8 @@ export const GameProvider = ({ children }) => {
     loadGameState,
     deleteSaveState,
     usePotion,
-    discardPotion
+    discardPotion,
+    loadScenario
   };
 
   return (
