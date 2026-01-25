@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, act } from '@testing-library/react';
 import { GameProvider, useGame } from '../context/GameContext';
-import { getPotionById } from '../data/potions';
 
 // Captures the context value for assertion
 let capturedContext = null;
@@ -36,7 +35,7 @@ describe('Potion Integration through GameContext', () => {
       );
 
       // Set up combat state with a potion and an enemy
-      const strengthPotion = getPotionById('strength_potion');
+      // Note: strengthPotion would be used if we could set potions directly in state
       act(() => {
         // We need to start a game and get into combat to test properly
         // Instead, we'll directly test the reducer behavior by manipulating state
@@ -69,7 +68,7 @@ describe('Potion Integration through GameContext', () => {
 
       // Manually set state to combat with a potion - we use spawnEnemies to enter combat-like state
       // and test the reducer logic directly
-      const blockPotion = getPotionById('block_potion');
+      // Note: blockPotion would be used if we could set potions directly in state
 
       // The reducer USE_POTION case checks: potion exists, canUsePotion, then applies + removes
       // We can verify the reducer case works by checking the function is callable

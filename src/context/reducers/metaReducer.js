@@ -208,6 +208,9 @@ export const metaReducer = (state, action) => {
         .map(savedPotion => deserializePotion(savedPotion))
         .filter(Boolean);
 
+      // Ensure we always have exactly 3 potion slots (using null for empty slots)
+      while (potions.length < 3) potions.push(null);
+
       return {
         ...createInitialState(),
         phase: GAME_PHASE.MAP,
