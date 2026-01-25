@@ -7,7 +7,7 @@ Tester - Component tests, balance simulator, E2E tests
 `src/test/`, test infrastructure
 
 ## Sprint 2 Tasks
-- FIX-06: Test selectors (P0)
+- FIX-06: Test selectors (P2)
 - QA-03: E2E tests (P2)
 
 ---

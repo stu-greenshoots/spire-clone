@@ -10,25 +10,27 @@
 ```
 master                              (stable, deployable, protected)
   └── sprint-N                      (integration branch per sprint)
-       ├── sprint-N/task-id-desc    (feature/task branches)
-       └── sprint-N/fix-desc        (bug fix branches)
+       ├── task-id-description      (feature/task branches - flat names)
+       └── fix-NN-description       (bug fix branches - flat names)
 ```
 
 ### Branch Naming Convention
 
 ```
-sprint-{N}/{task-id}-{short-description}
+{task-id}-{short-description}
 ```
+
+**Note:** Per DEC-013, branch names are flat (no `sprint-N/` prefix) because git treats `sprint-N` as both a branch and a directory prefix, causing push conflicts.
 
 | Type | Pattern | Example |
 |------|---------|---------|
-| Feature | `sprint-N/TASK-ID-description` | `sprint-2/be-02-normalize-state` |
-| Bug fix | `sprint-N/fix-description` | `sprint-1/fix-save-system` |
-| Hotfix | `sprint-N/hotfix-description` | `sprint-1/hotfix-potion-integration` |
+| Feature | `TASK-ID-description` | `be-02-normalize-state` |
+| Bug fix | `fix-NN-description` | `fix-01-potion-integration` |
 
 **Rules:**
 - All lowercase, hyphens only (no underscores, no camelCase)
 - No auto-generated suffixes (no `-RmZyD` or `-LsIh1`)
+- No `sprint-N/` prefix (conflicts with sprint-N branch in git refs)
 - Task ID included when applicable
 - Short description (2-4 words max)
 
@@ -40,7 +42,7 @@ sprint-{N}/{task-id}-{short-description}
 ```bash
 git checkout sprint-N
 git pull origin sprint-N
-git checkout -b sprint-N/task-id-description
+git checkout -b task-id-description
 ```
 
 ### 2. During Work
@@ -225,7 +227,7 @@ Backlog -> Sprint Board -> Branch Created -> PR Opened -> CI Pass -> Review -> M
 | Don't | Do Instead |
 |-------|-----------|
 | Bundle 10 tasks in one commit | One commit per logical change, one PR per task |
-| Use auto-generated branch names | Use convention: `sprint-N/task-id-desc` |
+| Use auto-generated branch names | Use convention: `task-id-description` (flat, no sprint prefix) |
 | Merge without CI passing | Wait for green checks |
 | Skip smoke testing | Test your change in the running game |
 | Open 50-file PRs | Split into sub-tasks, max 300 lines |
