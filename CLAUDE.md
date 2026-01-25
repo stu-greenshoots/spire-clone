@@ -74,6 +74,25 @@ JR-03: Add 5 Act 2 normal enemies with movesets
 - Smoke test documented
 - Use the template in `.github/pull_request_template.md`
 
+### PR Review Process (MANDATORY)
+
+**DO NOT AUTO-MERGE PRs. EVER.**
+
+After opening a PR, follow this exact sequence:
+
+1. **Create PR** → Stop here. Do not merge.
+2. **Wait for Copilot review** → GitHub Copilot automatically reviews PRs
+3. **Address all HIGH/MEDIUM Copilot findings** → Fix issues, push updates
+4. **Wait for Mentor review** → Mentor (Lead Engineer) reviews and approves
+5. **Merge only after Mentor approval** → Or let Mentor merge
+
+**Why this matters:**
+- Copilot catches bugs, security issues, and code quality problems
+- Mentor ensures architectural consistency and catches integration issues
+- Auto-merging bypasses quality gates and introduces bugs
+
+**If you merge without review, you are breaking the process.**
+
 ## Team Members
 
 Each "team member" is a role with owned files and responsibilities. When working as a specific role, stay within your file boundaries.
@@ -148,6 +167,7 @@ npm run build            # Production build
 8. **Max 300 lines per PR.** Split larger tasks into sub-tasks.
 9. **No unused imports/variables.** Lint must be clean.
 10. **No forward-referencing.** Don't call APIs that don't exist yet.
+11. **NEVER auto-merge PRs.** Wait for Copilot review → address findings → wait for Mentor approval → then merge.
 
 ## Current State (Sprint 3 - In Progress)
 
@@ -160,10 +180,10 @@ npm run build            # Production build
 - **Review Score:** 58/100 (Game Zone Magazine) - Sprint 3 targets 70+
 - **Diaries:** `docs/diaries/{ROLE}.md` - update daily
 - **Sprint 3 Goal:** Address magazine review feedback to reach 70+ score
-- **Phase A:** Pending (GD-05, PM-03, UX-05 - Day 1 parallel tasks)
-- **Phase B:** Pending (UX-06, JR-05, AR-04, BE-05, UX-07 - Days 2-3)
+- **Phase A:** COMPLETE (GD-05, PM-03, UX-05 merged - PRs #20, #21, #22)
+- **Phase B:** IN PROGRESS (UX-06, JR-05, AR-04, BE-05, UX-07 - Days 2-3)
 - **Phase C:** Pending (GD-06, AR-03, QA-03 - Day 4+)
-- **Next:** Sprint 3 work begins
+- **Next:** Phase B tasks - create PRs and wait for Copilot + Mentor review before merging
 
 ## Architecture Quick Reference
 
