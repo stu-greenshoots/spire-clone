@@ -166,7 +166,7 @@
 |------|-------|------|-------------|--------|
 | VP-08 | BE/UX | L | Sequential enemy turns with visible delay | MERGED (PR #33) |
 | VP-09 | UX | M | Enemy action indicator (highlight active) | Pending |
-| VP-10 | UX | S | Floating damage numbers for enemy attacks | Pending |
+| VP-10 | UX | S | Floating damage numbers for enemy attacks | MERGED (PR #35) |
 | VP-11 | UX | S | Block applied visual for enemies | Pending |
 
 ### Phase D: Quick Polish (Lower Priority)
@@ -185,7 +185,7 @@
 - [x] Victory screen shows as overlay with combat visible behind
 - [x] Enemy turns animate one-by-one with visible feedback
 - [x] Each enemy shows "attacking" indicator during their turn
-- [ ] Floating damage numbers appear for enemy attacks
+- [x] Floating damage numbers appear for enemy attacks
 - [ ] E2E tests pass with updated screenshots
 - [ ] Full playthrough feels "polished" not "alpha"
 
