@@ -6,6 +6,7 @@ import { generateMap } from '../../utils/mapGenerator';
 import { saveGame, loadGame, deleteSave } from '../../systems/saveSystem';
 import { getPassiveRelicEffects } from '../../systems/relicSystem';
 import { createInitialState } from '../GameContext';
+import { loadProgression, updateRunStats } from '../../systems/progressionSystem';
 
 /**
  * Reconstruct a full card object from its serialized form.
@@ -235,6 +236,32 @@ export const metaReducer = (state, action) => {
 
     case 'DELETE_SAVE': {
       deleteSave();
+      return state;
+    }
+
+    case 'UPDATE_PROGRESSION': {
+      // Called on game over (win or loss) to update meta-progression
+      const { won, causeOfDeath } = action.payload;
+      const progression = loadProgression();
+
+      // Build run data from current state and runStats
+      const runData = {
+        won,
+        floor: state.currentFloor + 1, // Convert 0-based to 1-based
+        enemiesKilled: state.runStats?.enemiesKilled || 0,
+        goldEarned: state.runStats?.goldEarned || 0,
+        damageDealt: state.runStats?.damageDealt || 0,
+        cardsPlayed: state.runStats?.cardsPlayed || 0,
+        defeatedEnemies: state.runStats?.defeatedEnemies || [],
+        relics: state.relics,
+        deckSize: state.deck?.length || 0,
+        ascension: state.ascension || 0,
+        causeOfDeath: won ? null : causeOfDeath
+      };
+
+      // Update progression (this also saves to localStorage)
+      updateRunStats(progression, runData);
+
       return state;
     }
 
