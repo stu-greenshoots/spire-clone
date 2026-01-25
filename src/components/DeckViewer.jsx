@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CARD_TYPES } from '../data/cards';
+import { SimpleTooltip } from './Tooltip';
 
 const DeckViewer = ({ deck, relics, runStats, onClose }) => {
   const [sortBy, setSortBy] = useState('type'); // 'type', 'cost', 'name'
@@ -64,10 +65,24 @@ const DeckViewer = ({ deck, relics, runStats, onClose }) => {
             <h3>Relics ({relics.length})</h3>
             <div className="deck-relics-grid">
               {relics.map((relic, idx) => (
-                <div key={relic.id || idx} className="deck-relic-item" title={relic.description}>
-                  <span className="relic-emoji">{relic.emoji}</span>
-                  <span className="relic-name">{relic.name}</span>
-                </div>
+                <SimpleTooltip
+                  key={relic.id || idx}
+                  content={
+                    <div>
+                      <div style={{ fontWeight: 'bold', color: '#DAA520', marginBottom: '4px' }}>
+                        {relic.name}
+                      </div>
+                      <div style={{ color: '#ccc' }}>{relic.description}</div>
+                    </div>
+                  }
+                  placement="top"
+                  delay={150}
+                >
+                  <div className="deck-relic-item">
+                    <span className="relic-emoji">{relic.emoji}</span>
+                    <span className="relic-name">{relic.name}</span>
+                  </div>
+                </SimpleTooltip>
               ))}
             </div>
           </div>
