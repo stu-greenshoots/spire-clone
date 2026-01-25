@@ -87,9 +87,14 @@ After opening a PR, follow this exact sequence:
 5. **Merge only after Mentor approval** → Or let Mentor merge
 
 **Copilot Review Notes:**
-- Copilot review is automatic when enabled in repository settings (Settings > Code review > Copilot)
-- It's NOT added via `--reviewer` flag - it triggers automatically on PR creation
-- If Copilot review isn't appearing, check repo settings
+- Copilot review is configured via repository rulesets (Settings > Rules > Rulesets)
+- It does NOT trigger on initial PR creation - only on subsequent pushes
+- **To trigger Copilot review after creating a PR:**
+  ```bash
+  git commit --allow-empty -m "chore: trigger Copilot review"
+  git push origin <branch-name>
+  ```
+- If Copilot review still isn't appearing, ensure "Automatically request Copilot code review" is enabled in repo rulesets
 
 **Why this matters:**
 - Copilot catches bugs, security issues, and code quality problems
