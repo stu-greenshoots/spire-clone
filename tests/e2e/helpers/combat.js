@@ -81,15 +81,20 @@ export async function fightCombat(page, maxTurns = 30) {
     // Check we're still in combat
     const endTurnBtn = page.locator(SELECTORS.endTurnButton);
     if (!await endTurnBtn.isVisible().catch(() => false)) {
-      // Wait for victory overlay animation to appear
-      await page.waitForTimeout(1500);
-      // Re-check after wait for overlay animations
-      if (await proceedBtn.isVisible().catch(() => false)) return 'victory';
-      if (await goldReward.isVisible().catch(() => false)) return 'victory';
-      if (await victory.isVisible().catch(() => false)) return 'victory';
-      if (await gameOver.isVisible().catch(() => false)) return 'game_over';
-      // One more wait in case overlay is still animating
-      await page.waitForTimeout(1000);
+      // Combat ended - wait for either victory or game over with Playwright waitFor
+      try {
+        // Wait for any victory indicator to appear (up to 10s for animations)
+        await Promise.race([
+          proceedBtn.waitFor({ state: 'visible', timeout: 10000 }),
+          goldReward.waitFor({ state: 'visible', timeout: 10000 }),
+          victory.waitFor({ state: 'visible', timeout: 10000 }),
+          gameOver.waitFor({ state: 'visible', timeout: 10000 })
+        ]);
+      } catch {
+        // Timeout - check what's visible now
+      }
+
+      // Check final state
       if (await proceedBtn.isVisible().catch(() => false)) return 'victory';
       if (await goldReward.isVisible().catch(() => false)) return 'victory';
       if (await victory.isVisible().catch(() => false)) return 'victory';
