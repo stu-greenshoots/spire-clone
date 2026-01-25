@@ -63,10 +63,40 @@ const getEnemyArt = (enemyId, type) => {
   return { art: ' o\n/|\\\n/ \\', color: '#888888' };
 };
 
+// Get specific effect label from effects array
+const getEffectLabel = (effects) => {
+  if (!effects || effects.length === 0) return null;
+
+  const effectNames = {
+    weak: 'Weak',
+    vulnerable: 'Vuln',
+    frail: 'Frail',
+    strength: 'Str',
+    strengthDown: '-Str',
+    dexterity: 'Dex',
+    dexterityDown: '-Dex',
+    ritual: 'Ritual',
+    artifact: 'Artifact',
+    thorns: 'Thorns',
+    metallicize: 'Metal',
+    intangible: 'Intang',
+    regen: 'Regen',
+    entangle: 'Entangle',
+    hex: 'Hex'
+  };
+
+  const parts = effects.map(e => {
+    const name = effectNames[e.type] || e.type;
+    return e.amount ? `${name} ${e.amount}` : name;
+  });
+
+  return parts.join(', ');
+};
+
 // Get intent icon and color
 const getIntentDisplay = (enemy) => {
   if (!enemy.intentData) return { icon: '?', color: '#888', label: 'Unknown' };
-  const { intent, damage, times, block } = enemy.intentData;
+  const { intent, damage, times, block, effects } = enemy.intentData;
 
   const getDamageValue = (dmg) => {
     if (dmg === null || dmg === undefined) return 0;
@@ -87,25 +117,28 @@ const getIntentDisplay = (enemy) => {
   }
   const totalDmg = times > 1 ? `${dmgValue}x${times}` : dmgValue;
 
+  // Get specific effect labels for buff/debuff intents
+  const effectLabel = getEffectLabel(effects);
+
   switch (intent) {
     case INTENT.ATTACK:
       return { icon: '', color: '#ff4444', label: `${totalDmg}`, isAttack: true };
     case INTENT.ATTACK_BUFF:
       return { icon: '', color: '#ff8844', label: `${totalDmg}`, isAttack: true };
     case INTENT.ATTACK_DEBUFF:
-      return { icon: '', color: '#ff44aa', label: `${totalDmg}`, isAttack: true };
+      return { icon: '', color: '#ff44aa', label: effectLabel ? `${totalDmg} +${effectLabel}` : `${totalDmg}`, isAttack: true };
     case INTENT.ATTACK_DEFEND:
       return { icon: '', color: '#ff8866', label: `${totalDmg}`, isAttack: true };
     case INTENT.BUFF:
-      return { icon: '', color: '#44ff44', label: 'Buff' };
+      return { icon: '', color: '#44ff44', label: effectLabel || 'Buff' };
     case INTENT.DEBUFF:
-      return { icon: '', color: '#aa44ff', label: 'Debuff' };
+      return { icon: '', color: '#aa44ff', label: effectLabel || 'Debuff' };
     case INTENT.STRONG_DEBUFF:
-      return { icon: '', color: '#ff44ff', label: 'Strong Debuff' };
+      return { icon: '', color: '#ff44ff', label: effectLabel || 'Strong Debuff' };
     case INTENT.DEFEND:
       return { icon: '', color: '#4488ff', label: block ? `${block}` : 'Block' };
     case INTENT.DEFEND_BUFF:
-      return { icon: '', color: '#44aaff', label: block ? `${block}` : 'Defend' };
+      return { icon: '', color: '#44aaff', label: effectLabel ? `${block || ''} +${effectLabel}` : (block ? `${block}` : 'Defend') };
     case INTENT.SLEEPING:
       return { icon: '', color: '#8888aa', label: 'Zzz' };
     case INTENT.STUN:

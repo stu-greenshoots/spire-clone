@@ -13,6 +13,11 @@ dist-ssr
 coverage
 *.local
 
+# E2E test artifacts
+screenshots/
+playwright-report/
+test-results/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -350,6 +350,7 @@ const MapScreen = () => {
               return (
                 <g
                   key={node.id}
+                  data-testid={`map-node-${node.id}`}
                   onClick={() => accessible && selectNode(node.id)}
                   style={{ cursor: accessible ? 'pointer' : 'default' }}
                   opacity={nodeOpacity}
