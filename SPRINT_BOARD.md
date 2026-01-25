@@ -1,9 +1,9 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-01-25
-**Current Sprint:** 4 (Visual Polish) - PLANNING
-**Integration Branch:** `sprint-3` (Sprint 3 merged to master via PR #31)
-**Next Sprint Plan:** See `docs/SPRINT_4_PLAN.md`
+**Current Sprint:** 4 (Visual Polish) - IN_PROGRESS
+**Integration Branch:** `sprint-4`
+**Sprint Plan:** See `docs/SPRINT_4_PLAN.md`
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
 **Previous:** Sprint 3 COMPLETE (10 PRs merged, 837 tests)
@@ -137,10 +137,10 @@
 
 ---
 
-## Sprint 4: Visual Polish - PLANNING
+## Sprint 4: Visual Polish - IN_PROGRESS
 
 **Goal:** Transform from "functional alpha" to "polished experience"; target 70+ magazine score.
-**Branch:** `sprint-4` (to be created)
+**Branch:** `sprint-4`
 **Plan:** See `docs/SPRINT_4_PLAN.md`
 
 ### Phase A: Map Navigation (Priority)

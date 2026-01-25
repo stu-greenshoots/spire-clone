@@ -1,4 +1,4 @@
-# PM Diary - Sprint 3
+# PM Diary - Sprint 4
 
 ## Role
 Project Manager - Sprint coordination, process, CI/CD, PR management
@@ -112,5 +112,32 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 **My task:** PM-03 (hide Data Editor in production) - XS size, Day 1
 
 **Team readiness:** All members have clear assignments. No blocking dependencies on Day 1 tasks.
+
+---
+
+### Sprint 4 Kickoff
+**Date:** 2026-01-25
+**Status:** Sprint 4 ACTIVE
+
+**What I did:**
+- Created sprint-4 branch from master
+- Pushed sprint-4 to origin
+- Updated SPRINT_BOARD.md status to IN_PROGRESS
+- Created task tracking for all 12 remaining VP tasks
+- Set up task dependencies (VP-02/04 blocked by VP-01, VP-06/07 by VP-05, etc.)
+
+**Sprint 4 Goal:** Visual polish to reach 70+ magazine score
+
+**Tasks remaining (VP-12, VP-13, VP-14 done in Sprint 3):**
+- Phase A: VP-01, VP-02, VP-03, VP-04 (Map navigation)
+- Phase B: VP-05, VP-06, VP-07 (Victory overlay)
+- Phase C: VP-08, VP-09, VP-10, VP-11 (Enemy turn animations)
+- Phase D: VP-15 (Swipe hint removal)
+
+**Parallel tracks:**
+- Map work (Phase A) can run parallel to Victory overlay (Phase B)
+- VP-08 (sequential enemy turns) is the largest task (Size: L)
+
+**Next:** Coordinate team to start parallel work on VP-01 (UX) and VP-05 (UX)
 
 ---
