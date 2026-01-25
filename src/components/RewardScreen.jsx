@@ -50,9 +50,10 @@ const RewardScreen = () => {
           padding: '30px 20px',
           flexWrap: 'wrap'
         }}>
-          {cardRewards.map((card) => (
+          {cardRewards.map((card, index) => (
             <div
               key={card.instanceId}
+              data-testid={`reward-card-${index}`}
               onClick={() => selectCardReward(card)}
               style={{
                 cursor: 'pointer',
@@ -73,6 +74,7 @@ const RewardScreen = () => {
           justifyContent: 'center'
         }}>
           <button
+            data-testid="btn-skip-reward"
             onClick={skipCardReward}
             style={{
               padding: '14px 50px',
@@ -156,6 +158,7 @@ const RewardScreen = () => {
         {/* Gold Reward */}
         {combatRewards?.gold > 0 && (
           <RewardButton
+            testId="reward-gold"
             icon={'\uD83D\uDCB0'}
             title={`${combatRewards.gold} Gold`}
             subtitle="Add to your purse"
@@ -178,6 +181,7 @@ const RewardScreen = () => {
         {/* Card Reward */}
         {combatRewards?.cardRewards && combatRewards.cardRewards.length > 0 && (
           <RewardButton
+            testId="reward-cards"
             icon={'\uD83C\uDCCF'}
             title="Add Card to Deck"
             subtitle="Choose from 3 cards"
@@ -194,6 +198,7 @@ const RewardScreen = () => {
         borderTop: '2px solid #333'
       }}>
         <button
+          data-testid="btn-proceed-map"
           onClick={proceedToMap}
           style={{
             width: '100%',
@@ -252,8 +257,9 @@ const RewardScreen = () => {
 };
 
 // Reward Button Component
-const RewardButton = ({ icon, title, subtitle, onClick, color }) => (
+const RewardButton = ({ icon, title, subtitle, onClick, color, testId }) => (
   <button
+    data-testid={testId}
     onClick={onClick}
     style={{
       display: 'flex',
