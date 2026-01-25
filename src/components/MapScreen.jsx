@@ -59,17 +59,26 @@ const MapScreen = () => {
   const { map, currentFloor, deck } = state;
   const containerRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const lastKnownFloorRef = useRef(null);
 
   const totalFloors = map.length;
 
-  // Track scroll position for mini-map indicator
+  // Track scroll position for mini-map indicator and persistence
   const handleScroll = useCallback((e) => {
     const container = e.target;
     const maxScroll = container.scrollHeight - container.clientHeight;
     if (maxScroll > 0) {
-      setScrollPosition(container.scrollTop / maxScroll);
+      const position = container.scrollTop / maxScroll;
+      setScrollPosition(position);
+      // Save scroll position for restoration on return
+      try {
+        sessionStorage.setItem('mapScrollPosition', container.scrollTop.toString());
+        sessionStorage.setItem('mapScrollFloor', currentFloor.toString());
+      } catch {
+        // sessionStorage not available
+      }
     }
-  }, []);
+  }, [currentFloor]);
 
   // Calculate SVG dimensions and node positions
   const layout = useMemo(() => {
@@ -99,15 +108,42 @@ const MapScreen = () => {
   }, [map, totalFloors]);
 
   // Auto-scroll to current floor on mount and floor change
+  // VP-04: Restore saved scroll position if returning to same floor
   useEffect(() => {
-    if (containerRef.current && currentFloor >= 0) {
+    if (!containerRef.current) return;
+
+    // Check if we should restore saved position (returning to same floor)
+    try {
+      const savedFloor = sessionStorage.getItem('mapScrollFloor');
+      const savedScrollTop = sessionStorage.getItem('mapScrollPosition');
+
+      if (savedFloor !== null && savedScrollTop !== null) {
+        const savedFloorNum = parseInt(savedFloor, 10);
+
+        // If returning to the same floor, restore scroll position
+        if (savedFloorNum === currentFloor && lastKnownFloorRef.current === null) {
+          containerRef.current.scrollTo({
+            top: parseFloat(savedScrollTop),
+            behavior: 'instant'
+          });
+          lastKnownFloorRef.current = currentFloor;
+          return;
+        }
+      }
+    } catch {
+      // sessionStorage not available
+    }
+
+    // Otherwise, scroll to current floor (new floor or first visit)
+    if (currentFloor >= 0 && currentFloor !== lastKnownFloorRef.current) {
       const floorY = layout.positions[map[currentFloor]?.[0]?.id]?.y;
       if (floorY) {
         containerRef.current.scrollTo({
           top: floorY - containerRef.current.clientHeight / 2,
-          behavior: 'smooth'
+          behavior: lastKnownFloorRef.current === null ? 'instant' : 'smooth'
         });
       }
+      lastKnownFloorRef.current = currentFloor;
     }
   }, [currentFloor, layout.positions, map]);
 
