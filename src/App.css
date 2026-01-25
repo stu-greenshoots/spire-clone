@@ -1449,3 +1449,11 @@ button:active {
     display: none;
   }
 }
+
+/* Defeated enemy styling for victory overlay */
+.enemy--defeated {
+  opacity: 0.4;
+  filter: grayscale(80%) brightness(0.6);
+  transform: scale(0.95);
+  transition: all 0.3s ease;
+}
