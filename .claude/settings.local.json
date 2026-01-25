@@ -18,7 +18,23 @@
       "Bash(git push:*)",
       "Bash(gh auth:*)",
       "Bash(git checkout:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh pr comment:*)",
+      "Bash(gh pr merge:*)",
+      "Bash(npm run test:run:*)",
+      "WebFetch(domain:assetstore.unity.com)",
+      "WebFetch(domain:www.gameuidatabase.com)",
+      "WebFetch(domain:www.spriters-resource.com)",
+      "WebFetch(domain:itch.io)",
+      "WebFetch(domain:tann.itch.io)",
+      "WebFetch(domain:opengameart.org)",
+      "Bash(xargs:*)",
+      "Bash(ffmpeg:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(pkill:*)",
+      "Bash(echo \"\n\n---END V1---\")",
+      "Bash(echo \"\n\n---END V2---\")",
+      "Bash(curl:*)"
     ]
   }
 }

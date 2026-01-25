@@ -37,7 +37,7 @@ Each team role has a dedicated command that sets up their identity and responsib
 | AR | `engineer-ar.md` | Audio/save/settings work |
 | UX | `engineer-ux.md` | Combat feedback/polish work |
 | GD | `engineer-gd.md` | Art/asset work |
-| SL | `engineer-sl.md` | Story/events work |
+| Varrow | `engineer-varrow.md` | Narrative design/loop-story synergy |
 | QA | `engineer-qa.md` | Testing work |
 
 **When spawning sub-agents:** Always include reference to their engineer command and remind them to read their diary first.
@@ -141,11 +141,11 @@ Each "team member" is a role with owned files and responsibilities. When working
 - **Sprint 3 tasks:** GD-05 (theme brightness), GD-06 (sprite sheets)
 - **Rule:** Always provide fallback when assets missing. Lazy-load images.
 
-### SL (Story Line)
-- **Owns:** `src/data/events.js`, `src/data/flavorText.js`
-- **Focus:** Events, world building, narrative, dialogue
-- **Sprint 3 tasks:** Support role (reviews, smoke testing, tooltip content)
-- **Rule:** Only reference effects/systems that currently exist. No forward-referencing unbuilt features.
+### Varrow (The Loop Doctor)
+- **Owns:** `src/data/events.js`, `src/data/flavorText.js`, `src/data/bossDialogue.js`
+- **Focus:** Narrative design, mechanic-story synergy, emergent storytelling, loop justification
+- **Specialty:** Indie roguelikes - makes the gameplay loop and story inseparable
+- **Rule:** Story must embrace what the game IS, not explain it away. No derivative concepts. Challenge premises ruthlessly.
 
 ### QA (Tester)
 - **Owns:** `src/test/`, test infrastructure
