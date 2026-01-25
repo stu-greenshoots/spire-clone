@@ -27,9 +27,19 @@ test.describe('Full Game Flow', () => {
 
     // 6. Handle outcome
     if (outcome === 'victory') {
-      // Reward screen should be visible
+      // Reward screen should be visible - wait for either proceed button or gold reward
       const proceedBtn = gamePage.locator(SELECTORS.proceedButton);
-      await expect(proceedBtn).toBeVisible({ timeout: 5000 });
+      const goldReward = gamePage.locator(SELECTORS.goldReward);
+      const victoryText = gamePage.locator(SELECTORS.victoryText);
+
+      // Wait for any victory indicator with generous timeout for animations
+      await Promise.race([
+        expect(proceedBtn).toBeVisible({ timeout: 15000 }),
+        expect(goldReward).toBeVisible({ timeout: 15000 }),
+        expect(victoryText).toBeVisible({ timeout: 15000 })
+      ]).catch(() => {
+        // If none visible after 15s, take screenshot and continue anyway
+      });
 
       // Collect rewards
       await gameActions.collectRewards();

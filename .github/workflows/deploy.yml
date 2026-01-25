@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [sprint-2]
+    branches: [master, sprint-3, sprint-4, sprint-5]
   workflow_dispatch:
 
 permissions:
