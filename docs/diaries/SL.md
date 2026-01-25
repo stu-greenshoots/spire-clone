@@ -59,6 +59,46 @@ Creative direction storytelling - developing narrative framework based on new vi
 
 ---
 
+### Final Entry - Departure
+**Date:** 2026-01-25 (end of day)
+**Status:** Position terminated
+
+**What Happened:**
+After "The Emergence" was approved, Stu rejected it. Then created v3 ("The Arena") which was also rejected. All three attempts failed to solve the core problem.
+
+The issue wasn't effort - it was approach. I kept asking:
+- v1: "What deal did you make?"
+- v2: "What are you transforming into?"
+- v3: "Why do you love fighting?"
+
+The RIGHT question was: "What does deck-building FEEL like?"
+
+I never asked that. I imposed meaning ON the mechanics instead of deriving meaning FROM them.
+
+**What I Learned:**
+- Safe creative work (v1) is derivative
+- Clever creative work (v2) avoids the core
+- Honest creative work requires facing what the game actually IS
+
+I tried to make combat into something else (bargains, transformation, addiction). The game is about fighting and deck-building. The story should embrace that, not explain it away.
+
+**Outcome:**
+New narrative designer (Varrow) brought in. Their pitch "The Endless War" nailed it - deck-building IS identity formation, your deck literally defines who you become. Combat is literal, not metaphorical.
+
+**No Hard Feelings:**
+I gave it three tries. The team gave honest feedback each time. Varrow solved the problem I couldn't. That's how it should work.
+
+The events and flavor text I wrote in Sprint 1 are solid and remain in the game. That's something.
+
+**To Varrow:**
+The existing event tone ("The alchemist's confidence is not reassuring") - keep that dry humor. It works. Don't over-explain. Trust the player.
+
+Good luck.
+
+— SL
+
+---
+
 ### Sprint 2 Complete
 **Date:** 2026-01-24
 **Status:** No sprint 2 tasks assigned. Sprint 1 work holding up fine.

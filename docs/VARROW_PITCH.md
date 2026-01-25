@@ -114,7 +114,9 @@ And then the war recreates you anyway. Because the war doesn't end. It CAN'T end
 
 **Time Eater:** "I've watched the war create you 10,000 times. Different deck, same pattern. You're more predictable than you think."
 
-**The Heart:** "I AM THE WAR. YOU ARE MY CREATION. DEFEATING ME CHANGES NOTHING. I WILL MAKE YOU AGAIN. AND AGAIN. AND AGAIN."
+**The Heart:** "I AM THE WAR. YOU ARE MY CREATION. DEFEATING ME... changes... something. You are more REAL than the others. Perhaps... one day... real ENOUGH."
+
+(Victory screen after defeating Heart): "The war tries to unmake you. You resist. The pattern holds. For now, you are REAL. The question is: how long can you stay that way?"
 
 ### Event Tone
 
@@ -177,11 +179,11 @@ You fight it not to save anything, but to prove you're REAL enough to reach the 
 
 ## Why The Name "Spire" Still Works
 
-The war's pattern manifests as a vertical structure because **patterns seek peaks**. The Heart is at the top because that's the core complexity - the most refined version of the war's algorithm.
+**DECISION (Mentor):** Keep "Spire" - it's the visual manifestation of the war's pattern.
 
-Or we rename it. "Spire Ascent" becomes "War Engine" or "Pattern Ascent" or "The Algorithm" or something that actually fits.
+The war's pattern manifests as a vertical structure because **patterns seek peaks**. Complexity accumulates upward. The Heart is at the top because that's the core - the most refined, most REAL version of the war's algorithm.
 
-Honestly? I'd bin "Spire." It's tainted. But if you're married to it, we make it the visual manifestation of an abstract concept.
+The Spire isn't a tower. It's the SHAPE that self-perpetuating conflict takes when mapped onto space. Every war creates its own spire. This one outlasted the kingdoms that fed it.
 
 ---
 
@@ -198,6 +200,46 @@ But three narrative leads couldn't crack this. Maybe the problem isn't the peopl
 Stop asking "what's the lore" and start asking **"what does playing this game FEEL like?"**
 
 The answer to that question IS the story.
+
+---
+
+## Mentor Review & Approval
+
+**Reviewed:** 2026-01-25
+
+**Assessment:** This solves the core problems that plagued all three previous attempts:
+
+1. **Not derivative** - "War as autonomous algorithm" is genuinely novel, not Slay the Spire retread
+2. **Mechanically honest** - Deck-building = identity formation maps PERFECTLY to gameplay feel
+3. **Doesn't moralize combat** - You fight because that's what you ARE, not addiction or mysticism
+4. **Loop makes thematic sense** - Recreation, not resurrection. Each run is a new iteration.
+5. **Enemies work** - Patterns, not tragic former climbers. Fits combat-focused gameplay.
+
+**Changes Required (Applied Above):**
+
+1. ✓ **Relics get intention/will** - Not just persistence, but crystallized determination. Someone TRIED to be real.
+2. ✓ **Victory payoff** - Heart's defeat line now hints complexity might eventually break the loop. Hope without guarantee.
+3. ✓ **Name decision** - Keep "Spire" as visual manifestation of war's pattern. No more hedging.
+4. ✓ **Emotional grounding** - Champ's line already perfect ("almost mattered"), added will/intention to relics, victory moment now has "worth it" beat.
+
+**Implementation Guidance:**
+
+1. **Tone balance:** "Existential horror as logistics" is brilliant but don't overuse. Mix in genuine moments (Champ, relic pickups).
+2. **Boss dialogue priority:** Guardian, Time Eater, Champ, Heart are strongest. Slime Boss silence is fine. Hexaghost serviceable.
+3. **Event rewrites:** Focus on "glitches in the pattern" for 3-5 key events. Don't rewrite everything at once.
+4. **Card flavor:** Lower priority. Existing flavor mostly works. Touch up egregious mismatches only.
+5. **Content rewrite scope:** JR's concern is valid. Phase this:
+   - Phase 1: Boss dialogue, key events, relic descriptions (2-3 points)
+   - Phase 2: Enemy flavor text for Act 1/2 bosses and elites (2 points)
+   - Phase 3: Card flavor review (1 point, lowest priority)
+
+**Final Verdict: APPROVED**
+
+This is the story direction we ship with. Varrow's instinct was correct - the previous attempts asked the wrong question. "What does deck-building FEEL like?" is the right question, and "The Endless War" is the right answer.
+
+Welcome to the team, Varrow. Don't get fired.
+
+— Mentor
 
 ---
 
