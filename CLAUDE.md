@@ -4,16 +4,52 @@
 
 Before starting any work, read these files to understand current state:
 
-1. **SPRINT_3_PLAN.md** - Sprint 3 kickoff plan, task assignments, delivery order
-2. **SPRINT_BOARD.md** - Current sprint, task status, what's in progress
-3. **PROCESS.md** - Branch naming, PR workflow, commit conventions
-4. **DEFINITION_OF_DONE.md** - When is a task actually done (not just committed)
+1. **SPRINT_BOARD.md** - Current sprint, task status, what's in progress
+2. **docs/GIT_FLOW.md** - Complete git workflow (MANDATORY for all engineers)
+3. **DEFINITION_OF_DONE.md** - When is a task actually done (not just committed)
+4. **Your diary** - `docs/diaries/{ROLE}.md` - Your previous context and notes
 
 For deeper context (read when relevant to your task):
+- **SPRINT_4_PLAN.md** - Current sprint plan, task assignments, delivery order
+- **PROCESS.md** - Branch naming, PR workflow, commit conventions
 - **DEPENDENCIES.md** - Task ordering, conflict zones, what blocks what
 - **TEAM_PLAN.md** - Full phase breakdown, all task details
 - **GAME_REFERENCE.md** - Card/enemy/relic mechanics (for content tasks)
-- **review.html** - Game Zone Magazine feedback (58/100) that drives Sprint 3
+
+## Commands
+
+### Orchestration Commands
+
+| Command | Purpose |
+|---------|---------|
+| `pm-sprint.md` | Sprint execution - PR management, engineer spawning, daily orchestration |
+| `pm-plan.md` | Sprint planning - collaborative planning with team input |
+| `mentor.md` | Lead engineer - final decisions, unblocking, quality enforcement |
+
+### Engineer Commands
+
+Each team role has a dedicated command that sets up their identity and responsibilities:
+
+| Role | Command | Purpose |
+|------|---------|---------|
+| BE | `engineer-be.md` | Backend/architecture work |
+| JR | `engineer-jr.md` | Junior dev content work |
+| AR | `engineer-ar.md` | Audio/save/settings work |
+| UX | `engineer-ux.md` | Combat feedback/polish work |
+| GD | `engineer-gd.md` | Art/asset work |
+| SL | `engineer-sl.md` | Story/events work |
+| QA | `engineer-qa.md` | Testing work |
+
+**When spawning sub-agents:** Always include reference to their engineer command and remind them to read their diary first.
+
+### When to Use Each Command
+
+| Situation | Command |
+|-----------|---------|
+| Starting a new sprint | `pm-plan.md` - collaborative planning |
+| Daily sprint execution | `pm-sprint.md` - PR management, engineer coordination |
+| PRs stuck or decisions needed | `mentor.md` - unblock and decide |
+| Individual task work | `engineer-{role}.md` - role-specific work |
 
 ## Diaries
 
@@ -27,81 +63,44 @@ Propose → others review → PM resolves. No silent changes to things other peo
 
 ## Git Flow
 
-### Branch Structure
-```
-master                              (stable, protected)
-  └── sprint-N                      (integration branch)
-       └── task-id-description      (one task, one branch - flat names)
-```
+**Full documentation: `docs/GIT_FLOW.md`** - Read this before every task.
 
-### Branch Naming
-```
-{task-id}-{short-description}
-```
-- All lowercase, hyphens only
-- No auto-generated suffixes
-- No `sprint-N/` prefix (conflicts with git refs per DEC-013)
-- Examples: `fix-01-potion-integration`, `be-02-normalize-state`, `ux-02-card-tooltips`
+### Quick Reference
 
-### Workflow Per Task
 ```bash
-git checkout sprint-3
-git pull origin sprint-3
-git checkout -b task-id-description
+# Complete workflow
+git checkout sprint-N && git pull origin sprint-N
+git checkout -b {task-id}-{description}
 # ... do work ...
 npm run validate                    # MUST pass before push
 git add <specific-files>
-git commit --author="ROLE <role@spire-ascent.dev>" -m "TASK-ID: description"
-git push -u origin task-id-description
-# Open PR targeting sprint-3 branch
+git commit --author="{ROLE} <{role}@spire-ascent.dev>" -m "{TASK-ID}: description"
+git push -u origin {task-id}-{description}
+gh pr create --base sprint-N --title "{TASK-ID}: Description" --body "..."
+# ... perform Copilot review (security, bugs, quality) ...
+# ... perform Mentor review (architecture, integration) ...
+gh pr merge --squash --delete-branch
 ```
 
-### Commit Messages
-```
-TASK-ID: short description
+### Critical Rules
 
-Examples:
-FIX-01: Wire usePotion action through GameContext
-BE-02: Extract player state to use entity IDs
-JR-03: Add 5 Act 2 normal enemies with movesets
-```
-
-### PR Rules
-- Target: `sprint-N` branch (never master directly)
-- Title: `TASK-ID: Description`
-- Max ~300 lines changed
-- CI must pass
-- Smoke test documented
-- Use the template in `.github/pull_request_template.md`
+1. **Always use your author flag** - `--author="{ROLE} <{role}@spire-ascent.dev>"`
+2. **Always run `npm run validate`** before pushing
+3. **Always perform both reviews** - Copilot AND Mentor
+4. **Never auto-merge** - Complete all review steps first
+5. **Never skip CI** - If CI fails, fix before proceeding
 
 ### PR Review Process (MANDATORY)
 
 **DO NOT AUTO-MERGE PRs. EVER.**
 
-After opening a PR, follow this exact sequence:
+For each PR:
+1. **Check CI status** - Must be passing
+2. **Perform Copilot Review** - Security, bugs, quality checks
+3. **Perform Mentor Review** - Architecture, integration, Definition of Done
+4. **Merge only after approval** - Both reviews must pass
 
-1. **Create PR** → Stop here. Do not merge.
-2. **Wait for Copilot review** → GitHub Copilot automatically reviews PRs (if enabled in repo settings)
-3. **Address all HIGH/MEDIUM Copilot findings** → Fix issues, push updates
-4. **Wait for Mentor review** → Mentor (Lead Engineer) reviews and approves
-5. **Merge only after Mentor approval** → Or let Mentor merge
-
-**Copilot Review Notes:**
-- Copilot review is configured via repository rulesets (Settings > Rules > Rulesets)
-- It does NOT trigger on initial PR creation - only on subsequent pushes
-- **To trigger Copilot review after creating a PR:**
-  ```bash
-  git commit --allow-empty -m "chore: trigger Copilot review"
-  git push origin <branch-name>
-  ```
-- If Copilot review still isn't appearing, ensure "Automatically request Copilot code review" is enabled in repo rulesets
-
-**Why this matters:**
-- Copilot catches bugs, security issues, and code quality problems
-- Mentor ensures architectural consistency and catches integration issues
-- Auto-merging bypasses quality gates and introduces bugs
-
-**If you merge without review, you are breaking the process.**
+See `docs/GIT_FLOW.md` for detailed review templates and checklists.
 
 ## Team Members
 
@@ -179,19 +178,25 @@ npm run build            # Production build
 10. **No forward-referencing.** Don't call APIs that don't exist yet.
 11. **NEVER auto-merge PRs.** Wait for Copilot review → address findings → wait for Mentor approval → then merge.
 
-## Current State (Sprint 4 - Planning)
+## Current State (Sprint 4 - Active)
 
-- **Branch:** `master` (Sprint 3 merged via PR #31)
+- **Branch:** `sprint-4` (create if not exists)
 - **Previous Sprint:** Sprint 3 COMPLETE (10 PRs merged, all validation gates passed)
 - **Tests:** 837 passing (29 test files)
 - **Lint:** 0 errors
 - **Build:** Passing
-- **Runtime:** All systems functional (potions, save/load, card effects, tooltips, upgrades, damage preview)
-- **Review Score:** 58/100 (Game Zone Magazine) - awaiting re-review after Sprint 3 polish
+- **Runtime:** All systems functional
+- **Review Score:** 58/100 (Game Zone Magazine) - target 70+
 - **Diaries:** `docs/diaries/{ROLE}.md` - update daily
-- **Sprint 4 Plan:** See `docs/SPRINT_4_PLAN.md` (15 visual polish tasks VP-01 to VP-15)
+- **Sprint 4 Plan:** See `SPRINT_4_PLAN.md` (15 visual polish tasks VP-01 to VP-15)
 - **Sprint 4 Focus:** Map auto-scroll, victory overlay, sequential enemy turns, visual polish
-- **Next:** Create `sprint-4` integration branch and begin Phase A tasks
+
+### Sprint Infrastructure Checklist
+- [ ] `sprint-4` branch exists
+- [ ] Draft PR from `sprint-4` to `master` with task checklist
+- [ ] All engineers using their `engineer-{role}.md` commands
+- [ ] All commits authored correctly
+- [ ] All PRs reviewed before merge
 
 ## Architecture Quick Reference
 

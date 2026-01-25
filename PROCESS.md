@@ -1,7 +1,26 @@
 # Development Process - Spire Ascent
 
 **Established:** 2026-01-24 (Brainstorm Session 2)
-**Purpose:** Prevent the sprint 1 chaos from repeating. Use GitHub properly.
+**Updated:** 2026-01-25 (Sprint 4 - Process Refinement)
+**Purpose:** Prevent sprint chaos. Use GitHub properly. Take ownership.
+
+---
+
+## Key Documents
+
+| Document | Purpose |
+|----------|---------|
+| `docs/GIT_FLOW.md` | Complete git workflow - READ BEFORE EVERY TASK |
+| `docs/diaries/{ROLE}.md` | Individual engineer diaries |
+
+### Commands
+
+| Command | When to Use |
+|---------|-------------|
+| `.claude/commands/pm-plan.md` | Starting a new sprint - collaborative planning with team |
+| `.claude/commands/pm-sprint.md` | Daily sprint execution - PR management, engineer spawning |
+| `.claude/commands/mentor.md` | Unblocking PRs, making decisions, quality enforcement |
+| `.claude/commands/engineer-{role}.md` | Individual engineer task work |
 
 ---
 
@@ -128,9 +147,9 @@ FIX-01: Wire usePotion action through GameContext
 QA-03: Add Playwright E2E test for combat flow
 ```
 
-### Author Identity
+### Author Identity (MANDATORY)
 
-Each team member commits as themselves using the `--author` flag:
+**Every commit MUST use the correct author flag for the role doing the work.**
 
 ```
 PM:  --author="PM <pm@spire-ascent.dev>"
@@ -148,12 +167,14 @@ Example:
 git commit --author="JR <jr@spire-ascent.dev>" -m "FIX-01: Wire usePotion action through GameContext"
 ```
 
+**If you forget the author flag, you are not properly taking on your role.**
+
 ### Rules
 - Present tense, imperative mood ("Add" not "Added")
 - First line under 72 characters
 - Task ID prefix always included
 - No generic messages ("fix stuff", "updates", "wip")
-- Always use your role's `--author` flag
+- **Always use your role's `--author` flag** - this is not optional
 
 ---
 
@@ -240,13 +261,45 @@ Backlog -> Sprint Board -> Branch Created -> PR Opened -> CI Pass -> Review -> M
 
 ## Sprint Cadence
 
-| When | What | Who |
-|------|------|-----|
-| Sprint start | Brainstorm session, scope tasks, assign owners | All |
-| Daily | Async standup: what's done, what's blocked | All |
-| Per task | Branch -> PR -> Review -> Merge cycle | Owner |
-| Mid-sprint | Check: are P0 bugs fixed? Any scope creep? | PM |
-| Sprint end | Integration PR, full validation, retro | All |
+| When | What | Who | Command |
+|------|------|-----|---------|
+| Sprint planning | Collaborative planning, team input | All | `pm-plan.md` |
+| Daily execution | PR management, engineer spawning | PM | `pm-sprint.md` |
+| Per task | Branch -> PR -> Review -> Merge | Engineer | `engineer-{role}.md` |
+| Blockers/decisions | Unblock PRs, make calls | Mentor | `mentor.md` |
+| Sprint end | Integration PR, full validation | All | `pm-sprint.md` |
+
+---
+
+## Sprint Planning Process
+
+Sprint planning is collaborative, not dictated. Use `pm-plan.md` command.
+
+### Planning Phases
+
+1. **Context Gathering** - Read all project state, diaries, previous sprint
+2. **PM + Mentor Draft** - Create initial plan with priorities and assignments
+3. **Team Input Round** - Each engineer reviews and provides perspective
+4. **Synthesis & Iteration** - Address concerns, iterate until aligned
+5. **Finalize** - Create sprint plan doc, update board, create infrastructure
+
+### Engineer Input Questions
+
+Each engineer is asked:
+- Are assigned tasks clear and achievable?
+- Is sizing accurate?
+- Anything missing that should be in the sprint?
+- Any priority disagreements?
+- Can you handle the workload?
+- Any better approaches?
+
+### Planning Outputs
+
+- `SPRINT_N_PLAN.md` - Finalized sprint plan
+- Updated `SPRINT_BOARD.md` - Tasks with owners and phases
+- Updated `docs/DECISIONS.md` - Any decisions made during planning
+- Updated team diaries - Each engineer's assignments
+- Sprint branch and draft PR created
 
 ---
 
@@ -270,3 +323,43 @@ A feature is validated when:
 4. It doesn't break other features (regression level)
 
 **Tests passing alone is NOT validation.** Sprint 1 proved this - 763 tests passed while the potion UI, save system, and card effects were broken at runtime.
+
+---
+
+## Engineer Responsibility
+
+Each engineer is responsible for the FULL lifecycle of their work:
+
+### Before Starting
+1. Read your diary (`docs/diaries/{ROLE}.md`)
+2. Read the git flow (`docs/GIT_FLOW.md`)
+3. Read your engineer command (`.claude/commands/engineer-{role}.md`)
+4. Check sprint board for your assigned tasks
+
+### During Work
+1. Stay within your owned files
+2. Run `npm run validate` frequently
+3. Commit with proper `--author` flag
+4. Keep PRs under 300 lines
+
+### Before Merge
+1. Create PR with full template
+2. Verify CI is passing
+3. Perform Copilot review (security, bugs, quality)
+4. Perform Mentor review (architecture, integration)
+5. Document smoke test evidence
+6. Only then merge
+
+### After Merge
+1. Update your diary with session notes
+2. Pull latest sprint branch
+3. Check sprint board for next task
+
+### Taking Ownership Means:
+- You ARE the role, not just completing tasks
+- You catch your own bugs before review
+- You document what you tested
+- You update the sprint draft PR after your merge
+- You never skip steps because "it's just a small change"
+
+**If a PR sits unreviewed, that's a process failure.** If CI is failing, that blocks everything. If reviews are superficial, bugs slip through. Own your work end-to-end.
