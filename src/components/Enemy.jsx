@@ -150,14 +150,35 @@ const getIntentDisplay = (enemy) => {
   }
 };
 
-const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = false }) {
+const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = false, defeated = false }) {
   const [isEntering, setIsEntering] = useState(true);
   const [imageReady, setImageReady] = useState(() => hasImage(enemy.id));
+  const [prevBlock, setPrevBlock] = useState(enemy.block || 0);
+  const [showBlockGained, setShowBlockGained] = useState(false);
   const hpPercentage = (enemy.currentHp / enemy.maxHp) * 100;
+
+  // Track block changes to trigger animation
+  useEffect(() => {
+    if (enemy.block > prevBlock) {
+      // Block was gained - trigger animation
+      setShowBlockGained(true);
+      const timer = setTimeout(() => {
+        setShowBlockGained(false);
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+    setPrevBlock(enemy.block || 0);
+  }, [enemy.block, prevBlock]);
   const enemyArt = getEnemyArt(enemy.id, enemy.type);
   const intentDisplay = getIntentDisplay(enemy);
   const isBoss = enemy.type === 'boss';
   const isElite = enemy.type === 'elite';
+
+  // Defeated state styling
+  const defeatedStyle = defeated ? {
+    filter: 'grayscale(0.8) brightness(0.5)',
+    opacity: 0.6
+  } : {};
 
   // Asset pipeline: lazy-load enemy image (don't block initial render)
   useEffect(() => {
@@ -227,7 +248,7 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
               ? '2px solid #ffcc00'
               : '2px solid rgba(255, 255, 255, 0.1)',
         minWidth: isBoss ? '130px' : '100px',
-        cursor: 'pointer',
+        cursor: defeated ? 'default' : 'pointer',
         touchAction: 'manipulation',
         boxShadow: targeted
           ? '0 0 20px rgba(255, 215, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.1)'
@@ -235,8 +256,9 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
             ? '0 4px 20px rgba(204, 51, 102, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)'
             : '0 4px 15px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)',
         transition: isEntering ? 'none' : 'all 0.2s ease',
-        animation: getAnimation(),
-        position: 'relative'
+        animation: defeated ? 'none' : getAnimation(),
+        position: 'relative',
+        ...defeatedStyle
       }}
     >
       {/* Elite/Boss Badge */}
@@ -448,18 +470,28 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
 
       {/* Block Display */}
       {enemy.block > 0 && (
-        <div data-testid="enemy-block" style={{
-          marginTop: '6px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '4px',
-          background: 'linear-gradient(180deg, #4488ff44 0%, #4488ff22 100%)',
-          border: '1px solid #4488ff',
-          padding: '3px 10px',
-          borderRadius: '12px',
-          boxShadow: '0 0 8px rgba(68, 136, 255, 0.4)'
-        }}>
-          <span style={{ fontSize: '12px' }}></span>
+        <div
+          data-testid="enemy-block"
+          className={showBlockGained ? 'enemy-block-gained' : ''}
+          style={{
+            marginTop: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            background: 'linear-gradient(180deg, #4488ff44 0%, #4488ff22 100%)',
+            border: '1px solid #4488ff',
+            padding: '3px 10px',
+            borderRadius: '12px',
+            boxShadow: showBlockGained
+              ? '0 0 20px rgba(68, 136, 255, 0.8), 0 0 40px rgba(68, 136, 255, 0.4)'
+              : '0 0 8px rgba(68, 136, 255, 0.4)',
+            animation: showBlockGained ? 'enemyBlockAppear 0.5s ease-out' : 'none',
+            transition: 'box-shadow 0.3s ease'
+          }}>
+          <span style={{
+            fontSize: '14px',
+            animation: showBlockGained ? 'shieldIconPulse 0.5s ease-out' : 'none'
+          }}>🛡️</span>
           <span style={{
             color: '#88ccff',
             fontSize: '12px',

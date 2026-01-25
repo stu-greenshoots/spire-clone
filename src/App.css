@@ -211,6 +211,27 @@ button:active {
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* Enemy block gained animation (VP-11) */
+@keyframes enemyBlockAppear {
+  0% { transform: scale(0.3); opacity: 0; }
+  40% { transform: scale(1.2); opacity: 1; }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Shield icon pulse when enemy gains block (VP-11) */
+@keyframes shieldIconPulse {
+  0% { transform: scale(0.5) rotate(-10deg); opacity: 0; }
+  30% { transform: scale(1.4) rotate(5deg); opacity: 1; }
+  60% { transform: scale(1.1) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0); opacity: 1; }
+}
+
+/* Enemy block gained glow class (VP-11) */
+.enemy-block-gained {
+  animation: enemyBlockAppear 0.5s ease-out;
+}
+
 /* Player hit flash */
 @keyframes playerHit {
   0%, 100% { filter: brightness(1); }
@@ -1419,3 +1440,62 @@ button:active {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
+
+/* ==================== SWIPE HINT (VP-15) ==================== */
+
+/* Hide swipe hint on non-touch devices (devices with hover capability) */
+@media (hover: hover) {
+  .swipe-hint {
+    display: none;
+  }
+}
+
+/* Defeated enemy styling for victory overlay */
+.enemy--defeated {
+  opacity: 0.4;
+  filter: grayscale(80%) brightness(0.6);
+  transform: scale(0.95);
+  transition: all 0.3s ease;
+}
+
+
+/* ==================== VICTORY TRANSITION (VP-07) ==================== */
+
+@keyframes victorySlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes victoryContentAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.victory-overlay-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.victory-content-panel {
+  animation: victorySlideUp 0.4s ease-out 0.1s both;
+}
+
+.victory-reward-button {
+  animation: victoryContentAppear 0.3s ease-out backwards;
+}
+
+.victory-reward-button:nth-child(1) { animation-delay: 0.2s; }
+.victory-reward-button:nth-child(2) { animation-delay: 0.3s; }
+.victory-reward-button:nth-child(3) { animation-delay: 0.4s; }
+

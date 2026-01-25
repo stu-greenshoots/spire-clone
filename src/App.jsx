@@ -19,6 +19,9 @@ const DataEditor = lazy(() => import('./components/DataEditor'));
 const GameContent = () => {
   const { state } = useGame();
 
+  // Check if we're in victory/reward phase (show overlay on combat screen)
+  const isVictoryPhase = state.phase === GAME_PHASE.COMBAT_REWARD || state.phase === GAME_PHASE.CARD_REWARD;
+
   const renderPhase = () => {
     switch (state.phase) {
       case GAME_PHASE.MAIN_MENU:
@@ -29,7 +32,13 @@ const GameContent = () => {
         return <CombatScreen />;
       case GAME_PHASE.COMBAT_REWARD:
       case GAME_PHASE.CARD_REWARD:
-        return <RewardScreen />;
+        // Keep combat screen visible with defeated enemies, overlay reward screen
+        return (
+          <>
+            <CombatScreen showDefeatedEnemies={true} />
+            <RewardScreen isOverlay={true} />
+          </>
+        );
       case GAME_PHASE.REST_SITE:
         return <RestSite />;
       case GAME_PHASE.SHOP:
@@ -48,6 +57,8 @@ const GameContent = () => {
   };
 
   const hideChrome = state.phase === GAME_PHASE.DATA_EDITOR || state.phase === GAME_PHASE.MAIN_MENU;
+  // Hide player status bar during victory overlay to avoid duplicate info
+  const hideStatusBar = hideChrome || isVictoryPhase;
 
   return (
     <div className="game-container">
@@ -55,7 +66,7 @@ const GameContent = () => {
       <Suspense fallback={<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888' }}>Loading...</div>}>
         {renderPhase()}
       </Suspense>
-      {!hideChrome && <PlayerStatusBar />}
+      {!hideStatusBar && <PlayerStatusBar />}
     </div>
   );
 };
