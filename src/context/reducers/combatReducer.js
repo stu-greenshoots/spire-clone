@@ -2,7 +2,6 @@ import { handleSelectCard, handleCancelTarget } from './combat/selectCardAction'
 import { handlePlayCard } from './combat/playCardAction';
 import { handleEndTurn } from './combat/endTurnAction';
 import { GAME_PHASE } from '../GameContext';
-import { shuffleArray } from '../../utils/mapGenerator';
 import { handleExhaustTriggers } from '../../systems/effectProcessor';
 
 function handleSelectCardFromPile(state, action) {

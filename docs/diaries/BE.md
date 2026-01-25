@@ -88,3 +88,16 @@ Back Ender - Architecture, state management, performance
 **Ready for Sprint 3:** Yes. BE-05 (damage preview with modifiers) queued.
 
 ---
+
+### Sprint 2 Validation Gate Sign-off
+**Date:** 2026-01-24
+**Status:** SIGNED OFF
+**Review:**
+- Confirmed BE-02 state normalization works correctly in full playthrough tests
+- Multi-floor progression exercises instanceId-based targeting without crashes
+- Card effects with ctx.hand (FIX-03) confirmed working through combat loop tests
+- useGame hook shape stable — all 20 actions exercised in fullPlaythrough.test.js
+- Removed unused `shuffleArray` import from combatReducer.js (artifact from normalization work)
+**Verdict:** Architecture is stable. No regressions detected. Ready to merge sprint-2 → master.
+
+---

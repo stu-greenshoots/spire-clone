@@ -147,21 +147,22 @@ npm run build            # Production build
 9. **No unused imports/variables.** Lint must be clean.
 10. **No forward-referencing.** Don't call APIs that don't exist yet.
 
-## Current State (Sprint 2 - Phase B In Progress)
+## Current State (Sprint 2 - COMPLETE)
 
-- **Branch:** `sprint-2` (integration branch, deploys to GitHub Pages)
-- **P0 Bugs:** 0 open (all 3 fixed and merged: FIX-01, FIX-02, FIX-03)
-- **P1/P2 Bugs:** 2 open (enemy block FIX-05, test selectors FIX-06)
-- **Tests:** 809 passing (28 test files)
-- **Lint:** 0 errors, 1 warning (unused shuffleArray in combatReducer.js)
+- **Branch:** `sprint-2` (integration branch, all PRs merged)
+- **P0 Bugs:** 0 open (FIX-01, FIX-02, FIX-03 merged)
+- **P1/P2 Bugs:** 0 open (FIX-04, FIX-05, FIX-06 merged)
+- **Tests:** 837 passing (29 test files)
+- **Lint:** 0 errors
 - **Build:** Passing
 - **Runtime:** Potions, save/load, card effects all WORKING
-- **Open PRs:** #13 (UX-02, +217/-7), #14 (JR-02, +166/-2), #7 (sprint-2→master, draft)
-- **Phase A:** COMPLETE (FIX-01, FIX-02, FIX-03, FIX-04 merged)
-- **Phase B:** In progress (UX-02 PR #13, JR-02 PR #14 open; BE-02, GD-02 pending)
+- **All PRs merged:** 11 PRs into sprint-2 branch
+- **Phase A:** COMPLETE
+- **Phase B:** COMPLETE
+- **Phase C:** PARTIAL (AR-03, QA-03 deferred to Sprint 3)
 - **Diaries:** `docs/diaries/{ROLE}.md` - update daily
 - **Review:** Game Zone magazine scored 58/100 (see review.html). Sprint 3 backlog derived from feedback.
-- **Decisions:** 6 open proposals awaiting PM resolution (DEC-004 through DEC-011)
+- **Decisions:** All resolved (DEC-001 through DEC-013)
 
 ## Architecture Quick Reference
 

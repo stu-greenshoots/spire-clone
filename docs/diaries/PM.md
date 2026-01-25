@@ -88,3 +88,26 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 - Kick off remaining Phase B tasks (BE-02, GD-02)
 
 ---
+
+### Sprint 2 Validation Gate - COMPLETE
+**Date:** 2026-01-24
+**Status:** ALL GATES PASSED. Sprint 2 ready for master merge.
+**Final checklist:**
+- [x] All P0 bugs fixed and validated at runtime
+- [x] `npm run validate` passes (837+ tests green across 29 files)
+- [x] Full game playthrough without crashes (fullPlaythrough.test.js)
+- [x] Potion use works in combat
+- [x] Save/load round-trips correctly
+- [x] Card effects with ctx.hand work
+- [x] All PRs follow PROCESS.md conventions
+- [x] Asset format fixed, enemy block retention works, test selectors stable
+- [x] State normalized to IDs, card tooltips/frames/upgrades functional
+- [x] Auto-save on combat victory
+**Actions taken:**
+- QA wrote fullPlaythrough.test.js (20 tests, all game phases)
+- BE cleaned up unused shuffleArray import (lint warning)
+- Updated SPRINT_BOARD.md, CLAUDE.md with final test counts
+- All team members signed off
+**Next:** Merge sprint-2 → master, then begin Sprint 3 (review feedback & polish).
+
+---
