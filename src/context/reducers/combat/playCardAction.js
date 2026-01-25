@@ -7,6 +7,7 @@ import { createSplitSlimes } from '../../../systems/enemySystem';
 import { handleSpecialEffect, SUPPORTED_EFFECTS } from '../../../systems/cardEffects';
 import { triggerRelics } from '../../../systems/relicSystem';
 import { autoSave } from '../../../systems/saveSystem';
+import { audioManager, SOUNDS } from '../../../systems/audioSystem';
 
 export const handlePlayCard = (state, action) => {
   const { card, targetId } = action.payload;
@@ -20,6 +21,9 @@ export const handlePlayCard = (state, action) => {
   if (!isXCost && (state.player.energy < card.cost || card.unplayable)) {
     return { ...state, selectedCard: null, targetingMode: false };
   }
+
+  // Play card sound
+  audioManager.playSFX(SOUNDS.combat.cardPlay, 'combat');
 
   // For X-cost cards, don't deduct energy here (done in xCost special handler)
   let newPlayer = { ...state.player, energy: isXCost ? state.player.energy : state.player.energy - card.cost };
@@ -148,6 +152,9 @@ export const handlePlayCard = (state, action) => {
       }
     }
 
+    // Play attack sound
+    audioManager.playSFX(SOUNDS.combat.attack, 'combat');
+
     // Reset pen nib after use
     newPlayer.penNibActive = false;
   }
@@ -156,6 +163,7 @@ export const handlePlayCard = (state, action) => {
     const block = calculateBlock(card.block, newPlayer);
     newPlayer.block += block;
     combatLog.push(`Gained ${block} Block`);
+    audioManager.playSFX(SOUNDS.combat.block, 'combat');
 
     // Juggernaut: deal damage when gaining block
     if (newPlayer.juggernaut > 0) {
