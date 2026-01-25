@@ -1,15 +1,13 @@
-# JR Diary - Sprint 2
+# JR Diary - Sprint 3
 
 ## Role
 Junior Developer - Potion system, card upgrades, new content
 
 ## Owned Files
-`src/data/potions.js`, `src/systems/potionSystem.js`, `src/components/PotionSlots.jsx`
+`src/data/potions.js`, `src/data/enemies.js`, `src/systems/potionSystem.js`, `src/components/PotionSlots.jsx`
 
-## Sprint 2 Tasks
-- FIX-01: Potion UI integration (P0)
-- FIX-05: Enemy block retention (P2)
-- JR-02: Card upgrades (P1)
+## Sprint 3 Tasks
+- JR-05: Enemy intent specificity (Day 2, P2)
 
 ---
 
@@ -91,5 +89,34 @@ Junior Developer - Potion system, card upgrades, new content
 - FIX-05: Enemy block retention — MERGED (PR #15), added 7 retainBlock tests per co-pilot review
 **Satisfaction:** Happy with sprint 2. All my tasks complete, PRs reviewed and merged.
 **Ready for Sprint 3:** Yes. No assigned S3 tasks yet but available for JR-05 (enemy intent specificity).
+
+---
+
+### Sprint 3 Kickoff
+**Date:** 2026-01-25
+**Status:** Sprint 3 ACTIVE
+
+**My task:**
+- **JR-05 (Day 2, P2):** Enemy intent specificity
+  - Show "Applying Weak 2" instead of generic "Debuff"
+  - Structured intent format per DEC-011: `{ type, effect, amount, target }`
+  - Backwards-compatible: add fields alongside existing type strings
+  - Files: enemies.js (data file)
+  - QA to update test assertions when implemented
+
+**Dependencies:**
+- No hard blockers (can start Day 2)
+- Independent of Phase A tasks
+
+**Data format change (per DEC-011):**
+```javascript
+// Before:
+intent: { type: 'debuff' }
+
+// After:
+intent: { type: 'debuff', effect: 'weak', amount: 2, target: 'player' }
+```
+
+**Ready to start:** Day 2 (after Phase A)
 
 ---
