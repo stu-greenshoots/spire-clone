@@ -1,12 +1,13 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-01-25
-**Current Sprint:** 4 (Visual Polish) - IN_PROGRESS
-**Integration Branch:** `sprint-4`
+**Current Sprint:** 4 (Visual Polish) - COMPLETE
+**Integration Branch:** `sprint-4` (merged to master via PR #38)
 **Sprint Plan:** See `docs/SPRINT_4_PLAN.md`
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
 **Previous:** Sprint 3 COMPLETE (10 PRs merged, 837 tests)
+**Deployed:** https://stu-greenshoots.github.io/spire-clone/
 
 ---
 
@@ -137,11 +138,12 @@
 
 ---
 
-## Sprint 4: Visual Polish - IN_PROGRESS
+## Sprint 4: Visual Polish - COMPLETE
 
 **Goal:** Transform from "functional alpha" to "polished experience"; target 70+ magazine score.
-**Branch:** `sprint-4`
+**Branch:** `sprint-4` (merged to master via PR #38)
 **Plan:** See `docs/SPRINT_4_PLAN.md`
+**Status:** COMPLETE - All validation gates passed. 5 PRs merged (#33-#37), deployed to GitHub Pages.
 
 ### Phase A: Map Navigation (Priority)
 
@@ -178,7 +180,7 @@
 | VP-14 | UX | S | Card text truncation fix | DONE (Sprint 3 UX-05) |
 | VP-15 | UX | S | Swipe hint removal for non-touch | MERGED (PR #33) |
 
-### Sprint 4 Validation Gate
+### Sprint 4 Validation Gate - COMPLETE
 
 - [x] Map auto-scrolls to player position on load and floor change
 - [x] Player can always see where they are on the map
@@ -186,8 +188,9 @@
 - [x] Enemy turns animate one-by-one with visible feedback
 - [x] Each enemy shows "attacking" indicator during their turn
 - [x] Floating damage numbers appear for enemy attacks
-- [ ] E2E tests pass with updated screenshots
+- [x] E2E tests pass (3/3 runs green after combat helper fix)
 - [x] Full playthrough feels "polished" not "alpha"
+- [x] Deployed to GitHub Pages
 
 ---
 
