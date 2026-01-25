@@ -81,10 +81,15 @@ JR-03: Add 5 Act 2 normal enemies with movesets
 After opening a PR, follow this exact sequence:
 
 1. **Create PR** → Stop here. Do not merge.
-2. **Wait for Copilot review** → GitHub Copilot automatically reviews PRs
+2. **Wait for Copilot review** → GitHub Copilot automatically reviews PRs (if enabled in repo settings)
 3. **Address all HIGH/MEDIUM Copilot findings** → Fix issues, push updates
 4. **Wait for Mentor review** → Mentor (Lead Engineer) reviews and approves
 5. **Merge only after Mentor approval** → Or let Mentor merge
+
+**Copilot Review Notes:**
+- Copilot review is automatic when enabled in repository settings (Settings > Code review > Copilot)
+- It's NOT added via `--reviewer` flag - it triggers automatically on PR creation
+- If Copilot review isn't appearing, check repo settings
 
 **Why this matters:**
 - Copilot catches bugs, security issues, and code quality problems
