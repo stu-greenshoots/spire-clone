@@ -19,15 +19,16 @@ export const test = base.extend({
       },
 
       selectFirstNode: async () => {
-        // Find accessible map nodes (cursor: pointer indicates clickable)
+        // Find accessible map nodes (opacity === 1 indicates clickable)
         // Use force:true because SVG nodes have continuous animations
         const nodes = page.locator('[data-testid^="map-node-"]');
         const count = await nodes.count();
 
         for (let i = 0; i < count; i++) {
           const node = nodes.nth(i);
-          const cursor = await node.evaluate(el => el.style.cursor);
-          if (cursor === 'pointer') {
+          // Accessible nodes have opacity 1, others have lower opacity
+          const opacity = await node.evaluate(el => el.getAttribute('opacity'));
+          if (opacity === '1') {
             await node.click({ force: true });
             await page.waitForTimeout(500);
             return true;

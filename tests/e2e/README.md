@@ -7,8 +7,10 @@ Playwright-based end-to-end tests for Spire Ascent.
 ```bash
 npm run test:e2e              # Run headless
 npm run test:e2e:headed       # Run with browser visible
-npm run test:e2e:screenshots  # Generate screenshots for PR review
+npm run test:e2e:screenshots  # Generate screenshots for PR review (Unix/macOS only)
 npm run test:e2e:debug        # Debug mode with inspector
+
+> **Note:** The `test:e2e:screenshots` script uses Unix shell syntax for environment variables. On Windows, run: `set SCREENSHOT_DIR=screenshots && npx playwright test --config=tests/e2e/playwright.config.js`
 ```
 
 ## Structure
