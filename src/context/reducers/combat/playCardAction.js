@@ -30,6 +30,21 @@ export const handlePlayCard = (state, action) => {
   let newDrawPile = [...state.drawPile];
   let combatLog = [...state.combatLog];
 
+  // Initialize runStats tracking
+  let newRunStats = {
+    ...(state.runStats || {}),
+    cardsPlayed: (state.runStats?.cardsPlayed || 0) + 1,
+    cardsPlayedById: { ...(state.runStats?.cardsPlayedById || {}) },
+    damageDealt: state.runStats?.damageDealt || 0,
+    enemiesKilled: state.runStats?.enemiesKilled || 0,
+    defeatedEnemies: [...(state.runStats?.defeatedEnemies || [])],
+    goldEarned: state.runStats?.goldEarned || 0,
+    floor: state.currentFloor + 1
+  };
+
+  // Track card played by ID
+  newRunStats.cardsPlayedById[card.id] = (newRunStats.cardsPlayedById[card.id] || 0) + 1;
+
   // Track card plays
   newPlayer.cardsPlayedThisTurn++;
   if (card.type === CARD_TYPES.ATTACK) newPlayer.attacksPlayedThisTurn++;
@@ -88,6 +103,7 @@ export const handlePlayCard = (state, action) => {
         newEnemies = newEnemies.map(enemy => {
           if (enemy.currentHp <= 0) return enemy;
           const damage = calculateDamage(baseDamage, newPlayer, enemy, damageOptions);
+          newRunStats.damageDealt += damage; // Track damage dealt
           const result = applyDamageToTarget(enemy, damage);
           combatLog.push(`Dealt ${damage} damage to ${enemy.name}`);
           if (enemy.thorns > 0) {
@@ -109,6 +125,7 @@ export const handlePlayCard = (state, action) => {
           const randomIdx = Math.floor(Math.random() * aliveEnemies.length);
           const targetEnemy = aliveEnemies[randomIdx];
           const damage = calculateDamage(baseDamage, newPlayer, targetEnemy, damageOptions);
+          newRunStats.damageDealt += damage; // Track damage dealt
           newEnemies = newEnemies.map(e =>
             e.instanceId === targetEnemy.instanceId ? applyDamageToTarget(e, damage) : e
           );
@@ -129,6 +146,7 @@ export const handlePlayCard = (state, action) => {
         const enemy = newEnemies.find(e => e.instanceId === resolvedTargetId);
         if (enemy && enemy.currentHp > 0) {
           const damage = calculateDamage(baseDamage, newPlayer, enemy, damageOptions);
+          newRunStats.damageDealt += damage; // Track damage dealt
           newEnemies = newEnemies.map(e =>
             e.instanceId === resolvedTargetId ? applyDamageToTarget(e, damage) : e
           );
@@ -438,6 +456,12 @@ export const handlePlayCard = (state, action) => {
   let spawnedEnemies = [];
 
   dyingEnemies.forEach(enemy => {
+    // Track enemy kills for run stats
+    newRunStats.enemiesKilled++;
+    if (!newRunStats.defeatedEnemies.includes(enemy.id)) {
+      newRunStats.defeatedEnemies.push(enemy.id);
+    }
+
     // Handle slime splits
     if (enemy.onDeath && enemy.onDeath.startsWith('split') && !enemy.hasSplit) {
       const spawns = createSplitSlimes(enemy, enemy.onDeath);
@@ -474,6 +498,9 @@ export const handlePlayCard = (state, action) => {
         : getRandomRelic(null, state.relics.map(r => r.id));
     }
 
+    // Track gold earned in run stats
+    newRunStats.goldEarned += goldReward;
+
     const victoryState = {
       ...state,
       phase: GAME_PHASE.COMBAT_REWARD,
@@ -487,6 +514,7 @@ export const handlePlayCard = (state, action) => {
       selectedCard: null,
       targetingMode: false,
       combatLog,
+      runStats: newRunStats,
       combatRewards: {
         gold: goldReward,
         cardRewards,
@@ -508,6 +536,7 @@ export const handlePlayCard = (state, action) => {
     relics: relicsUpdated,
     selectedCard: null,
     targetingMode: false,
-    combatLog
+    combatLog,
+    runStats: newRunStats
   };
 };

@@ -6,6 +6,7 @@ import { getEnemyIntent, createSplitSlimes, createSummonedEnemy } from '../../..
 import { triggerRelics, getPassiveRelicEffects } from '../../../systems/relicSystem';
 import { deleteSave, autoSave } from '../../../systems/saveSystem';
 import { processEnemyTurns } from './enemyTurnAction';
+import { loadProgression, updateRunStats as updateProgressionStats } from '../../../systems/progressionSystem';
 
 const applyDamageToTarget = combatApplyDamageToTarget;
 
@@ -18,6 +19,18 @@ export const handleEndTurn = (state) => {
   let newExhaustPile = [...state.exhaustPile];
   let newRelics = [...state.relics];
   let combatLog = [...state.combatLog, '--- Enemy Turn ---'];
+
+  // Initialize runStats tracking for this action
+  let newRunStats = {
+    ...(state.runStats || {}),
+    cardsPlayed: state.runStats?.cardsPlayed || 0,
+    cardsPlayedById: { ...(state.runStats?.cardsPlayedById || {}) },
+    damageDealt: state.runStats?.damageDealt || 0,
+    enemiesKilled: state.runStats?.enemiesKilled || 0,
+    defeatedEnemies: [...(state.runStats?.defeatedEnemies || [])],
+    goldEarned: state.runStats?.goldEarned || 0,
+    floor: state.currentFloor + 1
+  };
 
   // Apply turn end relic effects (Orichalcum, Incense Burner)
   const { effects: turnEndEffects, updatedRelics: turnEndRelics } = triggerRelics(newRelics, 'onTurnEnd', {

@@ -106,7 +106,17 @@ export const createInitialState = () => ({
   combatLog: [],
   // Card selection state
   cardSelection: null, // { type: 'discardToDrawTop'|'handToDrawTop'|'upgradeInHand'|'copyCardInHand'|'retrieveExhausted', sourceCard: card }
-  pendingCardPlay: null // For cards that need selection before completing
+  pendingCardPlay: null, // For cards that need selection before completing
+  // Run stats tracking (for meta-progression)
+  runStats: {
+    cardsPlayed: 0,
+    cardsPlayedById: {},
+    damageDealt: 0,
+    enemiesKilled: 0,
+    defeatedEnemies: [], // Array of enemy IDs killed this run
+    goldEarned: 0,
+    floor: 0
+  }
 });
 
 // Re-export combat calculation functions for testing (implementations in combatSystem.js)
@@ -231,6 +241,10 @@ const gameReducer = (state, action) => {
     }
 
     case 'DELETE_SAVE': {
+      return metaReducer(state, action);
+    }
+
+    case 'UPDATE_PROGRESSION': {
       return metaReducer(state, action);
     }
 
