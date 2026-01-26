@@ -22,27 +22,32 @@ Sprint 6 is the PIVOT SPRINT. After Sprint 5's replayability features, we:
 
 ## Sprint 6 Tasks
 
-### P0 - Must Complete (Critical Bugs + Infrastructure)
+### P0 - Must Complete (Critical Bugs + Infrastructure + Game Mechanics)
 
 | Task | Owner | Size | Description | Dependencies |
 |------|-------|------|-------------|--------------|
 | **BE-10** | BE | M | **Status effect persistence bug** - Buff/debuff decrement timing fix. When enemy applies 2 Vulnerable, should NOT decrement until END of player's NEXT turn. Audit all status effect timing in combatReducer.js. | None |
 | **BE-11** | BE | M | **Performance dashboard** - FPS counter overlay (dev mode), reducer execution time tracking, state size monitoring, memory usage display. Add `src/utils/performanceMonitor.js`. | None |
 | **BE-12** | BE | S | **Error monitoring integration** - Integrate Sentry for crash reporting. Wrap gameReducer with error boundaries. Log errors to Sentry in production. Add `VITE_SENTRY_DSN` env var. | None |
+| **BE-15** | BE | S | **Fix Sentry encounter** - CRITICAL: Correct Sentry HP (38-42 not 48-56), artifact (1 not 2), damage (9 not 11), and moveset (all Bolt turn 1, then staggered). See GAME_MECHANICS_AUDIT.md. | None |
+| **BE-16** | BE | M | **Verify power card exhaustion** - Ensure power cards don't exhaust when played, remain active until combat ends, and effects persist correctly. Test all 10+ power cards. | None |
+| **BE-17** | BE | M | **Combat state clearing** - CRITICAL: Ensure ALL temporary buffs/debuffs clear after combat. Block, Weak, Vulnerable, Frail, etc. must reset to 0. Powers must clear. Only permanent relic effects persist. | None |
 | **UX-10** | UX | L | **Comprehensive UX audit** - Document ALL "amateur-looking" elements across all screens. Create prioritized punch list. Cover: title, map, combat, shop, rest, rewards, events, game over, victory. Output: `UX_AUDIT.md` with 50+ items. | None |
 
-**P0 Estimated Effort:** 2M (BE) + 1S (BE) + 1L (UX) = ~5-6 person-weeks
+**P0 Estimated Effort:** 5M (BE) + 1S (BE) + 1L (UX) = ~8-9 person-weeks
 
-### P1 - Should Complete (High Value)
+### P1 - Should Complete (High Value + Mechanics Validation)
 
 | Task | Owner | Size | Description | Dependencies |
 |------|-------|------|-------------|--------------|
-| **QA-06** | QA | M | **Balance pass** - Run balance simulator 10,000 games. Tune enemy HP/damage, boss HP. Adjust rare card drop rates (currently too high - should be 3% not 10%). Target win rate 25-35% at A0. | BE-10 (status fix affects balance) |
+| **QA-06** | QA | M | **Balance pass** - Run balance simulator 10,000 games. Tune enemy HP/damage, boss HP. Adjust rare card drop rates (currently too high - should be 3% not 10%). Target win rate 25-35% at A0. | BE-10, BE-15, BE-17 (all mechanics fixes affect balance) |
+| **BE-18** | BE | S | **Card appearance rate audit** - Verify card rewards match StS: 3% rare, 37% uncommon, 60% common (normal); 17% rare, 33% uncommon, 50% common (elite). Run 10k simulation. | None |
+| **QA-07** | QA | L | **Comprehensive mechanics test suite** - Create 100+ test cases covering: status effects, damage calc, block calc, power persistence, state clearing, card rates, enemy patterns, potions. See GAME_MECHANICS_AUDIT.md. | BE-15, BE-16, BE-17 |
 | **UX-11** | UX | S | **Non-intrusive block indicator** - Block display should NOT cause layout shifts. Use absolute positioning or fixed-size reserved space. Test on mobile. | UX-10 (audit identifies layout jumps) |
 | **SL-06** | SL/VARROW | S | **Event tone pass** - Rewrite 5 key events to "glitches in pattern" tone per "Endless War" story. Hollow Merchant, Cursed Altar, Serpent Guardian, 2 others. | None |
 | **BE-13** | BE | S | **Extract balance constants** - Move magic numbers to `src/data/balance.json`. Update systems to read from config. Enables rapid iteration without code changes. | None |
 
-**P1 Estimated Effort:** 1M (QA) + 1S (UX) + 1S (SL) + 1S (BE) = ~3-4 person-weeks
+**P1 Estimated Effort:** 2M (QA) + 1S (BE) + 1L (QA) + 1S (UX) + 1S (SL) + 1S (BE) = ~6-7 person-weeks
 
 ### P2 - If Time Permits
 
