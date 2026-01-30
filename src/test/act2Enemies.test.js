@@ -499,6 +499,84 @@ describe('Act 2 Enemies - Centurion, Mystic, Snecko (JR-03a)', () => {
     });
   });
 
+  describe('Bronze Automaton (JR-03d)', () => {
+    const automaton = getEnemyById('automaton');
+
+    it('should exist with correct base stats', () => {
+      expect(automaton).toBeDefined();
+      expect(automaton.name).toBe('Bronze Automaton');
+      expect(automaton.hp).toEqual({ min: 300, max: 300 });
+      expect(automaton.type).toBe('boss');
+      expect(automaton.act).toBe(2);
+    });
+
+    it('should have artifact: 3', () => {
+      expect(automaton.artifact).toBe(3);
+    });
+
+    it('createEnemyInstance should set artifact to 3', () => {
+      const instance = createEnemyInstance(automaton);
+      expect(instance.artifact).toBe(3);
+    });
+
+    it('should have phase2 and spawn config for Bronze Orbs', () => {
+      expect(automaton.phase2).toBe(true);
+      expect(automaton.spawnMinions).toBe('bronzeOrb');
+      expect(automaton.minionCount).toEqual({ min: 2, max: 2 });
+      expect(automaton.onDeath).toBe('phase2Automaton');
+    });
+
+    it('should have 3 moves: boost (+3 str), dualStrike (5x2), hyperBeam (45)', () => {
+      expect(automaton.moveset).toHaveLength(3);
+      expect(automaton.moveset[0].id).toBe('boost');
+      expect(automaton.moveset[0].effects[0].type).toBe('strength');
+      expect(automaton.moveset[0].effects[0].amount).toBe(3);
+      expect(automaton.moveset[1].id).toBe('dualStrike');
+      expect(automaton.moveset[1].damage).toBe(5);
+      expect(automaton.moveset[1].times).toBe(2);
+      expect(automaton.moveset[2].id).toBe('hyperBeam');
+      expect(automaton.moveset[2].damage).toBe(45);
+    });
+
+    it('AI should follow fixed pattern: boost -> dualStrike -> hyperBeam -> repeat', () => {
+      const instance = createEnemyInstance(automaton);
+      expect(automaton.ai(instance, 0, null).id).toBe('boost');
+      expect(automaton.ai(instance, 1, null).id).toBe('dualStrike');
+      expect(automaton.ai(instance, 2, null).id).toBe('hyperBeam');
+      expect(automaton.ai(instance, 3, null).id).toBe('boost');
+      expect(automaton.ai(instance, 4, null).id).toBe('dualStrike');
+      expect(automaton.ai(instance, 5, null).id).toBe('hyperBeam');
+    });
+  });
+
+  describe('Bronze Orb (JR-03d)', () => {
+    const orb = getEnemyById('bronzeOrb');
+
+    it('should exist with correct base stats', () => {
+      expect(orb).toBeDefined();
+      expect(orb.name).toBe('Bronze Orb');
+      expect(orb.hp).toEqual({ min: 52, max: 52 });
+      expect(orb.type).toBe('minion');
+      expect(orb.act).toBe(2);
+    });
+
+    it('should have 2 moves: beam (8 dmg), supportBeam (heal 12)', () => {
+      expect(orb.moveset).toHaveLength(2);
+      expect(orb.moveset[0].id).toBe('beam');
+      expect(orb.moveset[0].damage).toBe(8);
+      expect(orb.moveset[1].id).toBe('supportBeam');
+      expect(orb.moveset[1].healAmount).toBe(12);
+    });
+
+    it('AI should alternate beam and supportBeam', () => {
+      const instance = createEnemyInstance(orb);
+      expect(orb.ai(instance, 0, null).id).toBe('beam');
+      expect(orb.ai(instance, 1, null).id).toBe('supportBeam');
+      expect(orb.ai(instance, 2, null).id).toBe('beam');
+      expect(orb.ai(instance, 3, null).id).toBe('supportBeam');
+    });
+  });
+
   describe('Centurion + Mystic pair fight', () => {
     it('both should reference each other via pair property', () => {
       const centurion = getEnemyById('centurion');
