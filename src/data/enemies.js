@@ -525,6 +525,50 @@ export const ALL_ENEMIES = [
     }
   },
 
+  // ========== ACT 2 BOSSES ==========
+  {
+    id: 'automaton',
+    name: 'Bronze Automaton',
+    hp: { min: 300, max: 300 },
+    type: 'boss',
+    act: 2,
+    emoji: '🤖',
+    artifact: 3,
+    phase2: true, // On death: spawns 2 Bronze Orbs, gains +3 str
+    spawnMinions: 'bronzeOrb',
+    minionCount: { min: 2, max: 2 },
+    moveset: [
+      { id: 'boost', intent: INTENT.BUFF, effects: [{ type: 'strength', amount: 3 }], message: 'Boost' },
+      { id: 'dualStrike', intent: INTENT.ATTACK, damage: 5, times: 2, message: 'Dual Strike' },
+      { id: 'hyperBeam', intent: INTENT.ATTACK, damage: 45, special: 'hyperBeamDebuff', message: 'Hyper Beam' }
+    ],
+    ai: (enemy, turn, _lastMove) => {
+      // Fixed pattern: boost -> dual strike -> hyper beam -> repeat
+      const phase = turn % 3;
+      if (phase === 0) return enemy.moveset[0];
+      if (phase === 1) return enemy.moveset[1];
+      return enemy.moveset[2];
+    },
+    onDeath: 'phase2Automaton' // Spawns 2 Bronze Orbs + gains +3 str
+  },
+  {
+    id: 'bronzeOrb',
+    name: 'Bronze Orb',
+    hp: { min: 52, max: 52 },
+    type: 'minion',
+    act: 2,
+    emoji: '🔴',
+    moveset: [
+      { id: 'beam', intent: INTENT.ATTACK, damage: 8, message: 'Beam' },
+      { id: 'supportBeam', intent: INTENT.BUFF, special: 'healAlly', healAmount: 12, message: 'Support Beam' }
+    ],
+    ai: (enemy, turn, _lastMove) => {
+      // Alternates beam and support beam
+      if (turn % 2 === 0) return enemy.moveset[0];
+      return enemy.moveset[1];
+    }
+  },
+
   // ========== ACT 3 ENEMIES ==========
   {
     id: 'writhing_mass',
@@ -889,12 +933,107 @@ const WEAK_ENEMIES = ['louse_red', 'louse_green', 'slime_small', 'spike_slime_sm
 const MEDIUM_ENEMIES = ['slime_medium', 'spike_slime_medium', 'cultist', 'mystic', 'byrd'];
 const STRONG_NORMAL_ENEMIES = ['jawWorm', 'looter', 'chosen', 'snakePlant', 'centurion', 'slaverBlue', 'snecko', 'shelledParasite', 'sphericGuardian', 'writhing_mass', 'orbWalker', 'spiker'];
 
+// Act 2 encounter weighting (DEC-017)
+// Common enemies appear ~60% of the time, uncommon ~25%, pair ~15%
+const ACT2_COMMON = ['chosen', 'byrd', 'slaverBlue', 'snakePlant', 'sphericGuardian'];
+const ACT2_UNCOMMON = ['shelledParasite', 'snecko'];
+// centurion+mystic is a special pair encounter handled separately
+
+// Act 2 weak enemies for multi-spawn encounters
+const ACT2_WEAK = ['byrd'];
+// Act 2 medium enemies for double encounters
+const ACT2_MEDIUM = ['slaverBlue', 'snakePlant'];
+
+/**
+ * Get Act 2 normal encounter with weighted selection.
+ * - 60% common enemies, 25% uncommon, 15% centurion+mystic pair
+ * - Pair fights always spawn centurion and mystic together
+ */
+const getAct2NormalEncounter = (floor) => {
+  const floorInAct = ((floor - 1) % 15) + 1;
+  const isEarlyFloor = floorInAct <= 5;
+  const isLateFloor = floorInAct >= 11;
+
+  const roll = Math.random();
+
+  // Encounter structure: single, double, or pair
+  // Act 2: 40% single, 30% double/multi, 15% pair, 15% Act 1 carryover
+  let singleChance = 0.40;
+  let doubleChance = 0.30;
+  const pairChance = 0.15;
+  // remaining 15% = Act 1 carryover encounters
+
+  if (isEarlyFloor) {
+    singleChance += 0.10;
+    doubleChance -= 0.05;
+  } else if (isLateFloor) {
+    singleChance -= 0.10;
+    doubleChance += 0.05;
+  }
+
+  if (roll < pairChance) {
+    // Centurion + Mystic pair fight
+    const centurion = ALL_ENEMIES.find(e => e.id === 'centurion');
+    const mystic = ALL_ENEMIES.find(e => e.id === 'mystic');
+    return [createEnemyInstance(centurion, 0), createEnemyInstance(mystic, 1)];
+  }
+
+  if (roll < pairChance + singleChance) {
+    // Single Act 2 enemy - weighted by tier
+    const tierRoll = Math.random();
+    let pool;
+    if (tierRoll < 0.65) {
+      pool = ALL_ENEMIES.filter(e => ACT2_COMMON.includes(e.id));
+    } else {
+      pool = ALL_ENEMIES.filter(e => ACT2_UNCOMMON.includes(e.id));
+    }
+    if (isLateFloor) {
+      // Late floors prefer uncommon (tougher) enemies
+      const uncommonPool = ALL_ENEMIES.filter(e => ACT2_UNCOMMON.includes(e.id));
+      if (uncommonPool.length > 0 && Math.random() < 0.5) pool = uncommonPool;
+    }
+    const enemy = pool[Math.floor(Math.random() * pool.length)];
+    return [createEnemyInstance(enemy)];
+  }
+
+  if (roll < pairChance + singleChance + doubleChance) {
+    // Double/multi Act 2 enemies - use weaker Act 2 enemies
+    const act2Weak = ALL_ENEMIES.filter(e => ACT2_WEAK.includes(e.id));
+    const act2Medium = ALL_ENEMIES.filter(e => ACT2_MEDIUM.includes(e.id));
+    const pool = act2Weak.length > 0 && Math.random() < 0.6 ? act2Weak : act2Medium;
+    if (pool.length === 0) {
+      // Fallback to any Act 2 common enemy
+      const fallback = ALL_ENEMIES.filter(e => ACT2_COMMON.includes(e.id));
+      const enemy = fallback[Math.floor(Math.random() * fallback.length)];
+      return [createEnemyInstance(enemy, 0), createEnemyInstance(enemy, 1)];
+    }
+    const count = isEarlyFloor ? 2 : (Math.floor(Math.random() * 2) + 2);
+    const enemies = [];
+    for (let i = 0; i < count; i++) {
+      const enemy = pool[Math.floor(Math.random() * pool.length)];
+      enemies.push(createEnemyInstance(enemy, i));
+    }
+    return enemies;
+  }
+
+  // Act 1 carryover - use Act 1 medium/strong enemies for variety
+  const act1Pool = ALL_ENEMIES.filter(e => e.act === 1 && e.type === 'normal' && STRONG_NORMAL_ENEMIES.includes(e.id));
+  if (act1Pool.length > 0) {
+    const enemy = act1Pool[Math.floor(Math.random() * act1Pool.length)];
+    return [createEnemyInstance(enemy)];
+  }
+  // Final fallback
+  const fallback = ALL_ENEMIES.filter(e => ACT2_COMMON.includes(e.id));
+  const enemy = fallback[Math.floor(Math.random() * fallback.length)];
+  return [createEnemyInstance(enemy)];
+};
+
 export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) => {
   const type = isElite ? 'elite' : 'normal';
-  const availableEnemies = ALL_ENEMIES.filter(e => e.act <= act && e.type === type);
 
   if (type === 'elite') {
     // Prefer elites from current act, but can pull from earlier acts
+    const availableEnemies = ALL_ENEMIES.filter(e => e.act <= act && e.type === 'elite');
     const currentActElites = availableEnemies.filter(e => e.act === act);
     const pool = currentActElites.length > 0 ? currentActElites : availableEnemies;
     const enemy = pool[Math.floor(Math.random() * pool.length)];
@@ -906,24 +1045,24 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
     return instances;
   }
 
+  // Act 2 has its own weighted encounter system (DEC-017)
+  if (act === 2) {
+    return getAct2NormalEncounter(floor);
+  }
+
+  // Act 1 and Act 3 use the original system
+  const availableEnemies = ALL_ENEMIES.filter(e => e.act <= act && e.type === type);
+
   // Floor-based difficulty scaling
-  // Early floors (1-5): Easier encounters
-  // Mid floors (6-10): Normal difficulty
-  // Late floors (11-15): Harder encounters
   const floorInAct = ((floor - 1) % 15) + 1;
   const isEarlyFloor = floorInAct <= 5;
   const isLateFloor = floorInAct >= 11;
 
   const roll = Math.random();
 
-  // Rebalanced encounter chances - more single enemies, especially early
-  // Act 1: 50% single (was 25%), 35% double, 15% multi
-  // Act 2: 45% single, 35% double, 20% multi
-  // Act 3: 40% single, 35% double, 25% multi
-  let singleChance = act === 1 ? 0.50 : act === 2 ? 0.45 : 0.40;
-  let doubleChance = act === 1 ? 0.35 : act === 2 ? 0.35 : 0.35;
+  let singleChance = act === 1 ? 0.50 : 0.40;
+  let doubleChance = act === 1 ? 0.35 : 0.35;
 
-  // Early floors get even more single enemies
   if (isEarlyFloor) {
     singleChance += 0.15;
     doubleChance -= 0.10;
@@ -933,14 +1072,11 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
   }
 
   if (roll < singleChance) {
-    // Single enemy - can be any strength level, but weighted by floor
     let pool = availableEnemies;
     if (isEarlyFloor && act === 1) {
-      // Early Act 1: Prefer weaker single enemies
       const weakPool = availableEnemies.filter(e => WEAK_ENEMIES.includes(e.id) || MEDIUM_ENEMIES.includes(e.id));
       pool = weakPool.length > 0 ? weakPool : availableEnemies;
     } else if (isLateFloor) {
-      // Late floors: Prefer stronger enemies
       const strongPool = availableEnemies.filter(e => STRONG_NORMAL_ENEMIES.includes(e.id) || MEDIUM_ENEMIES.includes(e.id));
       pool = strongPool.length > 0 ? strongPool : availableEnemies;
     }
@@ -948,11 +1084,9 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
     return [createEnemyInstance(enemy)];
 
   } else if (roll < singleChance + doubleChance) {
-    // Double enemy - MUST use weaker enemies
     const weakPool = availableEnemies.filter(e => WEAK_ENEMIES.includes(e.id));
     const mediumPool = availableEnemies.filter(e => MEDIUM_ENEMIES.includes(e.id));
 
-    // Prefer weak enemies for doubles, fall back to medium
     let pool;
     if (weakPool.length > 0 && (isEarlyFloor || Math.random() < 0.7)) {
       pool = weakPool;
@@ -967,10 +1101,8 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
     return [createEnemyInstance(enemy, 0), createEnemyInstance(enemy, 1)];
 
   } else {
-    // Multi-enemy (2-3) - ONLY weak enemies, mix types for variety
     const weakPool = availableEnemies.filter(e => WEAK_ENEMIES.includes(e.id));
     if (weakPool.length === 0) {
-      // Fallback: just use 2 medium enemies
       const mediumPool = availableEnemies.filter(e => MEDIUM_ENEMIES.includes(e.id));
       const pool = mediumPool.length > 0 ? mediumPool : availableEnemies;
       const enemy = pool[Math.floor(Math.random() * pool.length)];
@@ -978,7 +1110,7 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
     }
 
     const enemies = [];
-    const count = isEarlyFloor ? 2 : (Math.floor(Math.random() * 2) + 2); // 2 early, 2-3 later
+    const count = isEarlyFloor ? 2 : (Math.floor(Math.random() * 2) + 2);
 
     for (let i = 0; i < count; i++) {
       const enemy = weakPool[Math.floor(Math.random() * weakPool.length)];

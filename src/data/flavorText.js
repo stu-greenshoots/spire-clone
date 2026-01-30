@@ -158,7 +158,9 @@ export const ENEMY_LORE = {
   mystic: 'Wandering seers who weave protective wards while channeling destructive force.',
   snecko: 'Chaotic serpentine beasts whose gaze muddles the mind and warps perception.',
   shelledParasite: 'Armored creatures that grow stronger each time their shell absorbs a blow.',
-  sphericGuardian: 'Crystalline sentinels that alternate between devastating strikes and impenetrable barriers.'
+  sphericGuardian: 'Crystalline sentinels that alternate between devastating strikes and impenetrable barriers.',
+  automaton: 'A bronze colossus forged in the Spire\'s foundries, powered by orbs of living metal.',
+  bronzeOrb: 'Floating constructs that orbit their master, mending its wounds and searing its foes.'
 };
 
 // ========== ACT DESCRIPTIONS ==========
