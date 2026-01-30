@@ -150,6 +150,12 @@ export const handleEndTurn = (state) => {
     return relic;
   });
 
+  // Decrement player debuffs at end of player turn (before enemy turns)
+  // This ensures Vulnerable 2 lasts for 2 full player turns, not 1
+  if (newPlayer.vulnerable > 0) newPlayer.vulnerable--;
+  if (newPlayer.weak > 0) newPlayer.weak--;
+  if (newPlayer.frail > 0) newPlayer.frail--;
+
   // Enemy turns
   const enemyResult = processEnemyTurns({
     newPlayer, newEnemies, newHand, newDrawPile, newDiscardPile, newRelics, combatLog
@@ -347,10 +353,7 @@ export const handleEndTurn = (state) => {
     combatLog.push(`Plated Armor granted ${newPlayer.platedArmor} Block`);
   }
 
-  // Decrement debuffs
-  if (newPlayer.vulnerable > 0) newPlayer.vulnerable--;
-  if (newPlayer.weak > 0) newPlayer.weak--;
-  if (newPlayer.frail > 0) newPlayer.frail--;
+  // Player debuffs already decremented at end of player turn (before enemy turns)
 
   // Reset turn counters
   newPlayer.cardsPlayedThisTurn = 0;
