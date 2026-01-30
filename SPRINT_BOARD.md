@@ -234,49 +234,44 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 6: User Feedback & Bug Fixes - PROPOSED
+## Sprint 6: Fix + Foundation + Narrative Start - PLANNED
 
-**Goal:** Address critical user feedback from user-feedback.md
-**Source:** See `FUTURE_SPRINTS_PLAN.md` for full analysis
-**Status:** Draft - awaiting team review
+**Goal:** Fix confirmed bugs, audit UX, begin Endless War narrative.
+**Plan:** See `SPRINT_6_PLAN.md`
+**Status:** PLANNED - Team-aligned, Mentor-approved
 
-### Key Items from User Feedback
+### P0 — Must Ship
 
-| Task | Owner | Size | Priority | Description |
-|------|-------|------|----------|-------------|
-| BE-10 | BE | M | P0 | **BUG** - Buff/debuff persistence (status effects decrement at wrong time) |
-| UX-10 | UX | L | P0 | Comprehensive UX audit - document all "amateur" elements |
-| BE-09 | BE | M | P1 | Starting bonus selection (Neow-like system) |
-| UX-11 | UX | S | P1 | Non-intrusive block indicator (no layout jumping) |
-| QA-06 | QA | M | P1 | Balance pass - enemy/boss difficulty, rare card rates |
-| UX-12 | UX | S | P2 | Smart card targeting (block cards don't need enemy target) |
-| GD-10 | GD | L | P2 | Title screen art |
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| BE-16 | BE | S | Power card fix — remove from play, not discard | TODO |
+| UX-10 | UX | M | Focused top-20 UX hit list | TODO |
+| QA-07a | QA | S | Mechanics audit spike — verify 4 Copilot claims | TODO |
+| VARROW-01 | Varrow | M | Act 1 boss dialogue ("Endless War") | TODO |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| BE-10 | BE | M | Status effect timing investigation | TODO |
+| BE-09 | BE | M | Starting bonus / Neow | TODO |
+| UX-11 | UX | S | Block indicator — no layout jumps | TODO |
+| QA-06 | QA | M | Balance pass (25-35% win rate A0) | TODO |
+| JR-fix | JR | S | Enemy HP accuracy (Sentry → StS baseline) | TODO |
+| JR-prep | JR | — | Draft 10 Act 2 enemy designs (doc only) | TODO |
+| GD-06 | GD | S | Sprite sheets (deferred from Sprint 4) | TODO |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| UX-12 | UX | S | Smart card targeting | TODO |
+| GD-audit | GD | S | Asset audit — catalog gaps | TODO |
 
 ---
 
-## Sprint 7: Content & Map - PROPOSED
+## Sprints 7–9: See `ROADMAP.md`
 
-**Goal:** Act 2 content and map route planning improvements
-**Source:** See `FUTURE_SPRINTS_PLAN.md`
-
-| Task | Owner | Size | Priority | Description |
-|------|-------|------|----------|-------------|
-| UX-13 | UX | M | P0 | Map path planning - show all routes from current position |
-| JR-03 | JR | L | P0 | Act 2 content expansion (10 new enemies) |
-| GD-07 | GD | L | P1 | Relic & potion art (47 relics + 15 potions) |
-| GD-08 | GD | M | P1 | Map visual overhaul |
-
----
-
-## Sprint 8: Tutorial & Ship Prep - PROPOSED
-
-**Goal:** Prepare for wider release
-**Source:** See `FUTURE_SPRINTS_PLAN.md`
-
-| Task | Owner | Size | Priority | Description |
-|------|-------|------|----------|-------------|
-| UX-09 | UX | M | P0 | Tutorial/first run experience |
-| QA-04 | QA | M | P0 | Pre-release QA pass |
-| AR-05 | AR | L | P1 | Mobile responsiveness |
-| GD-09 | GD | M | P1 | Visual effects & particles |
-| BE-08 | BE | M | P2 | Performance optimization |
+**Sprint 7:** Mobile Combat + Act 2 Content + Narrative World
+**Sprint 8:** Polish + Juice + Title Screen
+**Sprint 9:** Ship Prep + QA + 1.0 (Web + PWA)

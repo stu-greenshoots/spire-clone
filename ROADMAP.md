@@ -1,7 +1,7 @@
 # Spire Ascent — Production Roadmap
 
 **Created:** 2026-01-30
-**Status:** APPROVED — Team-aligned, ready for execution
+**Status:** Team-aligned, pending merge
 **Scope:** 4 sprints to 1.0 (Sprint 6–9)
 **Origin:** PR #48 consultant review, filtered through full team + Mentor input
 
