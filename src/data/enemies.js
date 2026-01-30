@@ -345,20 +345,28 @@ export const ALL_ENEMIES = [
   {
     id: 'centurion',
     name: 'Centurion',
-    hp: { min: 56, max: 62 },
+    hp: { min: 76, max: 76 },
     type: 'normal',
     act: 2,
     emoji: '🏛️',
+    pair: 'mystic',
+    fury: { strengthGain: 2 }, // Gains 2 strength when ally (Mystic) dies
     moveset: [
-      { id: 'slash', intent: INTENT.ATTACK, damage: 10, message: 'Slash' },
-      { id: 'fury', intent: INTENT.ATTACK, damage: 5, times: 3, message: 'Fury' },
-      { id: 'defend', intent: INTENT.DEFEND, block: 12, message: 'Defend' }
+      { id: 'slash', intent: INTENT.ATTACK, damage: 12, message: 'Slash' },
+      { id: 'fury', intent: INTENT.ATTACK, damage: 6, times: 3, message: 'Fury' },
+      { id: 'shieldAlly', intent: INTENT.DEFEND_BUFF, block: 15, special: 'shieldAlly', message: 'Shield of Flow' }
     ],
-    ai: (enemy, turn, lastMove) => {
-      const roll = Math.random();
-      if (roll < 0.45 && lastMove?.id !== 'slash') return enemy.moveset[0];
-      if (roll < 0.8) return enemy.moveset[1];
-      return enemy.moveset[2];
+    ai: (enemy, turn, lastMove, _index, allies) => {
+      // If mystic ally is alive and hurt, shield them
+      const mysticAlly = allies && allies.find(a => a.id === 'mystic' && a.instanceId !== enemy.instanceId && a.currentHp > 0);
+      if (mysticAlly && mysticAlly.currentHp < mysticAlly.maxHp * 0.5 && lastMove?.id !== 'shieldAlly') {
+        return enemy.moveset[2];
+      }
+      // Alternate between slash and fury, with occasional shield
+      if (turn === 0) return enemy.moveset[0];
+      if (lastMove?.id === 'slash') return enemy.moveset[1];
+      if (lastMove?.id === 'fury') return enemy.moveset[0];
+      return enemy.moveset[0];
     }
   },
   {
@@ -421,39 +429,50 @@ export const ALL_ENEMIES = [
   {
     id: 'mystic',
     name: 'Mystic',
-    hp: { min: 50, max: 56 },
+    hp: { min: 56, max: 56 },
     type: 'normal',
     act: 2,
     emoji: '🔮',
+    pair: 'centurion',
     moveset: [
-      { id: 'heal', intent: INTENT.BUFF, special: 'healAlly', healAmount: 12, message: 'Heal' },
+      { id: 'heal', intent: INTENT.BUFF, special: 'healAlly', healAmount: 16, message: 'Heal' },
+      { id: 'buffAlly', intent: INTENT.BUFF, special: 'buffAlly', effects: [{ type: 'strength', amount: 2 }], message: 'Protect' },
+      { id: 'debuff', intent: INTENT.DEBUFF, effects: [{ type: 'weak', amount: 2, target: 'player' }, { type: 'frail', amount: 2, target: 'player' }], message: 'Hex' },
       { id: 'attack', intent: INTENT.ATTACK, damage: 8, message: 'Attack' }
     ],
-    ai: (enemy, turn, _lastMove, _index, allies) => {
-      // Heals if any ally is below 50% HP, otherwise attacks
-      if (allies && allies.some(a => a.instanceId !== enemy.instanceId && a.currentHp > 0 && a.currentHp < a.maxHp * 0.5)) {
+    ai: (enemy, turn, lastMove, _index, allies) => {
+      const centurionAlly = allies && allies.find(a => a.id === 'centurion' && a.instanceId !== enemy.instanceId && a.currentHp > 0);
+      // Heal if centurion is hurt
+      if (centurionAlly && centurionAlly.currentHp < centurionAlly.maxHp * 0.6) {
         return enemy.moveset[0];
       }
-      return enemy.moveset[1];
+      // Cycle: buff ally -> debuff player -> attack
+      if (turn === 0 && centurionAlly) return enemy.moveset[1];
+      if (lastMove?.id === 'buffAlly') return enemy.moveset[2];
+      if (lastMove?.id === 'debuff') return enemy.moveset[3];
+      if (lastMove?.id === 'attack' && centurionAlly) return enemy.moveset[1];
+      return enemy.moveset[3];
     }
   },
   {
     id: 'snecko',
     name: 'Snecko',
-    hp: { min: 60, max: 66 },
+    hp: { min: 114, max: 120 },
     type: 'normal',
     act: 2,
     emoji: '🐍',
     moveset: [
-      { id: 'bite', intent: INTENT.ATTACK, damage: 15, message: 'Bite' },
-      { id: 'tailWhip', intent: INTENT.ATTACK_DEBUFF, damage: 8, effects: [{ type: 'frail', amount: 2, target: 'player' }], message: 'Tail Whip' }
+      { id: 'perplexingGlare', intent: INTENT.STRONG_DEBUFF, effects: [{ type: 'confused', amount: 1, target: 'player' }], message: 'Perplexing Glare' },
+      { id: 'tailWhip', intent: INTENT.ATTACK_DEBUFF, damage: 18, effects: [{ type: 'weak', amount: 1, target: 'player' }], message: 'Tail Whip' },
+      { id: 'bite', intent: INTENT.ATTACK, damage: 15, message: 'Bite' }
     ],
-    ai: (enemy, turn, _lastMove) => {
-      // Alternates between bite and tail whip
-      if (turn % 2 === 0) return enemy.moveset[0];
+    ai: (enemy, turn, lastMove) => {
+      // Opens with Perplexing Glare to apply Confused
+      if (turn === 0) return enemy.moveset[0];
+      // Then alternates tail whip and bite
+      if (lastMove?.id === 'tailWhip') return enemy.moveset[2];
       return enemy.moveset[1];
-    },
-    confuse: true
+    }
   },
   {
     id: 'shelledParasite',
