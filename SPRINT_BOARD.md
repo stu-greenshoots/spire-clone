@@ -239,15 +239,15 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Fix confirmed bugs, audit UX, begin Endless War narrative.
 **Plan:** See `SPRINT_6_PLAN.md`
 **Branch:** `sprint-6`
-**Draft PR:** TBD
-**Status:** IN PROGRESS - Week 1 COMPLETE, Week 2 starting
+**Draft PR:** #49
+**Status:** IN PROGRESS - P0 complete, most P1 merged, BE-09 deferred to Sprint 7
 
 ### P0 — Must Ship
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | BE-16 | BE | S | Power card fix — remove from play, not discard | MERGED (PR #51) |
-| UX-10 | UX | M | Focused top-20 UX hit list | TODO |
+| UX-10 | UX | M | Focused top-20 UX hit list | MERGED (PR #54) |
 | QA-07a | QA | S | Mechanics audit spike — verify 4 Copilot claims | MERGED (PR #50) |
 | VARROW-01 | Varrow | M | Act 1 boss dialogue ("Endless War") | MERGED (PR #50) |
 
@@ -255,20 +255,20 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| BE-10 | BE | M | Status effect timing investigation | TODO |
-| BE-09 | BE | M | Starting bonus / Neow | TODO |
-| UX-11 | UX | S | Block indicator — no layout jumps | TODO |
-| QA-06 | QA | M | Balance pass (25-35% win rate A0) | TODO |
+| BE-10 | BE | M | Status effect timing fix | MERGED (PR #55) |
+| BE-09 | BE | M | Starting bonus / Neow | DEFERRED (Sprint 7) |
+| UX-11 | UX | S | Block indicator — no layout jumps | MERGED (PR #56) |
+| QA-06 | QA | M | Balance pass (25-35% win rate A0) | MERGED (PR #57) |
 | JR-fix | JR | S | Enemy HP accuracy (Sentry → StS baseline) | MERGED (PR #52) |
-| JR-prep | JR | — | Draft 10 Act 2 enemy designs (doc only) | TODO |
+| JR-prep | JR | — | Draft 10 Act 2 enemy designs (doc only) | MERGED (PR #58) |
 | GD-06 | GD | S | Sprite sheets (deferred from Sprint 4) | MERGED (PR #53) |
 
 ### P2 — Stretch
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| UX-12 | UX | S | Smart card targeting | TODO |
-| GD-audit | GD | S | Asset audit — catalog gaps | TODO |
+| UX-12 | UX | S | Smart card targeting | DEFERRED (Sprint 7) |
+| GD-audit | GD | S | Asset audit — catalog gaps | DEFERRED (Sprint 7) |
 
 ---
 
