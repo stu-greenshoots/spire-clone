@@ -145,12 +145,12 @@ describe('Enemy Artifact', () => {
   it('Sentry should have artifact stat', () => {
     const sentry = getEnemyById('sentryA');
     expect(sentry).toBeDefined();
-    expect(sentry.artifact).toBe(2);
+    expect(sentry.artifact).toBe(1);
   });
 
   it('enemy instance should inherit artifact', () => {
     const sentry = createEnemyInstance(getEnemyById('sentryA'));
-    expect(sentry.artifact).toBe(2);
+    expect(sentry.artifact).toBe(1);
   });
 
   it('applying debuff to enemy with artifact should block it', () => {
@@ -158,7 +158,7 @@ describe('Enemy Artifact', () => {
     const combatLog = [];
     const result = applyEnemyDebuff(sentry, 'vulnerable', 2, combatLog);
     expect(result).toBe(false);
-    expect(sentry.artifact).toBe(1);
+    expect(sentry.artifact).toBe(0);
     expect(sentry.vulnerable).toBeFalsy();
   });
 
