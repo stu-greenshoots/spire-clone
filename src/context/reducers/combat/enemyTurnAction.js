@@ -118,6 +118,12 @@ export const processEnemyTurns = (ctx) => {
           }
         }
 
+        // Lifesteal: enemy heals for unblocked damage dealt
+        if (move.lifesteal && hpLost > 0 && newEnemy.currentHp > 0) {
+          newEnemy.currentHp = Math.min(newEnemy.maxHp, newEnemy.currentHp + hpLost);
+          combatLog.push(`${enemy.name} healed ${hpLost} HP from Lifesteal`);
+        }
+
         combatLog.push(`${enemy.name} dealt ${damage} damage`);
       }
     }
@@ -130,7 +136,7 @@ export const processEnemyTurns = (ctx) => {
       move.effects.forEach(effect => {
         if (effect.target === 'player') {
           // Check artifact
-          const isDebuff = ['weak', 'vulnerable', 'frail', 'strengthDown', 'dexterityDown', 'entangle', 'drawReduction'].includes(effect.type);
+          const isDebuff = ['weak', 'vulnerable', 'frail', 'strengthDown', 'dexterityDown', 'entangle', 'drawReduction', 'confused'].includes(effect.type);
           if (newPlayer.artifact > 0 && isDebuff) {
             newPlayer.artifact--;
             combatLog.push('Artifact blocked debuff');
@@ -141,6 +147,10 @@ export const processEnemyTurns = (ctx) => {
             if (effect.type === 'entangle') newPlayer.entangle = true;
             if (effect.type === 'drawReduction') {
               newPlayer.drawReduction = (newPlayer.drawReduction || 0) + effect.amount;
+            }
+            if (effect.type === 'confused') {
+              newPlayer.confused = (newPlayer.confused || 0) + effect.amount;
+              combatLog.push('Applied Confused!');
             }
             if (effect.type === 'strengthDown') {
               newPlayer.strength = (newPlayer.strength || 0) - effect.amount;
@@ -175,6 +185,12 @@ export const processEnemyTurns = (ctx) => {
     if (newEnemy.metallicize > 0 && newEnemy.currentHp > 0) {
       newEnemy.block = (newEnemy.block || 0) + newEnemy.metallicize;
       combatLog.push(`${enemy.name} gained ${newEnemy.metallicize} Block from Metallicize`);
+    }
+
+    // Apply enemy plated armor - gain block each turn (reduced by 1 on unblocked damage)
+    if (newEnemy.platedArmor > 0 && newEnemy.currentHp > 0) {
+      newEnemy.block = (newEnemy.block || 0) + newEnemy.platedArmor;
+      combatLog.push(`${enemy.name} gained ${newEnemy.platedArmor} Block from Plated Armor`);
     }
 
     return newEnemy;
