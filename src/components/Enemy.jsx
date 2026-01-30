@@ -1,7 +1,7 @@
 import { useState, useEffect, memo } from 'react';
 import { INTENT } from '../data/enemies';
 import { getEnemyArtInfo } from '../assets/art/art-config';
-import { getEnemyImagePath, getEnemySizeForType, hasImage, preloadEnemyImage } from '../utils/assetLoader';
+import { hasImage, preloadEnemyImage } from '../utils/assetLoader';
 
 // ASCII art representations for enemies
 const getEnemyArt = (enemyId, type) => {
@@ -192,10 +192,6 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
   const artInfo = getEnemyArtInfo(enemy.id);
   const displayName = enemy.name;
 
-  // Determine the asset pipeline image path and size
-  const enemyImagePath = getEnemyImagePath(enemy.id);
-  const enemyImageSize = getEnemySizeForType(enemy.type);
-
   // Boss/Elite entrance animation
   useEffect(() => {
     if (isBoss || isElite) {
@@ -227,6 +223,19 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
     }
     return isBoss ? 'breathe 3s ease-in-out infinite' : 'breathe 4s ease-in-out infinite';
   };
+
+  // Compute sprite rendering values if sprite sheet is available
+  const spriteRender = artInfo.sprite ? (() => {
+    const displaySize = isBoss ? 100 : isElite ? 85 : 70;
+    const scale = displaySize / artInfo.sprite.cellSize;
+    return {
+      displaySize,
+      bgWidth: artInfo.sprite.sheetWidth * scale,
+      bgHeight: artInfo.sprite.sheetHeight * scale,
+      bgX: artInfo.sprite.x * scale,
+      bgY: artInfo.sprite.y * scale,
+    };
+  })() : null;
 
   return (
     <div
@@ -338,8 +347,24 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
         position: 'relative',
         marginBottom: '6px'
       }}>
-        {/* Priority: 1) Asset pipeline image, 2) Ralph art image, 3) ASCII art */}
-        {imageReady ? (
+        {/* Priority: 1) Sprite sheet, 2) Asset pipeline image, 3) Individual art image, 4) ASCII art */}
+        {spriteRender ? (
+          <div
+            role="img"
+            aria-label={displayName}
+            style={{
+              width: `${spriteRender.displaySize}px`,
+              height: `${spriteRender.displaySize}px`,
+              borderRadius: '8px',
+              overflow: 'hidden',
+              border: `2px solid ${enemyArt.color}`,
+              boxShadow: `0 0 15px ${enemyArt.color}44`,
+              backgroundImage: `url(${artInfo.sprite.spriteUrl})`,
+              backgroundPosition: `-${spriteRender.bgX}px -${spriteRender.bgY}px`,
+              backgroundSize: `${spriteRender.bgWidth}px ${spriteRender.bgHeight}px`,
+            }}
+          />
+        ) : imageReady ? (
           <div style={{
             width: isBoss ? '100px' : isElite ? '85px' : '70px',
             height: isBoss ? '100px' : isElite ? '85px' : '70px',
@@ -349,10 +374,8 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
             boxShadow: `0 0 15px ${enemyArt.color}44`
           }}>
             <img
-              src={enemyImagePath}
+              src={`/images/enemies/${enemy.id}.webp`}
               alt={displayName}
-              width={enemyImageSize}
-              height={enemyImageSize}
               loading="lazy"
               style={{
                 width: '100%',
@@ -361,7 +384,7 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
               }}
             />
           </div>
-        ) : artInfo.hasImage ? (
+        ) : artInfo.hasImage && artInfo.imageUrl ? (
           <div style={{
             width: isBoss ? '100px' : '70px',
             height: isBoss ? '100px' : '70px',
@@ -399,8 +422,8 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
           </div>
         )}
 
-        {/* Emoji overlay for mobile clarity (only when no image from either pipeline) */}
-        {!imageReady && !artInfo.hasImage && (
+        {/* Emoji overlay for mobile clarity (only when no image from any pipeline) */}
+        {!spriteRender && !imageReady && !artInfo.hasImage && (
           <div style={{
             position: 'absolute',
             bottom: '-5px',
