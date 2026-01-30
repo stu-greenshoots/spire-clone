@@ -120,3 +120,17 @@ intent: { type: 'debuff', effect: 'weak', amount: 2, target: 'player' }
 **Ready to start:** Day 2 (after Phase A)
 
 ---
+
+### Sprint 6 - JR-fix: Enemy HP Accuracy
+**Date:** 2026-01-30
+**Status:** PR #52 open, awaiting review
+**Done today:**
+- Aligned Sentry stats with StS baseline: HP 48-56 to 38-42, artifact 2 to 1, damage 11 to 9
+- Updated Sentry AI: all Bolt on turn 0, then staggered alternation (was staggered from turn 0)
+- Documented Gremlin Nob HP deviation (106-118 vs StS 82-86) with code comment
+- Updated 4 test assertions across enemyMechanics.test.js and newMechanics.test.js
+- All tests passing (959), validate clean
+**Blockers:** None
+**Next:** Await PR review and merge
+
+---

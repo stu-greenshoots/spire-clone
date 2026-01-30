@@ -101,3 +101,31 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 **Ready to start:** GD-05 immediately
 
 ---
+
+### Sprint 6 - GD-06 Complete
+**Date:** 2026-01-30
+**Status:** GD-06 complete, PR #53 open targeting sprint-6
+
+**Done today:**
+- Implemented enemy sprite sheet bundling:
+  - Created `scripts/generate-sprite-sheets.js` using sharp to composite 34 enemy WebP images into a single 3072x3072 sprite sheet
+  - Generated `sprite-sheet.webp` (2018KB) + `sprite-manifest.json` (position data for all 34 enemies)
+  - Individual files total: 2126KB -> sprite sheet: 2018KB (5% smaller, 34 requests -> 1)
+  - Updated `art-config.js` with new `getEnemySpriteInfo()` function and sprite sheet loading via `import.meta.glob`
+  - Updated `Enemy.jsx` to render sprites via CSS `background-position` with proper scaling (512px cells -> 70-100px display)
+  - Full fallback chain: sprite sheet -> asset pipeline -> individual art -> ASCII
+  - All 959 tests pass, build succeeds
+
+**Design decisions:**
+- Used CSS `background-position` + `background-size` approach (per DEC-008 investigation)
+- Single sprite sheet for all enemies (6x6 grid) since 34 images fit well in one sheet
+- Sprite sheet is imported via `import.meta.glob` for Vite hashing/bundling
+- Manifest JSON is statically imported at module level
+- Scale factor computed per render: `displaySize / cellSize` applied to all position/size values
+- Individual images still bundled as fallback (e.g., for enemies added after sprite sheet generation)
+
+**Next:**
+- Card sprite sheets could follow the same pattern (100+ cards would need multiple sheets)
+- Consider adding `npm run generate-sprites` to the build pipeline
+
+---
