@@ -339,11 +339,24 @@ Do NOT auto-merge. Complete all review steps.
 
 ---
 
-## Phase 8: Start Ralph Loop
+## Phase 8: Start Ralph Loop (FULL SPRINT SCOPE)
 
-Start ralph loop with 20 max iterations:
+The ralph loop must run until the **entire sprint is complete** — all tasks merged, validation gate passed, sprint board updated. Do NOT scope the completion promise to a single week or phase.
 
-**Action:** Invoke `Skill` tool with `skill: "ralph-loop:ralph-loop"` and `args: "--max-iterations 20"`
+**Completion promise:** `SPRINT N COMPLETE` (replace N with sprint number)
+
+**Action:** Invoke `Skill` tool with:
+- `skill: "ralph-loop:ralph-loop"`
+- `args: "PM Sprint N orchestration - review and merge open PRs, spawn engineers for remaining tasks, update draft PR and SPRINT_BOARD.md. See SPRINT_N_PLAN.md for full task list. --max-iterations 30 --completion-promise SPRINT N COMPLETE"`
+
+Replace N with the current sprint number. Use a single line with no special shell characters.
+
+**CRITICAL:** Only output the completion promise when ALL of these are true:
+1. Every task in the sprint plan is MERGED (check SPRINT_BOARD.md)
+2. The validation gate in the sprint plan is fully satisfied
+3. `npm run validate` passes on the sprint branch
+4. Draft integration PR description is up to date
+5. No open PRs targeting the sprint branch
 
 ---
 
@@ -361,16 +374,23 @@ Each iteration should:
    - Perform Copilot review
    - Perform Mentor review
    - Merge if approved
-   - Update draft integration PR
+   - Update draft integration PR (move task to Merged PRs table, remove from Remaining)
 
-3. **Spawn engineers for unblocked tasks:**
+3. **Spawn engineers for ALL remaining unblocked tasks:**
+   - Check SPRINT_BOARD.md and sprint plan for TODO tasks
    - Use the engineer command pattern above
    - Run in parallel when possible (no dependencies)
+   - Spawn across ALL weeks/phases — do not wait for artificial week boundaries
 
 4. **Update documentation:**
-   - Sprint board
-   - Draft PR checklist
-   - PM diary
+   - Sprint board (task statuses)
+   - Draft PR description (Merged PRs table, Remaining list, Status line)
+   - PM diary (if significant progress)
+
+5. **Check sprint completion:**
+   - Are ALL tasks merged? If not, keep iterating.
+   - Is the validation gate satisfied? If not, identify what's missing.
+   - Only output the completion promise when genuinely done.
 
 ---
 
