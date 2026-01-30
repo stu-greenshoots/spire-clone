@@ -1,6 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { calculateDamage, calculateBlock, applyDamageToTarget } from '../context/GameContext';
 import { getRelicById } from '../data/relics';
+import { getEnemyById, createEnemyInstance } from '../data/enemies';
+import { getCardById } from '../data/cards';
+import { handleEndTurn } from '../context/reducers/combat/endTurnAction';
 
 describe('Status Effects', () => {
   describe('Vulnerable', () => {
@@ -459,6 +462,87 @@ describe('Status Effects', () => {
 
       // Still only 25% reduction
       expect(calculateDamage(10, attacker, defender)).toBe(7);
+    });
+  });
+
+  describe('Status Effect Timing (BE-10)', () => {
+    const createMinimalCombatState = (overrides = {}) => ({
+      player: {
+        currentHp: 50, maxHp: 80, block: 0, energy: 3, maxEnergy: 3,
+        strength: 0, dexterity: 0, vulnerable: 0, weak: 0, frail: 0,
+        cardsPlayedThisTurn: 0, attacksPlayedThisTurn: 0,
+        skillsPlayedThisTurn: 0, powersPlayedThisTurn: 0,
+        ...overrides.player
+      },
+      enemies: overrides.enemies || [createEnemyInstance(getEnemyById('jawWorm'))],
+      hand: [],
+      drawPile: [getCardById('strike'), getCardById('strike'), getCardById('defend'), getCardById('defend'), getCardById('strike')],
+      discardPile: [],
+      exhaustPile: [],
+      relics: [],
+      turn: 1,
+      combatLog: [],
+      roomType: 'combat',
+      ...overrides
+    });
+
+    it('player Vulnerable 2 should last 2 full player turns (decrement at end of player turn)', () => {
+      const state = createMinimalCombatState({ player: { vulnerable: 2 } });
+      const result1 = handleEndTurn(state);
+      expect(result1.player.vulnerable).toBe(1);
+
+      const result2 = handleEndTurn(result1);
+      expect(result2.player.vulnerable).toBe(0);
+    });
+
+    it('player Weak 2 should last 2 full player turns', () => {
+      const state = createMinimalCombatState({ player: { weak: 2 } });
+      const result1 = handleEndTurn(state);
+      expect(result1.player.weak).toBe(1);
+
+      const result2 = handleEndTurn(result1);
+      expect(result2.player.weak).toBe(0);
+    });
+
+    it('player Frail 2 should last 2 full player turns', () => {
+      const state = createMinimalCombatState({ player: { frail: 2 } });
+      const result1 = handleEndTurn(state);
+      expect(result1.player.frail).toBe(1);
+
+      const result2 = handleEndTurn(result1);
+      expect(result2.player.frail).toBe(0);
+    });
+
+    it('player debuffs decrement at end of player turn, not start of next turn', () => {
+      const state = createMinimalCombatState({ player: { vulnerable: 1, weak: 1, frail: 1 } });
+      const result = handleEndTurn(state);
+      expect(result.player.vulnerable).toBe(0);
+      expect(result.player.weak).toBe(0);
+      expect(result.player.frail).toBe(0);
+    });
+
+    it('enemy debuffs applied by player should decrement after enemy acts', () => {
+      const enemy = createEnemyInstance(getEnemyById('jawWorm'));
+      enemy.vulnerable = 2;
+      const state = createMinimalCombatState({ enemies: [enemy] });
+
+      const result1 = handleEndTurn(state);
+      expect(result1.enemies[0].vulnerable).toBe(1);
+
+      const result2 = handleEndTurn(result1);
+      expect(result2.enemies[0].vulnerable).toBe(0);
+    });
+
+    it('enemy Weak applied by player should decrement after enemy acts', () => {
+      const enemy = createEnemyInstance(getEnemyById('jawWorm'));
+      enemy.weak = 2;
+      const state = createMinimalCombatState({ enemies: [enemy] });
+
+      const result1 = handleEndTurn(state);
+      expect(result1.enemies[0].weak).toBe(1);
+
+      const result2 = handleEndTurn(result1);
+      expect(result2.enemies[0].weak).toBe(0);
     });
   });
 });
