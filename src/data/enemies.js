@@ -215,6 +215,8 @@ export const ALL_ENEMIES = [
   {
     id: 'gremlinNob',
     name: 'Gremlin Nob',
+    // HP intentionally higher than StS baseline (82-86) to compensate for
+    // simpler AI pattern and lack of full enrage mechanic scaling
     hp: { min: 106, max: 118 },
     type: 'elite',
     act: 1,
@@ -260,22 +262,23 @@ export const ALL_ENEMIES = [
   {
     id: 'sentryA',
     name: 'Sentry',
-    hp: { min: 48, max: 56 },
+    hp: { min: 38, max: 42 },
     type: 'elite',
     act: 1,
     emoji: '🗿',
-    artifact: 2,
+    artifact: 1,
     spawnCount: 3,
     moveset: [
-      { id: 'bolt', intent: INTENT.ATTACK, damage: 11, message: 'Bolt' },
-      { id: 'beam', intent: INTENT.ATTACK_DEBUFF, damage: 11, special: 'addDazed', message: 'Beam' }
+      { id: 'bolt', intent: INTENT.ATTACK, damage: 9, message: 'Bolt' },
+      { id: 'beam', intent: INTENT.ATTACK_DEBUFF, damage: 9, special: 'addDazed', message: 'Beam' }
     ],
     ai: (enemy, turn, lastMove, index) => {
-      // Staggered attacks - harder to block all damage
+      // StS baseline: all Bolt on first turn, then staggered alternation
+      if (turn === 0) return enemy.moveset[0]; // All sentries Bolt first
       if (index % 2 === 0) {
-        return turn % 2 === 0 ? enemy.moveset[0] : enemy.moveset[1];
+        return turn % 2 === 1 ? enemy.moveset[1] : enemy.moveset[0];
       } else {
-        return turn % 2 === 0 ? enemy.moveset[1] : enemy.moveset[0];
+        return turn % 2 === 1 ? enemy.moveset[0] : enemy.moveset[1];
       }
     }
   },
