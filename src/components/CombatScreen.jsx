@@ -383,6 +383,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   return (
     <div
       ref={containerRef}
+      className="combat-screen-container"
       style={{
         display: 'flex',
         flexDirection: 'column',
