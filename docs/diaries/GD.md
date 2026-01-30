@@ -102,6 +102,30 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ---
 
+### Sprint 7 - GD-08 Complete
+**Date:** 2026-01-30
+**Status:** GD-08 complete, PR #60 open targeting sprint-7
+
+**Done today:**
+- Created `docs/STYLE_GUIDE.md` — one-page style reference (165 lines)
+- Documented all CSS custom properties from `:root` (card types, rarity, UI colors)
+- Defined surface color palette (backgrounds, overlays, highlights)
+- Captured font stack, type scale, base line-height
+- Established 4px spacing scale (4/8/12/16/24/32)
+- Documented component patterns: cards, buttons, panels, overlays, health bars, screen shake
+- All values verified against `src/App.css` and `src/index.css`
+
+**Design decisions:**
+- Kept as documentation only — no CSS changes, no new custom properties
+- Noted surface colors and spacing are not yet extracted to custom properties (future task)
+- Focused on practical reference over comprehensive design system
+
+**Next:**
+- Surface colors could be extracted to CSS custom properties in a follow-up task
+- Spacing scale could become custom properties when needed
+
+---
+
 ### Sprint 6 - GD-06 Complete
 **Date:** 2026-01-30
 **Status:** GD-06 complete, PR #53 open targeting sprint-6
