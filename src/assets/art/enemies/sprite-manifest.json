@@ -1,0 +1,247 @@
+{
+  "cellSize": 512,
+  "cols": 6,
+  "rows": 6,
+  "sheetWidth": 3072,
+  "sheetHeight": 3072,
+  "enemies": {
+    "awakened_one": {
+      "x": 0,
+      "y": 0,
+      "col": 0,
+      "row": 0,
+      "index": 0
+    },
+    "bookOfStabbing": {
+      "x": 512,
+      "y": 0,
+      "col": 1,
+      "row": 0,
+      "index": 1
+    },
+    "byrd": {
+      "x": 1024,
+      "y": 0,
+      "col": 2,
+      "row": 0,
+      "index": 2
+    },
+    "centurion": {
+      "x": 1536,
+      "y": 0,
+      "col": 3,
+      "row": 0,
+      "index": 3
+    },
+    "chosen": {
+      "x": 2048,
+      "y": 0,
+      "col": 4,
+      "row": 0,
+      "index": 4
+    },
+    "corruptHeart": {
+      "x": 2560,
+      "y": 0,
+      "col": 5,
+      "row": 0,
+      "index": 5
+    },
+    "cultist": {
+      "x": 0,
+      "y": 512,
+      "col": 0,
+      "row": 1,
+      "index": 6
+    },
+    "dagger": {
+      "x": 512,
+      "y": 512,
+      "col": 1,
+      "row": 1,
+      "index": 7
+    },
+    "fungiBeast": {
+      "x": 1024,
+      "y": 512,
+      "col": 2,
+      "row": 1,
+      "index": 8
+    },
+    "giant_head": {
+      "x": 1536,
+      "y": 512,
+      "col": 3,
+      "row": 1,
+      "index": 9
+    },
+    "gremlinLeader": {
+      "x": 2048,
+      "y": 512,
+      "col": 4,
+      "row": 1,
+      "index": 10
+    },
+    "gremlinNob": {
+      "x": 2560,
+      "y": 512,
+      "col": 5,
+      "row": 1,
+      "index": 11
+    },
+    "hexaghost": {
+      "x": 0,
+      "y": 1024,
+      "col": 0,
+      "row": 2,
+      "index": 12
+    },
+    "jawWorm": {
+      "x": 512,
+      "y": 1024,
+      "col": 1,
+      "row": 2,
+      "index": 13
+    },
+    "lagavulin": {
+      "x": 1024,
+      "y": 1024,
+      "col": 2,
+      "row": 2,
+      "index": 14
+    },
+    "looter": {
+      "x": 1536,
+      "y": 1024,
+      "col": 3,
+      "row": 2,
+      "index": 15
+    },
+    "louse_green": {
+      "x": 2048,
+      "y": 1024,
+      "col": 4,
+      "row": 2,
+      "index": 16
+    },
+    "louse_red": {
+      "x": 2560,
+      "y": 1024,
+      "col": 5,
+      "row": 2,
+      "index": 17
+    },
+    "orbWalker": {
+      "x": 0,
+      "y": 1536,
+      "col": 0,
+      "row": 3,
+      "index": 18
+    },
+    "reptomancer": {
+      "x": 512,
+      "y": 1536,
+      "col": 1,
+      "row": 3,
+      "index": 19
+    },
+    "sentryA": {
+      "x": 1024,
+      "y": 1536,
+      "col": 2,
+      "row": 3,
+      "index": 20
+    },
+    "slaverBlue": {
+      "x": 1536,
+      "y": 1536,
+      "col": 3,
+      "row": 3,
+      "index": 21
+    },
+    "slimeBoss": {
+      "x": 2048,
+      "y": 1536,
+      "col": 4,
+      "row": 3,
+      "index": 22
+    },
+    "slime_large": {
+      "x": 2560,
+      "y": 1536,
+      "col": 5,
+      "row": 3,
+      "index": 23
+    },
+    "slime_medium": {
+      "x": 0,
+      "y": 2048,
+      "col": 0,
+      "row": 4,
+      "index": 24
+    },
+    "slime_small": {
+      "x": 512,
+      "y": 2048,
+      "col": 1,
+      "row": 4,
+      "index": 25
+    },
+    "snakePlant": {
+      "x": 1024,
+      "y": 2048,
+      "col": 2,
+      "row": 4,
+      "index": 26
+    },
+    "spike_slime_medium": {
+      "x": 1536,
+      "y": 2048,
+      "col": 3,
+      "row": 4,
+      "index": 27
+    },
+    "spike_slime_small": {
+      "x": 2048,
+      "y": 2048,
+      "col": 4,
+      "row": 4,
+      "index": 28
+    },
+    "spiker": {
+      "x": 2560,
+      "y": 2048,
+      "col": 5,
+      "row": 4,
+      "index": 29
+    },
+    "theChamp": {
+      "x": 0,
+      "y": 2560,
+      "col": 0,
+      "row": 5,
+      "index": 30
+    },
+    "theGuardian": {
+      "x": 512,
+      "y": 2560,
+      "col": 1,
+      "row": 5,
+      "index": 31
+    },
+    "timeEater": {
+      "x": 1024,
+      "y": 2560,
+      "col": 2,
+      "row": 5,
+      "index": 32
+    },
+    "writhing_mass": {
+      "x": 1536,
+      "y": 2560,
+      "col": 3,
+      "row": 5,
+      "index": 33
+    }
+  }
+}

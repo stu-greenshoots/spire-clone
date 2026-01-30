@@ -11,7 +11,7 @@ vi.mock('../../utils/assetLoader', () => ({
 
 // Mock the art config
 vi.mock('../../assets/art/art-config', () => ({
-  getEnemyArtInfo: () => ({ hasImage: false, imageUrl: null }),
+  getEnemyArtInfo: () => ({ hasImage: false, imageUrl: null, sprite: null }),
 }));
 
 import Enemy from '../../components/Enemy';
