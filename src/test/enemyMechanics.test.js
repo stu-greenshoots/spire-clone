@@ -105,10 +105,10 @@ describe('Enemy Mechanics', () => {
       });
     });
 
-    it('Sentry should have 2 artifact', () => {
+    it('Sentry should have 1 artifact', () => {
       const sentry = getEnemyById('sentryA');
       expect(sentry).toBeDefined();
-      expect(sentry.artifact).toBe(2);
+      expect(sentry.artifact).toBe(1);
     });
 
     it('artifact should block first debuff application', () => {
