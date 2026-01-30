@@ -64,7 +64,20 @@ git checkout -b sprint-N
 git push -u origin sprint-N
 ```
 
-### 2. Create or Update Integration Draft PR (MANDATORY)
+### 2. Verify Deployment Pipeline
+
+The sprint branch must deploy to GitHub Pages so the user can test. Check that `.github/workflows/deploy.yml` triggers on the sprint branch. The current pattern `sprint-*` should match all sprint branches automatically. If it doesn't, update the workflow.
+
+```bash
+grep -A2 'branches:' .github/workflows/deploy.yml  # Should show sprint-* or sprint-N
+```
+
+After the first push to the sprint branch, verify the deploy workflow ran:
+```bash
+gh run list --branch sprint-N --workflow deploy.yml --limit 3
+```
+
+### 3. Create or Update Integration Draft PR (MANDATORY)
 
 Check if a draft PR exists for this sprint:
 ```bash
