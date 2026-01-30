@@ -321,6 +321,184 @@ describe('Act 2 Enemies - Centurion, Mystic, Snecko (JR-03a)', () => {
     });
   });
 
+  describe('Book of Stabbing (JR-03c)', () => {
+    const book = getEnemyById('bookOfStabbing');
+
+    it('should exist with correct base stats', () => {
+      expect(book).toBeDefined();
+      expect(book.name).toBe('Book of Stabbing');
+      expect(book.hp).toEqual({ min: 160, max: 160 });
+      expect(book.type).toBe('elite');
+      expect(book.act).toBe(2);
+    });
+
+    it('should have multiStabCount starting at 2', () => {
+      expect(book.multiStabCount).toBe(2);
+      expect(book.stabEscalation).toBe(1);
+    });
+
+    it('should have single move: multiStab (6 dmg x2)', () => {
+      expect(book.moveset).toHaveLength(1);
+      expect(book.moveset[0].id).toBe('multiStab');
+      expect(book.moveset[0].damage).toBe(6);
+      expect(book.moveset[0].times).toBe(2);
+    });
+
+    it('AI should always return multiStab', () => {
+      const instance = createEnemyInstance(book);
+      for (let t = 0; t < 5; t++) {
+        const move = book.ai(instance, t, null);
+        expect(move.id).toBe('multiStab');
+      }
+    });
+  });
+
+  describe('Gremlin Leader (JR-03c)', () => {
+    const leader = getEnemyById('gremlinLeader');
+
+    it('should exist with correct base stats', () => {
+      expect(leader).toBeDefined();
+      expect(leader.name).toBe('Gremlin Leader');
+      expect(leader.hp).toEqual({ min: 73, max: 73 });
+      expect(leader.type).toBe('elite');
+      expect(leader.act).toBe(2);
+    });
+
+    it('should have spawnMinions config for gremlin minions', () => {
+      expect(leader.spawnMinions).toBe('gremlinMinion');
+      expect(leader.minionCount).toEqual({ min: 3, max: 4 });
+    });
+
+    it('should have 3 moves: encourage, stab (6x3), enrage', () => {
+      expect(leader.moveset).toHaveLength(3);
+      expect(leader.moveset[0].id).toBe('encourage');
+      expect(leader.moveset[0].effects[0].amount).toBe(3);
+      expect(leader.moveset[1].id).toBe('stab');
+      expect(leader.moveset[1].damage).toBe(6);
+      expect(leader.moveset[1].times).toBe(3);
+      expect(leader.moveset[2].id).toBe('enrage');
+      expect(leader.moveset[2].effects[0].type).toBe('strength');
+      expect(leader.moveset[2].effects[0].amount).toBe(9);
+      expect(leader.moveset[2].effects[1].type).toBe('metallicize');
+      expect(leader.moveset[2].effects[1].amount).toBe(9);
+    });
+
+    it('AI should enrage when alone (no living minions)', () => {
+      const instance = createEnemyInstance(leader);
+      const move = leader.ai(instance, 1, null, 0, [instance]);
+      expect(move.id).toBe('enrage');
+    });
+
+    it('AI should encourage on turn 0 with minions', () => {
+      const instance = createEnemyInstance(leader);
+      const minion = createEnemyInstance(getEnemyById('gremlinMinion'));
+      const move = leader.ai(instance, 0, null, 0, [instance, minion]);
+      expect(move.id).toBe('encourage');
+    });
+
+    it('AI should alternate encourage and stab with minions', () => {
+      const instance = createEnemyInstance(leader);
+      const minion = createEnemyInstance(getEnemyById('gremlinMinion'));
+      const allies = [instance, minion];
+      const m1 = leader.ai(instance, 1, null, 0, allies);
+      expect(m1.id).toBe('stab');
+      const m2 = leader.ai(instance, 2, m1, 0, allies);
+      expect(m2.id).toBe('encourage');
+    });
+  });
+
+  describe('Gremlin Minion (JR-03c)', () => {
+    const minion = getEnemyById('gremlinMinion');
+
+    it('should exist with correct base stats', () => {
+      expect(minion).toBeDefined();
+      expect(minion.name).toBe('Gremlin');
+      expect(minion.hp).toEqual({ min: 18, max: 22 });
+      expect(minion.type).toBe('minion');
+      expect(minion.act).toBe(2);
+    });
+
+    it('should have single move: scratch (5 dmg)', () => {
+      expect(minion.moveset).toHaveLength(1);
+      expect(minion.moveset[0].id).toBe('scratch');
+      expect(minion.moveset[0].damage).toBe(5);
+    });
+  });
+
+  describe('Reptomancer (JR-03c)', () => {
+    const repto = getEnemyById('reptomancer');
+
+    it('should exist with correct base stats', () => {
+      expect(repto).toBeDefined();
+      expect(repto.name).toBe('Reptomancer');
+      expect(repto.hp).toEqual({ min: 180, max: 180 });
+      expect(repto.type).toBe('elite');
+      expect(repto.act).toBe(2);
+    });
+
+    it('should have spawnMinions config for daggers', () => {
+      expect(repto.spawnMinions).toBe('dagger');
+      expect(repto.minionCount).toEqual({ min: 2, max: 2 });
+    });
+
+    it('should have 3 moves: summon, snakeStrike (16 + weak 1), bigBite (30)', () => {
+      expect(repto.moveset).toHaveLength(3);
+      expect(repto.moveset[0].id).toBe('summon');
+      expect(repto.moveset[1].id).toBe('snakeStrike');
+      expect(repto.moveset[1].damage).toBe(16);
+      expect(repto.moveset[1].effects[0].type).toBe('weak');
+      expect(repto.moveset[2].id).toBe('bigBite');
+      expect(repto.moveset[2].damage).toBe(30);
+    });
+
+    it('AI should summon on turn 0', () => {
+      const instance = createEnemyInstance(repto);
+      const move = repto.ai(instance, 0, null, 0, []);
+      expect(move.id).toBe('summon');
+    });
+
+    it('AI should resummon when all daggers dead', () => {
+      const instance = createEnemyInstance(repto);
+      const move = repto.ai(instance, 2, null, 0, [instance]);
+      expect(move.id).toBe('summon');
+    });
+
+    it('AI should alternate snakeStrike and bigBite with living daggers', () => {
+      const instance = createEnemyInstance(repto);
+      const dagger = createEnemyInstance(getEnemyById('dagger'));
+      const allies = [instance, dagger];
+      const m1 = repto.ai(instance, 1, null, 0, allies);
+      expect(m1.id).toBe('snakeStrike');
+      const m2 = repto.ai(instance, 2, m1, 0, allies);
+      expect(m2.id).toBe('bigBite');
+    });
+  });
+
+  describe('Dagger (JR-03c)', () => {
+    const dagger = getEnemyById('dagger');
+
+    it('should exist with correct base stats', () => {
+      expect(dagger).toBeDefined();
+      expect(dagger.name).toBe('Dagger');
+      expect(dagger.hp).toEqual({ min: 25, max: 25 });
+      expect(dagger.type).toBe('minion');
+      expect(dagger.act).toBe(2);
+    });
+
+    it('should have single move: stab (9x2)', () => {
+      expect(dagger.moveset).toHaveLength(1);
+      expect(dagger.moveset[0].id).toBe('stab');
+      expect(dagger.moveset[0].damage).toBe(9);
+      expect(dagger.moveset[0].times).toBe(2);
+    });
+
+    it('AI should always return stab', () => {
+      const move = dagger.ai();
+      expect(move.id).toBe('stab');
+      expect(move.times).toBe(2);
+    });
+  });
+
   describe('Centurion + Mystic pair fight', () => {
     it('both should reference each other via pair property', () => {
       const centurion = getEnemyById('centurion');

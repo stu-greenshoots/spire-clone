@@ -157,91 +157,65 @@ describe('Fixed Mechanics', () => {
     });
   });
 
-  describe('Book of Stabbing escalation (addStab)', () => {
-    it('Book of Stabbing should have multiStabCount and stabEscalation', () => {
+  describe('Book of Stabbing escalation', () => {
+    it('Book of Stabbing should have multiStabCount starting at 2 and stabEscalation', () => {
       const book = getEnemyById('bookOfStabbing');
       expect(book).toBeDefined();
-      expect(book.multiStabCount).toBe(3);
+      expect(book.multiStabCount).toBe(2);
       expect(book.stabEscalation).toBe(1);
     });
 
-    it('multiStab move should have addStab special', () => {
+    it('multiStab should be the only move with damage 6', () => {
       const book = getEnemyById('bookOfStabbing');
-      const multiStab = book.moveset.find(m => m.id === 'multiStab');
-      expect(multiStab).toBeDefined();
-      expect(multiStab.special).toBe('addStab');
+      expect(book.moveset).toHaveLength(1);
+      const multiStab = book.moveset[0];
+      expect(multiStab.id).toBe('multiStab');
+      expect(multiStab.damage).toBe(6);
+      expect(multiStab.times).toBe(2);
     });
 
-    it('hit count should use enemy.multiStabCount when move.special is addStab', () => {
-      // Simulate the reducer logic for determining hit count
+    it('hit count should use enemy.multiStabCount for escalation', () => {
       const book = getEnemyById('bookOfStabbing');
       const instance = createEnemyInstance(book);
-      const move = book.moveset.find(m => m.special === 'addStab');
 
-      // Initial state: multiStabCount is 3, same as move.times
-      let enemy = { ...instance, multiStabCount: 3 };
-      let hits = (move.special === 'addStab' && enemy.multiStabCount)
-        ? enemy.multiStabCount
-        : (move.times || 1);
-      expect(hits).toBe(3);
+      // Initial state: multiStabCount is 2
+      let enemy = { ...instance, multiStabCount: 2 };
+      expect(enemy.multiStabCount).toBe(2);
 
-      // After first escalation: multiStabCount becomes 4
+      // After first escalation: multiStabCount becomes 3
+      enemy.multiStabCount = 3;
+      expect(enemy.multiStabCount).toBe(3);
+
+      // After second escalation: multiStabCount becomes 4
       enemy.multiStabCount = 4;
-      hits = (move.special === 'addStab' && enemy.multiStabCount)
-        ? enemy.multiStabCount
-        : (move.times || 1);
-      expect(hits).toBe(4);
-
-      // After second escalation: multiStabCount becomes 5
-      enemy.multiStabCount = 5;
-      hits = (move.special === 'addStab' && enemy.multiStabCount)
-        ? enemy.multiStabCount
-        : (move.times || 1);
-      expect(hits).toBe(5);
+      expect(enemy.multiStabCount).toBe(4);
     });
 
-    it('without escalation fix, hits would always be static move.times (3)', () => {
+    it('multiStabCount should increment by stabEscalation each turn', () => {
       const book = getEnemyById('bookOfStabbing');
-      const move = book.moveset.find(m => m.special === 'addStab');
-
-      // Using only move.times ignores escalation
-      const staticHits = move.times;
-      expect(staticHits).toBe(3); // Always 3, never escalates
-
-      // Using multiStabCount respects escalation
-      const escalatedEnemy = { multiStabCount: 7 };
-      const dynamicHits = (move.special === 'addStab' && escalatedEnemy.multiStabCount)
-        ? escalatedEnemy.multiStabCount
-        : (move.times || 1);
-      expect(dynamicHits).toBe(7); // Properly escalated
-    });
-
-    it('addStab special should increment multiStabCount by stabEscalation', () => {
-      const book = getEnemyById('bookOfStabbing');
-      let enemy = { ...createEnemyInstance(book), multiStabCount: 3 };
+      let enemy = { ...createEnemyInstance(book), multiStabCount: 2 };
 
       // Simulate the reducer: multiStabCount += stabEscalation
-      enemy.multiStabCount = (enemy.multiStabCount || 3) + (enemy.stabEscalation || 1);
+      enemy.multiStabCount = (enemy.multiStabCount || 2) + (enemy.stabEscalation || 1);
+      expect(enemy.multiStabCount).toBe(3);
+
+      enemy.multiStabCount = (enemy.multiStabCount || 2) + (enemy.stabEscalation || 1);
       expect(enemy.multiStabCount).toBe(4);
 
-      enemy.multiStabCount = (enemy.multiStabCount || 3) + (enemy.stabEscalation || 1);
+      enemy.multiStabCount = (enemy.multiStabCount || 2) + (enemy.stabEscalation || 1);
       expect(enemy.multiStabCount).toBe(5);
-
-      enemy.multiStabCount = (enemy.multiStabCount || 3) + (enemy.stabEscalation || 1);
-      expect(enemy.multiStabCount).toBe(6);
     });
 
     it('total damage should increase each turn with escalation', () => {
       const book = getEnemyById('bookOfStabbing');
-      const move = book.moveset.find(m => m.special === 'addStab');
-      const baseDamage = move.damage; // 7
+      const baseDamage = book.moveset[0].damage; // 6
 
-      // Turn 1: 3 hits * 7 = 21
-      expect(baseDamage * 3).toBe(21);
-      // Turn 2: 4 hits * 7 = 28
-      expect(baseDamage * 4).toBe(28);
-      // Turn 3: 5 hits * 7 = 35
-      expect(baseDamage * 5).toBe(35);
+      // Turn 1: 2 hits * 6 = 12
+      expect(baseDamage * 2).toBe(12);
+      // Turn 2: 3 hits * 6 = 18
+      expect(baseDamage * 3).toBe(18);
+      // Turn 3: 4 hits * 6 = 24
+      expect(baseDamage * 4).toBe(24);
     });
   });
 

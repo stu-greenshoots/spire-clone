@@ -140,6 +140,7 @@ export const ENEMY_LORE = {
   centurion: 'Remnants of a conquered army, still marching in hollow formation.',
   bookOfStabbing: 'A grimoire animated by malice, its pages edged like razors.',
   gremlinLeader: 'Commands lesser gremlins through sheer brutality and cunning.',
+  gremlinMinion: 'Small, vicious creatures that swarm at their leader\'s command.',
   slaverBlue: 'Binds victims with enchanted chains that drain the will to resist.',
   writhing_mass: 'A shapeless horror of fused flesh and screaming faces.',
   giant_head: 'A colossal stone sentinel that counts down to annihilation.',
