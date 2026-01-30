@@ -240,16 +240,16 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Plan:** See `SPRINT_6_PLAN.md`
 **Branch:** `sprint-6`
 **Draft PR:** TBD
-**Status:** IN PROGRESS - Week 1 starting
+**Status:** IN PROGRESS - Week 1 COMPLETE, Week 2 starting
 
 ### P0 — Must Ship
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| BE-16 | BE | S | Power card fix — remove from play, not discard | TODO |
+| BE-16 | BE | S | Power card fix — remove from play, not discard | MERGED (PR #51) |
 | UX-10 | UX | M | Focused top-20 UX hit list | TODO |
-| QA-07a | QA | S | Mechanics audit spike — verify 4 Copilot claims | TODO |
-| VARROW-01 | Varrow | M | Act 1 boss dialogue ("Endless War") | TODO |
+| QA-07a | QA | S | Mechanics audit spike — verify 4 Copilot claims | MERGED (PR #50) |
+| VARROW-01 | Varrow | M | Act 1 boss dialogue ("Endless War") | MERGED (PR #50) |
 
 ### P1 — Should Ship
 
@@ -259,9 +259,9 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | BE-09 | BE | M | Starting bonus / Neow | TODO |
 | UX-11 | UX | S | Block indicator — no layout jumps | TODO |
 | QA-06 | QA | M | Balance pass (25-35% win rate A0) | TODO |
-| JR-fix | JR | S | Enemy HP accuracy (Sentry → StS baseline) | TODO |
+| JR-fix | JR | S | Enemy HP accuracy (Sentry → StS baseline) | MERGED (PR #52) |
 | JR-prep | JR | — | Draft 10 Act 2 enemy designs (doc only) | TODO |
-| GD-06 | GD | S | Sprite sheets (deferred from Sprint 4) | TODO |
+| GD-06 | GD | S | Sprite sheets (deferred from Sprint 4) | MERGED (PR #53) |
 
 ### P2 — Stretch
 
