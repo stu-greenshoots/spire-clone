@@ -1,21 +1,21 @@
 export const BOSS_DIALOGUE = {
   slimeBoss: {
-    personality: 'Mindless, hungry, primordial. Communicates through oozing sounds and gurgles.',
-    intro: 'A massive wall of acidic slime blocks the passage. It pulses with a sick, hungry rhythm—sensing prey.',
-    midFight: 'The creature shudders violently, splitting and reforming. Its hunger only grows.',
-    deathQuote: 'The slime collapses into a bubbling pool, its hunger finally extinguished.',
+    personality: 'The war\'s simplest output. No mind, no memory. It splits and consumes because that is the only pattern it knows. It does not fight you — it processes you.',
+    intro: 'Something shifts in the passage ahead. Not a creature — a process. The war\'s simplest answer to complexity: divide, absorb, repeat.',
+    midFight: 'It splits without hesitation, without thought. There is nothing behind its movement but pattern. It does not know you. It does not need to.',
+    deathQuote: 'The mass collapses, but the pieces do not dissolve. They settle. Shrink. Reform into something smaller, denser. The war does not waste its material.',
   },
   theGuardian: {
-    personality: 'Ancient construct, dutiful, speaks in mechanical tones. Sees combat as a test.',
-    intro: '"INTRUDER DETECTED. INITIATING DEFENSE PROTOCOL. YOU WILL BE... EVALUATED."',
-    midFight: '"RECALIBRATING. SWITCHING TO AGGRESSIVE STANCE. YOU ARE... PERSISTENT."',
-    deathQuote: '"PROTOCOL... FAILED. PASSAGE... GRANTED. YOU ARE... WORTHY..."',
+    personality: 'The war\'s oldest iteration. It has stood at this threshold longer than anything else in the Spire. It does not guard — it repeats. It is the pattern examining itself.',
+    intro: 'It was here before you. Before the last version of you. Before the version before that. The war\'s oldest pattern, still iterating, still finding the same answer.',
+    midFight: 'Something shifts in its stance — not adaptation, but recognition. It has processed this configuration before. Or one close enough.',
+    deathQuote: 'It does not fall. It simply stops iterating. The pattern that held it together unravels, and what remains is indistinguishable from the walls around it.',
   },
   hexaghost: {
-    personality: 'Ancient, melancholic, treats combat as ritual. Six flames are fragments of its former self.',
-    intro: 'Six flames orbit a hollow shell of what was once a warrior. It regards you with something like pity.',
-    midFight: '"You burn brightly... but all flames gutter in the end."',
-    deathQuote: '"At last... the cold..."',
+    personality: 'Six flames, six failed attempts the war remembers. It is not a ghost — it is a record. The war\'s memory, burning.',
+    intro: 'Six flames circle in the dark. Each one a different color, a different temperature. The war remembers its failed attempts, and it remembers them in fire.',
+    midFight: 'The flames flicker with shapes almost familiar — a stance you considered, a card you almost played. Fragments of previous climbers, still burning in its memory.',
+    deathQuote: 'The shell cracks and the flames scatter outward, each drifting in a different direction. They do not go out. Somewhere in the Spire, they will find new fuel.',
   },
   theChamp: {
     personality: 'Arrogant, theatrical, lives for the fight. Respects worthy opponents.',
