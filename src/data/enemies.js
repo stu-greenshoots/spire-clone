@@ -286,44 +286,42 @@ export const ALL_ENEMIES = [
   {
     id: 'chosen',
     name: 'Chosen',
-    hp: { min: 62, max: 68 },
+    hp: { min: 95, max: 95 },
     type: 'normal',
     act: 2,
     emoji: '⚔️',
+    artifact: 1, // Blocks first debuff applied to it
     moveset: [
+      { id: 'hex', intent: INTENT.DEBUFF, effects: [{ type: 'vulnerable', amount: 2, target: 'player' }], message: 'Hex' },
       { id: 'poke', intent: INTENT.ATTACK, damage: 5, times: 2, message: 'Poke' },
-      { id: 'zap', intent: INTENT.ATTACK_DEBUFF, damage: 12, effects: [{ type: 'vulnerable', amount: 2, target: 'player' }], message: 'Zap' },
-      { id: 'debilitate', intent: INTENT.DEBUFF, effects: [{ type: 'weak', amount: 2, target: 'player' }, { type: 'vulnerable', amount: 2, target: 'player' }], message: 'Debilitate' },
-      { id: 'hex', intent: INTENT.DEBUFF, special: 'addHex', message: 'Hex' }
+      { id: 'drain', intent: INTENT.ATTACK_BUFF, damage: 18, special: 'healSelf', healAmount: 7, message: 'Drain' }
     ],
     ai: (enemy, turn, lastMove) => {
-      if (turn === 0) return enemy.moveset[3];
-      const roll = Math.random();
-      if (roll < 0.5 && lastMove?.id !== 'poke') return enemy.moveset[0];
-      if (roll < 0.8) return enemy.moveset[1];
-      return enemy.moveset[2];
+      // Opens with Hex, then cycles poke/drain
+      if (turn === 0) return enemy.moveset[0];
+      if (lastMove?.id === 'poke') return enemy.moveset[2];
+      return enemy.moveset[1];
     }
   },
   {
     id: 'byrd',
     name: 'Byrd',
-    hp: { min: 25, max: 31 },
+    hp: { min: 25, max: 25 },
     type: 'normal',
     act: 2,
     emoji: '🦅',
-    flying: true,
+    flying: true, // flight: 3 applied via createEnemyInstance when flying is true
+    // NOTE: flight mechanic acts as block-like damage reduction; needs wiring in combat system if not already done
     moveset: [
       { id: 'caw', intent: INTENT.BUFF, effects: [{ type: 'strength', amount: 1 }], message: 'Caw' },
       { id: 'peck', intent: INTENT.ATTACK, damage: 1, times: 5, message: 'Peck' },
-      { id: 'swoop', intent: INTENT.ATTACK, damage: 12, message: 'Swoop' },
-      { id: 'fly', intent: INTENT.BUFF, special: 'gainFlight', message: 'Fly' }
+      { id: 'swoop', intent: INTENT.ATTACK, damage: 14, message: 'Swoop' }
     ],
-    ai: (enemy, _turn, _lastMove) => {
-      if (!enemy.grounded && Math.random() < 0.5) return enemy.moveset[3];
-      const roll = Math.random();
-      if (roll < 0.4) return enemy.moveset[0];
-      if (roll < 0.7) return enemy.moveset[1];
-      return enemy.moveset[2];
+    ai: (enemy, turn, lastMove) => {
+      // Opens with Caw, then alternates peck/swoop
+      if (turn === 0) return enemy.moveset[0];
+      if (lastMove?.id === 'peck') return enemy.moveset[2];
+      return enemy.moveset[1];
     }
   },
   {
@@ -477,21 +475,19 @@ export const ALL_ENEMIES = [
   {
     id: 'shelledParasite',
     name: 'Shelled Parasite',
-    hp: { min: 68, max: 72 },
+    hp: { min: 71, max: 71 },
     type: 'normal',
     act: 2,
     emoji: '🐚',
-    retainBlock: true,
+    platedArmor: 14, // Gains 14 block each turn, degrades when taking unblocked damage
     moveset: [
-      { id: 'shell', intent: INTENT.DEFEND, block: 14, message: 'Shell' },
-      { id: 'suck', intent: INTENT.ATTACK_BUFF, damage: 10, special: 'healSelf', healAmount: 5, message: 'Suck' },
-      { id: 'doubleTap', intent: INTENT.ATTACK, damage: 6, times: 2, message: 'Double Tap' }
+      { id: 'suck', intent: INTENT.ATTACK_BUFF, damage: 10, special: 'healSelf', healAmount: 3, message: 'Suck' },
+      { id: 'fell', intent: INTENT.ATTACK_DEBUFF, damage: 18, effects: [{ type: 'frail', amount: 2, target: 'player' }], message: 'Fell' }
     ],
     ai: (enemy, turn, _lastMove) => {
-      // Shells first turn, then alternates between suck and double tap
-      if (turn === 0) return enemy.moveset[0];
-      if (turn % 2 === 1) return enemy.moveset[1];
-      return enemy.moveset[2];
+      // Alternates suck and fell
+      if (turn % 2 === 0) return enemy.moveset[0];
+      return enemy.moveset[1];
     }
   },
   {
@@ -866,6 +862,7 @@ export const createEnemyInstance = (enemy, index = 0) => {
     thorns: enemy.thorns || 0,
     flight: enemy.flying ? 3 : 0,
     metallicize: enemy.metallicize || 0,
+    platedArmor: enemy.platedArmor || 0,
     enrage: 0,
     lastMove: null,
     moveIndex: 0,

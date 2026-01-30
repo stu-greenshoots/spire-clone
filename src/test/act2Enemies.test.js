@@ -177,6 +177,150 @@ describe('Act 2 Enemies - Centurion, Mystic, Snecko (JR-03a)', () => {
     });
   });
 
+  describe('Chosen (JR-03b)', () => {
+    const chosen = getEnemyById('chosen');
+
+    it('should exist with correct base stats', () => {
+      expect(chosen).toBeDefined();
+      expect(chosen.name).toBe('Chosen');
+      expect(chosen.hp).toEqual({ min: 95, max: 95 });
+      expect(chosen.type).toBe('normal');
+      expect(chosen.act).toBe(2);
+    });
+
+    it('should have artifact: 1', () => {
+      expect(chosen.artifact).toBe(1);
+    });
+
+    it('should have 3 moves: hex, poke (5x2), drain (18 dmg + heal 7)', () => {
+      expect(chosen.moveset).toHaveLength(3);
+      expect(chosen.moveset[0].id).toBe('hex');
+      expect(chosen.moveset[0].effects[0].type).toBe('vulnerable');
+      expect(chosen.moveset[0].effects[0].amount).toBe(2);
+      expect(chosen.moveset[1].id).toBe('poke');
+      expect(chosen.moveset[1].damage).toBe(5);
+      expect(chosen.moveset[1].times).toBe(2);
+      expect(chosen.moveset[2].id).toBe('drain');
+      expect(chosen.moveset[2].damage).toBe(18);
+      expect(chosen.moveset[2].healAmount).toBe(7);
+    });
+
+    it('AI should open with Hex on turn 0', () => {
+      const instance = createEnemyInstance(chosen);
+      const move = chosen.ai(instance, 0, null);
+      expect(move.id).toBe('hex');
+    });
+
+    it('AI should cycle poke -> drain -> poke', () => {
+      const instance = createEnemyInstance(chosen);
+      const hex = chosen.moveset[0];
+      const poke = chosen.moveset[1];
+      const drain = chosen.moveset[2];
+
+      const m1 = chosen.ai(instance, 1, hex);
+      expect(m1.id).toBe('poke');
+
+      const m2 = chosen.ai(instance, 2, poke);
+      expect(m2.id).toBe('drain');
+
+      const m3 = chosen.ai(instance, 3, drain);
+      expect(m3.id).toBe('poke');
+    });
+
+    it('createEnemyInstance should set artifact to 1', () => {
+      const instance = createEnemyInstance(chosen);
+      expect(instance.artifact).toBe(1);
+    });
+  });
+
+  describe('Shelled Parasite (JR-03b)', () => {
+    const parasite = getEnemyById('shelledParasite');
+
+    it('should exist with correct base stats', () => {
+      expect(parasite).toBeDefined();
+      expect(parasite.name).toBe('Shelled Parasite');
+      expect(parasite.hp).toEqual({ min: 71, max: 71 });
+      expect(parasite.type).toBe('normal');
+      expect(parasite.act).toBe(2);
+    });
+
+    it('should have platedArmor: 14', () => {
+      expect(parasite.platedArmor).toBe(14);
+    });
+
+    it('should have 2 moves: suck (10 dmg + heal 3), fell (18 dmg + frail 2)', () => {
+      expect(parasite.moveset).toHaveLength(2);
+      expect(parasite.moveset[0].id).toBe('suck');
+      expect(parasite.moveset[0].damage).toBe(10);
+      expect(parasite.moveset[0].healAmount).toBe(3);
+      expect(parasite.moveset[1].id).toBe('fell');
+      expect(parasite.moveset[1].damage).toBe(18);
+      expect(parasite.moveset[1].effects[0].type).toBe('frail');
+      expect(parasite.moveset[1].effects[0].amount).toBe(2);
+    });
+
+    it('AI should alternate suck and fell', () => {
+      const instance = createEnemyInstance(parasite);
+      expect(parasite.ai(instance, 0, null).id).toBe('suck');
+      expect(parasite.ai(instance, 1, null).id).toBe('fell');
+      expect(parasite.ai(instance, 2, null).id).toBe('suck');
+      expect(parasite.ai(instance, 3, null).id).toBe('fell');
+    });
+
+    it('createEnemyInstance should set platedArmor to 14', () => {
+      const instance = createEnemyInstance(parasite);
+      expect(instance.platedArmor).toBe(14);
+    });
+  });
+
+  describe('Byrd (JR-03b)', () => {
+    const byrd = getEnemyById('byrd');
+
+    it('should exist with correct base stats', () => {
+      expect(byrd).toBeDefined();
+      expect(byrd.name).toBe('Byrd');
+      expect(byrd.hp).toEqual({ min: 25, max: 25 });
+      expect(byrd.type).toBe('normal');
+      expect(byrd.act).toBe(2);
+    });
+
+    it('should have flying: true (flight: 3 via createEnemyInstance)', () => {
+      expect(byrd.flying).toBe(true);
+      const instance = createEnemyInstance(byrd);
+      expect(instance.flight).toBe(3);
+    });
+
+    it('should have 3 moves: caw (+1 str), peck (1x5), swoop (14 dmg)', () => {
+      expect(byrd.moveset).toHaveLength(3);
+      expect(byrd.moveset[0].id).toBe('caw');
+      expect(byrd.moveset[0].effects[0].type).toBe('strength');
+      expect(byrd.moveset[0].effects[0].amount).toBe(1);
+      expect(byrd.moveset[1].id).toBe('peck');
+      expect(byrd.moveset[1].damage).toBe(1);
+      expect(byrd.moveset[1].times).toBe(5);
+      expect(byrd.moveset[2].id).toBe('swoop');
+      expect(byrd.moveset[2].damage).toBe(14);
+    });
+
+    it('AI should open with Caw on turn 0', () => {
+      const instance = createEnemyInstance(byrd);
+      const move = byrd.ai(instance, 0, null);
+      expect(move.id).toBe('caw');
+    });
+
+    it('AI should alternate peck and swoop after caw', () => {
+      const instance = createEnemyInstance(byrd);
+      const caw = byrd.moveset[0];
+      const peck = byrd.moveset[1];
+
+      const m1 = byrd.ai(instance, 1, caw);
+      expect(m1.id).toBe('peck');
+
+      const m2 = byrd.ai(instance, 2, peck);
+      expect(m2.id).toBe('swoop');
+    });
+  });
+
   describe('Centurion + Mystic pair fight', () => {
     it('both should reference each other via pair property', () => {
       const centurion = getEnemyById('centurion');
