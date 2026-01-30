@@ -1499,3 +1499,36 @@ button:active {
 .victory-reward-button:nth-child(2) { animation-delay: 0.3s; }
 .victory-reward-button:nth-child(3) { animation-delay: 0.4s; }
 
+/* ==================== UX-13a: Mobile Combat HUD ==================== */
+
+/* Mobile: collapsible header during combat + vertical combat zones */
+@media (max-width: 768px) {
+  /* During combat, show compact header and hide full rows */
+  .persistent-header-container.combat-mode .combat-header-compact {
+    display: flex !important;
+  }
+
+  .persistent-header-container.combat-mode .header-stats-row,
+  .persistent-header-container.combat-mode .header-relics-row,
+  .persistent-header-container.combat-mode .header-potions-row {
+    display: none !important;
+  }
+
+  /* When HUD is expanded during combat, show everything */
+  .persistent-header-container.combat-mode.hud-expanded .header-stats-row,
+  .persistent-header-container.combat-mode.hud-expanded .header-relics-row,
+  .persistent-header-container.combat-mode.hud-expanded .header-potions-row {
+    display: flex !important;
+  }
+
+  /* Reduce combat screen padding to match compact header (~40px) */
+  .combat-screen-container {
+    padding-top: 40px !important;
+  }
+
+  /* HUD expand button - no hover transform on mobile */
+  .hud-expand-btn:hover {
+    transform: none !important;
+  }
+}
+

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGame, GAME_PHASE } from '../context/GameContext';
 import Card from './Card';
 import PotionSlots from './PotionSlots';
@@ -11,12 +11,25 @@ const PersistentHeader = () => {
   const [selectedRelic, setSelectedRelic] = useState(null);
   const [showDeckView, setShowDeckView] = useState(false);
   const [muted, setMutedState] = useState(isMuted());
+  const [hudExpanded, setHudExpanded] = useState(false);
+
+  const isCombatPhase = phase === GAME_PHASE.COMBAT ||
+    phase === GAME_PHASE.CARD_SELECT_HAND ||
+    phase === GAME_PHASE.CARD_SELECT_DISCARD ||
+    phase === GAME_PHASE.CARD_SELECT_EXHAUST;
 
   const toggleMute = () => {
     const newValue = !muted;
     setMuted(newValue);
     setMutedState(newValue);
   };
+
+  // Reset expanded state when leaving combat
+  useEffect(() => {
+    if (!isCombatPhase) {
+      setHudExpanded(false);
+    }
+  }, [isCombatPhase]);
 
   // Don't show on main menu, game over, or victory screens
   if (phase === GAME_PHASE.MAIN_MENU || phase === GAME_PHASE.GAME_OVER || phase === GAME_PHASE.VICTORY) {
@@ -36,21 +49,138 @@ const PersistentHeader = () => {
 
   return (
     <>
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'linear-gradient(180deg, rgba(15, 15, 25, 0.98) 0%, rgba(20, 20, 35, 0.95) 100%)',
-        borderBottom: '2px solid #444',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.6)',
-        backdropFilter: 'blur(10px)'
-      }}>
-        {/* Row 1: Stats */}
-        <div style={{
+      <div
+        className={`persistent-header-container${isCombatPhase ? ' combat-mode' : ''}${hudExpanded ? ' hud-expanded' : ''}`}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          display: 'flex',
+          flexDirection: 'column',
+          background: 'linear-gradient(180deg, rgba(15, 15, 25, 0.98) 0%, rgba(20, 20, 35, 0.95) 100%)',
+          borderBottom: '2px solid #444',
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.6)',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
+        {/* Combat compact header - shown on mobile during combat */}
+        {isCombatPhase && (
+          <div className="combat-header-compact" style={{
+            display: 'none', /* shown via CSS on mobile */
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '6px 12px',
+            gap: '8px'
+          }}>
+            {/* HP bar - compact */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flex: 1 }}>
+              <span style={{ fontSize: '14px', filter: 'drop-shadow(0 0 4px #ff4444)' }}>{'\u2764\uFE0F'}</span>
+              <div style={{
+                position: 'relative',
+                flex: 1,
+                maxWidth: '100px',
+                height: '16px',
+                background: '#1a1a2a',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                border: '1px solid #333'
+              }}>
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: `${hpPercentage}%`,
+                  height: '100%',
+                  background: `linear-gradient(180deg, ${hpColor} 0%, ${hpColor}88 100%)`,
+                  borderRadius: '7px',
+                  transition: 'width 0.4s ease'
+                }} />
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}>
+                  <span style={{
+                    color: '#fff',
+                    fontSize: '10px',
+                    fontWeight: 'bold',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.8)'
+                  }}>
+                    {player.currentHp}/{player.maxHp}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Block indicator - always reserve space */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '3px',
+              padding: '3px 8px',
+              background: player.block > 0 ? 'rgba(74, 144, 217, 0.25)' : 'rgba(74, 144, 217, 0.08)',
+              borderRadius: '6px',
+              border: `1px solid ${player.block > 0 ? 'rgba(74, 144, 217, 0.5)' : 'rgba(74, 144, 217, 0.15)'}`,
+              minWidth: '42px',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease'
+            }}>
+              <span style={{ fontSize: '12px' }}>{'\uD83D\uDEE1\uFE0F'}</span>
+              <span style={{
+                color: player.block > 0 ? '#6bb5ff' : '#555',
+                fontSize: '11px',
+                fontWeight: 'bold'
+              }}>
+                {player.block}
+              </span>
+            </div>
+
+            {/* Floor indicator - compact */}
+            <div style={{
+              color: '#FFD700',
+              fontSize: '10px',
+              fontWeight: 'bold',
+              padding: '3px 6px',
+              background: 'rgba(255, 215, 0, 0.1)',
+              borderRadius: '6px'
+            }}>
+              {act}-{currentFloor + 2}
+            </div>
+
+            {/* Expand chevron */}
+            <button
+              onClick={() => setHudExpanded(!hudExpanded)}
+              className="hud-expand-btn"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '28px',
+                height: '28px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                cursor: 'pointer',
+                fontSize: '12px',
+                color: '#888',
+                padding: 0,
+                minHeight: 'auto',
+                minWidth: 'auto',
+                transition: 'transform 0.2s ease'
+              }}
+              title={hudExpanded ? 'Collapse' : 'Expand'}
+            >
+              {hudExpanded ? '\u25B2' : '\u25BC'}
+            </button>
+          </div>
+        )}
+
+        {/* Row 1: Stats - full header (hidden on mobile during combat unless expanded) */}
+        <div className="header-stats-row" style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -199,7 +329,7 @@ const PersistentHeader = () => {
         </div>
 
         {/* Row 2: Relics */}
-        <div style={{
+        <div className="header-relics-row" style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -255,7 +385,7 @@ const PersistentHeader = () => {
         </div>
 
         {/* Row 3: Potions */}
-        <div style={{
+        <div className="header-potions-row" style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
