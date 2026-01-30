@@ -431,7 +431,8 @@ export const handlePlayCard = (state, action) => {
         combatLog.push(`Dead Branch added ${randomCard.name}`);
       }
     }
-  } else {
+  } else if (card.type !== CARD_TYPES.POWER) {
+    // Power cards are removed from play entirely (not discarded, not exhausted)
     newDiscardPile.push(card);
   }
 
