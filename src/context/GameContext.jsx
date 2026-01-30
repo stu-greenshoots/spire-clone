@@ -56,6 +56,7 @@ export const createInitialState = () => ({
     platedArmor: 0,
     regen: 0,
     hex: 0,
+    confused: 0,
     flight: 0,
     barricade: false,
     berserk: 0,

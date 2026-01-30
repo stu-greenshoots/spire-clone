@@ -8,6 +8,7 @@ import { handleSpecialEffect, SUPPORTED_EFFECTS } from '../../../systems/cardEff
 import { triggerRelics } from '../../../systems/relicSystem';
 import { autoSave } from '../../../systems/saveSystem';
 import { audioManager, SOUNDS } from '../../../systems/audioSystem';
+import { getEffectiveCost } from '../../../systems/effectProcessor';
 
 export const handlePlayCard = (state, action) => {
   const { card, targetId } = action.payload;
@@ -17,8 +18,9 @@ export const handlePlayCard = (state, action) => {
     : (state.enemies[0] && state.enemies[0].instanceId);
 
   const isXCost = card.cost === -1 || card.special === 'xCost';
+  const effectiveCost = isXCost ? card.cost : getEffectiveCost(card, state.player);
 
-  if (!isXCost && (state.player.energy < card.cost || card.unplayable)) {
+  if (!isXCost && (state.player.energy < effectiveCost || card.unplayable)) {
     return { ...state, selectedCard: null, targetingMode: false };
   }
 
@@ -26,7 +28,7 @@ export const handlePlayCard = (state, action) => {
   audioManager.playSFX(SOUNDS.combat.cardPlay, 'combat');
 
   // For X-cost cards, don't deduct energy here (done in xCost special handler)
-  let newPlayer = { ...state.player, energy: isXCost ? state.player.energy : state.player.energy - card.cost };
+  let newPlayer = { ...state.player, energy: isXCost ? state.player.energy : state.player.energy - effectiveCost };
   let newEnemies = [...state.enemies];
   let newHand = state.hand.filter(c => c.instanceId !== card.instanceId);
   let newDiscardPile = [...state.discardPile];
@@ -393,7 +395,7 @@ export const handlePlayCard = (state, action) => {
 
   // Corruption: Skills cost 0 and exhaust
   if (newPlayer.corruption && card.type === CARD_TYPES.SKILL) {
-    newPlayer.energy += card.cost; // Refund cost
+    newPlayer.energy += effectiveCost; // Refund cost
   }
 
   // Handle exhaust
