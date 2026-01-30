@@ -234,11 +234,13 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 6: Fix + Foundation + Narrative Start - PLANNED
+## Sprint 6: Fix + Foundation + Narrative Start - IN PROGRESS
 
 **Goal:** Fix confirmed bugs, audit UX, begin Endless War narrative.
 **Plan:** See `SPRINT_6_PLAN.md`
-**Status:** PLANNED - Team-aligned, Mentor-approved
+**Branch:** `sprint-6`
+**Draft PR:** TBD
+**Status:** IN PROGRESS - Week 1 starting
 
 ### P0 — Must Ship
 
