@@ -491,40 +491,40 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
         </div>
       </div>
 
-      {/* Block Display */}
-      {enemy.block > 0 && (
-        <div
-          data-testid="enemy-block"
-          className={showBlockGained ? 'enemy-block-gained' : ''}
-          style={{
-            marginTop: '6px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            background: 'linear-gradient(180deg, #4488ff44 0%, #4488ff22 100%)',
-            border: '1px solid #4488ff',
-            padding: '3px 10px',
-            borderRadius: '12px',
-            boxShadow: showBlockGained
-              ? '0 0 20px rgba(68, 136, 255, 0.8), 0 0 40px rgba(68, 136, 255, 0.4)'
-              : '0 0 8px rgba(68, 136, 255, 0.4)',
-            animation: showBlockGained ? 'enemyBlockAppear 0.5s ease-out' : 'none',
-            transition: 'box-shadow 0.3s ease'
-          }}>
-          <span style={{
-            fontSize: '14px',
-            animation: showBlockGained ? 'shieldIconPulse 0.5s ease-out' : 'none'
-          }}>🛡️</span>
-          <span style={{
-            color: '#88ccff',
-            fontSize: '12px',
-            fontWeight: 'bold',
-            textShadow: '0 0 5px rgba(68, 136, 255, 0.8)'
-          }}>
-            {enemy.block}
-          </span>
-        </div>
-      )}
+      {/* Block Display - always rendered to prevent layout jumps */}
+      <div
+        data-testid="enemy-block"
+        className={showBlockGained ? 'enemy-block-gained' : ''}
+        style={{
+          marginTop: '6px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '4px',
+          background: 'linear-gradient(180deg, #4488ff44 0%, #4488ff22 100%)',
+          border: '1px solid #4488ff',
+          padding: '3px 10px',
+          borderRadius: '12px',
+          boxShadow: showBlockGained
+            ? '0 0 20px rgba(68, 136, 255, 0.8), 0 0 40px rgba(68, 136, 255, 0.4)'
+            : '0 0 8px rgba(68, 136, 255, 0.4)',
+          animation: showBlockGained ? 'enemyBlockAppear 0.5s ease-out' : 'none',
+          transition: 'box-shadow 0.3s ease, opacity 0.3s ease',
+          opacity: enemy.block > 0 ? 1 : 0,
+          pointerEvents: enemy.block > 0 ? 'auto' : 'none'
+        }}>
+        <span style={{
+          fontSize: '14px',
+          animation: showBlockGained ? 'shieldIconPulse 0.5s ease-out' : 'none'
+        }}>🛡️</span>
+        <span style={{
+          color: '#88ccff',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          textShadow: '0 0 5px rgba(68, 136, 255, 0.8)'
+        }}>
+          {enemy.block || 0}
+        </span>
+      </div>
 
       {/* Status Effects */}
       <div style={{
