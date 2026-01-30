@@ -71,57 +71,45 @@ Check if a draft PR exists for this sprint:
 gh pr list --state open --head sprint-N --base master
 ```
 
-**If NO draft PR exists, CREATE ONE IMMEDIATELY:**
+**If NO draft PR exists, CREATE ONE IMMEDIATELY.**
 
-```bash
-gh pr create --draft --base master --head sprint-N --title "Sprint N: [Goal]" --body "$(cat <<'EOF'
-## Sprint N Integration PR
+The draft PR description must follow this structure. **CRITICAL RULES:**
+- The **Merged PRs** table is the source of truth — add rows as PRs merge
+- The **Remaining** section is a plain list (NO checkboxes) of tasks not yet merged
+- Move tasks from "Remaining" to "Merged PRs" as they land — never leave stale checkboxes
+- Only the **Validation Gate** uses checkboxes (these are sprint-close criteria)
+- Update the **Status** line every iteration
+
+```markdown
+## Sprint N: [Goal]
 
 ### Goal
-[Copy from SPRINT_N_PLAN.md]
-
-### Task Checklist
-<!-- Update this as tasks are merged -->
-- [ ] VP-01: Map auto-scroll to player position
-- [ ] VP-02: Victory overlay with stats
-- [ ] VP-03: Card pile counts in combat HUD
-- [ ] VP-04: Death screen with run summary
-- [ ] VP-05: Menu screen (new game, continue, settings)
-- [ ] VP-06: Card upgrade visual distinction
-- [ ] VP-07: Rest site heal preview
-- [ ] VP-08: Sequential enemy turns display
-- [ ] VP-09: Deck viewer overlay
-- [ ] VP-10: Map node tooltips
-- [ ] VP-11: Enemy spawn animations
-- [ ] VP-12: Card exhaust visual effect
-<!-- Add all tasks from sprint plan -->
+[1-2 sentences from SPRINT_N_PLAN.md]
 
 ### Merged PRs
-| PR | Task | Author | Merged |
-|----|------|--------|--------|
-<!-- Update as PRs merge -->
+| PR | Task | Priority | Author | Description |
+|----|------|----------|--------|-------------|
+<!-- Add rows as PRs merge. This is the source of truth for delivered work. -->
 
-### CI Status
-- [ ] Lint passing on sprint-N
-- [ ] Tests passing on sprint-N
-- [ ] Build passing on sprint-N
+### Remaining
+<!-- Plain list of tasks not yet merged. Remove items as they move to Merged PRs. -->
+- TASK-ID: Description (Priority)
+- TASK-ID: Description (Priority)
 
 ### Validation Gate
-[Copy validation criteria from SPRINT_N_PLAN.md]
+<!-- Checkboxes here only — these are sprint-close criteria from SPRINT_N_PLAN.md -->
+- [ ] All P0 tasks merged
+- [ ] npm run validate passes
+- [ ] Full game playthrough without crashes
 
-### Current Status
-**Phase:** [A/B/C/D]
-**Blocked:** [Any blockers]
+### Status
+**[Phase/Week]** — X/Y tasks merged. [What's next.]
 **Last Updated:** [Date]
+```
 
----
-**Instructions for PM:** Update this PR description as tasks are completed:
-1. Check off tasks when their PRs merge
-2. Add merged PRs to the table with author and date
-3. Update CI status after each merge
-4. Update current status section daily
-EOF
-)"
+Create the PR:
+```bash
+gh pr create --draft --base master --head sprint-N --title "Sprint N: [Goal]" --body "[use template above, populated from sprint plan]"
 ```
 
 **If draft PR EXISTS, update it with current status:**
@@ -169,10 +157,11 @@ For EACH open PR:
    ```
 
 5. **After EVERY merge:**
-   - Update the draft integration PR checklist
-   - Check the merged task off
-   - Add to the merged PRs table
-   - Update CI status
+   - Update the draft integration PR description:
+     - Add a row to the **Merged PRs** table
+     - Remove the task from the **Remaining** list
+     - Check off any validation gate items that are now satisfied
+     - Update the **Status** line
 
 ### Copilot Review Template
 
@@ -268,7 +257,7 @@ Create a work assignment table:
 Before starting work:
 
 1. **Update SPRINT_BOARD.md** with current task statuses
-2. **Update the draft PR description** with current progress (checked tasks, merged PRs)
+2. **Update the draft PR description** — move merged tasks to table, remove from Remaining, update Status line
 3. **Update PM diary** with today's orchestration plan
 
 ---
