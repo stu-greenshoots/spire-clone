@@ -13,6 +13,42 @@ Creative direction storytelling - developing narrative framework based on new vi
 
 ## Entries
 
+### VARROW-02: Event Rewrite — Pattern Glitches
+**Date:** 2026-01-30
+**Status:** PR #61 open, reviews complete, awaiting merge
+**Sprint:** 7
+
+**What I Did:**
+Rewrote the first 10 of 20 events in `src/data/events.js` with the Endless War voice established in VARROW-01 boss dialogue. Events are now "pattern glitches" — anomalies, legacy processes, corrupted caches, and orphaned instructions within the war's system.
+
+**Voice Consistency:**
+- Maintained the clinical, observational tone from VARROW-01 (slimeBoss, theGuardian, hexaghost)
+- "The war" as a system that processes, iterates, remembers
+- Pattern/iteration/configuration vocabulary
+- Dry humor preserved (SL's note: "keep that dry humor" — done)
+- No melodrama, no gothic horror, no explaining away the mechanics
+
+**Key Reframes:**
+- Merchant -> Supply Line Anomaly (stalled resource distribution)
+- Library -> Pattern Archive (war's deprecated data)
+- Altar -> Iteration Marker (cycle tracking infrastructure)
+- Serpent -> Legacy Process (outdated code still running)
+- Shadow -> Negative Space (gap in pattern coverage)
+- Crown -> Recursive Loop (self-referencing pattern)
+- Blade -> Orphaned Instruction (dead process still executing)
+
+**What I Preserved:**
+- All 10 event IDs (no downstream breakage)
+- All choice effect objects (identical mechanics)
+- All choice counts (same number of options)
+- Remaining 10 events untouched (classic dark fantasy voice)
+
+**Tests:** 972 passing, 0 lint errors, build clean.
+
+**Next:** Remaining 10 events could be rewritten in a future sprint if the voice lands well. Also: flavorText.js could benefit from Endless War treatment for card/relic text.
+
+---
+
 ### Story Direction v2 APPROVED: "The Emergence"
 **Date:** 2026-01-25
 **Status:** APPROVED - Original direction after v1 rejection
