@@ -370,41 +370,55 @@ export const ALL_ENEMIES = [
   {
     id: 'bookOfStabbing',
     name: 'Book of Stabbing',
-    hp: { min: 180, max: 192 },
+    hp: { min: 160, max: 160 },
     type: 'elite',
     act: 2,
     emoji: '📕',
+    multiStabCount: 2, // Starts at 2, increases by 1 each turn
+    stabEscalation: 1,
     moveset: [
-      { id: 'multiStab', intent: INTENT.ATTACK, damage: 7, times: 3, special: 'addStab', message: 'Multi Stab' },
-      { id: 'singleStab', intent: INTENT.ATTACK, damage: 24, message: 'Single Stab' }
+      { id: 'multiStab', intent: INTENT.ATTACK, damage: 6, times: 2, message: 'Multi Stab' }
     ],
-    ai: (enemy, turn, _lastMove) => {
-      // Escalates stab count each time multiStab is used
-      if (turn % 2 === 0) return enemy.moveset[0];
-      return enemy.moveset[1];
-    },
-    multiStabCount: 3, // Starts at 3, increases by 1 each multi-stab
-    stabEscalation: 1
+    ai: (enemy, _turn, _lastMove) => {
+      // Single move: Multi Stab. times = multiStabCount, which escalates each turn
+      return enemy.moveset[0];
+    }
   },
   {
     id: 'gremlinLeader',
     name: 'Gremlin Leader',
-    hp: { min: 160, max: 172 },
+    hp: { min: 73, max: 73 },
     type: 'elite',
     act: 2,
     emoji: '👑',
+    spawnMinions: 'gremlinMinion', // Spawns 3-4 gremlin minions at fight start
+    minionCount: { min: 3, max: 4 },
     moveset: [
-      { id: 'encourage', intent: INTENT.BUFF, special: 'buffGremlins', effects: [{ type: 'strength', amount: 3 }], message: 'Encourage' },
-      { id: 'rally', intent: INTENT.BUFF, special: 'summonGremlins', message: 'Rally!' },
-      { id: 'stab', intent: INTENT.ATTACK, damage: 7, times: 4, message: 'Stab' }
+      { id: 'encourage', intent: INTENT.BUFF, special: 'buffAllAllies', effects: [{ type: 'strength', amount: 3 }], message: 'Encourage' },
+      { id: 'stab', intent: INTENT.ATTACK, damage: 6, times: 3, message: 'Stab' },
+      { id: 'enrage', intent: INTENT.BUFF, effects: [{ type: 'strength', amount: 9 }, { type: 'metallicize', amount: 9 }], message: 'Enrage' }
     ],
-    ai: (enemy, turn, _lastMove) => {
-      // More aggressive pattern - attacks more often
-      if (turn === 0) return enemy.moveset[1]; // Start with rally
-      if (turn % 4 === 0) return enemy.moveset[1]; // Rally every 4 turns
+    ai: (enemy, turn, _lastMove, _index, allies) => {
+      // When alone (no living minions), enrage
+      const livingMinions = allies && allies.filter(a => a.instanceId !== enemy.instanceId && a.currentHp > 0);
+      if (!livingMinions || livingMinions.length === 0) return enemy.moveset[2]; // Enrage
+      // With minions: alternate encourage and stab
+      if (turn === 0) return enemy.moveset[0]; // Open with encourage
       if (turn % 2 === 0) return enemy.moveset[0]; // Encourage
-      return enemy.moveset[2]; // Stab
+      return enemy.moveset[1]; // Stab
     }
+  },
+  {
+    id: 'gremlinMinion',
+    name: 'Gremlin',
+    hp: { min: 18, max: 22 },
+    type: 'minion',
+    act: 2,
+    emoji: '👺',
+    moveset: [
+      { id: 'scratch', intent: INTENT.ATTACK, damage: 5, message: 'Scratch' }
+    ],
+    ai: () => ({ id: 'scratch', intent: INTENT.ATTACK, damage: 5, message: 'Scratch' })
   },
   {
     id: 'slaverBlue',
@@ -558,39 +572,37 @@ export const ALL_ENEMIES = [
   {
     id: 'reptomancer',
     name: 'Reptomancer',
-    hp: { min: 200, max: 216 },
+    hp: { min: 180, max: 180 },
     type: 'elite',
-    act: 3,
+    act: 2,
     emoji: '🐍',
     summons: true,
+    spawnMinions: 'dagger', // Opens with 2 Daggers, resummons when killed
+    minionCount: { min: 2, max: 2 },
     moveset: [
       { id: 'summon', intent: INTENT.BUFF, special: 'summonDaggers', message: 'Summon' },
-      { id: 'snakeStrike', intent: INTENT.ATTACK, damage: 15, times: 2, message: 'Snake Strike' },
-      { id: 'bigBite', intent: INTENT.ATTACK, damage: 34, message: 'Big Bite' }
+      { id: 'snakeStrike', intent: INTENT.ATTACK_DEBUFF, damage: 16, effects: [{ type: 'weak', amount: 1, target: 'player' }], message: 'Snake Strike' },
+      { id: 'bigBite', intent: INTENT.ATTACK, damage: 30, message: 'Big Bite' }
     ],
-    ai: (enemy, turn, _lastMove) => {
+    ai: (enemy, turn, _lastMove, _index, allies) => {
       if (turn === 0) return enemy.moveset[0];
-      // Summon more frequently - every 3 turns
-      if (turn % 3 === 0) return enemy.moveset[0];
-      if (Math.random() < 0.4) return enemy.moveset[1];
-      return enemy.moveset[2]; // More big bites
+      const livingDaggers = allies && allies.filter(a => a.id === 'dagger' && a.currentHp > 0);
+      if (!livingDaggers || livingDaggers.length === 0) return enemy.moveset[0]; // Resummon
+      if (turn % 2 === 1) return enemy.moveset[1];
+      return enemy.moveset[2];
     }
   },
   {
     id: 'dagger',
     name: 'Dagger',
-    hp: { min: 20, max: 25 },
+    hp: { min: 25, max: 25 },
     type: 'minion',
-    act: 3,
+    act: 2,
     emoji: '🗡️',
     moveset: [
-      { id: 'stab', intent: INTENT.ATTACK, damage: 9, message: 'Stab' },
-      { id: 'explode', intent: INTENT.ATTACK, damage: 25, special: 'killSelf', message: 'Explode!' }
+      { id: 'stab', intent: INTENT.ATTACK, damage: 9, times: 2, message: 'Stab' }
     ],
-    ai: (enemy, turn, _lastMove) => {
-      if (turn >= 2) return enemy.moveset[1];
-      return enemy.moveset[0];
-    }
+    ai: () => ({ id: 'stab', intent: INTENT.ATTACK, damage: 9, times: 2, message: 'Stab' })
   },
   {
     id: 'orbWalker',
