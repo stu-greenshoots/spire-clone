@@ -1,12 +1,13 @@
 # Sprint Board - Spire Ascent
 
-**Last Updated:** 2026-01-25
-**Current Sprint:** 5 (Replayability) - PLANNED
-**Integration Branch:** `sprint-5` (to be created)
-**Sprint Plan:** See `SPRINT_5_PLAN.md`
+**Last Updated:** 2026-01-30
+**Current Sprint:** 6 (Fix + Foundation + Narrative Start) - PLANNED
+**Integration Branch:** `sprint-6` (to be created)
+**Sprint Plan:** See `SPRINT_6_PLAN.md`
+**Roadmap:** See `ROADMAP.md` (4-sprint plan to 1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 4 COMPLETE (6 PRs merged, all VP tasks done)
+**Previous:** Sprint 5 COMPLETE (all tasks merged, 911+ tests, meta-progression + ascension live)
 
 ---
 
