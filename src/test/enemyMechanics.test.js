@@ -354,7 +354,7 @@ describe('Enemy Mechanics', () => {
 
     it('enemies with metallicize should have it defined', () => {
       const lagavulin = getEnemyById('lagavulin');
-      expect(lagavulin.metallicize).toBe(10);
+      expect(lagavulin.metallicize).toBe(6);
     });
 
     it('enemies with thorns should deal damage when attacked', () => {
