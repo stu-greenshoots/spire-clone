@@ -1,3 +1,22 @@
+# QA Diary - Sprint 6
+
+## Sprint 6 Entries
+
+### QA-07a: Mechanics Audit Spike
+**Date:** 2026-01-30
+**Status:** Complete, PR #50 ready for review
+
+**Done:**
+- Audited 4 Copilot claims against codebase
+- 1 CONFIRMED BUG: Power cards go to discard pile (BE-16 owns fix)
+- 3 NOT BUGS: Sentry data correct, combat clearing thorough, rarity distribution exists
+- Created `docs/QA-07a-mechanics-audit.md` with full evidence
+
+**Blockers:** None
+**Next:** Await review on PR #50
+
+---
+
 # QA Diary - Sprint 5
 
 ## Role
