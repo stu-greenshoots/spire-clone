@@ -94,3 +94,28 @@ UX Guy - Combat feedback, tooltips, visual polish
 **Ready to start:** UX-05 immediately
 
 ---
+
+### Sprint 6 - UX-10 Complete
+**Date:** 2026-01-30
+**Status:** UX-10 DONE (PR #54)
+
+**What I did:**
+- Conceptual mobile audit at 390x844 viewport (iPhone 14)
+- Read through all major components: CombatScreen, PersistentHeader, Card, Enemy, MapScreen, RewardScreen, ShopScreen
+- Identified 18 UX issues grouped into 3 effort tiers:
+  - 5 quick wins (header collapse, font sizes, layout balance, map width, turn indicator)
+  - 8 medium effort (hand redesign, card enlargement, drag UX, reward layout, shop layout, etc.)
+  - 4 needs-redesign (combat layout, collapsible HUD, map zoom, landscape)
+- Created `docs/UX-10-hit-list.md` with code references and screenshot descriptions
+
+**Key findings:**
+- The persistent header (3 rows, ~90px) is the single biggest mobile problem -- it eats 14% of usable screen height
+- Cards at 100x145px are simultaneously too small to read (8px descriptions) and too wide to fit 5+ in hand
+- The combat screen vertical space budget is the core issue feeding into Sprint 7's UX-13 redesign
+
+**Next steps:**
+- UX-11 (block indicator no layout jumps) is next
+- Quick wins QW-1 through QW-5 could be Sprint 6 stretch work
+- Sprint 7 UX-13 should use this doc as its requirements input
+
+---
