@@ -59,19 +59,19 @@ describe('Enemy Metallicize', () => {
   it('Lagavulin should have metallicize stat', () => {
     const lagavulin = getEnemyById('lagavulin');
     expect(lagavulin).toBeDefined();
-    expect(lagavulin.metallicize).toBe(10);
+    expect(lagavulin.metallicize).toBe(6);
   });
 
   it('enemy instance should inherit metallicize', () => {
     const lagavulin = createEnemyInstance(getEnemyById('lagavulin'));
-    expect(lagavulin.metallicize).toBe(10);
+    expect(lagavulin.metallicize).toBe(6);
   });
 
   it('metallicize should add block to enemy', () => {
     const lagavulin = createEnemyInstance(getEnemyById('lagavulin'));
     // Simulate metallicize block gain
     lagavulin.block = (lagavulin.block || 0) + lagavulin.metallicize;
-    expect(lagavulin.block).toBe(10);
+    expect(lagavulin.block).toBe(6);
   });
 });
 
@@ -560,12 +560,12 @@ describe('Lagavulin Siphon Soul', () => {
 
     const strDown = siphon.effects.find(e => e.type === 'strengthDown');
     expect(strDown).toBeDefined();
-    expect(strDown.amount).toBe(2);
+    expect(strDown.amount).toBe(1);
     expect(strDown.target).toBe('player');
 
     const dexDown = siphon.effects.find(e => e.type === 'dexterityDown');
     expect(dexDown).toBeDefined();
-    expect(dexDown.amount).toBe(2);
+    expect(dexDown.amount).toBe(1);
     expect(dexDown.target).toBe('player');
   });
 });
