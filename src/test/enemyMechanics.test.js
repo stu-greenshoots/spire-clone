@@ -105,10 +105,10 @@ describe('Enemy Mechanics', () => {
       });
     });
 
-    it('Sentry should have 2 artifact', () => {
+    it('Sentry should have 1 artifact', () => {
       const sentry = getEnemyById('sentryA');
       expect(sentry).toBeDefined();
-      expect(sentry.artifact).toBe(2);
+      expect(sentry.artifact).toBe(1);
     });
 
     it('artifact should block first debuff application', () => {
@@ -354,7 +354,7 @@ describe('Enemy Mechanics', () => {
 
     it('enemies with metallicize should have it defined', () => {
       const lagavulin = getEnemyById('lagavulin');
-      expect(lagavulin.metallicize).toBe(10);
+      expect(lagavulin.metallicize).toBe(6);
     });
 
     it('enemies with thorns should deal damage when attacked', () => {

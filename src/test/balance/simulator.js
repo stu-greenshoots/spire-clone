@@ -729,7 +729,9 @@ export function simulateRun(config = {}) {
   const seed = config.seed != null ? config.seed : Math.floor(Math.random() * 2147483647);
   const rng = createRng(seed);
   const eliteChance = config.eliteChance != null ? config.eliteChance : 0.1;
-  const healPerFloor = config.healPerFloor || 0;
+  // Default heal of 6 HP/floor models rest sites, events, and potions
+  // averaged across a typical Act 1 run (not every floor is combat)
+  const healPerFloor = config.healPerFloor != null ? config.healPerFloor : 6;
   const ascension = config.ascension || 0;
 
   // Get starter deck - add Wound card at ascension 2+

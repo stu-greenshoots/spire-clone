@@ -25,7 +25,7 @@ export const ALL_ENEMIES = [
     act: 1,
     emoji: '🧙',
     moveset: [
-      { id: 'incantation', intent: INTENT.BUFF, effects: [{ type: 'ritual', amount: 3 }], message: 'Ritual' },
+      { id: 'incantation', intent: INTENT.BUFF, effects: [{ type: 'ritual', amount: 2 }], message: 'Ritual' },
       { id: 'darkStrike', intent: INTENT.ATTACK, damage: 6, message: 'Dark Strike' }
     ],
     ai: (enemy, turn) => {
@@ -41,9 +41,9 @@ export const ALL_ENEMIES = [
     act: 1,
     emoji: '🐛',
     moveset: [
-      { id: 'chomp', intent: INTENT.ATTACK, damage: 12, message: 'Chomp' },
+      { id: 'chomp', intent: INTENT.ATTACK, damage: 11, message: 'Chomp' },
       { id: 'thrash', intent: INTENT.ATTACK_DEFEND, damage: 7, block: 5, message: 'Thrash' },
-      { id: 'bellow', intent: INTENT.DEFEND_BUFF, block: 6, effects: [{ type: 'strength', amount: 4 }], message: 'Bellow' }
+      { id: 'bellow', intent: INTENT.DEFEND_BUFF, block: 6, effects: [{ type: 'strength', amount: 3 }], message: 'Bellow' }
     ],
     ai: (enemy, turn, lastMove) => {
       // Jaw Worm is a "strong single" enemy - rewarded for dealing with it
@@ -215,13 +215,14 @@ export const ALL_ENEMIES = [
   {
     id: 'gremlinNob',
     name: 'Gremlin Nob',
-    hp: { min: 106, max: 118 },
+    // HP reduced from 106-118 for balance pass (QA-06)
+    hp: { min: 96, max: 108 },
     type: 'elite',
     act: 1,
     emoji: '👹',
     moveset: [
       { id: 'bellow', intent: INTENT.BUFF, effects: [{ type: 'enrage', amount: 3 }, { type: 'strength', amount: 2 }], message: 'Bellow' },
-      { id: 'rush', intent: INTENT.ATTACK, damage: 18, message: 'Rush' },
+      { id: 'rush', intent: INTENT.ATTACK, damage: 14, message: 'Rush' },
       { id: 'skullBash', intent: INTENT.ATTACK_DEBUFF, damage: 10, effects: [{ type: 'vulnerable', amount: 2, target: 'player' }], message: 'Skull Bash' }
     ],
     ai: (enemy, turn, lastMove) => {
@@ -236,18 +237,18 @@ export const ALL_ENEMIES = [
   {
     id: 'lagavulin',
     name: 'Lagavulin',
-    hp: { min: 120, max: 128 },
+    hp: { min: 110, max: 118 },
     type: 'elite',
     act: 1,
     emoji: '🛡️',
     retainBlock: true,
-    metallicize: 10,
+    metallicize: 6,
     asleep: true,
     wakeThreshold: 3, // Wakes after 3 turns even if not attacked
     moveset: [
       { id: 'sleep', intent: INTENT.SLEEPING, message: 'Sleeping...' },
-      { id: 'attack', intent: INTENT.ATTACK, damage: 20, message: 'Attack' },
-      { id: 'siphonSoul', intent: INTENT.STRONG_DEBUFF, effects: [{ type: 'strengthDown', amount: 2, target: 'player' }, { type: 'dexterityDown', amount: 2, target: 'player' }], message: 'Siphon Soul' }
+      { id: 'attack', intent: INTENT.ATTACK, damage: 16, message: 'Attack' },
+      { id: 'siphonSoul', intent: INTENT.STRONG_DEBUFF, effects: [{ type: 'strengthDown', amount: 1, target: 'player' }, { type: 'dexterityDown', amount: 1, target: 'player' }], message: 'Siphon Soul' }
     ],
     ai: (enemy, turn, _lastMove) => {
       // Wake up after 3 turns automatically or when attacked
@@ -260,22 +261,23 @@ export const ALL_ENEMIES = [
   {
     id: 'sentryA',
     name: 'Sentry',
-    hp: { min: 48, max: 56 },
+    hp: { min: 38, max: 42 },
     type: 'elite',
     act: 1,
     emoji: '🗿',
-    artifact: 2,
+    artifact: 1,
     spawnCount: 3,
     moveset: [
-      { id: 'bolt', intent: INTENT.ATTACK, damage: 11, message: 'Bolt' },
-      { id: 'beam', intent: INTENT.ATTACK_DEBUFF, damage: 11, special: 'addDazed', message: 'Beam' }
+      { id: 'bolt', intent: INTENT.ATTACK, damage: 9, message: 'Bolt' },
+      { id: 'beam', intent: INTENT.ATTACK_DEBUFF, damage: 9, special: 'addDazed', message: 'Beam' }
     ],
     ai: (enemy, turn, lastMove, index) => {
-      // Staggered attacks - harder to block all damage
+      // StS baseline: all Bolt on first turn, then staggered alternation
+      if (turn === 0) return enemy.moveset[0]; // All sentries Bolt first
       if (index % 2 === 0) {
-        return turn % 2 === 0 ? enemy.moveset[0] : enemy.moveset[1];
+        return turn % 2 === 1 ? enemy.moveset[1] : enemy.moveset[0];
       } else {
-        return turn % 2 === 0 ? enemy.moveset[1] : enemy.moveset[0];
+        return turn % 2 === 1 ? enemy.moveset[0] : enemy.moveset[1];
       }
     }
   },

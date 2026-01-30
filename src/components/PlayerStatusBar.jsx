@@ -94,10 +94,9 @@ const PlayerStatusBar = () => {
     player.vulnerable > 0 || player.weak > 0 || player.frail > 0 || player.hex > 0 ||
     player.noDrawNextTurn;
 
-  const hasBlock = player.block > 0;
-
-  // Don't show if nothing to display
-  if (!hasBuffs && !hasDebuffs && !hasBlock) {
+  // Don't show if nothing to display (block always reserves space when in combat)
+  const inCombat = phase === GAME_PHASE.COMBAT;
+  if (!hasBuffs && !hasDebuffs && player.block <= 0 && !inCombat) {
     return null;
   }
 
@@ -115,8 +114,8 @@ const PlayerStatusBar = () => {
       flexWrap: 'wrap',
       flexShrink: 0
     }}>
-      {/* Block Display - Large and prominent */}
-      {hasBlock && (
+      {/* Block Display - always rendered in combat to prevent layout jumps */}
+      {inCombat && (
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -126,7 +125,10 @@ const PlayerStatusBar = () => {
           borderRadius: '16px',
           border: '4px solid rgba(100, 180, 255, 0.9)',
           boxShadow: '0 0 30px rgba(68, 136, 255, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.15)',
-          animation: 'glowPulse 2s infinite'
+          animation: player.block > 0 ? 'glowPulse 2s infinite' : 'none',
+          transition: 'opacity 0.3s ease',
+          opacity: player.block > 0 ? 1 : 0,
+          pointerEvents: player.block > 0 ? 'auto' : 'none'
         }}>
           <span style={{
             fontSize: '36px',
@@ -146,15 +148,21 @@ const PlayerStatusBar = () => {
               fontWeight: 'bold',
               textShadow: '0 0 15px rgba(68, 136, 255, 1)'
             }}>
-              {player.block}
+              {player.block || 0}
             </span>
           </div>
         </div>
       )}
 
-      {/* Divider if block and other statuses */}
-      {hasBlock && (hasBuffs || hasDebuffs) && (
-        <div style={{ width: '2px', height: '50px', background: '#444' }} />
+      {/* Divider if block area and other statuses */}
+      {inCombat && (hasBuffs || hasDebuffs) && (
+        <div style={{
+          width: '2px',
+          height: '50px',
+          background: '#444',
+          transition: 'opacity 0.3s ease',
+          opacity: player.block > 0 ? 1 : 0
+        }} />
       )}
 
       {/* Buffs Section */}

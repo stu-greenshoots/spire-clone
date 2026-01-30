@@ -64,64 +64,65 @@ git checkout -b sprint-N
 git push -u origin sprint-N
 ```
 
-### 2. Create or Update Integration Draft PR (MANDATORY)
+### 2. Verify Deployment Pipeline
+
+The sprint branch must deploy to GitHub Pages so the user can test. Check that `.github/workflows/deploy.yml` triggers on the sprint branch. The current pattern `sprint-*` should match all sprint branches automatically. If it doesn't, update the workflow.
+
+```bash
+grep -A2 'branches:' .github/workflows/deploy.yml  # Should show sprint-* or sprint-N
+```
+
+After the first push to the sprint branch, verify the deploy workflow ran:
+```bash
+gh run list --branch sprint-N --workflow deploy.yml --limit 3
+```
+
+### 3. Create or Update Integration Draft PR (MANDATORY)
 
 Check if a draft PR exists for this sprint:
 ```bash
 gh pr list --state open --head sprint-N --base master
 ```
 
-**If NO draft PR exists, CREATE ONE IMMEDIATELY:**
+**If NO draft PR exists, CREATE ONE IMMEDIATELY.**
 
-```bash
-gh pr create --draft --base master --head sprint-N --title "Sprint N: [Goal]" --body "$(cat <<'EOF'
-## Sprint N Integration PR
+The draft PR description must follow this structure. **CRITICAL RULES:**
+- The **Merged PRs** table is the source of truth — add rows as PRs merge
+- The **Remaining** section is a plain list (NO checkboxes) of tasks not yet merged
+- Move tasks from "Remaining" to "Merged PRs" as they land — never leave stale checkboxes
+- Only the **Validation Gate** uses checkboxes (these are sprint-close criteria)
+- Update the **Status** line every iteration
+
+```markdown
+## Sprint N: [Goal]
 
 ### Goal
-[Copy from SPRINT_N_PLAN.md]
-
-### Task Checklist
-<!-- Update this as tasks are merged -->
-- [ ] VP-01: Map auto-scroll to player position
-- [ ] VP-02: Victory overlay with stats
-- [ ] VP-03: Card pile counts in combat HUD
-- [ ] VP-04: Death screen with run summary
-- [ ] VP-05: Menu screen (new game, continue, settings)
-- [ ] VP-06: Card upgrade visual distinction
-- [ ] VP-07: Rest site heal preview
-- [ ] VP-08: Sequential enemy turns display
-- [ ] VP-09: Deck viewer overlay
-- [ ] VP-10: Map node tooltips
-- [ ] VP-11: Enemy spawn animations
-- [ ] VP-12: Card exhaust visual effect
-<!-- Add all tasks from sprint plan -->
+[1-2 sentences from SPRINT_N_PLAN.md]
 
 ### Merged PRs
-| PR | Task | Author | Merged |
-|----|------|--------|--------|
-<!-- Update as PRs merge -->
+| PR | Task | Priority | Author | Description |
+|----|------|----------|--------|-------------|
+<!-- Add rows as PRs merge. This is the source of truth for delivered work. -->
 
-### CI Status
-- [ ] Lint passing on sprint-N
-- [ ] Tests passing on sprint-N
-- [ ] Build passing on sprint-N
+### Remaining
+<!-- Plain list of tasks not yet merged. Remove items as they move to Merged PRs. -->
+- TASK-ID: Description (Priority)
+- TASK-ID: Description (Priority)
 
 ### Validation Gate
-[Copy validation criteria from SPRINT_N_PLAN.md]
+<!-- Checkboxes here only — these are sprint-close criteria from SPRINT_N_PLAN.md -->
+- [ ] All P0 tasks merged
+- [ ] npm run validate passes
+- [ ] Full game playthrough without crashes
 
-### Current Status
-**Phase:** [A/B/C/D]
-**Blocked:** [Any blockers]
+### Status
+**[Phase/Week]** — X/Y tasks merged. [What's next.]
 **Last Updated:** [Date]
+```
 
----
-**Instructions for PM:** Update this PR description as tasks are completed:
-1. Check off tasks when their PRs merge
-2. Add merged PRs to the table with author and date
-3. Update CI status after each merge
-4. Update current status section daily
-EOF
-)"
+Create the PR:
+```bash
+gh pr create --draft --base master --head sprint-N --title "Sprint N: [Goal]" --body "[use template above, populated from sprint plan]"
 ```
 
 **If draft PR EXISTS, update it with current status:**
@@ -169,10 +170,11 @@ For EACH open PR:
    ```
 
 5. **After EVERY merge:**
-   - Update the draft integration PR checklist
-   - Check the merged task off
-   - Add to the merged PRs table
-   - Update CI status
+   - Update the draft integration PR description:
+     - Add a row to the **Merged PRs** table
+     - Remove the task from the **Remaining** list
+     - Check off any validation gate items that are now satisfied
+     - Update the **Status** line
 
 ### Copilot Review Template
 
@@ -268,7 +270,7 @@ Create a work assignment table:
 Before starting work:
 
 1. **Update SPRINT_BOARD.md** with current task statuses
-2. **Update the draft PR description** with current progress (checked tasks, merged PRs)
+2. **Update the draft PR description** — move merged tasks to table, remove from Remaining, update Status line
 3. **Update PM diary** with today's orchestration plan
 
 ---
@@ -350,11 +352,24 @@ Do NOT auto-merge. Complete all review steps.
 
 ---
 
-## Phase 8: Start Ralph Loop
+## Phase 8: Start Ralph Loop (FULL SPRINT SCOPE)
 
-Start ralph loop with 20 max iterations:
+The ralph loop must run until the **entire sprint is complete** — all tasks merged, validation gate passed, sprint board updated. Do NOT scope the completion promise to a single week or phase.
 
-**Action:** Invoke `Skill` tool with `skill: "ralph-loop:ralph-loop"` and `args: "--max-iterations 20"`
+**Completion promise:** `SPRINT N COMPLETE` (replace N with sprint number)
+
+**Action:** Invoke `Skill` tool with:
+- `skill: "ralph-loop:ralph-loop"`
+- `args: "PM Sprint N orchestration - review and merge open PRs, spawn engineers for remaining tasks, update draft PR and SPRINT_BOARD.md. See SPRINT_N_PLAN.md for full task list. --max-iterations 30 --completion-promise SPRINT N COMPLETE"`
+
+Replace N with the current sprint number. Use a single line with no special shell characters.
+
+**CRITICAL:** Only output the completion promise when ALL of these are true:
+1. Every task in the sprint plan is MERGED (check SPRINT_BOARD.md)
+2. The validation gate in the sprint plan is fully satisfied
+3. `npm run validate` passes on the sprint branch
+4. Draft integration PR description is up to date
+5. No open PRs targeting the sprint branch
 
 ---
 
@@ -372,16 +387,23 @@ Each iteration should:
    - Perform Copilot review
    - Perform Mentor review
    - Merge if approved
-   - Update draft integration PR
+   - Update draft integration PR (move task to Merged PRs table, remove from Remaining)
 
-3. **Spawn engineers for unblocked tasks:**
+3. **Spawn engineers for ALL remaining unblocked tasks:**
+   - Check SPRINT_BOARD.md and sprint plan for TODO tasks
    - Use the engineer command pattern above
    - Run in parallel when possible (no dependencies)
+   - Spawn across ALL weeks/phases — do not wait for artificial week boundaries
 
 4. **Update documentation:**
-   - Sprint board
-   - Draft PR checklist
-   - PM diary
+   - Sprint board (task statuses)
+   - Draft PR description (Merged PRs table, Remaining list, Status line)
+   - PM diary (if significant progress)
+
+5. **Check sprint completion:**
+   - Are ALL tasks merged? If not, keep iterating.
+   - Is the validation gate satisfied? If not, identify what's missing.
+   - Only output the completion promise when genuinely done.
 
 ---
 

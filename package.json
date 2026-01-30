@@ -16,6 +16,7 @@
     "generate-art": "node scripts/generate-images.js",
     "generate-art:dry": "node scripts/generate-images.js --dry-run",
     "compress-images": "node scripts/compress-images.js",
+    "generate-sprites": "node scripts/generate-sprite-sheets.js",
     "test:e2e": "npx playwright test --config=tests/e2e/playwright.config.js",
     "test:e2e:headed": "npx playwright test --config=tests/e2e/playwright.config.js --headed",
     "test:e2e:screenshots": "SCREENSHOT_DIR=screenshots npx playwright test --config=tests/e2e/playwright.config.js",

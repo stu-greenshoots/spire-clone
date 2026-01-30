@@ -11,7 +11,7 @@ vi.mock('../../utils/assetLoader', () => ({
 
 // Mock the art config
 vi.mock('../../assets/art/art-config', () => ({
-  getEnemyArtInfo: () => ({ hasImage: false, imageUrl: null }),
+  getEnemyArtInfo: () => ({ hasImage: false, imageUrl: null, sprite: null }),
 }));
 
 import Enemy from '../../components/Enemy';
@@ -95,8 +95,10 @@ describe('Enemy Component', () => {
     expect(container.firstChild).toBeInTheDocument();
   });
 
-  it('does not render block element when block is 0', () => {
+  it('hides block element visually when block is 0', () => {
     render(<Enemy enemy={baseEnemy} index={0} />);
-    expect(screen.queryByTestId('enemy-block')).not.toBeInTheDocument();
+    const blockEl = screen.getByTestId('enemy-block');
+    expect(blockEl).toBeInTheDocument();
+    expect(blockEl).toHaveStyle({ opacity: 0 });
   });
 });
