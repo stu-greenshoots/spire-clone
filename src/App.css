@@ -1637,5 +1637,142 @@ button:active {
     letter-spacing: 0.5px;
     animation: fadeIn 0.2s ease;
   }
+
+  /* ==================== UX-13c: Long-press inspect + inline enemy info ==================== */
+
+  .card-inspect-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1600;
+    animation: fadeIn 0.2s ease;
+    padding: 20px;
+  }
+
+  .card-inspect-panel {
+    background: linear-gradient(180deg, #252540 0%, #1a1a2e 100%);
+    border: 2px solid #555;
+    border-radius: 16px;
+    max-width: 320px;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    animation: slideUp 0.2s ease;
+  }
+
+  .card-inspect-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid #444;
+  }
+
+  .card-inspect-cost {
+    width: 32px;
+    height: 32px;
+    background: radial-gradient(circle at 30% 30%, #ffdd55 0%, #cc9900 50%, #886600 100%);
+    border: 2px solid #aa8800;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+  }
+
+  .card-inspect-name {
+    flex: 1;
+    font-size: 18px;
+    font-weight: bold;
+    color: #eee;
+  }
+
+  .card-inspect-type {
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .card-inspect-type--attack {
+    background: rgba(196, 30, 58, 0.3);
+    color: #ff6666;
+    border: 1px solid rgba(196, 30, 58, 0.5);
+  }
+
+  .card-inspect-type--skill {
+    background: rgba(0, 120, 212, 0.3);
+    color: #66aaff;
+    border: 1px solid rgba(0, 120, 212, 0.5);
+  }
+
+  .card-inspect-type--power {
+    background: rgba(212, 160, 23, 0.3);
+    color: #ffcc66;
+    border: 1px solid rgba(212, 160, 23, 0.5);
+  }
+
+  .card-inspect-type--curse,
+  .card-inspect-type--status {
+    background: rgba(100, 100, 100, 0.3);
+    color: #999;
+    border: 1px solid rgba(100, 100, 100, 0.5);
+  }
+
+  .card-inspect-body {
+    padding: 16px;
+  }
+
+  .card-inspect-description {
+    color: #ccc;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .card-inspect-upgraded {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #2ecc71;
+    background: rgba(46, 204, 113, 0.15);
+    border: 1px solid rgba(46, 204, 113, 0.4);
+    padding: 2px 8px;
+    border-radius: 8px;
+  }
+
+  .card-inspect-close {
+    display: block;
+    width: calc(100% - 32px);
+    margin: 0 16px 16px;
+    padding: 12px;
+    background: linear-gradient(180deg, #444 0%, #333 100%);
+    color: white;
+    border: 1px solid #555;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    min-height: 44px;
+  }
+
+  .mobile-enemy-wrapper {
+    max-width: 110px;
+  }
 }
 
