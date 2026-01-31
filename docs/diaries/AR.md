@@ -301,3 +301,32 @@ document.addEventListener('click', function initAudio() {
 **Next:** AR-09 (audio crossfade polish) if assigned as stretch
 
 ---
+
+### Sprint 9 - AR-09 Complete
+**Date:** 2026-01-31
+**Status:** AR-09 Audio Crossfade Polish — COMPLETE and MERGED (PR #105)
+**Sprint:** Sprint 9 (Ship Prep + QA + 1.0)
+**Task:** AR-09 (Audio polish — S size, P2 stretch)
+
+**Done today:**
+1. Fixed crossfade bug: `_fadeAudio` used a single `_fadeInterval`, so concurrent fades (old track out + new track in) stomped each other. Changed to `_fadeIntervals` array supporting multiple concurrent fades.
+2. Added `duckMusic()`/`unduckMusic()` methods — fades to 30% volume and back over 300ms
+3. Wired Settings modal open/close in MainMenu to duck/unduck music
+4. Cleaned up `stopMusic` and `_playMusicInternal` for proper fade lifecycle management
+
+**Architecture:**
+- Each `_fadeAudio` call gets its own interval ID, manages its own cleanup
+- `_clearFade()` clears all active intervals (used for instant stops only)
+- Duck state tracked via `_ducked` flag to prevent double-duck/unduck
+- Settings ducking is MainMenu-local (other settings access points can be wired later)
+
+**Acceptance criteria:**
+- [x] Crossfade works correctly — old and new tracks fade simultaneously
+- [x] Music ducks when Settings opens
+- [x] Music restores when Settings closes
+- [x] npm run validate passes (1736 tests, 0 errors)
+
+**Blockers:** None
+**Summary:** All AR Sprint 9 tasks complete (AR-06 + AR-05b + AR-09). Audio system fully polished for 1.0.
+
+---

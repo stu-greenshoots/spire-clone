@@ -382,7 +382,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 |------|-------|------|-------------|--------|
 | UX-18 | UX | S | Loading state — branded splash during initial load | MERGED (PR #103) |
 | JR-07 | JR | S | Card balance fine-tuning — address outliers from regression | MERGED (PR #104) |
-| AR-09 | AR | S | Audio polish — crossfade between music tracks on transitions | PENDING |
+| AR-09 | AR | S | Audio polish — crossfade between music tracks on transitions | MERGED (PR #105) |
 
 ### Sprint 9 Validation Gate (1.0 RELEASE GATE)
 
