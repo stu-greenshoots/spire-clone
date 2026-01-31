@@ -32,14 +32,14 @@ describe('Events Data', () => {
   describe('Basic Structure', () => {
     it('should export an array of exactly 20 events', () => {
       expect(Array.isArray(events)).toBe(true);
-      expect(events.length).toBe(20);
+      expect(events.length).toBe(25);
     });
 
     it('should also be available as named export', async () => {
       const module = await import('../data/events');
       expect(module.events).toBeDefined();
       expect(Array.isArray(module.events)).toBe(true);
-      expect(module.events.length).toBe(20);
+      expect(module.events.length).toBe(25);
     });
 
     it('all events should have required fields', () => {
