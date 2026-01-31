@@ -14,6 +14,30 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 10 - GD-14 Complete
+**Date:** 2026-01-31
+**Status:** GD-14 complete, PR #115 merged to sprint-10
+
+**Done today:**
+- Generated placeholder art for 4 missing Act 3 enemies: transient, spireGrowth, maw, nemesis
+- Each is 512x512 WebP with dark fantasy themed radial gradient and enemy name text
+- Color palettes: blue for Transient, green for Spire Growth, red for Maw, purple for Nemesis
+- Rebuilt sprite sheet from 41 → 45 enemies (7x7 grid, 3584x3584px, 2044KB)
+- Updated sprite-manifest.json with all 45 entries
+
+**Key finding:**
+- Task was scoped as "8 sprites" but only 4 were actually missing (transient, spireGrowth, maw, nemesis)
+- The other 4 Act 3 enemies (giant_head, writhing_mass, orbWalker, reptomancer) already had art from earlier sprints
+- Awakened One (boss) also already had high-quality art
+
+**Validation:** `npm run validate` passes — 1973 tests, lint clean, build clean
+
+**Next:**
+- GD-15 (P2 stretch): Act 3 event art — 5 scene illustrations for reality fractures
+- All placeholder enemies could be upgraded to higher-quality art in a future pass
+
+---
+
 ### Sprint 9 - GD-13 Complete (Verification)
 **Date:** 2026-01-31
 **Status:** GD-13 complete, PR #102 merged to sprint-9
