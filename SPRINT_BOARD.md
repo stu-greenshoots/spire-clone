@@ -316,7 +316,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make every action feel impactful. Professional first impression. Fix deferred infrastructure debt.
 **Plan:** See `SPRINT_8_PLAN.md`
 **Branch:** `sprint-8`
-**Status:** COMPLETE — 6 P0 + 5 P1 + 2 P2 merged, all tasks done
+**Status:** COMPLETE — 13 PRs merged (6 P0 + 5 P1 + 2 P2), 100% completion rate
 
 ### P0 — Must Ship
 
