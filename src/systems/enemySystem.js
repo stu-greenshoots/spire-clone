@@ -201,5 +201,25 @@ export const createSummonedEnemy = (type, timestamp, index = 0) => {
     base.ai = (enemy, turn) => enemy.moveset[turn % enemy.moveset.length];
     return base;
   }
+  if (type === 'bronzeOrb') {
+    return {
+      id: 'bronzeOrb',
+      name: 'Bronze Orb',
+      emoji: '🔴',
+      maxHp: 52,
+      currentHp: 52,
+      block: 0,
+      instanceId: `bronzeOrb_${timestamp}_${index}`,
+      stasis: null, // Card captured via Stasis mechanic
+      moveset: [
+        { id: 'beam', intent: INTENT.ATTACK, damage: 8, message: 'Beam' },
+        { id: 'supportBeam', intent: INTENT.BUFF, special: 'healAlly', healAmount: 12, message: 'Support Beam' }
+      ],
+      ai: (enemy, turn) => {
+        if (turn % 2 === 0) return enemy.moveset[0];
+        return enemy.moveset[1];
+      }
+    };
+  }
   return null;
 };

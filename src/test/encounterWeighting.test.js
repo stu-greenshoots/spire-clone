@@ -92,12 +92,18 @@ describe('Act 2 Encounter Weighting (DEC-017)', () => {
   });
 
   describe('Act 2 boss encounters', () => {
-    it('should return Act 2 boss', () => {
+    it('should return Act 2 boss (with minions if applicable)', () => {
       for (let i = 0; i < 50; i++) {
         const encounter = getBossEncounter(2);
-        expect(encounter.length).toBe(1);
+        expect(encounter.length).toBeGreaterThanOrEqual(1);
         expect(encounter[0].type).toBe('boss');
         expect(encounter[0].act).toBe(2);
+        // If Automaton, should have 2 Bronze Orb minions
+        if (encounter[0].id === 'automaton') {
+          expect(encounter).toHaveLength(3);
+          expect(encounter[1].id).toBe('bronzeOrb');
+          expect(encounter[2].id).toBe('bronzeOrb');
+        }
       }
     });
   });

@@ -37,7 +37,7 @@ describe('Integration Tests', () => {
         eliteEncounter.forEach(e => expect(e.type).toBe('elite'));
 
         const bossEncounter = getBossEncounter(act);
-        expect(bossEncounter.length).toBe(1);
+        expect(bossEncounter.length).toBeGreaterThanOrEqual(1);
         expect(bossEncounter[0].type).toBe('boss');
       }
     });
