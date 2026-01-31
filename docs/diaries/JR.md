@@ -2,6 +2,29 @@
 
 ## Sprint 10 Entries
 
+### JR-08a: Act 3 enemies batch 1 — Nemesis elite
+**Date:** 2026-01-31
+**Status:** MERGED (PR #108)
+
+**Done:**
+- Added Nemesis as Act 3 elite (185-200 HP) — the only missing Act 3 elite. Giant Head and Reptomancer already existed.
+- Implemented enemy intangible system: `applyDamageToTarget` reduces all damage to 1 when enemy has intangible > 0
+- Nemesis AI: alternating pattern — even turns use Debilitate (Frail 3 + Weak 3) and gain Intangible 1, odd turns alternate between Scythe (45 dmg + Burn) and Attack Burn (6×3 + Burn)
+- Added intangible decrement at end of turn, intangible badge in Enemy component, lore in flavorText
+- 17 new tests, 1755 total passing
+
+**Files changed:** enemies.js, combatSystem.js, enemyTurnAction.js, endTurnAction.js, Enemy.jsx, flavorText.js, nemesis.test.js (7 files, +198/-1)
+
+**Design decisions:**
+- Enemy intangible is generic (works for any enemy), not Nemesis-specific — future enemies can use it
+- Nemesis grants intangible via `nemesisIntangible` flag + move ID check, not turn counter
+- `addBurn` special reused from existing Orb Walker / Hexaghost pattern
+
+**Blockers:** None
+**Next:** JR-08b (Act 3 normals) or JR-08c (Awakened One boss)
+
+---
+
 ### FIX-07: Wire potion rewards into combat victory flow
 **Date:** 2026-01-31
 **Status:** MERGED (PR #107)
