@@ -620,3 +620,28 @@ The game is ready for 1.0 release pending final validation gate sign-off.
 **Next:** Commit plan, push branch, create draft PR, begin execution with PM-10 and FIX-07.
 
 ---
+
+### Sprint 10 — PM-10 Complete
+**Date:** 2026-01-31
+**Status:** PM-10 DONE
+
+**Done:**
+- Merged Sprint 9 PR #92 to master (was draft → ready → squash merged)
+- Tagged v1.0.0 on master
+- Merged master back into sprint-10 branch (resolved merge conflicts from FIX-07)
+- Updated draft PR #106 with full task checklist
+- Updated sprint board: PM-10 → DONE, status → IN PROGRESS
+- `npm run validate` passes on sprint-10
+
+**Merge conflicts resolved:**
+- `src/components/RewardScreen.jsx` — kept FIX-07's `getPotionImage` import
+- `SPRINT_BOARD.md`, `docs/diaries/PM.md`, `docs/diaries/JR.md` — kept sprint-10 versions with FIX-07 updates
+
+**Sprint 10 Progress:** 2/15 tasks done (PM-10, FIX-07)
+
+**Next P0 tasks:**
+- JR-08a: Act 3 enemies batch 1
+- BE-21: Act 3 map generation
+- VARROW-05: Act 3 narrative
+
+---
