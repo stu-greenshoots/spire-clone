@@ -68,7 +68,7 @@ const VictoryScreen = () => {
 
       {/* Trophy */}
       <div style={{
-        fontSize: '100px',
+        fontSize: 'clamp(60px, 15vw, 100px)',
         marginBottom: '20px',
         animation: 'celebrate 2s ease-in-out infinite',
         filter: 'drop-shadow(0 0 30px rgba(255, 215, 0, 0.8))'
@@ -78,7 +78,7 @@ const VictoryScreen = () => {
 
       {/* Title */}
       <h1 style={{
-        fontSize: '42px',
+        fontSize: 'clamp(28px, 8vw, 42px)',
         marginBottom: '10px',
         fontWeight: 'bold',
         letterSpacing: '4px',
@@ -99,7 +99,7 @@ const VictoryScreen = () => {
         color: '#88ff88',
         marginBottom: '30px',
         fontSize: '18px',
-        maxWidth: '420px',
+        maxWidth: 'min(420px, 90%)',
         lineHeight: '1.6',
         fontStyle: 'italic',
         textShadow: '0 0 10px rgba(136, 255, 136, 0.5)',
@@ -111,10 +111,11 @@ const VictoryScreen = () => {
       {/* Run Summary */}
       <div style={{
         background: 'linear-gradient(180deg, rgba(50, 50, 30, 0.8) 0%, rgba(30, 30, 20, 0.9) 100%)',
-        padding: '25px 35px',
+        padding: '20px clamp(16px, 5vw, 35px)',
         borderRadius: '15px',
         marginBottom: '25px',
-        minWidth: '260px',
+        width: '90%',
+        maxWidth: '340px',
         border: '3px solid #FFD700',
         boxShadow: '0 0 30px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.1)',
         animation: showContent ? 'fadeIn 0.5s ease 0.4s both' : 'none'
@@ -175,7 +176,7 @@ const VictoryScreen = () => {
       <button
         onClick={returnToMenu}
         style={{
-          padding: '18px 60px',
+          padding: '18px 48px',
           fontSize: '20px',
           background: 'linear-gradient(180deg, #44aa44 0%, #338833 50%, #226622 100%)',
           color: 'white',
