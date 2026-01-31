@@ -27,6 +27,8 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   const [combatStarted] = useState(true);
   const [newlyDrawnCards, setNewlyDrawnCards] = useState(new Set());
   const [mobileSelectedCard, setMobileSelectedCard] = useState(null);
+  const [inspectCard, setInspectCard] = useState(null);
+  const longPressTimer = useRef(null);
 
   // Detect mobile for tap-to-play (matches CSS breakpoint)
   const [isMobile, setIsMobile] = useState(() =>
@@ -193,7 +195,31 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     prevEnemyIds.current = currentEnemyIds;
   }, [enemies]);
 
+  // Long-press handlers for mobile card inspect
+  const handleCardTouchStart = useCallback((card) => {
+    if (!isMobile) return;
+    longPressTimer.current = setTimeout(() => {
+      setInspectCard(card);
+      longPressTimer.current = null;
+    }, 500);
+  }, [isMobile]);
+
+  const handleCardTouchEnd = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }, []);
+
+  const handleCardTouchMove = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }, []);
+
   const handleCardClick = (card) => {
+    if (inspectCard) return;
     if (targetingMode) {
       cancelTarget();
       setMobileSelectedCard(null);
@@ -235,11 +261,12 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         setCardPlaying(null);
       }, 300);
       playCard(selectedCard, enemyInstanceId);
-    } else {
-      // Show enemy info panel when not targeting
+    } else if (!isMobile) {
+      // Desktop: show full enemy info panel
       const enemy = enemies.find(e => e.instanceId === enemyInstanceId);
       setShowEnemyInfo(enemy);
     }
+    // Mobile: inline info is always visible, no panel needed
   };
 
   const canPlayCard = useCallback((card) => {
@@ -570,6 +597,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
             key={enemy.instanceId}
             data-testid={`enemy-${enemy.instanceId}`}
             ref={el => enemyRefs.current[enemy.instanceId] = el}
+            className={isMobile ? 'mobile-enemy-wrapper' : ''}
             style={{
               animation: enemyHitStates[enemy.instanceId] ? 'enemyHit 0.5s ease-out' : 'none',
               transform: dropTargetEnemy === enemy.instanceId ? 'scale(1.1)' : 'scale(1)',
@@ -697,7 +725,15 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
               key={card.instanceId}
               className={`${isMobile ? 'mobile-card-slot' : ''}${isMobileSelected ? ' mobile-card-selected' : ''}`}
               onMouseDown={(e) => !isMobile && handleDragStart(card, e)}
-              onTouchStart={(e) => !isMobile && handleDragStart(card, e)}
+              onTouchStart={(e) => {
+                if (isMobile) {
+                  handleCardTouchStart(card);
+                } else {
+                  handleDragStart(card, e);
+                }
+              }}
+              onTouchEnd={handleCardTouchEnd}
+              onTouchMove={handleCardTouchMove}
               style={{
                 transform: mobileTransform,
                 transition: isPlaying ? 'none' : 'transform 0.2s ease',
@@ -907,6 +943,36 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
           End Turn
         </button>
       </div>
+
+      {/* Card Inspect Modal (mobile long-press) */}
+      {inspectCard && (
+        <div
+          className="card-inspect-overlay"
+          onClick={() => setInspectCard(null)}
+        >
+          <div className="card-inspect-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="card-inspect-header">
+              <span className="card-inspect-cost">{inspectCard.cost}</span>
+              <span className="card-inspect-name">{inspectCard.name}</span>
+              <span className={`card-inspect-type card-inspect-type--${inspectCard.type}`}>
+                {inspectCard.type}
+              </span>
+            </div>
+            <div className="card-inspect-body">
+              <p className="card-inspect-description">{inspectCard.description}</p>
+              {inspectCard.upgraded && (
+                <span className="card-inspect-upgraded">Upgraded</span>
+              )}
+            </div>
+            <button
+              className="card-inspect-close"
+              onClick={() => setInspectCard(null)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Enemy Info Panel */}
       {showEnemyInfo && (
