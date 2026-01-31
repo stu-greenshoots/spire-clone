@@ -27,6 +27,29 @@ Back Ender - Architecture, state management, performance
 
 ---
 
+### BE-20: Performance Audit
+**Date:** 2026-01-31
+**Status:** COMPLETE, MERGED (PR #99)
+
+**Done:**
+- Bundle size analysis: 565KB JS (167KB gzipped), well under 2MB target
+- Added `useCallback` to `handleCardClick` and `handleEnemyClick` in CombatScreen
+- Added `useMemo` for `passiveEffects` computation in CombatScreen
+- Wrapped `PileButton` in `React.memo` (CombatScreen)
+- Wrapped `StatusBadge` in `React.memo` (Enemy.jsx)
+- Card and Enemy components already had React.memo from prior work
+- 6 screen-level components already lazy-loaded via React.lazy
+
+**Findings:**
+- JS bundle is 565KB — sprite sheet images (~5.3MB) are loaded on demand, not in bundle
+- Inline arrow closures in `.map()` iterations still create new refs per render; deeper refactoring out of scope
+- All 1736 tests pass, no regressions
+
+**Blockers:** None
+**Next:** All BE Sprint 9 tasks complete
+
+---
+
 ## Sprint 8 Entries
 
 ### BE-09: Starting Bonus / Neow
