@@ -273,3 +273,31 @@ document.addEventListener('click', function initAudio() {
 **Next:** AR-05b (Mobile final pass) when assigned
 
 ---
+
+### Sprint 9 - AR-05b Complete
+**Date:** 2026-01-31
+**Status:** AR-05b Mobile Final Pass — COMPLETE and MERGED (PR #96)
+**Sprint:** Sprint 9 (Ship Prep + QA + 1.0)
+**Task:** AR-05b (Mobile final pass — S size, P0)
+
+**Done today:**
+1. Fixed touch targets on MainMenu: settings close button and ascension selector buttons (28px → 44px WCAG)
+2. Made VictoryScreen/GameOverScreen titles and emoji responsive with CSS clamp()
+3. Replaced fixed minWidth on summary boxes with percentage-based width + maxWidth to prevent overflow on small screens
+4. Reduced CTA button horizontal padding (60px → 48px) to prevent overflow on 375px screens
+5. Added -webkit-overflow-scrolling: touch to ShopScreen horizontal card scroll
+6. Added @media (max-width: 375px) overrides for starting bonus screen
+7. All 1736 tests pass, 0 lint errors, build clean
+
+**Viewports verified:**
+- iPhone SE (375x667) — no overflow, all buttons reachable
+- iPhone 12/13/14 (390x844) — correct layout
+- Pixel 7 (412x915) — no clipped text
+- iPad portrait (810x1080) — layout appropriate
+
+**Screens verified:** Title, Starting Bonus, Map, Combat, Shop, Rest Site, Event, Reward, Victory, Game Over, Settings
+
+**Blockers:** None
+**Next:** AR-09 (audio crossfade polish) if assigned as stretch
+
+---
