@@ -1,10 +1,32 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
+import { DEFEAT_NARRATIVE, DEFEAT_FOOTER } from '../data/flavorText';
+
+const getDefeatText = (act, currentFloor, currentNode) => {
+  const isBoss = currentNode?.type === 'boss';
+  let pool;
+  if (isBoss && act >= 3) {
+    pool = DEFEAT_NARRATIVE.heart;
+  } else if (isBoss) {
+    pool = DEFEAT_NARRATIVE.boss;
+  } else if (act >= 3) {
+    pool = DEFEAT_NARRATIVE.act3;
+  } else if (act >= 2) {
+    pool = DEFEAT_NARRATIVE.act2;
+  } else if (currentFloor <= 5) {
+    pool = DEFEAT_NARRATIVE.early;
+  } else {
+    pool = DEFEAT_NARRATIVE.midAct1;
+  }
+  return pool[Math.floor(Math.random() * pool.length)];
+};
 
 const GameOverScreen = () => {
   const { state, returnToMenu } = useGame();
   const { player, deck, relics, currentFloor, act } = state;
   const [showContent, setShowContent] = useState(false);
+  const defeatText = useMemo(() => getDefeatText(act, currentFloor, state.currentNode), [act, currentFloor, state.currentNode]);
+  const footerText = useMemo(() => DEFEAT_FOOTER[Math.floor(Math.random() * DEFEAT_FOOTER.length)], []);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 500);
@@ -81,15 +103,17 @@ const GameOverScreen = () => {
         DEFEAT
       </h1>
 
-      {/* Subtitle */}
+      {/* Narrative text */}
       <p style={{
-        color: '#666',
+        color: '#aa8888',
         marginBottom: '30px',
         fontSize: '16px',
         fontStyle: 'italic',
+        maxWidth: '400px',
+        lineHeight: '1.6',
         animation: showContent ? 'fadeIn 0.5s ease 0.2s both' : 'none'
       }}>
-        You have fallen in the Spire...
+        {defeatText}
       </p>
 
       {/* Run Summary */}
@@ -177,14 +201,15 @@ const GameOverScreen = () => {
          Try Again
       </button>
 
-      {/* Encouragement text */}
+      {/* Footer narrative */}
       <p style={{
         marginTop: '25px',
-        color: '#444',
+        color: '#555',
         fontSize: '13px',
+        fontStyle: 'italic',
         animation: showContent ? 'fadeIn 0.5s ease 1s both' : 'none'
       }}>
-        The Spire awaits your return...
+        {footerText}
       </p>
     </div>
   );
