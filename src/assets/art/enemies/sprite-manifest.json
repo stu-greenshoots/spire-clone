@@ -1,9 +1,9 @@
 {
   "cellSize": 512,
   "cols": 7,
-  "rows": 6,
+  "rows": 7,
   "sheetWidth": 3584,
-  "sheetHeight": 3072,
+  "sheetHeight": 3584,
   "enemies": {
     "automaton": {
       "x": 0,
@@ -152,145 +152,173 @@
       "row": 2,
       "index": 20
     },
-    "mystic": {
+    "maw": {
       "x": 0,
       "y": 1536,
       "col": 0,
       "row": 3,
       "index": 21
     },
-    "orbWalker": {
+    "mystic": {
       "x": 512,
       "y": 1536,
       "col": 1,
       "row": 3,
       "index": 22
     },
-    "reptomancer": {
+    "nemesis": {
       "x": 1024,
       "y": 1536,
       "col": 2,
       "row": 3,
       "index": 23
     },
-    "sentryA": {
+    "orbWalker": {
       "x": 1536,
       "y": 1536,
       "col": 3,
       "row": 3,
       "index": 24
     },
-    "shelledParasite": {
+    "reptomancer": {
       "x": 2048,
       "y": 1536,
       "col": 4,
       "row": 3,
       "index": 25
     },
-    "slaverBlue": {
+    "sentryA": {
       "x": 2560,
       "y": 1536,
       "col": 5,
       "row": 3,
       "index": 26
     },
-    "slimeBoss": {
+    "shelledParasite": {
       "x": 3072,
       "y": 1536,
       "col": 6,
       "row": 3,
       "index": 27
     },
-    "slime_large": {
+    "slaverBlue": {
       "x": 0,
       "y": 2048,
       "col": 0,
       "row": 4,
       "index": 28
     },
-    "slime_medium": {
+    "slimeBoss": {
       "x": 512,
       "y": 2048,
       "col": 1,
       "row": 4,
       "index": 29
     },
-    "slime_small": {
+    "slime_large": {
       "x": 1024,
       "y": 2048,
       "col": 2,
       "row": 4,
       "index": 30
     },
-    "snakePlant": {
+    "slime_medium": {
       "x": 1536,
       "y": 2048,
       "col": 3,
       "row": 4,
       "index": 31
     },
-    "snecko": {
+    "slime_small": {
       "x": 2048,
       "y": 2048,
       "col": 4,
       "row": 4,
       "index": 32
     },
-    "sphericGuardian": {
+    "snakePlant": {
       "x": 2560,
       "y": 2048,
       "col": 5,
       "row": 4,
       "index": 33
     },
-    "spike_slime_medium": {
+    "snecko": {
       "x": 3072,
       "y": 2048,
       "col": 6,
       "row": 4,
       "index": 34
     },
-    "spike_slime_small": {
+    "sphericGuardian": {
       "x": 0,
       "y": 2560,
       "col": 0,
       "row": 5,
       "index": 35
     },
-    "spiker": {
+    "spike_slime_medium": {
       "x": 512,
       "y": 2560,
       "col": 1,
       "row": 5,
       "index": 36
     },
-    "theChamp": {
+    "spike_slime_small": {
       "x": 1024,
       "y": 2560,
       "col": 2,
       "row": 5,
       "index": 37
     },
-    "theGuardian": {
+    "spiker": {
       "x": 1536,
       "y": 2560,
       "col": 3,
       "row": 5,
       "index": 38
     },
-    "timeEater": {
+    "spireGrowth": {
       "x": 2048,
       "y": 2560,
       "col": 4,
       "row": 5,
       "index": 39
     },
-    "writhing_mass": {
+    "theChamp": {
       "x": 2560,
       "y": 2560,
       "col": 5,
       "row": 5,
       "index": 40
+    },
+    "theGuardian": {
+      "x": 3072,
+      "y": 2560,
+      "col": 6,
+      "row": 5,
+      "index": 41
+    },
+    "timeEater": {
+      "x": 0,
+      "y": 3072,
+      "col": 0,
+      "row": 6,
+      "index": 42
+    },
+    "transient": {
+      "x": 512,
+      "y": 3072,
+      "col": 1,
+      "row": 6,
+      "index": 43
+    },
+    "writhing_mass": {
+      "x": 1024,
+      "y": 3072,
+      "col": 2,
+      "row": 6,
+      "index": 44
     }
   }
 }
