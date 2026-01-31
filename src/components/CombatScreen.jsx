@@ -789,6 +789,8 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         {/* Scrollable card container */}
         <div
           data-testid="hand-area"
+          role="group"
+          aria-label={`Hand: ${hand.length} cards`}
           className={isMobile ? 'mobile-card-fan' : ''}
           style={{
           padding: '12px 10px',
@@ -985,7 +987,10 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         </div>
 
         {/* Energy Orb */}
-        <div style={{
+        <div
+          role="status"
+          aria-label={`Energy: ${player.energy} of ${player.maxEnergy}`}
+          style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -1021,6 +1026,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         {/* End Turn Button */}
         <button
           data-testid="btn-end-turn"
+          aria-label="End Turn"
           onClick={endTurn}
           style={{
             padding: '12px 30px',
@@ -1049,7 +1055,10 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
       {inspectCard && (
         <div
           className="card-inspect-overlay"
+          role="dialog"
+          aria-label={`Inspecting card: ${inspectCard.name}`}
           onClick={() => setInspectCard(null)}
+          onKeyDown={(e) => { if (e.key === 'Escape') setInspectCard(null); }}
         >
           <div className="card-inspect-panel" onClick={(e) => e.stopPropagation()}>
             <div className="card-inspect-header">
@@ -1249,6 +1258,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
 // Pile Button Component
 const PileButton = memo(function PileButton({ label, count, onClick, color }) { return (
   <button
+    aria-label={`${label} pile: ${count} cards`}
     onClick={onClick}
     style={{
       padding: '8px 12px',
