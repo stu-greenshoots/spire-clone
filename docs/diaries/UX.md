@@ -267,3 +267,19 @@ UX Guy - Combat feedback, tooltips, visual polish
 **Sprint 10 UX status:** UX-19 done. UX-20 (re-review self-assessment) is P2 stretch.
 
 ---
+
+### Sprint 10 - UX-20 Complete
+**Date:** 2026-01-31
+**Status:** UX-20 DONE (PR #118)
+
+**What I did:**
+- Created `docs/SELF_ASSESSMENT.md` — full re-review against Game Zone Magazine rubric
+- Original score: 58/100. Projected current score: **85/100** (+27)
+- Breakdown: Gameplay 7→9, Presentation 6→8, Stability 4→9, UX/Polish 5→8
+- 15/18 original complaints resolved (83%)
+- Remaining gaps: no run statistics, no card rarity visuals, no skip-reward confirmation
+- Documented path to 90+ (second character, run history, animated sprites, Heart boss, cloud save)
+
+**Sprint 10 UX status:** All UX tasks complete (UX-19 + UX-20). Done for the sprint.
+
+---
