@@ -19,7 +19,7 @@ import { shuffleArray } from '../utils/mapGenerator';
  * Registry of all player debuff types.
  * Adding a new debuff type here makes it automatically work with Artifact blocking.
  */
-export const PLAYER_DEBUFF_TYPES = ['weak', 'vulnerable', 'frail', 'strengthDown', 'dexterityDown', 'entangle', 'drawReduction'];
+export const PLAYER_DEBUFF_TYPES = ['weak', 'vulnerable', 'frail', 'strengthDown', 'dexterityDown', 'entangle', 'drawReduction', 'confused'];
 
 /**
  * Registry of all enemy debuff types.
@@ -50,6 +50,7 @@ export const applyPlayerDebuff = (player, type, amount, combatLog = []) => {
     case 'frail': player.frail = (player.frail || 0) + amount; break;
     case 'entangle': player.entangle = true; break;
     case 'drawReduction': player.drawReduction = (player.drawReduction || 0) + amount; break;
+    case 'confused': player.confused = (player.confused || 0) + amount; break;
     case 'strengthDown': player.strength = (player.strength || 0) - amount; break;
     case 'dexterityDown': player.dexterity = (player.dexterity || 0) - amount; break;
     default: return false;
@@ -99,6 +100,7 @@ export const applyEnemyBuff = (enemy, type, amount, _combatLog = []) => {
     case 'enrage': enemy.enrage = (enemy.enrage || 0) + amount; break;
     case 'thorns': enemy.thorns = (enemy.thorns || 0) + amount; break;
     case 'metallicize': enemy.metallicize = (enemy.metallicize || 0) + amount; break;
+    case 'platedArmor': enemy.platedArmor = (enemy.platedArmor || 0) + amount; break;
     case 'artifact': enemy.artifact = (enemy.artifact || 0) + amount; break;
     default: return false;
   }
@@ -243,6 +245,9 @@ export const processPlayerTurnStart = (player) => {
   if (player.weak > 0) player.weak--;
   if (player.frail > 0) player.frail--;
 
+  // Decrement confused
+  if (player.confused > 0) player.confused--;
+
   // Reset per-turn counters
   player.cardsPlayedThisTurn = 0;
   player.attacksPlayedThisTurn = 0;
@@ -304,6 +309,15 @@ export const createStatusCard = (cardId, source = '') => {
  * @param {Object} passiveEffects - Passive relic effects
  * @returns {{ canPlay: boolean, reason: string }} Whether the card can be played and why not
  */
+export const getEffectiveCost = (card, player) => {
+  const isXCost = card.cost === -1 || card.special === 'xCost';
+  if (isXCost || card.unplayable) return card.cost;
+  if (player.confused > 0) {
+    return Math.floor(Math.random() * 4);
+  }
+  return card.cost;
+};
+
 export const canPlayCard = (card, player, passiveEffects = {}) => {
   const isXCost = card.cost === -1 || card.special === 'xCost';
 

@@ -26,6 +26,20 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   const [cardPlaying, setCardPlaying] = useState(null);
   const [combatStarted] = useState(true);
   const [newlyDrawnCards, setNewlyDrawnCards] = useState(new Set());
+  const [mobileSelectedCard, setMobileSelectedCard] = useState(null);
+  const [inspectCard, setInspectCard] = useState(null);
+  const longPressTimer = useRef(null);
+
+  // Detect mobile for tap-to-play (matches CSS breakpoint)
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   // Drag and drop state
   const [draggingCard, setDraggingCard] = useState(null);
@@ -52,6 +66,13 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   }, [enemies]);
 
   const { animations, addAnimation, removeAnimation } = useAnimations();
+
+  // Clear mobile selection when hand changes
+  useEffect(() => {
+    if (mobileSelectedCard && !hand.find(c => c.instanceId === mobileSelectedCard.instanceId)) {
+      setMobileSelectedCard(null);
+    }
+  }, [hand, mobileSelectedCard]);
 
   // Track card draw animations
   useEffect(() => {
@@ -174,19 +195,62 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     prevEnemyIds.current = currentEnemyIds;
   }, [enemies]);
 
+  // Long-press handlers for mobile card inspect
+  const handleCardTouchStart = useCallback((card) => {
+    if (!isMobile) return;
+    longPressTimer.current = setTimeout(() => {
+      setInspectCard(card);
+      longPressTimer.current = null;
+    }, 500);
+  }, [isMobile]);
+
+  const handleCardTouchEnd = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }, []);
+
+  const handleCardTouchMove = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  }, []);
+
   const handleCardClick = (card) => {
+    if (inspectCard) return;
     if (targetingMode) {
       cancelTarget();
-    } else {
-      // Trigger card play animation for non-targeting cards
-      if (card.type !== 'attack' || enemies.length === 1) {
-        setCardPlaying(card.instanceId);
-        setTimeout(() => {
-          setCardPlaying(null);
-        }, 300);
-      }
-      selectCard(card);
+      setMobileSelectedCard(null);
+      return;
     }
+
+    // Mobile: tap-to-select, tap-again-to-play
+    if (isMobile) {
+      if (mobileSelectedCard?.instanceId === card.instanceId) {
+        // Second tap -- play the card
+        if (card.type !== 'attack' || enemies.length === 1) {
+          setCardPlaying(card.instanceId);
+          setTimeout(() => setCardPlaying(null), 300);
+        }
+        selectCard(card);
+        setMobileSelectedCard(null);
+      } else {
+        // First tap -- select/preview
+        setMobileSelectedCard(card);
+      }
+      return;
+    }
+
+    // Desktop: original behaviour
+    if (card.type !== 'attack' || enemies.length === 1) {
+      setCardPlaying(card.instanceId);
+      setTimeout(() => {
+        setCardPlaying(null);
+      }, 300);
+    }
+    selectCard(card);
   };
 
   const handleEnemyClick = (enemyInstanceId) => {
@@ -197,11 +261,12 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         setCardPlaying(null);
       }, 300);
       playCard(selectedCard, enemyInstanceId);
-    } else {
-      // Show enemy info panel when not targeting
+    } else if (!isMobile) {
+      // Desktop: show full enemy info panel
       const enemy = enemies.find(e => e.instanceId === enemyInstanceId);
       setShowEnemyInfo(enemy);
     }
+    // Mobile: inline info is always visible, no panel needed
   };
 
   const canPlayCard = useCallback((card) => {
@@ -271,29 +336,34 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     }
 
     const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+    const card = draggingCard;
+    const isAttack = card.type === 'attack';
 
     if (containerRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect();
       const relativeY = clientY - containerRect.top;
       const containerHeight = containerRect.height;
+      const inEnemyArea = relativeY < containerHeight * 0.6;
 
-      // Check if dropped in enemy area (upper 60% of screen)
-      if (relativeY < containerHeight * 0.6) {
-        const card = draggingCard;
-
-        // For attack cards that need targeting
-        if (card.type === 'attack' && enemies.length > 1) {
+      // Non-attack cards (skills, powers) can be played by dropping anywhere
+      if (!isAttack) {
+        setCardPlaying(card.instanceId);
+        setTimeout(() => setCardPlaying(null), 300);
+        selectCard(card);
+      } else if (inEnemyArea) {
+        // Attack cards must be dropped in enemy area
+        if (enemies.length > 1) {
           if (dropTargetEnemy !== null) {
             // Play card on specific enemy
             setCardPlaying(card.instanceId);
             setTimeout(() => setCardPlaying(null), 300);
             playCard(card, dropTargetEnemy);
           } else {
-            // Entered targeting mode
+            // Enter targeting mode
             selectCard(card);
           }
         } else {
-          // Non-targeted cards or single enemy
+          // Single enemy - auto-target
           setCardPlaying(card.instanceId);
           setTimeout(() => setCardPlaying(null), 300);
           selectCard(card);
@@ -383,6 +453,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   return (
     <div
       ref={containerRef}
+      className="combat-screen-container"
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -531,6 +602,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
             key={enemy.instanceId}
             data-testid={`enemy-${enemy.instanceId}`}
             ref={el => enemyRefs.current[enemy.instanceId] = el}
+            className={isMobile ? 'mobile-enemy-wrapper' : ''}
             style={{
               animation: enemyHitStates[enemy.instanceId] ? 'enemyHit 0.5s ease-out' : 'none',
               transform: dropTargetEnemy === enemy.instanceId ? 'scale(1.1)' : 'scale(1)',
@@ -621,14 +693,15 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         {/* Scrollable card container */}
         <div
           data-testid="hand-area"
+          className={isMobile ? 'mobile-card-fan' : ''}
           style={{
           padding: '12px 10px',
           paddingBottom: '5px',
-          overflowX: 'auto',
+          overflowX: isMobile ? 'visible' : 'auto',
           overflowY: 'hidden',
           display: 'flex',
-          gap: '8px',
-          justifyContent: hand.length > 4 ? 'flex-start' : 'center',
+          gap: isMobile ? '0' : '8px',
+          justifyContent: isMobile ? 'center' : (hand.length > 4 ? 'flex-start' : 'center'),
           minHeight: '155px',
           alignItems: 'flex-end',
           WebkitOverflowScrolling: 'touch'
@@ -637,15 +710,37 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
           const isPlaying = cardPlaying === card.instanceId;
           const isNewlyDrawn = newlyDrawnCards.has(card.instanceId);
           const isSelected = selectedCard?.instanceId === card.instanceId;
+          const isMobileSelected = mobileSelectedCard?.instanceId === card.instanceId;
           const isBeingDragged = draggingCard?.instanceId === card.instanceId;
+
+          // Fan/arc calculation for mobile
+          const cardCount = hand.length;
+          const midIndex = (cardCount - 1) / 2;
+          const offset = index - midIndex;
+          const maxRotation = Math.min(cardCount * 3, 25);
+          const rotation = cardCount > 1 ? (offset / midIndex) * maxRotation : 0;
+          const arcY = cardCount > 1 ? Math.abs(offset) * Math.abs(offset) * 4 : 0;
+
+          const mobileTransform = isMobile
+            ? `rotate(${rotation}deg) translateY(${isMobileSelected ? -(20 + arcY) : arcY}px)${isMobileSelected ? ' scale(1.15)' : ''}`
+            : `translateY(${isSelected ? '-10px' : '0'})`;
 
           return (
             <div
               key={card.instanceId}
-              onMouseDown={(e) => handleDragStart(card, e)}
-              onTouchStart={(e) => handleDragStart(card, e)}
+              className={`${isMobile ? 'mobile-card-slot' : ''}${isMobileSelected ? ' mobile-card-selected' : ''}`}
+              onMouseDown={(e) => !isMobile && handleDragStart(card, e)}
+              onTouchStart={(e) => {
+                if (isMobile) {
+                  handleCardTouchStart(card);
+                } else {
+                  handleDragStart(card, e);
+                }
+              }}
+              onTouchEnd={handleCardTouchEnd}
+              onTouchMove={handleCardTouchMove}
               style={{
-                transform: `translateY(${isSelected ? '-10px' : '0'})`,
+                transform: mobileTransform,
                 transition: isPlaying ? 'none' : 'transform 0.2s ease',
                 animation: isPlaying
                   ? 'cardFlyToEnemy 0.3s ease-out forwards'
@@ -653,16 +748,18 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
                     ? `cardDraw 0.4s ease-out ${index * 0.05}s both`
                     : 'none',
                 opacity: isBeingDragged ? 0.4 : 1,
-                cursor: canPlayCard(card) ? 'grab' : 'not-allowed',
-                touchAction: 'pan-x',
-                flexShrink: 0
+                cursor: canPlayCard(card) ? (isMobile ? 'pointer' : 'grab') : 'not-allowed',
+                touchAction: isMobile ? 'manipulation' : 'pan-x',
+                flexShrink: 0,
+                zIndex: isMobileSelected ? 20 : (isMobile ? cardCount - Math.abs(Math.round(offset)) : 'auto'),
+                transformOrigin: 'bottom center'
               }}
             >
               <CardTooltip card={card} player={player} targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}>
                 <Card
                   card={card}
                   onClick={() => !isDragging && handleCardClick(card)}
-                  selected={isSelected}
+                  selected={isSelected || isMobileSelected}
                   disabled={!canPlayCard(card)}
                   player={player}
                   targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}
@@ -684,8 +781,15 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         )}
         </div>
 
-        {/* Visual scroll track for large hands */}
-        {hand.length > 4 && (
+        {/* Mobile tap hint */}
+        {isMobile && mobileSelectedCard && (
+          <div className="mobile-tap-hint">
+            Tap again to play {mobileSelectedCard.name}
+          </div>
+        )}
+
+        {/* Visual scroll track for large hands (desktop only) */}
+        {!isMobile && hand.length > 4 && (
           <div style={{
             height: '12px',
             margin: '0 10px 8px 10px',
@@ -844,6 +948,36 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
           End Turn
         </button>
       </div>
+
+      {/* Card Inspect Modal (mobile long-press) */}
+      {inspectCard && (
+        <div
+          className="card-inspect-overlay"
+          onClick={() => setInspectCard(null)}
+        >
+          <div className="card-inspect-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="card-inspect-header">
+              <span className="card-inspect-cost">{inspectCard.cost}</span>
+              <span className="card-inspect-name">{inspectCard.name}</span>
+              <span className={`card-inspect-type card-inspect-type--${inspectCard.type}`}>
+                {inspectCard.type}
+              </span>
+            </div>
+            <div className="card-inspect-body">
+              <p className="card-inspect-description">{inspectCard.description}</p>
+              {inspectCard.upgraded && (
+                <span className="card-inspect-upgraded">Upgraded</span>
+              )}
+            </div>
+            <button
+              className="card-inspect-close"
+              onClick={() => setInspectCard(null)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Enemy Info Panel */}
       {showEnemyInfo && (

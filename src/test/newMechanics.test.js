@@ -214,11 +214,11 @@ describe('Byrd Flight', () => {
     expect(result.grounded).toBe(true);
   });
 
-  it('gainFlight special should restore flight', () => {
+  it('Byrd should have caw, peck, and swoop moves', () => {
     const byrd = getEnemyById('byrd');
-    const flyMove = byrd.moveset.find(m => m.id === 'fly');
-    expect(flyMove).toBeDefined();
-    expect(flyMove.special).toBe('gainFlight');
+    expect(byrd.moveset.find(m => m.id === 'caw')).toBeDefined();
+    expect(byrd.moveset.find(m => m.id === 'peck')).toBeDefined();
+    expect(byrd.moveset.find(m => m.id === 'swoop')).toBeDefined();
   });
 });
 
@@ -992,9 +992,9 @@ describe('Enemy Block Retention (FIX-05)', () => {
     expect(lagavulin.retainBlock).toBe(true);
   });
 
-  it('Shelled Parasite should have retainBlock in enemy data', () => {
+  it('Shelled Parasite should have platedArmor in enemy data', () => {
     const shelledParasite = getEnemyById('shelledParasite');
-    expect(shelledParasite.retainBlock).toBe(true);
+    expect(shelledParasite.platedArmor).toBe(14);
   });
 
   it('The Guardian should have retainBlock in enemy data', () => {

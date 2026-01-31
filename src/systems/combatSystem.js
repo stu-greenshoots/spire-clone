@@ -224,6 +224,10 @@ export const applyDamageToTarget = (target, damage) => {
   }
 
   const result = { ...target, block: newBlock, currentHp: newHp };
+  // Plated Armor: reduce by 1 when taking unblocked damage (HP loss)
+  if (remainingDamage > 0 && target.platedArmor > 0) {
+    result.platedArmor = Math.max(0, target.platedArmor - 1);
+  }
   // Update flight and grounded status
   if (target.flight !== undefined) {
     result.flight = newFlight;

@@ -308,6 +308,78 @@ Weights stored in `src/data/encounters.js` for easy tuning.
 
 ---
 
+### DEC-018: Defer UX-14 (mobile map) to Sprint 8
+
+**Status:** Accepted (Sprint 7 Planning)
+**Proposed by:** Mentor, UX
+**Resolution:** UX overloaded with UX-13. Map is less critical than combat. Deferred.
+
+---
+
+### DEC-019: Defer BE-09 (Neow) to Sprint 8
+
+**Status:** Accepted (Sprint 7 Planning)
+**Proposed by:** Mentor, BE
+**Resolution:** Sprint too full. Independent task — slots into any sprint.
+
+---
+
+### DEC-020: Defer Stasis (Bronze Orb card-steal) to Sprint 8
+
+**Status:** Accepted (Sprint 7 Planning)
+**Proposed by:** Mentor, BE, JR
+**Resolution:** Architecturally novel. Needs careful design. Ship Automaton without Orbs first.
+
+---
+
+### DEC-021: Split UX-13 into 3 sub-tasks (a/b/c)
+
+**Status:** Accepted (Sprint 7 Planning)
+**Proposed by:** UX, Mentor
+**Resolution:** 300-line PR limit. Each sub-task is reviewable and testable independently.
+
+---
+
+### DEC-022: Split JR enemies into 4 tasks (a/b/c/d)
+
+**Status:** Accepted (Sprint 7 Planning)
+**Proposed by:** JR, Mentor
+**Resolution:** 300-line limit. Isolates Automaton risk. Makes BE dependency explicit.
+
+---
+
+### DEC-023: Add BE-18 (enemy systems prerequisite)
+
+**Status:** Accepted (Sprint 7 Planning)
+**Proposed by:** BE, JR, Mentor
+**Resolution:** JR blocked without Plated Armor, Confused, Artifact, Lifesteal systems. BE must build first.
+
+---
+
+### DEC-024: Promote GD-08 (style guide) to P0
+
+**Status:** Accepted (Sprint 7 Planning)
+**Proposed by:** GD, UX, AR/QA
+**Resolution:** Gates UX-13. Must ship first 2-3 days of sprint.
+
+---
+
+### DEC-025: Split QA-08 into a/b
+
+**Status:** Accepted (Sprint 7 Planning)
+**Proposed by:** QA
+**Resolution:** Enemy testing and viewport testing are distinct efforts with different dependencies.
+
+---
+
+### DEC-026: Automaton ships without Bronze Orbs
+
+**Status:** Accepted (Sprint 7 Planning)
+**Proposed by:** Mentor, BE
+**Resolution:** Hyper Beam cycle + Artifact is enough for a boss. Orbs + Stasis deferred to Sprint 8.
+
+---
+
 ## Rejected
 
 (none)

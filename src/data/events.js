@@ -1,221 +1,220 @@
-// 20 Meaningful Game Events for Spire Ascent
-// Dark fantasy flavor with dry humor and real trade-offs
+// 20 Game Events for Spire Ascent
+// First 10: "Pattern glitches" in the Endless War (Varrow voice)
+// Last 10: Dark fantasy flavor with dry humor and real trade-offs
 
 export const events = [
-  // ===== MYSTERIOUS MERCHANTS/ENCOUNTERS =====
+  // ===== PATTERN GLITCHES (Endless War voice) =====
   {
     id: 'hollow_merchant',
-    title: 'The Hollow Merchant',
-    description: 'A figure draped in moth-eaten robes stands before a blanket of curious wares. Its face is a smooth void where features should be. It gestures toward its goods with fingers that bend the wrong way.',
+    title: 'Supply Line Anomaly',
+    description: 'The war keeps inventory. Resources cycle through its corridors in predictable loops. But this cache has stalled — a figure stands beside it, not quite a combatant, not quite anything. It holds out objects it should not have, in a place they should not be.',
     choices: [
       {
-        text: 'Buy the glowing vial (lose 75 gold)',
+        text: 'Take the restorative (lose 75 gold)',
         effect: { loseGold: 75, heal: 30 },
-        result: 'The vial burns going down, but warmth floods your veins. The merchant nods approvingly with its featureless face.'
+        result: 'The liquid tastes of nothing. It heals like a process completing, efficient and without warmth. The figure does not react. It was never really here — just the war redistributing.'
       },
       {
-        text: 'Buy the wrapped relic (lose 100 gold)',
+        text: 'Take the crystallized output (lose 100 gold)',
         effect: { loseGold: 100, gainRelic: 'vajra' },
-        result: 'You unwrap a crystalline shard that hums with raw power. Strength courses through you as it bonds to your essence.'
+        result: 'A shard of concentrated force, dense with iterations the war ran and discarded. It bonds to you immediately. The figure dissolves. The supply line corrects itself.'
       },
       {
         text: 'Walk away',
         effect: { gainGold: 10 },
-        result: 'As you leave, you notice a coin on the ground where the merchant stood. It was not there before. Neither was the merchant, come to think of it.'
+        result: 'You step past and something clinks underfoot. A small residue — the war rounds down, apparently. The anomaly collapses behind you without sound.'
       }
     ]
   },
 
   {
     id: 'traveling_alchemist',
-    title: 'The Traveling Alchemist',
-    description: 'A woman with singed eyebrows and acid-stained gloves blocks the corridor. She offers you a bubbling concoction, insisting it will "only mostly not kill you." Her confidence is not reassuring.',
+    title: 'Process Deviation',
+    description: 'A woman with singed eyebrows and acid-stained gloves blocks the corridor. She is not part of the war\'s pattern — or she is a part that has gone wrong. She holds out a concoction that bubbles with unstable intent. "Only mostly not kill you," she says, which is not how the war usually phrases things.',
     choices: [
       {
         text: 'Drink the concoction',
         effect: { loseHpPercent: 20, gainMaxHp: 10 },
-        result: 'Your insides rearrange themselves briefly. When the screaming stops, you feel fundamentally sturdier. The alchemist scribbles notes furiously.'
+        result: 'Your insides rearrange. The war does not approve of unauthorized modifications, but it cannot undo what has already compiled. You are sturdier now. The alchemist scribbles notes as if documenting a bug.'
       },
       {
         text: 'Politely decline and ask for gold instead',
         effect: { gainGold: 50, damage: 5 },
-        result: 'She flicks a pouch of gold at your head in annoyance. It connects solidly with your temple. Fair enough.'
+        result: 'She flicks a pouch at your head. It connects. The war did not arrange this interaction and seems unsure how to log it. Fair enough.'
       }
     ]
   },
 
-  // ===== ANCIENT RUINS/ARTIFACTS =====
   {
     id: 'forgotten_library',
-    title: 'The Forgotten Library',
-    description: 'Shelves of crumbling tomes stretch into darkness. One book pulses with a faint glow, its pages turning of their own accord. The knowledge within could reshape your understanding of combat.',
+    title: 'Pattern Archive',
+    description: 'The war remembers everything, but not everything is meant to be accessed. This chamber holds older iterations — tactics tested and shelved, configurations abandoned mid-cycle. One record still pulses, its data wanting to be read.',
     choices: [
       {
-        text: 'Study the glowing tome',
+        text: 'Access the active record',
         effect: { upgradeRandomCard: true, loseHp: 8 },
-        result: 'Forbidden knowledge sears into your mind. A technique you knew becomes refined, perfected. Blood drips from your nose onto the yellowed pages.'
+        result: 'The data overwrites something you knew with something sharper. Your nose bleeds — the war\'s archive was not designed for direct access. But the technique is yours now, refined beyond its original version.'
       },
       {
-        text: 'Search for hidden valuables',
+        text: 'Search for cached resources',
         effect: { gainGold: 80 },
-        result: 'Behind a loose stone you find a scholar\'s emergency fund. Apparently they never came back for it. Their skeleton in the corner explains why.'
+        result: 'Behind a corrupted section, resources the war allocated and forgot. A previous iteration\'s budget, never reclaimed. The skeleton nearby suggests the last accessor did not log out cleanly.'
       },
       {
-        text: 'Burn it all',
+        text: 'Purge the archive',
         effect: { removeCard: true, gainMaxHp: 3 },
-        result: 'The flames consume the cursed knowledge and with it, a weakness you carried. You feel lighter, unburdened. The Spire groans in disapproval.'
+        result: 'The old data burns away, and with it a pattern you had been carrying — one the war embedded in you without asking. You are lighter. The walls shudder, but the war has no mechanism for complaint.'
       }
     ]
   },
 
   {
     id: 'crumbling_altar',
-    title: 'The Crumbling Altar',
-    description: 'An altar of obsidian stands in a chamber of broken pillars. Ancient bloodstains pattern its surface in geometric shapes. The air tastes of iron and ozone.',
+    title: 'Iteration Marker',
+    description: 'A slab of dark stone scored with geometric patterns — the war\'s notation system, older than anything else in this corridor. Dried residue fills the grooves. This is where the war tracked its early cycles. The tracking still works.',
     choices: [
       {
-        text: 'Place gold on the altar (lose 60 gold)',
+        text: 'Offer resources to the marker (lose 60 gold)',
         effect: { loseGold: 60, gainRelic: 'anchor' },
-        result: 'The gold melts into the stone and reforms as a heavy anchor pendant. You feel steadier, more grounded. The altar crumbles to dust, its purpose fulfilled.'
+        result: 'The gold dissolves into the grooves and reforms as a dense pendant. The war\'s oldest output — stability, grounding. The marker cracks and goes dark. Its function is complete.'
       },
       {
         text: 'Offer your blood',
         effect: { loseHp: 15, upgradeRandomCard: true, upgradeRandomCard2: true },
-        result: 'Your blood traces the geometric patterns and blazes with light. Combat techniques burn into your muscle memory. The price was steep but the knowledge is forever.'
+        result: 'Your blood fills the geometric pattern and the war reads you. It writes back. Techniques sharpen in your muscle memory as the system calibrates you like any other input. The price was steep but the data is permanent.'
       },
       {
-        text: 'Smash the altar',
+        text: 'Break the marker',
         effect: { gainGold: 40, loseMaxHp: 3 },
-        result: 'The obsidian shatters, revealing gold within. But a cold curse settles over you, diminishing something fundamental. Perhaps some things are better left intact.'
+        result: 'The stone shatters. Resources clatter free. But something in the breakage settles into you — a small corruption, a reduced ceiling. The war does not forget damage to its infrastructure.'
       }
     ]
   },
 
   {
     id: 'sunken_vault',
-    title: 'The Sunken Vault',
-    description: 'A half-submerged stone vault rises from black water. Its door hangs open, revealing glinting treasures within. The water ripples despite the stillness of the air.',
+    title: 'Corrupted Cache',
+    description: 'A storage node the war sealed and abandoned. Half-submerged, its contents glinting through murky overflow. Whatever corrupted this cache still moves in the water — the war\'s cleanup process, still running, still hungry.',
     choices: [
       {
-        text: 'Wade in and grab what you can',
+        text: 'Grab what you can, fast',
         effect: { gainGold: 120, damage: 18 },
-        result: 'You snatch handfuls of gold before something beneath the water takes its toll. Teeth marks cross your legs as you scramble out, richer but bloodied.'
+        result: 'You plunge in and snatch. The cleanup process objects — violently. Teeth marks cross your legs as you scramble out clutching resources the war wrote off long ago. Profitable, if the war\'s janitor doesn\'t follow.'
       },
       {
-        text: 'Drain the water first (takes time)',
+        text: 'Drain the cache slowly',
         effect: { gainGold: 60, loseMaxHp: 2 },
-        result: 'You spend hours redirecting the flow. The vault yields modest treasure, but the exposure to the Spire\'s damp air has weakened your constitution.'
+        result: 'Hours of careful work. The yield is modest, but the exposure to whatever saturates this place has thinned something in you. The war\'s runoff is not meant for extended contact.'
       }
     ]
   },
 
-  // ===== DANGEROUS CREATURES OFFERING DEALS =====
   {
     id: 'serpent_guardian',
-    title: 'The Coiled Serpent',
-    description: 'A massive serpent with scales like tarnished silver blocks the path. Its eyes hold ancient intelligence. It speaks in a voice like grinding stone: "I offer you a trade, warm-blood."',
+    title: 'Legacy Process',
+    description: 'Something old blocks the path — older than the current iteration of the war, still running on outdated logic. It coils in silver-tarnished armor and speaks in a frequency the war no longer uses: "I offer you a trade, warm-blood." The war tolerates it. It does not know how to stop it.',
     choices: [
       {
-        text: 'Accept the serpent\'s bargain (lose 30 HP)',
+        text: 'Accept its bargain (lose 30 HP)',
         effect: { loseHp: 30, gainRelic: 'bronze_scales' },
-        result: 'The serpent bites deep, injecting something that burns. When the pain subsides, your skin has hardened with bronze-like scales. Attackers will regret touching you.'
+        result: 'It bites deep, injecting something the war did not authorize. Your skin hardens with a pattern from an older version — bronze-scale armor, deprecated but functional. The war cannot patch what it did not write.'
       },
       {
-        text: 'Challenge it to earn passage',
+        text: 'Challenge it for passage',
         effect: { damage: 12, gainGold: 65 },
-        result: 'The serpent strikes but you dodge most of its fury. Impressed, it yields passage and a tribute of scales that crumble into gold at your touch.'
+        result: 'The old process strikes with outdated patterns — painful but predictable. It yields passage and sheds resources as it recoils. Impressed, perhaps. Or simply executing its loss condition.'
       },
       {
-        text: 'Offer it food from your pack',
+        text: 'Feed it from your reserves',
         effect: { loseGold: 30, heal: 10 },
-        result: 'The serpent accepts your offering and coils aside. As thanks, it breathes warm air across your wounds. Surprisingly gentle for a creature that size.'
+        result: 'It accepts the input and coils aside. Warm air passes over your damage — a repair function from a gentler version of the war. The legacy process remembers a time before everything was combat.'
       }
     ]
   },
 
   {
     id: 'bone_collector',
-    title: 'The Bone Collector',
-    description: 'A creature of twisted antlers and too many joints crouches over a pile of bones, sorting them by some unknowable criteria. It looks up with hollow eye sockets and grins. "Spare me something interesting?"',
+    title: 'The Scavenger Pattern',
+    description: 'A thing of misaligned joints and hollow sockets crouches over a pile of discarded outputs — the war\'s waste material, sorted by criteria only it understands. It grins with borrowed teeth: "Spare me something interesting?" The war does not acknowledge this entity, but it exists anyway.',
     choices: [
       {
         text: 'Offer a card from your deck',
         effect: { removeCard: true, gainRelic: 'pen_nib' },
-        result: 'The creature plucks the technique from your mind like pulling a tooth. In exchange, it presses a sharp nib into your palm. "For writing your story in blood," it whispers.'
+        result: 'It extracts the technique from your configuration like pulling a bad tooth. In exchange, a sharp instrument — something for marking your progress through the war. "For writing your pattern in blood," it says. The war pretends this did not happen.'
       },
       {
         text: 'Offer your blood (lose 20 HP)',
         effect: { loseHp: 20, gainGold: 100 },
-        result: 'It produces a bone cup and you fill it. The creature drinks deeply and belches coins. "Delicious vintage," it says, patting a pouch of gold into your hands.'
+        result: 'It produces a cup and you fill it. The scavenger drinks, then produces resources from somewhere the war does not track. An off-the-books transaction. The war\'s economy has leaks.'
       }
     ]
   },
 
   {
     id: 'shadow_beast',
-    title: 'The Thing in the Walls',
-    description: 'Something moves in the walls, visible only as a darker patch of shadow. It whispers offers in a voice like rustling parchment, promising power for a small sacrifice of self.',
+    title: 'Negative Space',
+    description: 'Where the war\'s patterns do not reach, something else fills in. A gap in the corridor\'s logic, visible as a darker absence. It whispers in the frequency between the war\'s signals — offering modifications the system never intended.',
     choices: [
       {
         text: 'Accept its gift of strength',
         effect: { gainMaxHp: 8, loseGold: 50 },
-        result: 'Shadows pour into you, and your body swells with unnatural vitality. Your coin purse feels lighter. The shadow feeds on gold, apparently. An expensive appetite.'
+        result: 'The negative space pours into you, expanding your capacity beyond the war\'s allocation. Your resources lighten — the gap feeds on surplus. An expensive update, but the war cannot roll it back.'
       },
       {
         text: 'Ask it to refine your technique',
         effect: { upgradeRandomCard: true, loseMaxHp: 4 },
-        result: 'Dark tendrils probe your mind, perfecting a technique but hollowing something out in the process. You are sharper now, but somehow less.'
+        result: 'Dark tendrils rewrite a technique into something the war did not intend. Sharper, yes. But the edit cost you capacity — the gap took its margin. You are more precise now, and somehow less.'
       },
       {
-        text: 'Drive it away with light',
+        text: 'Drive it away',
         effect: { gainGold: 25 },
-        result: 'You strike sparks and the shadow recoils, dropping something metallic as it flees. Not much, but better than dealing with whatever that was.'
+        result: 'You force the gap to collapse and something metallic drops from the absence. The war fills in the space immediately, relieved. Not much gained, but the system is stable again.'
       }
     ]
   },
 
-  // ===== CURSED OBJECTS WITH POWER =====
   {
     id: 'blood_crown',
-    title: 'The Blood Crown',
-    description: 'A crown of iron thorns sits atop a pile of bones, stained rust-red. It radiates palpable malice, yet the power it promises is undeniable. Previous wearers did not fare well, judging by the bones.',
+    title: 'Recursive Loop',
+    description: 'An object the war produced and cannot reclaim — a crown of iron thorns, cycling endlessly through a self-referencing pattern. It sits atop the remains of everyone who wore it, each one feeding the next iteration. The loop wants a new input.',
     choices: [
       {
         text: 'Wear the crown',
         effect: { gainRelic: 'red_skull', loseHp: 25 },
-        result: 'The thorns bite deep into your scalp. Power floods through you, but only when your life hangs by a thread. The crown knows exactly what it is doing.'
+        result: 'The thorns bite in and the loop accepts you. Power flows — but only at the edge, only when your own pattern is close to terminating. The crown optimizes for desperation. It knows exactly what it is doing.'
       },
       {
-        text: 'Melt it down for gold',
+        text: 'Break the loop for materials',
         effect: { gainGold: 75, damage: 8 },
-        result: 'The iron resists your makeshift forge, spattering you with molten droplets. Eventually it yields gold, though the crown seemed to scream as it melted.'
+        result: 'The iron resists — recursive patterns do not want to end. Molten fragments spit and scar. Eventually the loop collapses into raw resources, and something that might have been a scream dissipates into the war\'s background noise.'
       }
     ]
   },
 
   {
     id: 'whispering_blade',
-    title: 'The Whispering Blade',
-    description: 'A sword embedded in a corpse hums with a frequency that sets your teeth on edge. It promises to teach you its secrets if you free it. The corpse\'s expression suggests this was a poor decision.',
+    title: 'Orphaned Instruction',
+    description: 'A weapon embedded in a terminated combatant, still executing its last command. It hums at a frequency the war no longer monitors — an instruction orphaned when its owner stopped iterating. It wants to complete its function. The previous owner\'s expression suggests cooperation was not optional.',
     choices: [
       {
-        text: 'Take the blade and listen',
+        text: 'Accept the instruction',
         effect: { upgradeRandomCard: true, damage: 10 },
-        result: 'The blade teaches you a refined killing technique even as it cuts your hand. Knowledge paid for in blood, as all the best knowledge is.'
+        result: 'The blade completes its transfer — a combat technique from a pattern that no longer exists, refined by an iteration you never met. It cuts your hand in the process. Instructions from dead patterns are not gentle.'
       },
       {
-        text: 'Pry out the gemstones instead',
+        text: 'Salvage the hardware instead',
         effect: { gainGold: 90 },
-        result: 'You avoid the blade entirely and pocket the gems from its hilt. The sword\'s whispers turn to curses, growing fainter as you walk away counting your earnings.'
+        result: 'You strip the weapon\'s components without accepting its data. The instruction fades to static, then silence. Resources gained, pattern lost. The war does not mourn orphaned code.'
       },
       {
-        text: 'Bury blade and corpse together',
+        text: 'Complete the termination properly',
         effect: { heal: 15, gainMaxHp: 3 },
-        result: 'A warm peace settles over you as you show respect to the dead. The act of mercy restores something the Spire had been slowly taking from you.'
+        result: 'You set the blade down and close the process correctly. Something the war should have done and didn\'t. A clean shutdown restores something in you — the war\'s entropy reversed, briefly, by simple maintenance.'
       }
     ]
   },
 
+  // ===== CLASSIC EVENTS (original dark fantasy voice) =====
   {
     id: 'mirror_of_souls',
     title: 'The Mirror of Souls',

@@ -1334,6 +1334,70 @@ button:active {
     max-width: 90%;
     font-size: 14px;
   }
+
+  /* AR-05a: WCAG 44px touch targets for non-combat interactive elements */
+
+  /* Settings: sliders need adequate height for thumb dragging */
+  .settings-panel input[type="range"] {
+    min-height: 44px;
+    cursor: pointer;
+  }
+
+  /* Settings: selects need 44px tap target */
+  .settings-panel select {
+    min-height: 44px;
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+
+  /* Settings: checkbox toggle rows need 44px tap height */
+  .settings-panel input[type="checkbox"] {
+    min-width: 24px;
+    min-height: 24px;
+  }
+
+  /* Deck viewer: close button needs 44px target (overrides unset) */
+  .deck-viewer-header .close-btn {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  /* Deck viewer: sort/filter buttons need 44px target */
+  .deck-viewer-controls button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  /* Deck viewer: relic items need 44px target */
+  .deck-relic-item {
+    min-height: 44px;
+    padding: 8px 12px;
+  }
+
+  /* Tutorial: buttons need 44px target */
+  .tutorial-buttons button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  /* Reward cards: ensure tap target */
+  .reward-card,
+  .reward-option {
+    min-height: 48px;
+  }
+
+  /* Event choice buttons */
+  .event-choice button,
+  .event-choices button {
+    min-height: 48px;
+    padding: 12px 16px;
+  }
 }
 
 /* Small phones (iPhone SE, etc) */
@@ -1498,4 +1562,217 @@ button:active {
 .victory-reward-button:nth-child(1) { animation-delay: 0.2s; }
 .victory-reward-button:nth-child(2) { animation-delay: 0.3s; }
 .victory-reward-button:nth-child(3) { animation-delay: 0.4s; }
+
+/* ==================== UX-13a: Mobile Combat HUD ==================== */
+
+/* Mobile: collapsible header during combat + vertical combat zones */
+@media (max-width: 768px) {
+  /* During combat, show compact header and hide full rows */
+  .persistent-header-container.combat-mode .combat-header-compact {
+    display: flex !important;
+  }
+
+  .persistent-header-container.combat-mode .header-stats-row,
+  .persistent-header-container.combat-mode .header-relics-row,
+  .persistent-header-container.combat-mode .header-potions-row {
+    display: none !important;
+  }
+
+  /* When HUD is expanded during combat, show everything */
+  .persistent-header-container.combat-mode.hud-expanded .header-stats-row,
+  .persistent-header-container.combat-mode.hud-expanded .header-relics-row,
+  .persistent-header-container.combat-mode.hud-expanded .header-potions-row {
+    display: flex !important;
+  }
+
+  /* Reduce combat screen padding to match compact header (~40px) */
+  .combat-screen-container {
+    padding-top: 40px !important;
+  }
+
+  /* HUD expand button - no hover transform on mobile */
+  .hud-expand-btn:hover {
+    transform: none !important;
+  }
+
+  /* ==================== UX-13b: Mobile Card Fan/Arc ==================== */
+
+  /* Fan container: centered, no scroll, allow overflow for arc */
+  .mobile-card-fan {
+    overflow: visible !important;
+    padding-bottom: 15px !important;
+    min-height: 170px !important;
+    position: relative;
+  }
+
+  /* Each card slot in the fan: overlap via negative margin */
+  .mobile-card-slot {
+    margin-left: -18px;
+    margin-right: -18px;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s;
+    will-change: transform;
+  }
+
+  .mobile-card-slot:first-child {
+    margin-left: 0;
+  }
+
+  .mobile-card-slot:last-child {
+    margin-right: 0;
+  }
+
+  /* Selected card lifts and enlarges */
+  .mobile-card-selected {
+    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.6));
+  }
+
+  /* Tap hint bar */
+  .mobile-tap-hint {
+    text-align: center;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: #FFD700;
+    background: rgba(255, 215, 0, 0.08);
+    border-top: 1px solid rgba(255, 215, 0, 0.2);
+    letter-spacing: 0.5px;
+    animation: fadeIn 0.2s ease;
+  }
+
+  /* ==================== UX-13c: Long-press inspect + inline enemy info ==================== */
+
+  .card-inspect-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1600;
+    animation: fadeIn 0.2s ease;
+    padding: 20px;
+  }
+
+  .card-inspect-panel {
+    background: linear-gradient(180deg, #252540 0%, #1a1a2e 100%);
+    border: 2px solid #555;
+    border-radius: 16px;
+    max-width: 320px;
+    width: 100%;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+    animation: slideUp 0.2s ease;
+  }
+
+  .card-inspect-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid #444;
+  }
+
+  .card-inspect-cost {
+    width: 32px;
+    height: 32px;
+    background: radial-gradient(circle at 30% 30%, #ffdd55 0%, #cc9900 50%, #886600 100%);
+    border: 2px solid #aa8800;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+  }
+
+  .card-inspect-name {
+    flex: 1;
+    font-size: 18px;
+    font-weight: bold;
+    color: #eee;
+  }
+
+  .card-inspect-type {
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 3px 8px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .card-inspect-type--attack {
+    background: rgba(196, 30, 58, 0.3);
+    color: #ff6666;
+    border: 1px solid rgba(196, 30, 58, 0.5);
+  }
+
+  .card-inspect-type--skill {
+    background: rgba(0, 120, 212, 0.3);
+    color: #66aaff;
+    border: 1px solid rgba(0, 120, 212, 0.5);
+  }
+
+  .card-inspect-type--power {
+    background: rgba(212, 160, 23, 0.3);
+    color: #ffcc66;
+    border: 1px solid rgba(212, 160, 23, 0.5);
+  }
+
+  .card-inspect-type--curse,
+  .card-inspect-type--status {
+    background: rgba(100, 100, 100, 0.3);
+    color: #999;
+    border: 1px solid rgba(100, 100, 100, 0.5);
+  }
+
+  .card-inspect-body {
+    padding: 16px;
+  }
+
+  .card-inspect-description {
+    color: #ccc;
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .card-inspect-upgraded {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #2ecc71;
+    background: rgba(46, 204, 113, 0.15);
+    border: 1px solid rgba(46, 204, 113, 0.4);
+    padding: 2px 8px;
+    border-radius: 8px;
+  }
+
+  .card-inspect-close {
+    display: block;
+    width: calc(100% - 32px);
+    margin: 0 16px 16px;
+    padding: 12px;
+    background: linear-gradient(180deg, #444 0%, #333 100%);
+    color: white;
+    border: 1px solid #555;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    min-height: 44px;
+  }
+
+  .mobile-enemy-wrapper {
+    max-width: 110px;
+  }
+}
 

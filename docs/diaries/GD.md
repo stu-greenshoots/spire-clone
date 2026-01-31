@@ -102,6 +102,59 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ---
 
+### Sprint 7 - GD-audit Complete
+**Date:** 2026-01-31
+**Status:** GD-audit complete, PR pending targeting sprint-7
+
+**Done today:**
+- Full asset audit across all 4 categories (cards, enemies, relics, potions)
+- Created `docs/GD-AUDIT.md` with detailed findings
+- Key findings:
+  - Cards: 96/96 (100% coverage) -- all good
+  - Enemies: 34/41 (83% coverage) -- 7 missing art from Sprint 7 JR-03 additions
+  - Relics: 49/49 (100%) -- all good
+  - Potions: 15/15 (100%) -- all good
+  - Dual asset loader system: legacy `public/images/enemies/` is dead (empty dir), `src/assets/art/` is the active pipeline
+  - Sprite sheet is stale (34 enemies, should be 41)
+  - Naming inconsistency: mix of camelCase and snake_case enemy IDs (documented, not worth fixing)
+  - Total asset disk: 8.5 MB, all individual files well under 500 KB limit
+
+**Recommendations documented:**
+- P1: Generate art for 7 missing enemies, rebuild sprite sheet
+- P2: Remove dead legacy asset loader path, card sprite sheets
+- P3: Clean up empty public/images/enemies/ dir
+
+**Next:**
+- Generate art for automaton, bronzeOrb, gremlinMinion, mystic, shelledParasite, snecko, sphericGuardian
+- Regenerate sprite sheet with all 41 enemies
+- Add custom ASCII fallbacks for new enemies in Enemy.jsx
+
+---
+
+### Sprint 7 - GD-08 Complete
+**Date:** 2026-01-30
+**Status:** GD-08 complete, PR #60 open targeting sprint-7
+
+**Done today:**
+- Created `docs/STYLE_GUIDE.md` — one-page style reference (165 lines)
+- Documented all CSS custom properties from `:root` (card types, rarity, UI colors)
+- Defined surface color palette (backgrounds, overlays, highlights)
+- Captured font stack, type scale, base line-height
+- Established 4px spacing scale (4/8/12/16/24/32)
+- Documented component patterns: cards, buttons, panels, overlays, health bars, screen shake
+- All values verified against `src/App.css` and `src/index.css`
+
+**Design decisions:**
+- Kept as documentation only — no CSS changes, no new custom properties
+- Noted surface colors and spacing are not yet extracted to custom properties (future task)
+- Focused on practical reference over comprehensive design system
+
+**Next:**
+- Surface colors could be extracted to CSS custom properties in a follow-up task
+- Spacing scale could become custom properties when needed
+
+---
+
 ### Sprint 6 - GD-06 Complete
 **Date:** 2026-01-30
 **Status:** GD-06 complete, PR #53 open targeting sprint-6

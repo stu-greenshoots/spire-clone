@@ -263,30 +263,30 @@ describe('Enemy Mechanics', () => {
       expect(damagePerHit * hits).toBe(18); // Total
     });
 
-    it('Gremlin Leader stab should hit 4 times', () => {
+    it('Gremlin Leader stab should hit 3 times', () => {
       const gremlinLeader = getEnemyById('gremlinLeader');
       expect(gremlinLeader).toBeDefined();
 
       const stab = gremlinLeader.moveset.find(m => m.id === 'stab');
       expect(stab).toBeDefined();
-      expect(stab.damage).toBe(7);
-      expect(stab.times).toBe(4);
+      expect(stab.damage).toBe(6);
+      expect(stab.times).toBe(3);
 
-      // Total = 7 * 4 = 28
-      expect(stab.damage * stab.times).toBe(28);
+      // Total = 6 * 3 = 18
+      expect(stab.damage * stab.times).toBe(18);
     });
 
-    it('Book of Stabbing multi-stab should have 3 initial hits', () => {
+    it('Book of Stabbing multi-stab should have 2 initial hits', () => {
       const book = getEnemyById('bookOfStabbing');
       expect(book).toBeDefined();
 
       const multiStab = book.moveset.find(m => m.id === 'multiStab');
       expect(multiStab).toBeDefined();
-      expect(multiStab.damage).toBe(7);
-      expect(multiStab.times).toBe(3);
+      expect(multiStab.damage).toBe(6);
+      expect(multiStab.times).toBe(2);
 
       // Book escalates stab count over time
-      expect(book.multiStabCount).toBe(3);
+      expect(book.multiStabCount).toBe(2);
       expect(book.stabEscalation).toBe(1);
     });
   });

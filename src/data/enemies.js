@@ -286,44 +286,42 @@ export const ALL_ENEMIES = [
   {
     id: 'chosen',
     name: 'Chosen',
-    hp: { min: 62, max: 68 },
+    hp: { min: 95, max: 95 },
     type: 'normal',
     act: 2,
     emoji: '⚔️',
+    artifact: 1, // Blocks first debuff applied to it
     moveset: [
+      { id: 'hex', intent: INTENT.DEBUFF, effects: [{ type: 'vulnerable', amount: 2, target: 'player' }], message: 'Hex' },
       { id: 'poke', intent: INTENT.ATTACK, damage: 5, times: 2, message: 'Poke' },
-      { id: 'zap', intent: INTENT.ATTACK_DEBUFF, damage: 12, effects: [{ type: 'vulnerable', amount: 2, target: 'player' }], message: 'Zap' },
-      { id: 'debilitate', intent: INTENT.DEBUFF, effects: [{ type: 'weak', amount: 2, target: 'player' }, { type: 'vulnerable', amount: 2, target: 'player' }], message: 'Debilitate' },
-      { id: 'hex', intent: INTENT.DEBUFF, special: 'addHex', message: 'Hex' }
+      { id: 'drain', intent: INTENT.ATTACK_BUFF, damage: 18, special: 'healSelf', healAmount: 7, message: 'Drain' }
     ],
     ai: (enemy, turn, lastMove) => {
-      if (turn === 0) return enemy.moveset[3];
-      const roll = Math.random();
-      if (roll < 0.5 && lastMove?.id !== 'poke') return enemy.moveset[0];
-      if (roll < 0.8) return enemy.moveset[1];
-      return enemy.moveset[2];
+      // Opens with Hex, then cycles poke/drain
+      if (turn === 0) return enemy.moveset[0];
+      if (lastMove?.id === 'poke') return enemy.moveset[2];
+      return enemy.moveset[1];
     }
   },
   {
     id: 'byrd',
     name: 'Byrd',
-    hp: { min: 25, max: 31 },
+    hp: { min: 25, max: 25 },
     type: 'normal',
     act: 2,
     emoji: '🦅',
-    flying: true,
+    flying: true, // flight: 3 applied via createEnemyInstance when flying is true
+    // NOTE: flight mechanic acts as block-like damage reduction; needs wiring in combat system if not already done
     moveset: [
       { id: 'caw', intent: INTENT.BUFF, effects: [{ type: 'strength', amount: 1 }], message: 'Caw' },
       { id: 'peck', intent: INTENT.ATTACK, damage: 1, times: 5, message: 'Peck' },
-      { id: 'swoop', intent: INTENT.ATTACK, damage: 12, message: 'Swoop' },
-      { id: 'fly', intent: INTENT.BUFF, special: 'gainFlight', message: 'Fly' }
+      { id: 'swoop', intent: INTENT.ATTACK, damage: 14, message: 'Swoop' }
     ],
-    ai: (enemy, _turn, _lastMove) => {
-      if (!enemy.grounded && Math.random() < 0.5) return enemy.moveset[3];
-      const roll = Math.random();
-      if (roll < 0.4) return enemy.moveset[0];
-      if (roll < 0.7) return enemy.moveset[1];
-      return enemy.moveset[2];
+    ai: (enemy, turn, lastMove) => {
+      // Opens with Caw, then alternates peck/swoop
+      if (turn === 0) return enemy.moveset[0];
+      if (lastMove?.id === 'peck') return enemy.moveset[2];
+      return enemy.moveset[1];
     }
   },
   {
@@ -345,60 +343,82 @@ export const ALL_ENEMIES = [
   {
     id: 'centurion',
     name: 'Centurion',
-    hp: { min: 56, max: 62 },
+    hp: { min: 76, max: 76 },
     type: 'normal',
     act: 2,
     emoji: '🏛️',
+    pair: 'mystic',
+    fury: { strengthGain: 2 }, // Gains 2 strength when ally (Mystic) dies
     moveset: [
-      { id: 'slash', intent: INTENT.ATTACK, damage: 10, message: 'Slash' },
-      { id: 'fury', intent: INTENT.ATTACK, damage: 5, times: 3, message: 'Fury' },
-      { id: 'defend', intent: INTENT.DEFEND, block: 12, message: 'Defend' }
+      { id: 'slash', intent: INTENT.ATTACK, damage: 12, message: 'Slash' },
+      { id: 'fury', intent: INTENT.ATTACK, damage: 6, times: 3, message: 'Fury' },
+      { id: 'shieldAlly', intent: INTENT.DEFEND_BUFF, block: 15, special: 'shieldAlly', message: 'Shield of Flow' }
     ],
-    ai: (enemy, turn, lastMove) => {
-      const roll = Math.random();
-      if (roll < 0.45 && lastMove?.id !== 'slash') return enemy.moveset[0];
-      if (roll < 0.8) return enemy.moveset[1];
-      return enemy.moveset[2];
+    ai: (enemy, turn, lastMove, _index, allies) => {
+      // If mystic ally is alive and hurt, shield them
+      const mysticAlly = allies && allies.find(a => a.id === 'mystic' && a.instanceId !== enemy.instanceId && a.currentHp > 0);
+      if (mysticAlly && mysticAlly.currentHp < mysticAlly.maxHp * 0.5 && lastMove?.id !== 'shieldAlly') {
+        return enemy.moveset[2];
+      }
+      // Alternate between slash and fury, with occasional shield
+      if (turn === 0) return enemy.moveset[0];
+      if (lastMove?.id === 'slash') return enemy.moveset[1];
+      if (lastMove?.id === 'fury') return enemy.moveset[0];
+      return enemy.moveset[0];
     }
   },
   {
     id: 'bookOfStabbing',
     name: 'Book of Stabbing',
-    hp: { min: 180, max: 192 },
+    hp: { min: 160, max: 160 },
     type: 'elite',
     act: 2,
     emoji: '📕',
+    multiStabCount: 2, // Starts at 2, increases by 1 each turn
+    stabEscalation: 1,
     moveset: [
-      { id: 'multiStab', intent: INTENT.ATTACK, damage: 7, times: 3, special: 'addStab', message: 'Multi Stab' },
-      { id: 'singleStab', intent: INTENT.ATTACK, damage: 24, message: 'Single Stab' }
+      { id: 'multiStab', intent: INTENT.ATTACK, damage: 6, times: 2, message: 'Multi Stab' }
     ],
-    ai: (enemy, turn, _lastMove) => {
-      // Escalates stab count each time multiStab is used
-      if (turn % 2 === 0) return enemy.moveset[0];
-      return enemy.moveset[1];
-    },
-    multiStabCount: 3, // Starts at 3, increases by 1 each multi-stab
-    stabEscalation: 1
+    ai: (enemy, _turn, _lastMove) => {
+      // Single move: Multi Stab. times = multiStabCount, which escalates each turn
+      return enemy.moveset[0];
+    }
   },
   {
     id: 'gremlinLeader',
     name: 'Gremlin Leader',
-    hp: { min: 160, max: 172 },
+    hp: { min: 73, max: 73 },
     type: 'elite',
     act: 2,
     emoji: '👑',
+    spawnMinions: 'gremlinMinion', // Spawns 3-4 gremlin minions at fight start
+    minionCount: { min: 3, max: 4 },
     moveset: [
-      { id: 'encourage', intent: INTENT.BUFF, special: 'buffGremlins', effects: [{ type: 'strength', amount: 3 }], message: 'Encourage' },
-      { id: 'rally', intent: INTENT.BUFF, special: 'summonGremlins', message: 'Rally!' },
-      { id: 'stab', intent: INTENT.ATTACK, damage: 7, times: 4, message: 'Stab' }
+      { id: 'encourage', intent: INTENT.BUFF, special: 'buffAllAllies', effects: [{ type: 'strength', amount: 3 }], message: 'Encourage' },
+      { id: 'stab', intent: INTENT.ATTACK, damage: 6, times: 3, message: 'Stab' },
+      { id: 'enrage', intent: INTENT.BUFF, effects: [{ type: 'strength', amount: 9 }, { type: 'metallicize', amount: 9 }], message: 'Enrage' }
     ],
-    ai: (enemy, turn, _lastMove) => {
-      // More aggressive pattern - attacks more often
-      if (turn === 0) return enemy.moveset[1]; // Start with rally
-      if (turn % 4 === 0) return enemy.moveset[1]; // Rally every 4 turns
+    ai: (enemy, turn, _lastMove, _index, allies) => {
+      // When alone (no living minions), enrage
+      const livingMinions = allies && allies.filter(a => a.instanceId !== enemy.instanceId && a.currentHp > 0);
+      if (!livingMinions || livingMinions.length === 0) return enemy.moveset[2]; // Enrage
+      // With minions: alternate encourage and stab
+      if (turn === 0) return enemy.moveset[0]; // Open with encourage
       if (turn % 2 === 0) return enemy.moveset[0]; // Encourage
-      return enemy.moveset[2]; // Stab
+      return enemy.moveset[1]; // Stab
     }
+  },
+  {
+    id: 'gremlinMinion',
+    name: 'Gremlin',
+    hp: { min: 18, max: 22 },
+    type: 'minion',
+    act: 2,
+    emoji: '👺',
+    moveset: [
+      { id: 'scratch', intent: INTENT.ATTACK, damage: 5, message: 'Scratch' }
+    ],
+    ai: () => ({ id: 'scratch', intent: INTENT.ATTACK, damage: 5, message: 'Scratch' })
   },
   {
     id: 'slaverBlue',
@@ -421,58 +441,67 @@ export const ALL_ENEMIES = [
   {
     id: 'mystic',
     name: 'Mystic',
-    hp: { min: 50, max: 56 },
+    hp: { min: 56, max: 56 },
     type: 'normal',
     act: 2,
     emoji: '🔮',
+    pair: 'centurion',
     moveset: [
-      { id: 'heal', intent: INTENT.BUFF, special: 'healAlly', healAmount: 12, message: 'Heal' },
+      { id: 'heal', intent: INTENT.BUFF, special: 'healAlly', healAmount: 16, message: 'Heal' },
+      { id: 'buffAlly', intent: INTENT.BUFF, special: 'buffAlly', effects: [{ type: 'strength', amount: 2 }], message: 'Protect' },
+      { id: 'debuff', intent: INTENT.DEBUFF, effects: [{ type: 'weak', amount: 2, target: 'player' }, { type: 'frail', amount: 2, target: 'player' }], message: 'Hex' },
       { id: 'attack', intent: INTENT.ATTACK, damage: 8, message: 'Attack' }
     ],
-    ai: (enemy, turn, _lastMove, _index, allies) => {
-      // Heals if any ally is below 50% HP, otherwise attacks
-      if (allies && allies.some(a => a.instanceId !== enemy.instanceId && a.currentHp > 0 && a.currentHp < a.maxHp * 0.5)) {
+    ai: (enemy, turn, lastMove, _index, allies) => {
+      const centurionAlly = allies && allies.find(a => a.id === 'centurion' && a.instanceId !== enemy.instanceId && a.currentHp > 0);
+      // Heal if centurion is hurt
+      if (centurionAlly && centurionAlly.currentHp < centurionAlly.maxHp * 0.6) {
         return enemy.moveset[0];
       }
-      return enemy.moveset[1];
+      // Cycle: buff ally -> debuff player -> attack
+      if (turn === 0 && centurionAlly) return enemy.moveset[1];
+      if (lastMove?.id === 'buffAlly') return enemy.moveset[2];
+      if (lastMove?.id === 'debuff') return enemy.moveset[3];
+      if (lastMove?.id === 'attack' && centurionAlly) return enemy.moveset[1];
+      return enemy.moveset[3];
     }
   },
   {
     id: 'snecko',
     name: 'Snecko',
-    hp: { min: 60, max: 66 },
+    hp: { min: 114, max: 120 },
     type: 'normal',
     act: 2,
     emoji: '🐍',
     moveset: [
-      { id: 'bite', intent: INTENT.ATTACK, damage: 15, message: 'Bite' },
-      { id: 'tailWhip', intent: INTENT.ATTACK_DEBUFF, damage: 8, effects: [{ type: 'frail', amount: 2, target: 'player' }], message: 'Tail Whip' }
+      { id: 'perplexingGlare', intent: INTENT.STRONG_DEBUFF, effects: [{ type: 'confused', amount: 1, target: 'player' }], message: 'Perplexing Glare' },
+      { id: 'tailWhip', intent: INTENT.ATTACK_DEBUFF, damage: 18, effects: [{ type: 'weak', amount: 1, target: 'player' }], message: 'Tail Whip' },
+      { id: 'bite', intent: INTENT.ATTACK, damage: 15, message: 'Bite' }
     ],
-    ai: (enemy, turn, _lastMove) => {
-      // Alternates between bite and tail whip
-      if (turn % 2 === 0) return enemy.moveset[0];
+    ai: (enemy, turn, lastMove) => {
+      // Opens with Perplexing Glare to apply Confused
+      if (turn === 0) return enemy.moveset[0];
+      // Then alternates tail whip and bite
+      if (lastMove?.id === 'tailWhip') return enemy.moveset[2];
       return enemy.moveset[1];
-    },
-    confuse: true
+    }
   },
   {
     id: 'shelledParasite',
     name: 'Shelled Parasite',
-    hp: { min: 68, max: 72 },
+    hp: { min: 71, max: 71 },
     type: 'normal',
     act: 2,
     emoji: '🐚',
-    retainBlock: true,
+    platedArmor: 14, // Gains 14 block each turn, degrades when taking unblocked damage
     moveset: [
-      { id: 'shell', intent: INTENT.DEFEND, block: 14, message: 'Shell' },
-      { id: 'suck', intent: INTENT.ATTACK_BUFF, damage: 10, special: 'healSelf', healAmount: 5, message: 'Suck' },
-      { id: 'doubleTap', intent: INTENT.ATTACK, damage: 6, times: 2, message: 'Double Tap' }
+      { id: 'suck', intent: INTENT.ATTACK_BUFF, damage: 10, special: 'healSelf', healAmount: 3, message: 'Suck' },
+      { id: 'fell', intent: INTENT.ATTACK_DEBUFF, damage: 18, effects: [{ type: 'frail', amount: 2, target: 'player' }], message: 'Fell' }
     ],
     ai: (enemy, turn, _lastMove) => {
-      // Shells first turn, then alternates between suck and double tap
-      if (turn === 0) return enemy.moveset[0];
-      if (turn % 2 === 1) return enemy.moveset[1];
-      return enemy.moveset[2];
+      // Alternates suck and fell
+      if (turn % 2 === 0) return enemy.moveset[0];
+      return enemy.moveset[1];
     }
   },
   {
@@ -493,6 +522,50 @@ export const ALL_ENEMIES = [
       if (turn === 0) return enemy.moveset[1];
       if (lastMove?.id === 'slam' || lastMove?.id === 'activate') return enemy.moveset[2];
       return enemy.moveset[0];
+    }
+  },
+
+  // ========== ACT 2 BOSSES ==========
+  {
+    id: 'automaton',
+    name: 'Bronze Automaton',
+    hp: { min: 300, max: 300 },
+    type: 'boss',
+    act: 2,
+    emoji: '🤖',
+    artifact: 3,
+    phase2: true, // On death: spawns 2 Bronze Orbs, gains +3 str
+    spawnMinions: 'bronzeOrb',
+    minionCount: { min: 2, max: 2 },
+    moveset: [
+      { id: 'boost', intent: INTENT.BUFF, effects: [{ type: 'strength', amount: 3 }], message: 'Boost' },
+      { id: 'dualStrike', intent: INTENT.ATTACK, damage: 5, times: 2, message: 'Dual Strike' },
+      { id: 'hyperBeam', intent: INTENT.ATTACK, damage: 45, special: 'hyperBeamDebuff', message: 'Hyper Beam' }
+    ],
+    ai: (enemy, turn, _lastMove) => {
+      // Fixed pattern: boost -> dual strike -> hyper beam -> repeat
+      const phase = turn % 3;
+      if (phase === 0) return enemy.moveset[0];
+      if (phase === 1) return enemy.moveset[1];
+      return enemy.moveset[2];
+    },
+    onDeath: 'phase2Automaton' // Spawns 2 Bronze Orbs + gains +3 str
+  },
+  {
+    id: 'bronzeOrb',
+    name: 'Bronze Orb',
+    hp: { min: 52, max: 52 },
+    type: 'minion',
+    act: 2,
+    emoji: '🔴',
+    moveset: [
+      { id: 'beam', intent: INTENT.ATTACK, damage: 8, message: 'Beam' },
+      { id: 'supportBeam', intent: INTENT.BUFF, special: 'healAlly', healAmount: 12, message: 'Support Beam' }
+    ],
+    ai: (enemy, turn, _lastMove) => {
+      // Alternates beam and support beam
+      if (turn % 2 === 0) return enemy.moveset[0];
+      return enemy.moveset[1];
     }
   },
 
@@ -543,39 +616,37 @@ export const ALL_ENEMIES = [
   {
     id: 'reptomancer',
     name: 'Reptomancer',
-    hp: { min: 200, max: 216 },
+    hp: { min: 180, max: 180 },
     type: 'elite',
-    act: 3,
+    act: 2,
     emoji: '🐍',
     summons: true,
+    spawnMinions: 'dagger', // Opens with 2 Daggers, resummons when killed
+    minionCount: { min: 2, max: 2 },
     moveset: [
       { id: 'summon', intent: INTENT.BUFF, special: 'summonDaggers', message: 'Summon' },
-      { id: 'snakeStrike', intent: INTENT.ATTACK, damage: 15, times: 2, message: 'Snake Strike' },
-      { id: 'bigBite', intent: INTENT.ATTACK, damage: 34, message: 'Big Bite' }
+      { id: 'snakeStrike', intent: INTENT.ATTACK_DEBUFF, damage: 16, effects: [{ type: 'weak', amount: 1, target: 'player' }], message: 'Snake Strike' },
+      { id: 'bigBite', intent: INTENT.ATTACK, damage: 30, message: 'Big Bite' }
     ],
-    ai: (enemy, turn, _lastMove) => {
+    ai: (enemy, turn, _lastMove, _index, allies) => {
       if (turn === 0) return enemy.moveset[0];
-      // Summon more frequently - every 3 turns
-      if (turn % 3 === 0) return enemy.moveset[0];
-      if (Math.random() < 0.4) return enemy.moveset[1];
-      return enemy.moveset[2]; // More big bites
+      const livingDaggers = allies && allies.filter(a => a.id === 'dagger' && a.currentHp > 0);
+      if (!livingDaggers || livingDaggers.length === 0) return enemy.moveset[0]; // Resummon
+      if (turn % 2 === 1) return enemy.moveset[1];
+      return enemy.moveset[2];
     }
   },
   {
     id: 'dagger',
     name: 'Dagger',
-    hp: { min: 20, max: 25 },
+    hp: { min: 25, max: 25 },
     type: 'minion',
-    act: 3,
+    act: 2,
     emoji: '🗡️',
     moveset: [
-      { id: 'stab', intent: INTENT.ATTACK, damage: 9, message: 'Stab' },
-      { id: 'explode', intent: INTENT.ATTACK, damage: 25, special: 'killSelf', message: 'Explode!' }
+      { id: 'stab', intent: INTENT.ATTACK, damage: 9, times: 2, message: 'Stab' }
     ],
-    ai: (enemy, turn, _lastMove) => {
-      if (turn >= 2) return enemy.moveset[1];
-      return enemy.moveset[0];
-    }
+    ai: () => ({ id: 'stab', intent: INTENT.ATTACK, damage: 9, times: 2, message: 'Stab' })
   },
   {
     id: 'orbWalker',
@@ -847,6 +918,7 @@ export const createEnemyInstance = (enemy, index = 0) => {
     thorns: enemy.thorns || 0,
     flight: enemy.flying ? 3 : 0,
     metallicize: enemy.metallicize || 0,
+    platedArmor: enemy.platedArmor || 0,
     enrage: 0,
     lastMove: null,
     moveIndex: 0,
@@ -861,12 +933,107 @@ const WEAK_ENEMIES = ['louse_red', 'louse_green', 'slime_small', 'spike_slime_sm
 const MEDIUM_ENEMIES = ['slime_medium', 'spike_slime_medium', 'cultist', 'mystic', 'byrd'];
 const STRONG_NORMAL_ENEMIES = ['jawWorm', 'looter', 'chosen', 'snakePlant', 'centurion', 'slaverBlue', 'snecko', 'shelledParasite', 'sphericGuardian', 'writhing_mass', 'orbWalker', 'spiker'];
 
+// Act 2 encounter weighting (DEC-017)
+// Common enemies appear ~60% of the time, uncommon ~25%, pair ~15%
+const ACT2_COMMON = ['chosen', 'byrd', 'slaverBlue', 'snakePlant', 'sphericGuardian'];
+const ACT2_UNCOMMON = ['shelledParasite', 'snecko'];
+// centurion+mystic is a special pair encounter handled separately
+
+// Act 2 weak enemies for multi-spawn encounters
+const ACT2_WEAK = ['byrd'];
+// Act 2 medium enemies for double encounters
+const ACT2_MEDIUM = ['slaverBlue', 'snakePlant'];
+
+/**
+ * Get Act 2 normal encounter with weighted selection.
+ * - 60% common enemies, 25% uncommon, 15% centurion+mystic pair
+ * - Pair fights always spawn centurion and mystic together
+ */
+const getAct2NormalEncounter = (floor) => {
+  const floorInAct = ((floor - 1) % 15) + 1;
+  const isEarlyFloor = floorInAct <= 5;
+  const isLateFloor = floorInAct >= 11;
+
+  const roll = Math.random();
+
+  // Encounter structure: single, double, or pair
+  // Act 2: 40% single, 30% double/multi, 15% pair, 15% Act 1 carryover
+  let singleChance = 0.40;
+  let doubleChance = 0.30;
+  const pairChance = 0.15;
+  // remaining 15% = Act 1 carryover encounters
+
+  if (isEarlyFloor) {
+    singleChance += 0.10;
+    doubleChance -= 0.05;
+  } else if (isLateFloor) {
+    singleChance -= 0.10;
+    doubleChance += 0.05;
+  }
+
+  if (roll < pairChance) {
+    // Centurion + Mystic pair fight
+    const centurion = ALL_ENEMIES.find(e => e.id === 'centurion');
+    const mystic = ALL_ENEMIES.find(e => e.id === 'mystic');
+    return [createEnemyInstance(centurion, 0), createEnemyInstance(mystic, 1)];
+  }
+
+  if (roll < pairChance + singleChance) {
+    // Single Act 2 enemy - weighted by tier
+    const tierRoll = Math.random();
+    let pool;
+    if (tierRoll < 0.65) {
+      pool = ALL_ENEMIES.filter(e => ACT2_COMMON.includes(e.id));
+    } else {
+      pool = ALL_ENEMIES.filter(e => ACT2_UNCOMMON.includes(e.id));
+    }
+    if (isLateFloor) {
+      // Late floors prefer uncommon (tougher) enemies
+      const uncommonPool = ALL_ENEMIES.filter(e => ACT2_UNCOMMON.includes(e.id));
+      if (uncommonPool.length > 0 && Math.random() < 0.5) pool = uncommonPool;
+    }
+    const enemy = pool[Math.floor(Math.random() * pool.length)];
+    return [createEnemyInstance(enemy)];
+  }
+
+  if (roll < pairChance + singleChance + doubleChance) {
+    // Double/multi Act 2 enemies - use weaker Act 2 enemies
+    const act2Weak = ALL_ENEMIES.filter(e => ACT2_WEAK.includes(e.id));
+    const act2Medium = ALL_ENEMIES.filter(e => ACT2_MEDIUM.includes(e.id));
+    const pool = act2Weak.length > 0 && Math.random() < 0.6 ? act2Weak : act2Medium;
+    if (pool.length === 0) {
+      // Fallback to any Act 2 common enemy
+      const fallback = ALL_ENEMIES.filter(e => ACT2_COMMON.includes(e.id));
+      const enemy = fallback[Math.floor(Math.random() * fallback.length)];
+      return [createEnemyInstance(enemy, 0), createEnemyInstance(enemy, 1)];
+    }
+    const count = isEarlyFloor ? 2 : (Math.floor(Math.random() * 2) + 2);
+    const enemies = [];
+    for (let i = 0; i < count; i++) {
+      const enemy = pool[Math.floor(Math.random() * pool.length)];
+      enemies.push(createEnemyInstance(enemy, i));
+    }
+    return enemies;
+  }
+
+  // Act 1 carryover - use Act 1 medium/strong enemies for variety
+  const act1Pool = ALL_ENEMIES.filter(e => e.act === 1 && e.type === 'normal' && STRONG_NORMAL_ENEMIES.includes(e.id));
+  if (act1Pool.length > 0) {
+    const enemy = act1Pool[Math.floor(Math.random() * act1Pool.length)];
+    return [createEnemyInstance(enemy)];
+  }
+  // Final fallback
+  const fallback = ALL_ENEMIES.filter(e => ACT2_COMMON.includes(e.id));
+  const enemy = fallback[Math.floor(Math.random() * fallback.length)];
+  return [createEnemyInstance(enemy)];
+};
+
 export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) => {
   const type = isElite ? 'elite' : 'normal';
-  const availableEnemies = ALL_ENEMIES.filter(e => e.act <= act && e.type === type);
 
   if (type === 'elite') {
     // Prefer elites from current act, but can pull from earlier acts
+    const availableEnemies = ALL_ENEMIES.filter(e => e.act <= act && e.type === 'elite');
     const currentActElites = availableEnemies.filter(e => e.act === act);
     const pool = currentActElites.length > 0 ? currentActElites : availableEnemies;
     const enemy = pool[Math.floor(Math.random() * pool.length)];
@@ -878,24 +1045,24 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
     return instances;
   }
 
+  // Act 2 has its own weighted encounter system (DEC-017)
+  if (act === 2) {
+    return getAct2NormalEncounter(floor);
+  }
+
+  // Act 1 and Act 3 use the original system
+  const availableEnemies = ALL_ENEMIES.filter(e => e.act <= act && e.type === type);
+
   // Floor-based difficulty scaling
-  // Early floors (1-5): Easier encounters
-  // Mid floors (6-10): Normal difficulty
-  // Late floors (11-15): Harder encounters
   const floorInAct = ((floor - 1) % 15) + 1;
   const isEarlyFloor = floorInAct <= 5;
   const isLateFloor = floorInAct >= 11;
 
   const roll = Math.random();
 
-  // Rebalanced encounter chances - more single enemies, especially early
-  // Act 1: 50% single (was 25%), 35% double, 15% multi
-  // Act 2: 45% single, 35% double, 20% multi
-  // Act 3: 40% single, 35% double, 25% multi
-  let singleChance = act === 1 ? 0.50 : act === 2 ? 0.45 : 0.40;
-  let doubleChance = act === 1 ? 0.35 : act === 2 ? 0.35 : 0.35;
+  let singleChance = act === 1 ? 0.50 : 0.40;
+  let doubleChance = act === 1 ? 0.35 : 0.35;
 
-  // Early floors get even more single enemies
   if (isEarlyFloor) {
     singleChance += 0.15;
     doubleChance -= 0.10;
@@ -905,14 +1072,11 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
   }
 
   if (roll < singleChance) {
-    // Single enemy - can be any strength level, but weighted by floor
     let pool = availableEnemies;
     if (isEarlyFloor && act === 1) {
-      // Early Act 1: Prefer weaker single enemies
       const weakPool = availableEnemies.filter(e => WEAK_ENEMIES.includes(e.id) || MEDIUM_ENEMIES.includes(e.id));
       pool = weakPool.length > 0 ? weakPool : availableEnemies;
     } else if (isLateFloor) {
-      // Late floors: Prefer stronger enemies
       const strongPool = availableEnemies.filter(e => STRONG_NORMAL_ENEMIES.includes(e.id) || MEDIUM_ENEMIES.includes(e.id));
       pool = strongPool.length > 0 ? strongPool : availableEnemies;
     }
@@ -920,11 +1084,9 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
     return [createEnemyInstance(enemy)];
 
   } else if (roll < singleChance + doubleChance) {
-    // Double enemy - MUST use weaker enemies
     const weakPool = availableEnemies.filter(e => WEAK_ENEMIES.includes(e.id));
     const mediumPool = availableEnemies.filter(e => MEDIUM_ENEMIES.includes(e.id));
 
-    // Prefer weak enemies for doubles, fall back to medium
     let pool;
     if (weakPool.length > 0 && (isEarlyFloor || Math.random() < 0.7)) {
       pool = weakPool;
@@ -939,10 +1101,8 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
     return [createEnemyInstance(enemy, 0), createEnemyInstance(enemy, 1)];
 
   } else {
-    // Multi-enemy (2-3) - ONLY weak enemies, mix types for variety
     const weakPool = availableEnemies.filter(e => WEAK_ENEMIES.includes(e.id));
     if (weakPool.length === 0) {
-      // Fallback: just use 2 medium enemies
       const mediumPool = availableEnemies.filter(e => MEDIUM_ENEMIES.includes(e.id));
       const pool = mediumPool.length > 0 ? mediumPool : availableEnemies;
       const enemy = pool[Math.floor(Math.random() * pool.length)];
@@ -950,7 +1110,7 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
     }
 
     const enemies = [];
-    const count = isEarlyFloor ? 2 : (Math.floor(Math.random() * 2) + 2); // 2 early, 2-3 later
+    const count = isEarlyFloor ? 2 : (Math.floor(Math.random() * 2) + 2);
 
     for (let i = 0; i < count; i++) {
       const enemy = weakPool[Math.floor(Math.random() * weakPool.length)];
