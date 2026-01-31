@@ -173,3 +173,25 @@ UX Guy - Combat feedback, tooltips, visual polish
 **Next:** UX-14 (mobile map screen) and UX-15 (narrative UI theming) remaining for Sprint 8.
 
 ---
+
+### Sprint 8 - UX-14 Complete
+**Date:** 2026-01-31
+**Status:** UX-14 DONE (PR #86)
+
+**What I did:**
+- Made MapScreen responsive for mobile viewports (<480px)
+- Added `useViewportWidth` hook for reactive layout
+- SVG width scales to viewport on mobile (min 280px, max viewport-32px)
+- Reduced header padding from 90px to 60px on mobile
+- Hidden mini-map sidebar on mobile to maximize horizontal space
+- Compact legend with tighter spacing
+- Prevented horizontal overflow with overflowX: hidden
+- Added WebkitOverflowScrolling: touch for smooth mobile scrolling
+- Node targets remain 44px diameter (WCAG compliant)
+- Desktop layout unchanged
+
+**Validation:** `npm run validate` passes — 1147 tests, lint clean, build clean
+
+**Next:** UX-15 (narrative UI theming) remaining for Sprint 8.
+
+---
