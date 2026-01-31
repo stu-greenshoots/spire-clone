@@ -13,6 +13,37 @@ Creative direction storytelling - developing narrative framework based on new vi
 
 ## Entries
 
+### VARROW-04: Narrative Polish — Endless War Consistency Pass
+**Date:** 2026-01-31
+**Status:** MERGED (PR #101)
+**Sprint:** 9
+
+**What I Did:**
+Final copy pass across all player-facing text. Brought the entire game into consistent Endless War voice.
+
+**Changes:**
+- **Boss dialogue (4 entries):** Rewrote theChamp, awakened_one, timeEater, corruptHeart. These were still in generic dark fantasy voice. Now they use war/pattern/algorithm vocabulary:
+  - theChamp → the war's most successful pattern, developed pride
+  - awakened_one → pattern that rebuilt itself from debug logs
+  - timeEater → the war's rate limiter, throttles fast patterns
+  - corruptHeart → the core algorithm, evaluates not fights
+- **Events (10 entries):** Rewrote the "classic" events (mirror_of_souls through ancient_guardian) from Spire/dark fantasy voice to Endless War framing. All IDs, effects, choice counts preserved.
+- **World lore (10 entries):** Rewrote from "the Spire" to "the war" vocabulary
+- **Act descriptions (3 acts):** Renamed and reframed — The Bottom→The Periphery, The City→The Infrastructure, The Summit→The Core
+- **Test update:** Act name expectations in flavorText.test.js
+
+**What I Preserved:**
+- All mechanical data (effects, IDs, choice counts) — zero gameplay changes
+- Dry humor throughout (the war's attendant applauds, contained processes are dramatic)
+- Card flavor text left as-is — it works tonally even in the old voice, and a full card text rewrite would be XL scope
+
+**Tests:** 1736 passing, 0 lint errors, build clean.
+
+**Voice Notes:**
+The Endless War voice works best when it treats everything as systems and processes without being clinical. The humor comes from the gap between bureaucratic language and violent reality ("the war does not regulate transactions between patterns").
+
+---
+
 ### VARROW-02: Event Rewrite — Pattern Glitches
 **Date:** 2026-01-30
 **Status:** PR #61 open, reviews complete, awaiting merge
