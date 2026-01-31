@@ -441,3 +441,24 @@ Per ROADMAP.md, Sprint 9 is "Ship Prep + QA + 1.0":
 - Begin Sprint 9 task execution (QA-11 regression is next P0)
 
 ---
+
+### Sprint 9 — QA-11 Complete
+**Date:** 2026-01-31
+**Status:** QA-11 merged (PR #94)
+
+**Done:**
+- Spawned QA to implement QA-11 full regression test suite
+- 577 new tests added (1159 → 1736 total), well above 1200+ target
+- Covers all cards, enemies, relics, events, potions, ascension playthroughs, save/load
+- Both Copilot and Mentor reviews passed — no findings
+- All CI checks green (test, e2e, coverage, preview)
+- Merged PR #94 via squash, updated sprint board and QA diary
+
+**Sprint 9 Progress:** 3/14 tasks merged (PM-09, BE-PWA, QA-11)
+
+**Next P0 tasks remaining:**
+- AR-06 (Music integration)
+- AR-05b (Mobile final pass)
+- GD-12 (Relic/potion icons)
+
+---
