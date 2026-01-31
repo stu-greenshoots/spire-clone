@@ -645,3 +645,25 @@ The game is ready for 1.0 release pending final validation gate sign-off.
 - VARROW-05: Act 3 narrative
 
 ---
+
+### Sprint 10 — JR-08b Complete
+**Date:** 2026-01-31
+**Status:** JR-08b merged (PR #109)
+
+**Done:**
+- Identified JR-08b as next highest-priority P0 task
+- Discovered 3 of 5 planned enemies already existed (Writhing Mass, Orb Walker, Spiker)
+- Implemented as JR: added Transient, Spire Growth, Maw to enemies.js
+- Added to encounter pools, flavor text, 39 new tests
+- Both Copilot and Mentor reviews passed — one LOW note about constrict needing BE wiring
+- Merged PR #109 via squash, updated sprint board and JR diary
+- 1794 tests passing
+
+**Sprint 10 Progress:** 4/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b)
+
+**Next P0 tasks:**
+- JR-08c: Awakened One boss
+- BE-21: Act 3 map generation
+- VARROW-05: Act 3 narrative
+
+---

@@ -2,6 +2,29 @@
 
 ## Sprint 10 Entries
 
+### JR-08b: Act 3 enemies batch 2 — normals
+**Date:** 2026-01-31
+**Status:** MERGED (PR #109)
+
+**Done:**
+- Added 3 new Act 3 normal enemies: Transient (999 HP, fades after 5 turns), Spire Growth (170-180 HP, constrict + strength scaling), Maw (300 HP, drool-slam-roar-nom cycle)
+- Writhing Mass, Orb Walker, and Spiker already existed — this completes the Act 3 normal pool (6 enemies)
+- Added all 3 to STRONG_NORMAL_ENEMIES encounter pool
+- Added flavor text for all 3 enemies
+- 39 new tests in act3Normals.test.js, 1794 total passing
+
+**Files changed:** enemies.js, flavorText.js, act3Normals.test.js (3 files, +295/-1)
+
+**Design decisions:**
+- Transient uses fadeTimer flag (5 turns) — fade special needs combat system wiring to kill enemy
+- Spire Growth has constrict property — constrict damage-per-turn needs BE wiring
+- Maw follows drool→slam→roar→nom→drool deterministic cycle
+
+**Blockers:** None
+**Next:** JR-08c (Awakened One boss)
+
+---
+
 ### JR-08a: Act 3 enemies batch 1 — Nemesis elite
 **Date:** 2026-01-31
 **Status:** MERGED (PR #108)
