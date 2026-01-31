@@ -235,3 +235,20 @@ UX Guy - Combat feedback, tooltips, visual polish
 **Sprint 9 UX status:** UX-17 done. UX-18 (loading splash) is P2 stretch if time allows.
 
 ---
+
+### Sprint 9 - UX-18 Complete
+**Date:** 2026-01-31
+**Status:** UX-18 DONE (PR #103)
+
+**What I did:**
+- Added branded dark fantasy loading splash to index.html
+- Displays "Spire Ascent" title with red glow text-shadow + "The Endless War Awaits" tagline
+- Subtle red pulsing line animation during load
+- All inline HTML/CSS — zero JS, displays before bundle loads
+- React replaces content on mount (standard #root replacement)
+- Responsive text sizing with clamp() for mobile/desktop
+- 43 lines added, minimal and clean
+
+**Sprint 9 UX status:** All UX tasks complete (UX-17 + UX-18). Done for the sprint.
+
+---
