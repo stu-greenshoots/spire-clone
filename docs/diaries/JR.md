@@ -1,3 +1,30 @@
+# JR Diary - Sprint 9
+
+## Sprint 9 Entries
+
+### JR-07: Card balance fine-tuning
+**Date:** 2026-01-31
+**Status:** Complete, MERGED (PR #104)
+
+**Done:**
+- Balanced 3 card outliers identified as never-pick relative to alternatives:
+  - **Pummel:** 2→3 damage per hit (8→12 total, 10→15 upgraded) — exhaust cost now justified
+  - **Clash:** 14→18 base, 18→24 upgraded — reward matches harsh all-attacks condition
+  - **True Grit:** 7→9 block base, 9→12 upgraded — random exhaust risk compensated
+- Conservative number-only changes, no mechanic modifications
+- All 1218 tests passing, lint clean, build clean
+
+**Design decisions:**
+- Kept changes minimal — only adjusted cards that were clearly outclassed by same-cost alternatives
+- Pummel still exhausts (key balance lever), but 3 damage per hit makes strength scaling more relevant
+- Clash buff is largest (14→18) because the condition is among the hardest to meet in the game
+- True Grit upgraded version bumped to 12 (from 9) to create meaningful upgrade incentive
+
+**Blockers:** None
+**Next:** All JR Sprint 9 tasks complete
+
+---
+
 # JR Diary - Sprint 8
 
 ## Role

@@ -353,7 +353,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Production-ready 1.0 on web + PWA. Zero P0 bugs. Full regression. Professional polish.
 **Plan:** See `SPRINT_9_PLAN.md`
 **Branch:** `sprint-9`
-**Status:** IN PROGRESS — PM-09, BE-PWA, QA-11, AR-06, AR-05b, GD-12, UX-17, BE-20, QA-12, VARROW-04, GD-13, UX-18 merged
+**Status:** IN PROGRESS — PM-09, BE-PWA, QA-11, AR-06, AR-05b, GD-12, UX-17, BE-20, QA-12, VARROW-04, GD-13, UX-18, JR-07 merged
 
 ### P0 — Must Ship
 
@@ -381,7 +381,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | UX-18 | UX | S | Loading state — branded splash during initial load | MERGED (PR #103) |
-| JR-07 | JR | S | Card balance fine-tuning — address outliers from regression | PENDING |
+| JR-07 | JR | S | Card balance fine-tuning — address outliers from regression | MERGED (PR #104) |
 | AR-09 | AR | S | Audio polish — crossfade between music tracks on transitions | PENDING |
 
 ### Sprint 9 Validation Gate (1.0 RELEASE GATE)
