@@ -414,7 +414,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | PM-10 | PM | S | Merge Sprint 9 PR #92 to master, tag v1.0.0, create sprint-10 infra | PENDING |
-| FIX-07 | JR/BE | S | **P0 BUG:** Potions never awarded from battles — reward system broken | PENDING |
+| FIX-07 | JR/BE | S | **P0 BUG:** Potions never awarded from battles — reward system broken | MERGED (PR #107) |
 | JR-08a | JR | M | Act 3 enemies batch 1 — Giant Head, Nemesis, Reptomancer (elites) | PENDING |
 | JR-08b | JR | M | Act 3 enemies batch 2 — Writhing Mass, Transient, Spire Growth, Maw, Orb Walker | PENDING |
 | JR-08c | JR | M | Act 3 boss — Awakened One (two-phase, power reaction) | PENDING |

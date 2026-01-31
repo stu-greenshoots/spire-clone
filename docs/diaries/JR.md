@@ -1,4 +1,18 @@
-# JR Diary - Sprint 9
+# JR Diary - Sprint 10
+
+## Sprint 10 Entries
+
+### FIX-07: Wire potion rewards into combat victory flow
+**Date:** 2026-01-31
+**Status:** MERGED (PR #107)
+
+**Root cause:** Potion rewards were completely missing from the victory flow. `combatRewards` only contained `gold` and `cardRewards` — no `potionReward` field was ever set, and RewardScreen.jsx had no potion section.
+
+**Fix:** Added potion reward generation to both victory paths (endTurnAction.js and playCardAction.js), 40% drop rate for normal/elite fights, 100% for bosses. Only offered when player has an empty potion slot. Added COLLECT_POTION reducer action and RewardScreen UI with potion art.
+
+**Files changed:** endTurnAction.js, playCardAction.js, rewardReducer.js, GameContext.jsx, RewardScreen.jsx (5 files, +87/-4 lines)
+
+---
 
 ## Sprint 9 Entries
 
