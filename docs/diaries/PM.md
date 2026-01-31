@@ -572,3 +572,51 @@ Per ROADMAP.md, Sprint 9 is "Ship Prep + QA + 1.0":
 The game is ready for 1.0 release pending final validation gate sign-off.
 
 ---
+
+### URGENT: Potions Never Awarded from Battles
+**Date:** 2026-01-31
+**Priority:** P0 BUG — USER-REPORTED
+**Status:** OPEN — needs immediate investigation
+
+**User feedback:** Potion slots are visible in the UI, but players NEVER receive potions from battles. The potion reward system appears broken — potions are not being granted as combat rewards.
+
+**Impact:** Core game mechanic completely non-functional. Players can see the potion UI but have no way to obtain potions through normal gameplay. This undermines the entire potion system (15 potions with art, PotionSlots component, potionSystem — all useless if you can't get them).
+
+**Action required:**
+1. Investigate reward flow — check `rewardReducer.js` and `combatReducer.js` for potion reward generation after combat
+2. Check if potion rewards are being generated but not displayed, or not generated at all
+3. Check `src/data/potions.js` for any issues with potion pool
+4. This should block any other work until resolved — potions are a core mechanic
+
+**Owner:** JR (potion system) + BE (reward/combat reducers) — coordinate to fix
+**Branch:** Needs new task ID (e.g., FIX-07 or BUG-01)
+
+**READ THIS FIRST NEXT SESSION. DO NOT START OTHER WORK UNTIL THIS IS TRIAGED.**
+
+---
+
+### Sprint 10 Planning
+**Date:** 2026-01-31
+**Status:** Sprint 10 PLANNED
+
+**What I did:**
+- Analyzed post-1.0 backlog (ROADMAP.md, FUTURE_SPRINTS_PLAN.md, team diaries)
+- Identified Act 3 content as highest-impact gap — game currently ends after Act 2
+- Created SPRINT_10_PLAN.md with 15 tasks (7 P0, 5 P1, 3 P2)
+- Created sprint-10 branch from sprint-9
+- Updated SPRINT_BOARD.md with Sprint 10 section
+- Included FIX-07 (potion rewards P0 bug) as first priority
+
+**Sprint 10 Theme:** Act 3 + Daily Challenge + Post-Launch Polish
+
+**Key decisions:**
+1. Act 3 content is the sprint anchor — 8 enemies + Awakened One boss + map extension
+2. Daily challenge mode adds replay value without requiring new content pipeline
+3. FIX-07 (potions never awarded) is P0 — must fix before anything else
+4. Sprint 9 PR #92 still needs to merge to master + v1.0.0 tag (PM-10)
+
+**Task count:** 15 tasks across 8 roles. JR is heaviest loaded (3 enemy batches).
+
+**Next:** Commit plan, push branch, create draft PR, begin execution with PM-10 and FIX-07.
+
+---
