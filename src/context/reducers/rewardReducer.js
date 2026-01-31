@@ -1,4 +1,5 @@
 import { GAME_PHASE } from '../GameContext';
+import { audioManager, SOUNDS } from '../../systems/audioSystem';
 
 export const rewardReducer = (state, action) => {
   switch (action.type) {
@@ -14,6 +15,7 @@ export const rewardReducer = (state, action) => {
           }
         };
       }
+      audioManager.playSFX(SOUNDS.ui.goldGain, 'ui');
       return {
         ...state,
         player: {
@@ -28,6 +30,7 @@ export const rewardReducer = (state, action) => {
     }
 
     case 'COLLECT_RELIC': {
+      audioManager.playSFX(SOUNDS.ui.relicPickup, 'ui');
       const relic = state.combatRewards.relicReward;
       let newPlayer = { ...state.player };
 

@@ -7,6 +7,7 @@ export const SOUNDS = {
     block: 'block_gain',
     enemyAttack: 'enemy_attack',
     playerHurt: 'player_hurt',
+    heavyHit: 'heavy_hit',
     enemyDeath: 'enemy_death',
     buff: 'buff_apply',
     debuff: 'debuff_apply',
@@ -14,7 +15,9 @@ export const SOUNDS = {
     poison: 'poison_tick',
     turnStart: 'turn_start',
     turnEnd: 'turn_end',
-    victory: 'combat_victory'
+    victory: 'combat_victory',
+    bossIntro: 'boss_intro',
+    potionUse: 'potion_use'
   },
   ui: {
     buttonClick: 'ui_click',
@@ -22,6 +25,8 @@ export const SOUNDS = {
     menuOpen: 'menu_open',
     goldGain: 'gold_gain',
     relicPickup: 'relic_pickup',
+    cardUpgrade: 'card_upgrade',
+    mapStep: 'map_step',
     error: 'ui_error'
   },
   ambient: {
@@ -75,6 +80,10 @@ class AudioManager {
     // Phase-based music selection
     this._phases = {};  // { phaseName: trackId }
     this._currentPhase = null;
+
+    // AR-07: Debounce tracking to prevent overlapping rapid sounds
+    this._lastPlayedTime = {}; // { soundId: timestamp }
+    this._debounceMs = 80; // Minimum ms between same sound
 
     // AR-04: User gesture tracking for autoplay policy compliance
     this._userGestureReceived = false;
@@ -177,6 +186,13 @@ class AudioManager {
   _playSFXInternal(soundId, category = 'combat') {
     const volume = this._getEffectiveVolume(category);
     if (volume <= 0) return;
+
+    // AR-07: Debounce rapid duplicate sounds
+    const now = Date.now();
+    if (this._lastPlayedTime[soundId] && now - this._lastPlayedTime[soundId] < this._debounceMs) {
+      return;
+    }
+    this._lastPlayedTime[soundId] = now;
 
     const audio = this._getAudio(soundId);
     if (!audio) return;

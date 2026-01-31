@@ -6,6 +6,7 @@ import {
   applyDamageToTarget as combatApplyDamageToTarget
 } from '../systems/combatSystem';
 import { canUsePotion, applyPotionEffect, removePotion } from '../systems/potionSystem';
+import { audioManager, SOUNDS } from '../systems/audioSystem';
 import { shopReducer } from './reducers/shopReducer';
 import { mapReducer } from './reducers/mapReducer';
 import { metaReducer } from './reducers/metaReducer';
@@ -230,6 +231,7 @@ const gameReducer = (state, action) => {
       if (!potion) return state;
       if (!canUsePotion(potion, state)) return state;
 
+      audioManager.playSFX(SOUNDS.combat.potionUse, 'combat');
       let newState = applyPotionEffect(potion, state, targetIndex);
       newState = removePotion(newState, slotIndex);
       return newState;
