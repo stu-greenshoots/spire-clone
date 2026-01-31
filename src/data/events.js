@@ -243,7 +243,7 @@ export const events = [
   {
     id: 'dissolving_pattern',
     title: 'The Dissolving',
-    description: 'A pattern more complex than you hangs in the corridor, mid-dissolution. It is aware. It is terrified. The core algorithm is unmmaking it in real-time, and in its desperation it reaches toward you with data it no longer needs — combat techniques, structural memory, everything it can shed before the end.',
+    description: 'A pattern more complex than you hangs in the corridor, mid-dissolution. It is aware. It is terrified. The core algorithm is unmaking it in real-time, and in its desperation it reaches toward you with data it no longer needs — combat techniques, structural memory, everything it can shed before the end.',
     choices: [
       {
         text: 'Accept its combat data',
