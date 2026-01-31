@@ -1,3 +1,51 @@
+# QA Diary - Sprint 10
+
+## Sprint 10 Entries
+
+### QA-14: DataEditor Removal
+**Date:** 2026-01-31
+**Status:** Complete, PR #117 merged
+
+**Done:**
+1. Wrapped DataEditor lazy import in `import.meta.env.DEV` conditional in App.jsx
+2. Vite tree-shakes the entire DataEditor chunk (~51KB) from production builds
+3. DataEditor remains fully functional in development mode
+4. Added fallback to MainMenu if DATA_EDITOR phase reached in production (defensive)
+
+**Validation:** `npm run validate` passes — all tests green, lint clean, build succeeds. No DataEditor chunk in production build output.
+
+**Blockers:** None
+**Next:** All QA sprint 10 tasks complete
+
+---
+
+### QA-13: Act 3 Regression + Balance
+**Date:** 2026-01-31
+**Status:** Complete, PR #114 open for review
+
+**Done:**
+1. Created `src/test/act3Regression.test.js` — 103 regression tests covering all Act 3 content
+2. **Act 3 Enemy AI:** All 10 Act 3+ enemies (6 normals, 2 elites, 2 bosses + Corrupt Heart) validated for turns 0-10
+3. **Enemy mechanics:** Writhing Mass reactive, Giant Head countdown, Nemesis intangible, Transient fade, Spire Growth constrict, Maw cycle, Orb Walker, Spiker thorns
+4. **Awakened One two-phase:** Rebirth trigger, phase 2 moveset (slash/soulStrike only), onPowerPlayed +2 strength
+5. **Time Eater:** Card counter to 12 triggers endTurn+heal, haste at half HP
+6. **Corrupt Heart:** Debilitate opener, blood/echo/buff cycle, beatOfDeath
+7. **Encounter pools:** Act 3 normal/elite/boss encounters, ALL_ENEMIES content validation
+8. **Map generation:** Act 3 floor types, connections, elite rate > Act 1
+9. **3-act playthrough:** A0/A5 via reducer dispatch without crashes
+10. **Balance simulator:** 3-act runs, floor/act tracking
+11. **Daily challenge:** Modifier fields, determinism, score calculation with multipliers
+12. **Reality fracture events:** All 5 events validated for structure, effects, relics
+
+**Test count:** 1870 → 1973 tests (+103 new). Above 1900 target.
+
+**Validation:** `npm run validate` passes — all tests green, lint clean, build succeeds
+
+**Blockers:** None
+**Next:** Await review on PR #114
+
+---
+
 # QA Diary - Sprint 9
 
 ## Sprint 9 Entries
