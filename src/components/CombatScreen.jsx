@@ -26,6 +26,18 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   const [cardPlaying, setCardPlaying] = useState(null);
   const [combatStarted] = useState(true);
   const [newlyDrawnCards, setNewlyDrawnCards] = useState(new Set());
+  const [mobileSelectedCard, setMobileSelectedCard] = useState(null);
+
+  // Detect mobile for tap-to-play (matches CSS breakpoint)
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches
+  );
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)');
+    const handler = (e) => setIsMobile(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   // Drag and drop state
   const [draggingCard, setDraggingCard] = useState(null);
@@ -52,6 +64,13 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   }, [enemies]);
 
   const { animations, addAnimation, removeAnimation } = useAnimations();
+
+  // Clear mobile selection when hand changes
+  useEffect(() => {
+    if (mobileSelectedCard && !hand.find(c => c.instanceId === mobileSelectedCard.instanceId)) {
+      setMobileSelectedCard(null);
+    }
+  }, [hand, mobileSelectedCard]);
 
   // Track card draw animations
   useEffect(() => {
@@ -177,16 +196,35 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   const handleCardClick = (card) => {
     if (targetingMode) {
       cancelTarget();
-    } else {
-      // Trigger card play animation for non-targeting cards
-      if (card.type !== 'attack' || enemies.length === 1) {
-        setCardPlaying(card.instanceId);
-        setTimeout(() => {
-          setCardPlaying(null);
-        }, 300);
-      }
-      selectCard(card);
+      setMobileSelectedCard(null);
+      return;
     }
+
+    // Mobile: tap-to-select, tap-again-to-play
+    if (isMobile) {
+      if (mobileSelectedCard?.instanceId === card.instanceId) {
+        // Second tap -- play the card
+        if (card.type !== 'attack' || enemies.length === 1) {
+          setCardPlaying(card.instanceId);
+          setTimeout(() => setCardPlaying(null), 300);
+        }
+        selectCard(card);
+        setMobileSelectedCard(null);
+      } else {
+        // First tap -- select/preview
+        setMobileSelectedCard(card);
+      }
+      return;
+    }
+
+    // Desktop: original behaviour
+    if (card.type !== 'attack' || enemies.length === 1) {
+      setCardPlaying(card.instanceId);
+      setTimeout(() => {
+        setCardPlaying(null);
+      }, 300);
+    }
+    selectCard(card);
   };
 
   const handleEnemyClick = (enemyInstanceId) => {
@@ -622,14 +660,15 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         {/* Scrollable card container */}
         <div
           data-testid="hand-area"
+          className={isMobile ? 'mobile-card-fan' : ''}
           style={{
           padding: '12px 10px',
           paddingBottom: '5px',
-          overflowX: 'auto',
+          overflowX: isMobile ? 'visible' : 'auto',
           overflowY: 'hidden',
           display: 'flex',
-          gap: '8px',
-          justifyContent: hand.length > 4 ? 'flex-start' : 'center',
+          gap: isMobile ? '0' : '8px',
+          justifyContent: isMobile ? 'center' : (hand.length > 4 ? 'flex-start' : 'center'),
           minHeight: '155px',
           alignItems: 'flex-end',
           WebkitOverflowScrolling: 'touch'
@@ -638,15 +677,29 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
           const isPlaying = cardPlaying === card.instanceId;
           const isNewlyDrawn = newlyDrawnCards.has(card.instanceId);
           const isSelected = selectedCard?.instanceId === card.instanceId;
+          const isMobileSelected = mobileSelectedCard?.instanceId === card.instanceId;
           const isBeingDragged = draggingCard?.instanceId === card.instanceId;
+
+          // Fan/arc calculation for mobile
+          const cardCount = hand.length;
+          const midIndex = (cardCount - 1) / 2;
+          const offset = index - midIndex;
+          const maxRotation = Math.min(cardCount * 3, 25);
+          const rotation = cardCount > 1 ? (offset / midIndex) * maxRotation : 0;
+          const arcY = cardCount > 1 ? Math.abs(offset) * Math.abs(offset) * 4 : 0;
+
+          const mobileTransform = isMobile
+            ? `rotate(${rotation}deg) translateY(${isMobileSelected ? -(20 + arcY) : arcY}px)${isMobileSelected ? ' scale(1.15)' : ''}`
+            : `translateY(${isSelected ? '-10px' : '0'})`;
 
           return (
             <div
               key={card.instanceId}
-              onMouseDown={(e) => handleDragStart(card, e)}
-              onTouchStart={(e) => handleDragStart(card, e)}
+              className={`${isMobile ? 'mobile-card-slot' : ''}${isMobileSelected ? ' mobile-card-selected' : ''}`}
+              onMouseDown={(e) => !isMobile && handleDragStart(card, e)}
+              onTouchStart={(e) => !isMobile && handleDragStart(card, e)}
               style={{
-                transform: `translateY(${isSelected ? '-10px' : '0'})`,
+                transform: mobileTransform,
                 transition: isPlaying ? 'none' : 'transform 0.2s ease',
                 animation: isPlaying
                   ? 'cardFlyToEnemy 0.3s ease-out forwards'
@@ -654,16 +707,18 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
                     ? `cardDraw 0.4s ease-out ${index * 0.05}s both`
                     : 'none',
                 opacity: isBeingDragged ? 0.4 : 1,
-                cursor: canPlayCard(card) ? 'grab' : 'not-allowed',
-                touchAction: 'pan-x',
-                flexShrink: 0
+                cursor: canPlayCard(card) ? (isMobile ? 'pointer' : 'grab') : 'not-allowed',
+                touchAction: isMobile ? 'manipulation' : 'pan-x',
+                flexShrink: 0,
+                zIndex: isMobileSelected ? 20 : (isMobile ? cardCount - Math.abs(Math.round(offset)) : 'auto'),
+                transformOrigin: 'bottom center'
               }}
             >
               <CardTooltip card={card} player={player} targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}>
                 <Card
                   card={card}
                   onClick={() => !isDragging && handleCardClick(card)}
-                  selected={isSelected}
+                  selected={isSelected || isMobileSelected}
                   disabled={!canPlayCard(card)}
                   player={player}
                   targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}
@@ -685,8 +740,15 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         )}
         </div>
 
-        {/* Visual scroll track for large hands */}
-        {hand.length > 4 && (
+        {/* Mobile tap hint */}
+        {isMobile && mobileSelectedCard && (
+          <div className="mobile-tap-hint">
+            Tap again to play {mobileSelectedCard.name}
+          </div>
+        )}
+
+        {/* Visual scroll track for large hands (desktop only) */}
+        {!isMobile && hand.length > 4 && (
           <div style={{
             height: '12px',
             margin: '0 10px 8px 10px',
