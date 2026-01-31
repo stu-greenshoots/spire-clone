@@ -14,6 +14,29 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 11 - GD-16 Complete
+**Date:** 2026-01-31
+**Status:** GD-16 complete, PR #125 merged to sprint-11
+
+**Done today:**
+- Enhanced Card.jsx rarity visuals: uncommon cards get blue glow, rare cards get gold glow with stronger box-shadow
+- Added rarity label text ("UNCOMMON" / "RARE") between type badge and description in full-size card view
+- Updated DeckViewer.jsx to show rarity classes and labels for uncommon/rare cards
+- Added CSS styles in App.css for deck viewer rarity borders, glow effects, and label colors
+- Uses existing CSS variables (--uncommon-color, --rare-color) for consistency
+
+**Key decisions:**
+- Rarity label hidden in small mode (in-hand cards) — keeps combat view clean
+- Common cards intentionally left with default styling — only uncommon/rare get special treatment
+- DeckViewer only shows rarity for uncommon/rare (common is implicit default)
+
+**Validation:** `npm run validate` passes — 2111 tests, lint clean, build clean
+
+**Next:**
+- GD-17 (Silent character art) and GD-18 (Silent card art) pending
+
+---
+
 ### Sprint 10 - GD-15 Complete
 **Date:** 2026-01-31
 **Status:** GD-15 complete, PR #119 merged to sprint-10

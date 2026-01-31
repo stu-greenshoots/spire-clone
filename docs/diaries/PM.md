@@ -15,6 +15,24 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 11 — GD-16 Complete
+**Date:** 2026-01-31
+**Status:** GD-16 merged (PR #125)
+
+**Done:**
+- Implemented as GD: enhanced card rarity visuals with distinct glow for uncommon (blue) and rare (gold)
+- Added rarity labels in Card.jsx (reward selection) and DeckViewer.jsx (deck viewer)
+- CSS additions for deck viewer rarity styling using existing CSS variables
+- 3 files changed, 63 insertions, 5 deletions
+- Both Copilot and Mentor reviews passed
+- Merged PR #125 via squash, updated sprint board and GD diary
+
+**Sprint 11 Progress:** 6/16 tasks done (PM-11, BE-23, JR-09a, JR-09b, FIX-08, GD-16)
+
+**Next highest priority:** UX-21 (run history & statistics) — last remaining P0 task
+
+---
+
 ### Sprint 11 — FIX-08 Complete
 **Date:** 2026-01-31
 **Status:** FIX-08 merged (PR #124)
