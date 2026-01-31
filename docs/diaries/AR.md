@@ -212,3 +212,32 @@ document.addEventListener('click', function initAudio() {
 **Next:** AR-08 (sprite sheet automation) if assigned, otherwise available for Sprint 8 support
 
 ---
+
+### Sprint 8 - AR-08 Complete
+**Date:** 2026-01-31
+**Status:** AR-08 Sprite Sheet Automation — COMPLETE and MERGED (PR #90)
+**Sprint:** Sprint 8 (Polish + Juice + Title Screen)
+**Task:** AR-08 (Sprite sheet automation — S size, P2)
+
+**Done today:**
+1. Added enemy art validation to `scripts/generate-sprite-sheets.js`
+2. Script now cross-references enemy IDs from `src/data/enemies.js` against available `.webp` art files
+3. Exits non-zero (`process.exit(1)`) if any enemies are defined in data but missing art
+4. Reports missing enemies clearly to stderr for CI visibility
+5. Validation runs before sprite sheet generation — fast fail on missing art
+
+**Implementation:**
+- Reads `src/data/enemies.js` as text, extracts IDs via regex (`id: 'xxx'`)
+- Compares against `.webp` filenames in `src/assets/art/enemies/`
+- Currently all 41 enemies have art — validation passes cleanly
+- +14 lines added, no new dependencies
+
+**Acceptance criteria:**
+- [x] `npm run generate-sprites` regenerates sheet from current assets
+- [x] Script exits non-zero if new enemies found without art
+- [x] npm run validate passes (1159 tests, 0 errors)
+
+**Blockers:** None
+**Summary:** All AR Sprint 8 tasks complete (AR-07 + AR-08). Available for Sprint 9.
+
+---
