@@ -71,7 +71,13 @@ test.describe('Boss Dialogue', () => {
 
     // Start a new game first to ensure all components are loaded
     await gamePage.click(SELECTORS.newGameButton);
-    await gamePage.waitForTimeout(500);
+    // Wait for game to transition past menu
+    const skipBtn = gamePage.locator('[data-testid="bonus-skip"]');
+    await skipBtn.waitFor({ timeout: 3000 }).catch(() => {});
+    if (await skipBtn.isVisible().catch(() => false)) {
+      await skipBtn.click();
+    }
+    await gamePage.locator('[data-testid^="map-node-"]').first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
 
     // Check if the animation keyframes for boss dialogue exist in the page
     const hasDialogueStyles = await gamePage.evaluate(() => {
@@ -155,7 +161,8 @@ test.describe('Boss Dialogue', () => {
 
           // Click to dismiss
           await bossDialogue.click();
-          await gamePage.waitForTimeout(500);
+          // Wait for dialogue to dismiss
+          await bossDialogue.waitFor({ state: 'hidden', timeout: 3000 }).catch(() => {});
 
           // Dialogue should be dismissed
           const stillVisible = await bossDialogue.isVisible().catch(() => false);
@@ -175,12 +182,12 @@ test.describe('Boss Dialogue', () => {
         }
       } else {
         // Non-combat node (event, rest, shop)
-        await gamePage.waitForTimeout(1000);
-        // Try to proceed
+        // Wait for non-combat node to resolve, then try to proceed
         const proceedBtn = gamePage.locator(SELECTORS.proceedButton);
+        await proceedBtn.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
         if (await proceedBtn.isVisible().catch(() => false)) {
           await proceedBtn.click();
-          await gamePage.waitForTimeout(500);
+          await gamePage.locator('[data-testid^="map-node-"]').first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
         }
       }
     }

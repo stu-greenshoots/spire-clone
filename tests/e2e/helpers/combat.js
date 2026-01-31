@@ -1,6 +1,23 @@
 import { SELECTORS } from './selectors.js';
 
 /**
+ * Wait for a condition to become true, polling at intervals.
+ * Replaces fixed waitForTimeout calls with condition-based polling.
+ * @param {Function} conditionFn - async function returning boolean
+ * @param {number} maxWait - maximum wait time in ms
+ * @param {number} pollInterval - polling interval in ms
+ * @returns {boolean} whether the condition was met
+ */
+async function waitForCondition(conditionFn, maxWait = 5000, pollInterval = 100) {
+  const startTime = Date.now();
+  while (Date.now() - startTime < maxWait) {
+    if (await conditionFn()) return true;
+    await new Promise(resolve => setTimeout(resolve, pollInterval));
+  }
+  return false;
+}
+
+/**
  * Play all available cards in hand, then end turn.
  * Handles randomness by playing whatever cards are dealt.
  * Uses force:true on clicks because game has many CSS animations.
@@ -13,12 +30,12 @@ export async function playTurn(page) {
   for (let i = 0; i < maxCards; i++) {
     // Find cards in hand
     const cards = handArea.locator('.card-frame');
-    const count = await cards.count();
-    if (count === 0) break;
+    const countBefore = await cards.count();
+    if (countBefore === 0) break;
 
     // Find a playable card (not disabled = opacity !== 0.5)
     let played = false;
-    for (let j = 0; j < count; j++) {
+    for (let j = 0; j < countBefore; j++) {
       const card = cards.nth(j);
       const opacity = await card.evaluate(el => getComputedStyle(el).opacity);
       if (opacity !== '0.5' && opacity !== '0') {
@@ -29,7 +46,17 @@ export async function playTurn(page) {
     }
     if (!played) break;
 
-    await page.waitForTimeout(300);
+    // Wait for card to resolve: either hand count changes, targeting activates, or combat ends
+    await waitForCondition(async () => {
+      const targeting = page.locator(SELECTORS.targetingBanner);
+      if (await targeting.isVisible().catch(() => false)) return true;
+      const currentCount = await cards.count();
+      if (currentCount !== countBefore) return true;
+      // Combat may have ended
+      if (await page.locator(SELECTORS.gameOverText).isVisible().catch(() => false)) return true;
+      if (await page.locator(SELECTORS.goldReward).isVisible().catch(() => false)) return true;
+      return false;
+    }, 3000, 100);
 
     // Check if targeting mode activated (attack cards with multiple enemies)
     const targeting = page.locator(SELECTORS.targetingBanner);
@@ -38,17 +65,19 @@ export async function playTurn(page) {
       const enemyCount = await enemies.count();
       if (enemyCount > 0) {
         await enemies.first().click({ force: true });
-        await page.waitForTimeout(300);
+        // Wait for targeting to resolve
+        await waitForCondition(async () => {
+          return !(await targeting.isVisible().catch(() => false));
+        }, 3000, 100);
       } else {
         // No enemies visible, cancel targeting
         await targeting.click({ force: true });
-        await page.waitForTimeout(200);
+        await waitForCondition(async () => {
+          return !(await targeting.isVisible().catch(() => false));
+        }, 2000, 100);
         break;
       }
     }
-
-    // Brief pause for card play animation
-    await page.waitForTimeout(200);
   }
 
   // End the turn
@@ -67,33 +96,22 @@ export async function playTurn(page) {
  * Uses polling instead of fixed timeout to handle variable enemy counts.
  * Sequential enemy turns (VP-08) can take 600ms per enemy.
  */
-async function waitForEnemyTurnComplete(page, maxWait = 8000) {
-  const startTime = Date.now();
+async function waitForEnemyTurnComplete(page, maxWait = 10000) {
   const endTurnBtn = page.locator(SELECTORS.endTurnButton);
   const proceedBtn = page.locator(SELECTORS.proceedButton);
   const gameOver = page.locator(SELECTORS.gameOverText);
   const victory = page.locator(SELECTORS.victoryText);
   const goldReward = page.locator(SELECTORS.goldReward);
 
-  // Give animations time to start
-  await page.waitForTimeout(500);
-
-  while (Date.now() - startTime < maxWait) {
-    // Check if combat ended
-    if (await proceedBtn.isVisible().catch(() => false)) return;
-    if (await gameOver.isVisible().catch(() => false)) return;
-    if (await victory.isVisible().catch(() => false)) return;
-    if (await goldReward.isVisible().catch(() => false)) return;
-
-    // Check if it's our turn again (end turn button visible and enabled)
-    if (await endTurnBtn.isVisible().catch(() => false)) {
-      // Small buffer to ensure enemy animations are truly done
-      await page.waitForTimeout(200);
-      return;
-    }
-
-    await page.waitForTimeout(200);
-  }
+  // Poll for end-of-enemy-turn indicators
+  await waitForCondition(async () => {
+    if (await proceedBtn.isVisible().catch(() => false)) return true;
+    if (await gameOver.isVisible().catch(() => false)) return true;
+    if (await victory.isVisible().catch(() => false)) return true;
+    if (await goldReward.isVisible().catch(() => false)) return true;
+    if (await endTurnBtn.isVisible().catch(() => false)) return true;
+    return false;
+  }, maxWait, 150);
 }
 
 /**
@@ -118,8 +136,8 @@ async function waitForCombatEnd(page, timeout = 15000) {
     // If end turn button reappears, we're still in combat
     if (await endTurnBtn.isVisible().catch(() => false)) return 'still_fighting';
 
-    // Brief wait before next poll
-    await page.waitForTimeout(200);
+    // Brief wait before next poll (polling-based, not fixed delay)
+    await new Promise(resolve => setTimeout(resolve, 150));
   }
 
   return 'timeout';
