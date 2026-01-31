@@ -276,7 +276,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make combat feel professional on mobile. Correct and expand the Act 2 enemy roster. Extend the Endless War narrative.
 **Plan:** See `SPRINT_7_PLAN.md`
 **Branch:** `sprint-7`
-**Status:** IN PROGRESS — 9/9 P0 COMPLETE + 3/5 P1 merged, QA tasks remaining
+**Status:** NEAR COMPLETE — 9/9 P0 + 4/5 P1 merged (13 PRs), QA-08b deferred
 
 ### P0 — Must Ship (ALL COMPLETE)
 
@@ -299,8 +299,8 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | JR-03d | JR | L | Automaton boss + Bronze Orbs (simplified — no Stasis) | MERGED (PR #68) |
 | BE-19 | BE | S | Encounter weighting for Act 2 map (DEC-017) | MERGED (PR #71) |
 | AR-05a | AR | S | Touch targets — 44px minimum on all interactive elements | MERGED (PR #72) |
-| QA-08a | QA | M | Act 2 enemy regression — AI patterns, new systems | PENDING |
-| QA-08b | QA | S | Combat redesign viewport testing — desktop + mobile | PENDING |
+| QA-08a | QA | M | Act 2 enemy regression — AI patterns, new systems | MERGED (PR #75) |
+| QA-08b | QA | S | Combat redesign viewport testing — desktop + mobile | DEFERRED (E2E flaky) |
 
 ### P2 — Stretch
 
