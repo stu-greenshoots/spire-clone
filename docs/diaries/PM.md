@@ -304,3 +304,68 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 3. Begin Sprint 6 planning
 
 ---
+
+### Sprint 7 Retrospective
+**Date:** 2026-01-31
+**Status:** Sprint 7 COMPLETE — merged to master (PR #59)
+
+#### What Was Accomplished
+
+**Sprint 7 Goal:** Make combat feel professional on mobile. Expand Act 2 enemy roster. Extend the Endless War narrative.
+
+**Final tally:** 15 PRs merged (9 P0 + 4 P1 + 2 P2 stretch). Only QA-08b deferred (E2E flaky).
+
+| Area | PRs | Highlights |
+|------|-----|------------|
+| Mobile Combat (UX-13a/b/c) | #65, #70, #73 | Collapsible HUD, card fan/arc, tap-to-play, long-press inspect. Combat is now playable on mobile. |
+| Act 2 Enemies (JR-03a/b/c/d) | #63, #64, #66, #68 | 10 new enemies + Bronze Automaton boss. All aligned to StS baselines. |
+| Act 2 Systems (BE-18, BE-19) | #62, #71 | Plated Armor, Confused, Artifact, Lifesteal. Encounter weighting for Act 2 map. |
+| Narrative (VARROW-02) | #61 | 10 events rewritten as "pattern glitches" in Endless War voice. |
+| Style Guide (GD-08) | #60 | Palette, fonts, spacing, component patterns documented. |
+| Touch Targets (AR-05a) | #72 | 44px minimum on all interactive elements (WCAG). |
+| QA (QA-08a) | #75 | 63 regression tests for all 16 Act 2 enemy AIs. 1131 tests total. |
+| Stretch: Smart Targeting (UX-12) | #76 | Non-attack cards playable by dropping anywhere. |
+| Stretch: Asset Audit (GD-audit) | #77 | Full catalog: 96/96 cards, 34/41 enemies, 49/49 relics, 15/15 potions. 7 enemy art gaps identified. |
+
+**Test count progression:** 959 (Sprint 6 end) → 1131 (Sprint 7 end). +172 tests.
+
+#### Recurring Issues & Observations
+
+1. **E2E flakiness continues.** QA-08b deferred because viewport E2E tests are unreliable. This has been a pattern since Sprint 3 (QA-03 was deferred twice). E2E infrastructure needs dedicated investment — not just "add more tests."
+
+2. **Sprite sheet staleness.** GD-audit found the sprite sheet has 34 enemies but codebase now has 41. Asset pipeline doesn't auto-rebuild. Need a `npm run generate-sprites` in CI or pre-commit.
+
+3. **Diary freshness varies.** BE diary stops at Sprint 3 kickoff. AR stops at Sprint 5. Diaries are most useful when current — stale diaries mean lost context between sessions.
+
+4. **Stretch items keep deferring then landing late.** UX-12 and GD-audit were deferred from Sprint 6 and both shipped as stretch in Sprint 7. This suggests our P2 estimates are reasonable but sprint capacity is tight for non-critical work.
+
+5. **SL → Varrow transition landed well.** The narrative voice is consistent across boss dialogue (Sprint 6) and events (Sprint 7). SL's dry humor preserved as requested.
+
+6. **Mobile was the right call.** Three PRs (UX-13a/b/c) transformed the combat experience. This was the highest-impact work of the sprint.
+
+#### What Went Well
+- All 9 P0 tasks shipped without blockers
+- JR delivered 4 PRs of enemy content on schedule — consistent output
+- UX-13 mobile redesign was well-phased (a → b → c), each PR reviewable independently
+- Both stretch items completed despite not being committed scope
+- 1131 tests — highest test count yet
+
+#### What Could Improve
+- Dedicate Sprint 8 time to fixing E2E infrastructure (not just adding tests)
+- Automate sprite sheet regeneration
+- Enforce diary updates as part of PR checklist
+- 7 missing enemy art assets need generation before ship
+
+#### Deferred Items
+- **QA-08b:** Combat viewport E2E testing (E2E flaky)
+- **BE-09:** Starting bonus / Neow (deferred since Sprint 6)
+
+#### Sprint 8 Recommendations
+Per ROADMAP.md, Sprint 8 is "Polish + Juice + Gameplay Quality Infrastructure":
+1. Fix E2E flakiness (root cause, not workarounds)
+2. Generate missing enemy art (7 assets)
+3. Rebuild sprite sheet with all 41 enemies
+4. BE-09 starting bonus (deferred twice — needs to ship)
+5. Remaining 10 events for Endless War voice treatment
+
+---

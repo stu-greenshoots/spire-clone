@@ -90,3 +90,27 @@ The Heart = the war's core algorithm. Beating it proves you're complex enough to
 **Satisfaction:** Didn't get fired on day one. Progress.
 
 ---
+
+### VARROW-03: Victory/Defeat Narrative
+**Date:** 2026-01-31
+**Status:** Complete, PR #81 merged
+
+**Done:**
+- Added `DEFEAT_NARRATIVE` to `flavorText.js` — 6 context pools (early, midAct1, act2, act3, boss, heart)
+- Added `VICTORY_NARRATIVE` — standard and heart variants
+- Added `DEFEAT_FOOTER` — 4 "another iteration" rotation messages
+- Updated `GameOverScreen.jsx` — selects defeat text by act/floor/node type
+- Updated `VictoryScreen.jsx` — shows Endless War victory text instead of generic "conquered the Spire"
+- Key line from Mentor's approved text preserved: "The war tries to unmake you. You resist. For now, you are REAL."
+
+**Design decisions:**
+- Death text gets more complex/reluctant as the player progresses deeper — early deaths are dismissive, Act 3 deaths acknowledge the player's near-permanence
+- Victory text focuses on identity and persistence, not triumph — consistent with "deck = identity" metaphor
+- Heart victory pool exists but won't trigger until `state.defeatedHeart` flag is added (standard pool is correct fallback)
+- Used `useMemo` to prevent text re-randomizing on re-renders
+
+**Validation:** `npm run validate` passes — 1131 tests, lint clean, build clean
+
+**Next:** Available for UX-15 (narrative UI theming) when VARROW-03's tone is established
+
+---

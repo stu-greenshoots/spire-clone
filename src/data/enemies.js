@@ -924,7 +924,8 @@ export const createEnemyInstance = (enemy, index = 0) => {
     moveIndex: 0,
     intentData: null,
     asleep: enemy.asleep || false,
-    hasSplit: false
+    hasSplit: false,
+    stasis: null
   };
 };
 
@@ -1123,5 +1124,18 @@ export const getEncounter = (act, floor, _eliteChance = 0.1, isElite = false) =>
 export const getBossEncounter = (act) => {
   const bosses = ALL_ENEMIES.filter(e => e.act === act && e.type === 'boss');
   const boss = bosses[Math.floor(Math.random() * bosses.length)];
-  return [createEnemyInstance(boss)];
+  const enemies = [createEnemyInstance(boss)];
+
+  // Spawn initial minions for bosses with spawnMinions config
+  if (boss.spawnMinions && boss.minionCount) {
+    const count = boss.minionCount.min + Math.floor(Math.random() * (boss.minionCount.max - boss.minionCount.min + 1));
+    const minionDef = ALL_ENEMIES.find(e => e.id === boss.spawnMinions);
+    if (minionDef) {
+      for (let i = 0; i < count; i++) {
+        enemies.push(createEnemyInstance(minionDef, i));
+      }
+    }
+  }
+
+  return enemies;
 };

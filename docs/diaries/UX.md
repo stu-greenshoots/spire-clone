@@ -119,3 +119,98 @@ UX Guy - Combat feedback, tooltips, visual polish
 - Sprint 7 UX-13 should use this doc as its requirements input
 
 ---
+
+### Sprint 7 - UX-13c Complete
+**Date:** 2026-01-31
+**Status:** UX-13c DONE (PR #73)
+
+**What I did:**
+- Added long-press (500ms) card inspect modal for mobile
+- Made enemy info stay inline on mobile (no more full-screen panel on tap)
+- Added compact mobile enemy wrappers (max-width: 110px)
+- Desktop behavior unchanged
+
+**Next:** UX-13 complete (a, b, c all done). Ready for QA-08b viewport testing.
+
+---
+
+### Sprint 7 - UX-12 Complete
+**Date:** 2026-01-31
+**Status:** UX-12 DONE (PR #76)
+
+**What I did:**
+- Smart card targeting: non-attack cards (skills, powers) can now be played by dropping anywhere during drag-and-drop
+- Attack cards with single enemy already auto-targeted via reducer — no change needed
+- Attack cards with multiple enemies still require explicit enemy selection
+- Click-to-play path was already correct, no changes needed
+
+**Analysis:** The reducer (`selectCardAction.js`) already handled single-enemy auto-targeting correctly. The only gap was the drag-and-drop path in `handleDragEnd` which required dropping in the enemy area (upper 60%) even for non-attack cards. Fixed by checking card type first and playing non-attacks on any drop location.
+
+**Next:** Awaiting reviews on PR #76.
+
+---
+
+### Sprint 8 - UX-16 Complete
+**Date:** 2026-01-31
+**Status:** UX-16 DONE (PR #80)
+
+**What I did:**
+- Screen shake on player damage (light/medium/heavy tiers based on damage amount)
+- Screen shake on heavy enemy hits (>15 damage)
+- All shakes respect `screenShake` setting and `animationSpeed` multiplier
+- Enhanced cardFlyToEnemy with initial brightness flash (glow before fly)
+- Energy orb now pulses on both spend AND gain (was spend-only)
+- Floating status effect labels when vulnerable/weak/strength/platedArmor/artifact applied to enemies
+- Floating status effect labels when vulnerable/weak/strength applied to player
+- All animations fire-and-forget, non-blocking
+
+**Technical notes:**
+- Used existing CSS shake classes (shake-light, shake-medium, shake-heavy) already in App.css
+- `loadSettings()` called directly in effects (consistent with useEnemyTurnSequence pattern)
+- Status tracking uses refs for previous values (same pattern as prevEnemyHp)
+- Extracted player status fields to variables to satisfy exhaustive-deps lint rule
+
+**Next:** UX-14 (mobile map screen) and UX-15 (narrative UI theming) remaining for Sprint 8.
+
+---
+
+### Sprint 8 - UX-14 Complete
+**Date:** 2026-01-31
+**Status:** UX-14 DONE (PR #86)
+
+**What I did:**
+- Made MapScreen responsive for mobile viewports (<480px)
+- Added `useViewportWidth` hook for reactive layout
+- SVG width scales to viewport on mobile (min 280px, max viewport-32px)
+- Reduced header padding from 90px to 60px on mobile
+- Hidden mini-map sidebar on mobile to maximize horizontal space
+- Compact legend with tighter spacing
+- Prevented horizontal overflow with overflowX: hidden
+- Added WebkitOverflowScrolling: touch for smooth mobile scrolling
+- Node targets remain 44px diameter (WCAG compliant)
+- Desktop layout unchanged
+
+**Validation:** `npm run validate` passes — 1147 tests, lint clean, build clean
+
+**Next:** UX-15 (narrative UI theming) remaining for Sprint 8.
+
+---
+
+### Sprint 8 - UX-15 Complete
+**Date:** 2026-01-31
+**Status:** UX-15 DONE (PR #89)
+
+**What I did:**
+- Added subtle Endless War narrative motifs to UI chrome (CSS-only, ~90 lines)
+- War-pattern diagonal hash borders on panels (deck viewer, tooltips, settings, tutorial)
+- Faint red radial vignette overlay on combat screen via ::before pseudo-element
+- Scanline glitch effect on game-container::after (3% opacity, slow 4s pulse)
+- Vertical hash borders on victory/defeat content panels
+- CSS custom properties for war theme: --war-border-color, --war-glow, --war-accent
+- All effects use pointer-events: none, purely atmospheric
+
+**Validation:** `npm run validate` passes — 1147 tests, lint clean, build clean
+
+**Sprint 8 UX status:** All 3 UX tasks complete (UX-16, UX-14, UX-15). Done for the sprint.
+
+---

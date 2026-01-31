@@ -7,8 +7,8 @@
  * @module test/balance/simulator
  */
 
-import { getStarterDeck, CARD_TYPES } from '../../data/cards.js';
-import { getEncounter, createEnemyInstance, ALL_ENEMIES, INTENT } from '../../data/enemies.js';
+import { getStarterDeck, getRandomCard, CARD_TYPES } from '../../data/cards.js';
+import { getEncounter, getBossEncounter, createEnemyInstance, ALL_ENEMIES, INTENT } from '../../data/enemies.js';
 import {
   calculateDamage,
   calculateBlock,
@@ -722,15 +722,17 @@ function _simulateCombatInner(playerState, enemies, deck, rng, maxTurns, drawPer
  * @param {number} [config.eliteChance=0.1] - Chance of elite encounter
  * @param {number} [config.healPerFloor=0] - HP healed between floors (rest simulation)
  * @param {number} [config.ascension=0] - Ascension level (0-10, affects enemy HP, debuffs, etc.)
- * @returns {Object} Run result: { survived, floorsCleared, finalHp, combatStats, ascension }
+ * @param {number} [config.acts=1] - Number of acts to simulate (1 = Act 1 only, 2 = Act 1 + Act 2)
+ * @returns {Object} Run result: { survived, floorsCleared, finalHp, combatStats, ascension, actsCompleted }
  */
 export function simulateRun(config = {}) {
-  const floors = config.floors || 14;
+  const floorsPerAct = config.floors || 14;
+  const acts = config.acts || 1;
   const seed = config.seed != null ? config.seed : Math.floor(Math.random() * 2147483647);
   const rng = createRng(seed);
   const eliteChance = config.eliteChance != null ? config.eliteChance : 0.1;
   // Default heal of 6 HP/floor models rest sites, events, and potions
-  // averaged across a typical Act 1 run (not every floor is combat)
+  // averaged across a typical run (not every floor is combat)
   const healPerFloor = config.healPerFloor != null ? config.healPerFloor : 6;
   const ascension = config.ascension || 0;
 
@@ -744,61 +746,127 @@ export function simulateRun(config = {}) {
 
   const combatStats = [];
   let floorsCleared = 0;
+  let actsCompleted = 0;
 
-  for (let floor = 1; floor <= floors; floor++) {
-    // Generate encounter - override Math.random for deterministic encounters
+  for (let act = 1; act <= acts; act++) {
+    // Normal floors for this act
+    for (let floor = 1; floor <= floorsPerAct; floor++) {
+      const origRandom = Math.random;
+      Math.random = () => rng();
+      let enemies;
+      let nodeType = 'combat';
+      try {
+        const isElite = rng() < eliteChance;
+        nodeType = isElite ? 'elite' : 'combat';
+        enemies = getEncounter(act, floor, eliteChance, isElite);
+      } finally {
+        Math.random = origRandom;
+      }
+
+      if (ascension > 0) {
+        enemies = applyAscensionToEnemies(enemies, ascension, nodeType);
+      }
+
+      const result = simulateCombat(
+        { ...player },
+        enemies,
+        [...deck],
+        { seed: Math.floor(rng() * 2147483647), maxTurns: 50 }
+      );
+
+      combatStats.push({
+        floor: floorsCleared + 1,
+        act,
+        ...result,
+        enemyNames: enemies.map(e => e.name)
+      });
+
+      if (!result.won) {
+        return {
+          survived: false,
+          floorsCleared,
+          finalHp: 0,
+          combatStats,
+          ascension,
+          actsCompleted
+        };
+      }
+
+      player.currentHp = result.hpRemaining;
+
+      if (healPerFloor > 0) {
+        const healPercent = getAscensionHealPercent(ascension);
+        const healAmount = Math.floor(player.maxHp * healPercent);
+        player.currentHp = Math.min(player.maxHp, player.currentHp + Math.min(healPerFloor, healAmount));
+      }
+
+      // Simulate card reward — pick a random card and add to deck
+      // Models the deck-building progression that happens in actual gameplay
+      const origRandom2 = Math.random;
+      Math.random = () => rng();
+      try {
+        const roll = rng();
+        const rarity = roll < 0.6 ? 'common' : roll < 0.9 ? 'uncommon' : 'rare';
+        const reward = getRandomCard(rarity);
+        if (reward) {
+          deck.push({ ...reward, instanceId: `reward_${floorsCleared}_${Date.now()}` });
+        }
+      } finally {
+        Math.random = origRandom2;
+      }
+
+      floorsCleared++;
+    }
+
+    // Boss fight at end of act
     const origRandom = Math.random;
     Math.random = () => rng();
-    let enemies;
-    let nodeType = 'combat';
+    let bossEnemies;
     try {
-      const isElite = rng() < eliteChance;
-      nodeType = isElite ? 'elite' : 'combat';
-      enemies = getEncounter(1, floor, eliteChance, isElite);
+      bossEnemies = getBossEncounter(act);
     } finally {
       Math.random = origRandom;
     }
 
-    // Apply ascension modifiers to enemies
     if (ascension > 0) {
-      enemies = applyAscensionToEnemies(enemies, ascension, nodeType);
+      bossEnemies = applyAscensionToEnemies(bossEnemies, ascension, 'boss');
     }
 
-    // Run combat
-    const result = simulateCombat(
+    const bossResult = simulateCombat(
       { ...player },
-      enemies,
+      bossEnemies,
       [...deck],
       { seed: Math.floor(rng() * 2147483647), maxTurns: 50 }
     );
 
     combatStats.push({
-      floor,
-      ...result,
-      enemyNames: enemies.map(e => e.name)
+      floor: floorsCleared + 1,
+      act,
+      boss: true,
+      ...bossResult,
+      enemyNames: bossEnemies.map(e => e.name)
     });
 
-    if (!result.won) {
+    if (!bossResult.won) {
       return {
         survived: false,
         floorsCleared,
         finalHp: 0,
         combatStats,
-        ascension
+        ascension,
+        actsCompleted
       };
     }
 
-    // Update player HP from combat result
-    player.currentHp = result.hpRemaining;
+    player.currentHp = bossResult.hpRemaining;
 
-    // Heal between floors (use ascension heal percent if applicable)
-    if (healPerFloor > 0) {
-      const healPercent = getAscensionHealPercent(ascension);
-      const healAmount = Math.floor(player.maxHp * healPercent);
-      player.currentHp = Math.min(player.maxHp, player.currentHp + Math.min(healPerFloor, healAmount));
+    // Full heal between acts (like StS rest before next act)
+    if (act < acts) {
+      player.currentHp = Math.min(player.maxHp, player.currentHp + Math.floor(player.maxHp * 0.25));
     }
 
     floorsCleared++;
+    actsCompleted++;
   }
 
   return {
@@ -806,7 +874,8 @@ export function simulateRun(config = {}) {
     floorsCleared,
     finalHp: player.currentHp,
     combatStats,
-    ascension
+    ascension,
+    actsCompleted
   };
 }
 

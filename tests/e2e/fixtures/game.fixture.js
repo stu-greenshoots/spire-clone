@@ -14,14 +14,22 @@ export const test = base.extend({
     const actions = {
       startNewGame: async () => {
         await page.click(SELECTORS.newGameButton);
-        // Wait for map to render (The Spire header appears)
-        await page.waitForTimeout(500);
+        // Skip starting bonus to go straight to map
+        const skipBtn = page.locator('[data-testid="bonus-skip"]');
+        await skipBtn.waitFor({ timeout: 3000 }).catch(() => {});
+        if (await skipBtn.isVisible().catch(() => false)) {
+          await skipBtn.click();
+        }
+        // Wait for map nodes to appear (condition-based, not fixed timeout)
+        const mapNodes = page.locator('[data-testid^="map-node-"]');
+        await mapNodes.first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
       },
 
       selectFirstNode: async () => {
         // Find accessible map nodes (opacity === 1 indicates clickable)
         // Use force:true because SVG nodes have continuous animations
         const nodes = page.locator('[data-testid^="map-node-"]');
+        await nodes.first().waitFor({ state: 'visible', timeout: 5000 }).catch(() => false);
         const count = await nodes.count();
 
         for (let i = 0; i < count; i++) {
@@ -30,7 +38,13 @@ export const test = base.extend({
           const opacity = await node.evaluate(el => el.getAttribute('opacity'));
           if (opacity === '1') {
             await node.click({ force: true });
-            await page.waitForTimeout(500);
+            // Wait for combat or event screen to appear
+            const endTurnBtn = page.locator(SELECTORS.endTurnButton);
+            const proceedBtn = page.locator(SELECTORS.proceedButton);
+            await Promise.race([
+              endTurnBtn.waitFor({ state: 'visible', timeout: 10000 }),
+              proceedBtn.waitFor({ state: 'visible', timeout: 10000 }),
+            ]).catch(() => {});
             return true;
           }
         }
@@ -41,41 +55,51 @@ export const test = base.extend({
       fightCombat: () => fightCombat(page),
 
       collectRewards: async () => {
-        await page.waitForTimeout(300);
+        // Wait for reward screen to stabilize
+        const goldBtn = page.locator(SELECTORS.goldReward);
+        const proceedBtn = page.locator(SELECTORS.proceedButton);
+        await Promise.race([
+          goldBtn.waitFor({ state: 'visible', timeout: 5000 }),
+          proceedBtn.waitFor({ state: 'visible', timeout: 5000 }),
+        ]).catch(() => {});
 
         // Collect gold if available
-        const goldBtn = page.locator(SELECTORS.goldReward);
         if (await goldBtn.isVisible().catch(() => false)) {
           await goldBtn.click();
-          await page.waitForTimeout(300);
+          // Wait for gold to be collected (button may disappear or change)
+          await goldBtn.waitFor({ state: 'hidden', timeout: 3000 }).catch(() => {});
         }
 
         // Open card rewards if available
         const cardBtn = page.locator(SELECTORS.cardReward);
         if (await cardBtn.isVisible().catch(() => false)) {
           await cardBtn.click();
-          await page.waitForTimeout(300);
+
+          // Wait for card selection to appear
+          const firstCard = page.locator(SELECTORS.rewardCard(0));
+          const skipBtn = page.locator(SELECTORS.skipRewardButton);
+          await Promise.race([
+            firstCard.waitFor({ state: 'visible', timeout: 3000 }),
+            skipBtn.waitFor({ state: 'visible', timeout: 3000 }),
+          ]).catch(() => {});
 
           // Pick first card or skip
-          const firstCard = page.locator(SELECTORS.rewardCard(0));
           if (await firstCard.isVisible().catch(() => false)) {
             await firstCard.click();
-            await page.waitForTimeout(300);
-          } else {
-            const skipBtn = page.locator(SELECTORS.skipRewardButton);
-            if (await skipBtn.isVisible().catch(() => false)) {
-              await skipBtn.click();
-              await page.waitForTimeout(300);
-            }
+          } else if (await skipBtn.isVisible().catch(() => false)) {
+            await skipBtn.click();
           }
         }
       },
 
       proceedToMap: async () => {
         const btn = page.locator(SELECTORS.proceedButton);
+        await btn.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
         if (await btn.isVisible().catch(() => false)) {
           await btn.click();
-          await page.waitForTimeout(500);
+          // Wait for map to appear
+          const mapNodes = page.locator('[data-testid^="map-node-"]');
+          await mapNodes.first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => {});
         }
       },
 

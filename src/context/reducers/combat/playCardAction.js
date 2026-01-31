@@ -3,7 +3,7 @@ import { ALL_CARDS, CARD_TYPES, getCardRewards, getRandomCard } from '../../../d
 import { getRandomRelic, getBossRelic } from '../../../data/relics';
 import { shuffleArray } from '../../../utils/mapGenerator';
 import { calculateDamage, calculateBlock, applyDamageToTarget } from '../../../systems/combatSystem';
-import { createSplitSlimes } from '../../../systems/enemySystem';
+import { createSplitSlimes, createSummonedEnemy, getEnemyIntent } from '../../../systems/enemySystem';
 import { handleSpecialEffect, SUPPORTED_EFFECTS } from '../../../systems/cardEffects';
 import { triggerRelics } from '../../../systems/relicSystem';
 import { autoSave } from '../../../systems/saveSystem';
@@ -464,6 +464,9 @@ export const handlePlayCard = (state, action) => {
 
   // Check for enemy deaths and handle splits/spawns
   const dyingEnemies = newEnemies.filter(e => e.currentHp <= 0);
+  if (dyingEnemies.length > 0) {
+    audioManager.playSFX(SOUNDS.combat.enemyDeath, 'combat');
+  }
   let spawnedEnemies = [];
 
   dyingEnemies.forEach(enemy => {
@@ -484,6 +487,32 @@ export const handlePlayCard = (state, action) => {
       newPlayer.weak = (newPlayer.weak || 0) + 2;
       combatLog.push(`${enemy.name}'s Spore Cloud applied 2 Weak`);
     }
+
+    // Bronze Automaton phase 2: spawn 2 Bronze Orbs
+    if (enemy.onDeath === 'phase2Automaton') {
+      const timestamp = Date.now();
+      for (let i = 0; i < 2; i++) {
+        const orb = createSummonedEnemy('bronzeOrb', timestamp, i);
+        if (orb) {
+          // Stasis: each orb captures a random card from hand
+          if (newHand.length > 0) {
+            const captureIdx = Math.floor(Math.random() * newHand.length);
+            orb.stasis = newHand[captureIdx];
+            newHand = [...newHand.slice(0, captureIdx), ...newHand.slice(captureIdx + 1)];
+            combatLog.push(`${orb.name} captured ${orb.stasis.name} with Stasis!`);
+          }
+          orb.intentData = getEnemyIntent(orb, 0);
+          spawnedEnemies.push(orb);
+        }
+      }
+      combatLog.push('Bronze Automaton spawns Bronze Orbs!');
+    }
+
+    // Bronze Orb death: return stasis card to discard pile
+    if (enemy.id === 'bronzeOrb' && enemy.stasis) {
+      newDiscardPile = [...newDiscardPile, enemy.stasis];
+      combatLog.push(`${enemy.stasis.name} released from Stasis!`);
+    }
   });
 
   newEnemies = newEnemies.filter(e => e.currentHp > 0);
@@ -491,6 +520,7 @@ export const handlePlayCard = (state, action) => {
 
   // Check victory
   if (newEnemies.length === 0) {
+    audioManager.playSFX(SOUNDS.combat.victory, 'combat');
     const goldReward = 10 + Math.floor(Math.random() * 15) +
       (state.currentNode?.type === 'elite' ? 25 : 0) +
       (state.currentNode?.type === 'boss' ? 50 : 0);

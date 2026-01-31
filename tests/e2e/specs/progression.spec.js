@@ -153,7 +153,7 @@ test.describe('Progression Persistence', () => {
     await context2.close();
   });
 
-  test('corrupted progression data is handled gracefully', async ({ gamePage }) => {
+  test('corrupted progression data is handled gracefully', async ({ gamePage, gameActions }) => {
     // Save corrupted data
     await gamePage.evaluate(() => {
       localStorage.setItem('spireAscent_progression', 'not valid json {{{');
@@ -165,12 +165,11 @@ test.describe('Progression Persistence', () => {
     // Game should still load (graceful error handling)
     await expect(gamePage.locator(SELECTORS.mainMenuTitle)).toBeVisible({ timeout: 15000 });
 
-    // Should be able to start a new game
-    await gamePage.click(SELECTORS.newGameButton);
-    await gamePage.waitForTimeout(500);
+    // Should be able to start a new game (use gameActions to handle starting bonus)
+    await gameActions.startNewGame();
 
     // Map should render without crashing
     const mapNodes = gamePage.locator('[data-testid^="map-node-"]');
-    await expect(mapNodes.first()).toBeVisible({ timeout: 5000 });
+    await expect(mapNodes.first()).toBeVisible({ timeout: 10000 });
   });
 });

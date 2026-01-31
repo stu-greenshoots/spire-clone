@@ -16,6 +16,7 @@ const ShopScreen = lazy(() => import('./components/ShopScreen'));
 const EventScreen = lazy(() => import('./components/EventScreen'));
 const RestSite = lazy(() => import('./components/RestSite'));
 const DataEditor = lazy(() => import('./components/DataEditor'));
+const StartingBonus = lazy(() => import('./components/StartingBonus'));
 
 const GameContent = () => {
   const { state } = useGame();
@@ -27,6 +28,8 @@ const GameContent = () => {
     switch (state.phase) {
       case GAME_PHASE.MAIN_MENU:
         return <MainMenu />;
+      case GAME_PHASE.STARTING_BONUS:
+        return <StartingBonus />;
       case GAME_PHASE.MAP:
         return <MapScreen />;
       case GAME_PHASE.COMBAT:
@@ -57,7 +60,7 @@ const GameContent = () => {
     }
   };
 
-  const hideChrome = state.phase === GAME_PHASE.DATA_EDITOR || state.phase === GAME_PHASE.MAIN_MENU;
+  const hideChrome = state.phase === GAME_PHASE.DATA_EDITOR || state.phase === GAME_PHASE.MAIN_MENU || state.phase === GAME_PHASE.STARTING_BONUS;
   // Hide player status bar during victory overlay to avoid duplicate info
   const hideStatusBar = hideChrome || isVictoryPhase;
 

@@ -1,6 +1,6 @@
 import { GAME_PHASE } from '../GameContext';
-import { getStarterDeck, getCardById } from '../../data/cards';
-import { getStarterRelic, getRelicById } from '../../data/relics';
+import { getStarterDeck, getCardById, getRandomCard, RARITY } from '../../data/cards';
+import { getStarterRelic, getRelicById, getRandomRelic, RELIC_RARITY } from '../../data/relics';
 import { getPotionById } from '../../data/potions';
 import { getEnemyById, createEnemyInstance } from '../../data/enemies';
 import { getEnemyIntent } from '../../systems/enemySystem';
@@ -10,6 +10,7 @@ import { getPassiveRelicEffects } from '../../systems/relicSystem';
 import { createInitialState } from '../GameContext';
 import { loadProgression, updateRunStats, saveProgression } from '../../systems/progressionSystem';
 import { getAscensionStartGold } from '../../systems/ascensionSystem';
+import { audioManager, SOUNDS } from '../../systems/audioSystem';
 
 /**
  * Reconstruct a full card object from its serialized form.
@@ -83,7 +84,7 @@ export const metaReducer = (state, action) => {
 
       return {
         ...createInitialState(),
-        phase: GAME_PHASE.MAP,
+        phase: GAME_PHASE.STARTING_BONUS,
         deck,
         relics: [starterRelic],
         map,
@@ -94,6 +95,78 @@ export const metaReducer = (state, action) => {
           gold: startingGold
         }
       };
+    }
+
+    case 'SELECT_STARTING_BONUS': {
+      const { bonusId } = action.payload;
+
+      // Skip option — go straight to map
+      if (bonusId === 'skip') {
+        const skipState = { ...state, phase: GAME_PHASE.MAP };
+        saveGame(skipState);
+        return skipState;
+      }
+
+      let newState = { ...state };
+
+      switch (bonusId) {
+        case 'random_relic': {
+          const existingIds = state.relics.map(r => r.id);
+          const relic = getRandomRelic(RELIC_RARITY.COMMON, existingIds);
+          if (relic) {
+            newState.relics = [...state.relics, relic];
+          }
+          break;
+        }
+        case 'gain_gold': {
+          newState.player = { ...state.player, gold: state.player.gold + 100 };
+          break;
+        }
+        case 'upgrade_card': {
+          // Upgrade a random upgradable starter card
+          const upgradable = state.deck.filter(c => !c.upgraded && c.upgradedVersion);
+          if (upgradable.length > 0) {
+            const target = upgradable[Math.floor(Math.random() * upgradable.length)];
+            newState.deck = state.deck.map(c => {
+              if (c.instanceId === target.instanceId) {
+                return {
+                  ...c,
+                  ...c.upgradedVersion,
+                  upgraded: true,
+                  name: c.name + '+'
+                };
+              }
+              return c;
+            });
+          }
+          break;
+        }
+        case 'transform_card': {
+          // Replace a random starter Strike/Defend with a random card of same type
+          const starters = state.deck.filter(c =>
+            c.id === 'strike' || c.id === 'defend'
+          );
+          if (starters.length > 0) {
+            const target = starters[Math.floor(Math.random() * starters.length)];
+            const newCard = getRandomCard(RARITY.COMMON, target.type);
+            if (newCard) {
+              newState.deck = state.deck.map(c => {
+                if (c.instanceId === target.instanceId) {
+                  return { ...newCard, instanceId: c.instanceId };
+                }
+                return c;
+              });
+            }
+          }
+          break;
+        }
+        default:
+          break;
+      }
+
+      newState.phase = GAME_PHASE.MAP;
+      saveGame(newState);
+      return newState;
     }
 
     case 'REST': {
@@ -144,6 +217,8 @@ export const metaReducer = (state, action) => {
       const newDeck = state.deck.map(c =>
         c.instanceId === cardId ? upgradedCard : c
       );
+
+      audioManager.playSFX(SOUNDS.ui.cardUpgrade, 'ui');
 
       const upgradeState = {
         ...state,

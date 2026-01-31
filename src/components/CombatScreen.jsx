@@ -10,6 +10,7 @@ import CardSelectionModal from './CardSelectionModal';
 import { CARD_TYPES } from '../data/cards';
 import CardTooltip from './CardTooltip';
 import { getPassiveRelicEffects } from '../systems/combatSystem';
+import { loadSettings, getAnimationDuration } from '../systems/settingsSystem';
 
 const CombatScreen = ({ showDefeatedEnemies = false }) => {
   const { state, selectCard, playCard, cancelTarget, endTurn, selectCardFromPile, cancelCardSelection } = useGame();
@@ -28,7 +29,10 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   const [newlyDrawnCards, setNewlyDrawnCards] = useState(new Set());
   const [mobileSelectedCard, setMobileSelectedCard] = useState(null);
   const [inspectCard, setInspectCard] = useState(null);
+  const [screenShakeClass, setScreenShakeClass] = useState('');
   const longPressTimer = useRef(null);
+  const prevEnemyStatuses = useRef({});
+  const prevPlayerStatuses = useRef({});
 
   // Detect mobile for tap-to-play (matches CSS breakpoint)
   const [isMobile, setIsMobile] = useState(() =>
@@ -102,6 +106,16 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
           setEnemyHitStates(prev => ({ ...prev, [enemy.instanceId]: false }));
         }, 500);
 
+        // Screen shake on heavy enemy hits
+        const settings = loadSettings();
+        if (settings.screenShake && damage > 15) {
+          const duration = getAnimationDuration(settings, 200);
+          if (duration > 0) {
+            setScreenShakeClass('shake-medium');
+            setTimeout(() => setScreenShakeClass(''), duration);
+          }
+        }
+
         // Add floating damage number
         const enemyEl = enemyRefs.current[enemy.instanceId];
         if (enemyEl && containerRef.current) {
@@ -122,6 +136,18 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
       const damage = prevPlayerHp.current - player.currentHp;
       setPlayerHit(true);
       setTimeout(() => setPlayerHit(false), 500);
+
+      // Screen shake on heavy hits (respects settings)
+      const settings = loadSettings();
+      if (settings.screenShake && damage > 0) {
+        const shakeLevel = damage > 20 ? 'shake-heavy' : damage > 10 ? 'shake-medium' : 'shake-light';
+        const duration = getAnimationDuration(settings, damage > 20 ? 300 : 200);
+        if (duration > 0) {
+          setScreenShakeClass(shakeLevel);
+          setTimeout(() => setScreenShakeClass(''), duration);
+        }
+      }
+
       // Add floating damage number for enemy attacks on player
       if (containerRef.current) {
         // Position near player stats area (bottom left)
@@ -149,14 +175,80 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     prevPlayerBlock.current = player.block;
   }, [player.block, addAnimation]);
 
-  // Track energy spent - setState is intentional for animation triggers
+  // Track energy spent/gained - setState is intentional for animation triggers
   useEffect(() => {
-    if (player.energy < prevPlayerEnergy.current) {
+    if (player.energy !== prevPlayerEnergy.current) {
       setEnergySpent(true);
       setTimeout(() => setEnergySpent(false), 300);
     }
     prevPlayerEnergy.current = player.energy;
   }, [player.energy]);
+
+  // Track status effect changes on enemies — pop animation
+  useEffect(() => {
+    enemies.forEach((enemy) => {
+      const prev = prevEnemyStatuses.current[enemy.instanceId] || {};
+      const statusKeys = ['vulnerable', 'weak', 'strength', 'platedArmor', 'artifact'];
+      const statusLabels = { vulnerable: 'Vulnerable', weak: 'Weak', strength: 'Strength', platedArmor: 'Plated', artifact: 'Artifact' };
+      const statusColors = { vulnerable: '#ff9944', weak: '#44cc44', strength: '#ff4444', platedArmor: '#8888aa', artifact: '#ffdd44' };
+
+      statusKeys.forEach(key => {
+        const prevVal = prev[key] || 0;
+        const curVal = enemy[key] || 0;
+        if (curVal > prevVal) {
+          const enemyEl = enemyRefs.current[enemy.instanceId];
+          if (enemyEl && containerRef.current) {
+            const rect = enemyEl.getBoundingClientRect();
+            const containerRect = containerRef.current.getBoundingClientRect();
+            const x = rect.left - containerRect.left + rect.width / 2;
+            const y = rect.top - containerRect.top + rect.height * 0.7;
+            addAnimation(ANIMATION_TYPE.STATUS, curVal, x, y, {
+              label: `${statusLabels[key]} ${curVal}`,
+              color: statusColors[key],
+              duration: 600
+            });
+          }
+        }
+      });
+
+      prevEnemyStatuses.current[enemy.instanceId] = {
+        vulnerable: enemy.vulnerable || 0,
+        weak: enemy.weak || 0,
+        strength: enemy.strength || 0,
+        platedArmor: enemy.platedArmor || 0,
+        artifact: enemy.artifact || 0
+      };
+    });
+  }, [enemies, addAnimation]);
+
+  // Track status effect changes on player — pop animation
+  const playerVulnerable = player.vulnerable || 0;
+  const playerWeak = player.weak || 0;
+  const playerStrength = player.strength || 0;
+  useEffect(() => {
+    const prev = prevPlayerStatuses.current;
+    const statuses = [
+      { key: 'vulnerable', val: playerVulnerable, label: 'Vulnerable', color: '#ff9944' },
+      { key: 'weak', val: playerWeak, label: 'Weak', color: '#44cc44' },
+      { key: 'strength', val: playerStrength, label: 'Strength', color: '#ff4444' }
+    ];
+
+    statuses.forEach(({ key, val, label, color }) => {
+      if (val > (prev[key] || 0) && containerRef.current) {
+        addAnimation(ANIMATION_TYPE.STATUS, val, 100, 80, {
+          label: `${label} ${val}`,
+          color,
+          duration: 600
+        });
+      }
+    });
+
+    prevPlayerStatuses.current = {
+      vulnerable: playerVulnerable,
+      weak: playerWeak,
+      strength: playerStrength
+    };
+  }, [playerVulnerable, playerWeak, playerStrength, addAnimation]);
 
   // Track enemy deaths - store dying enemies for death animation
   useEffect(() => {
@@ -453,7 +545,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   return (
     <div
       ref={containerRef}
-      className="combat-screen-container"
+      className={`combat-screen-container ${screenShakeClass}`}
       style={{
         display: 'flex',
         flexDirection: 'column',

@@ -1,7 +1,36 @@
-# JR Diary - Sprint 3
+# JR Diary - Sprint 8
 
 ## Role
 Junior Developer - Potion system, card upgrades, new content
+
+## Sprint 8 Entries
+
+### JR-06: Bronze Orbs + Stasis — Automaton companion mechanic
+**Date:** 2026-01-31
+**Status:** Complete, MERGED (PR #85)
+
+**Done:**
+- Added `bronzeOrb` type to `createSummonedEnemy` in enemySystem.js (52 HP, beam/supportBeam alternation)
+- Modified `getBossEncounter` to spawn 2 Bronze Orbs alongside Automaton at fight start
+- Implemented phase2Automaton onDeath handler in both playCardAction.js and endTurnAction.js:
+  - Spawns 2 new Bronze Orbs that each capture a random card from hand via Stasis
+  - Cards returned to discard pile when orb is killed
+- Added `stasis: null` to `createEnemyInstance` for all enemies
+- 10 new tests in bronzeOrbStasis.test.js covering orb lifecycle
+- Updated encounterWeighting and integration tests for multi-enemy boss encounters
+- 1147 tests passing, lint clean, build clean
+
+**Design decisions:**
+- Stasis capture happens on phase 2 spawn (not initial fight start) — initial orbs fight normally
+- Stasis card returns to discard (not hand) to match StS behavior
+- Phase 2 logic duplicated across playCardAction/endTurnAction following existing pattern (sporeCloud)
+
+**Blockers:** None
+**Next:** Available for Sprint 8 tasks or reviews
+
+---
+
+# JR Diary - Sprint 3
 
 ## Owned Files
 `src/data/potions.js`, `src/data/enemies.js`, `src/systems/potionSystem.js`, `src/components/PotionSlots.jsx`

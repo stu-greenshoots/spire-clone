@@ -102,6 +102,87 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ---
 
+### Sprint 8 - GD-11 Complete
+**Date:** 2026-01-31
+**Status:** GD-11 complete, PR #91 merged to sprint-8
+
+**Done today:**
+- Bundled 96 individual card art images into a single sprite sheet
+- Extended `generate-sprite-sheets.js` to support `--type=cards` flag (reusable for any asset type)
+- Generated 5120x5120 sprite sheet (10 cols × 10 rows, 3199KB vs 3466KB individual)
+- Added `getCardSpriteInfo()` to art-config.js following enemy sprite pattern
+- Updated `getCardArtInfo()` to try sprite sheet first, fall back to individual images
+- Updated Card.jsx to render from sprite sheet via CSS `background-position`
+- Added `npm run generate-card-sprites` script to package.json
+
+**Performance impact:**
+- Network requests: 96 → 1
+- Total size: 3466KB → 3199KB (8% smaller)
+- Fallback chain preserved: sprite sheet → individual image → icon
+
+**Design decisions:**
+- Used 10-column grid (vs 7 for enemies) to keep sheet roughly square at 96 images
+- Card art display is smaller (88px vs 512px cells), so scale factor handles the mapping
+- Individual images still bundled as eager fallback — could be optimized to lazy in future
+
+**Validation:** `npm run validate` passes — 1159 tests, lint clean, build clean
+
+**Next:**
+- All GD Sprint 8 tasks complete (GD-10, GD-09, GD-11)
+- Sprint 8 is fully done from GD perspective
+
+---
+
+### Sprint 8 - GD-09 Complete
+**Date:** 2026-01-31
+**Status:** GD-09 complete, PR #84 merged to sprint-8
+
+**Done today:**
+- Generated placeholder art for 7 missing Act 2 enemies: automaton, bronzeOrb, gremlinMinion, mystic, shelledParasite, snecko, sphericGuardian
+- Each is 512x512 WebP with dark fantasy themed radial gradient and enemy name text
+- Rebuilt sprite sheet from 34 → 41 enemies using 7-column grid (3584x3072px, 2033KB)
+- Updated sprite-manifest.json with all 41 entries
+- All enemies now served from sprite sheet — no ASCII fallbacks in normal play
+
+**Design decisions:**
+- Used themed color palettes per enemy type (bronze for mechanical, purple for mystic, teal for reptile, etc.)
+- Placeholder style is serviceable — can be replaced with higher-quality art later
+- Changed grid from 6 to 7 columns to fit 41 enemies in 6 rows
+
+**Validation:** `npm run validate` passes — 1137 tests, lint clean, build clean
+
+**Next:**
+- GD-11 (P2 stretch): Card sprite sheets if time permits
+- AR-08 depends on GD-09 completion — now unblocked
+
+---
+
+### Sprint 8 - GD-10 Complete
+**Date:** 2026-01-31
+**Status:** GD-10 complete, PR #79 merged to sprint-8
+
+**Done today:**
+- Professional dark fantasy title screen upgrade
+- Replaced generic "A Deck-Building Roguelike" subtitle with Endless War narrative tone ("The Endless War" + atmospheric tagline)
+- Added Settings button accessible from title screen (modal overlay pattern)
+- Removed emoji feature grid for cleaner, more atmospheric first impression
+- Added entrance fade-in animation with staggered title/button timing
+- Vignette overlay for depth, responsive title sizing via clamp()
+- Sharper button styling (8px border-radius, semi-transparent borders)
+- All 1131 tests pass, build clean
+
+**Design decisions:**
+- Kept existing atmospheric elements (starfield, spire silhouette, embers, fog) — they work well
+- Settings opens as modal overlay rather than navigating to separate phase — simpler, stays on title screen
+- Removed FeatureItem grid — felt cluttered and too "mobile app store" for dark fantasy tone
+- Used muted purple-grey palette (#8878a0, #9988aa) for secondary text to maintain atmosphere
+- Entrance animation is subtle (0.8s fade + translate) — professional, not flashy
+
+**Next:**
+- GD-09: Generate 7 missing enemy sprites + rebuild sprite sheet (41 enemies)
+
+---
+
 ### Sprint 7 - GD-audit Complete
 **Date:** 2026-01-31
 **Status:** GD-audit complete, PR pending targeting sprint-7

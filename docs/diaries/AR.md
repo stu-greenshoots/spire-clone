@@ -186,3 +186,58 @@ document.addEventListener('click', function initAudio() {
 **Summary:** AR-03 verification COMPLETE. Settings.jsx confirmed production-ready. All features functional, all tests passing, zero regressions. Task merged to sprint-5.
 
 ---
+
+### Sprint 8 - AR-07 Complete
+**Date:** 2026-01-31
+**Status:** AR-07 SFX Expansion — COMPLETE and MERGED (PR #82)
+**Sprint:** Sprint 8 (Polish + Juice + Title Screen)
+**Task:** AR-07 (SFX expansion — M size, P0)
+
+**Done today:**
+1. Added 5 new sound IDs to SOUNDS constants: heavyHit, bossIntro, potionUse, cardUpgrade, mapStep
+2. Wired 12 playSFX calls across 7 files to game events:
+   - Combat: enemy attack, heavy hit (>15 dmg), player hurt, enemy death, combat victory, boss intro, potion use
+   - UI: card upgrade (rest site), map step (node selection), gold gain, relic pickup
+   - Card play + block already wired from Sprint 3
+3. Added 80ms debounce mechanism to prevent overlapping rapid sounds (e.g., multi-hit attacks)
+4. Generated 5 placeholder CC0 MP3 files for new sound IDs
+5. All 1131 tests pass, 0 lint errors, build clean
+
+**Architecture decisions:**
+- Debounce is per-soundId (different sounds can overlap, only rapid duplicates are suppressed)
+- Sound layering: heavy hits play BOTH enemyAttack + heavyHit for extra impact
+- Placeholder MP3s are valid but silent — to be replaced with real CC0 sounds before 1.0
+
+**Blockers:** None
+**Next:** AR-08 (sprite sheet automation) if assigned, otherwise available for Sprint 8 support
+
+---
+
+### Sprint 8 - AR-08 Complete
+**Date:** 2026-01-31
+**Status:** AR-08 Sprite Sheet Automation — COMPLETE and MERGED (PR #90)
+**Sprint:** Sprint 8 (Polish + Juice + Title Screen)
+**Task:** AR-08 (Sprite sheet automation — S size, P2)
+
+**Done today:**
+1. Added enemy art validation to `scripts/generate-sprite-sheets.js`
+2. Script now cross-references enemy IDs from `src/data/enemies.js` against available `.webp` art files
+3. Exits non-zero (`process.exit(1)`) if any enemies are defined in data but missing art
+4. Reports missing enemies clearly to stderr for CI visibility
+5. Validation runs before sprite sheet generation — fast fail on missing art
+
+**Implementation:**
+- Reads `src/data/enemies.js` as text, extracts IDs via regex (`id: 'xxx'`)
+- Compares against `.webp` filenames in `src/assets/art/enemies/`
+- Currently all 41 enemies have art — validation passes cleanly
+- +14 lines added, no new dependencies
+
+**Acceptance criteria:**
+- [x] `npm run generate-sprites` regenerates sheet from current assets
+- [x] Script exits non-zero if new enemies found without art
+- [x] npm run validate passes (1159 tests, 0 errors)
+
+**Blockers:** None
+**Summary:** All AR Sprint 8 tasks complete (AR-07 + AR-08). Available for Sprint 9.
+
+---

@@ -1,10 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
+import { VICTORY_NARRATIVE } from '../data/flavorText';
+
+const getVictoryText = (defeatedHeart) => {
+  const pool = defeatedHeart ? VICTORY_NARRATIVE.heart : VICTORY_NARRATIVE.standard;
+  return pool[Math.floor(Math.random() * pool.length)];
+};
 
 const VictoryScreen = () => {
   const { state, returnToMenu } = useGame();
   const { player, deck, relics, currentFloor } = state;
   const [showContent, setShowContent] = useState(false);
+  const victoryText = useMemo(() => getVictoryText(state.defeatedHeart), [state.defeatedHeart]);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 500);
@@ -87,15 +94,18 @@ const VictoryScreen = () => {
         VICTORY!
       </h1>
 
-      {/* Subtitle */}
+      {/* Narrative text */}
       <p style={{
         color: '#88ff88',
         marginBottom: '30px',
         fontSize: '18px',
+        maxWidth: '420px',
+        lineHeight: '1.6',
+        fontStyle: 'italic',
         textShadow: '0 0 10px rgba(136, 255, 136, 0.5)',
         animation: showContent ? 'fadeIn 0.5s ease 0.2s both' : 'none'
       }}>
-        You have conquered the Spire!
+        {victoryText}
       </p>
 
       {/* Run Summary */}

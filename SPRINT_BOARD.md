@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
-**Last Updated:** 2026-01-30
-**Current Sprint:** 7 (Mobile Combat + Act 2 Content + Narrative Voice) - PLANNED
-**Integration Branch:** `sprint-7` (to be created)
-**Sprint Plan:** See `SPRINT_7_PLAN.md`
+**Last Updated:** 2026-01-31
+**Current Sprint:** 8 (Polish + Juice + Title Screen) - PLANNED
+**Integration Branch:** `sprint-8`
+**Sprint Plan:** See `SPRINT_8_PLAN.md`
 **Roadmap:** See `ROADMAP.md` (4-sprint plan to 1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 5 COMPLETE (all tasks merged, 911+ tests, meta-progression + ascension live)
+**Previous:** Sprint 7 COMPLETE (15 PRs merged, 1131 tests, mobile combat + Act 2 content + narrative voice)
 
 ---
 
@@ -271,12 +271,12 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 7: Mobile Combat + Act 2 Content + Narrative Voice - IN PROGRESS
+## Sprint 7: Mobile Combat + Act 2 Content + Narrative Voice - COMPLETE
 
 **Goal:** Make combat feel professional on mobile. Correct and expand the Act 2 enemy roster. Extend the Endless War narrative.
 **Plan:** See `SPRINT_7_PLAN.md`
-**Branch:** `sprint-7`
-**Status:** NEAR COMPLETE — 9/9 P0 + 4/5 P1 merged (13 PRs), QA-08b deferred
+**Branch:** `sprint-7` (merged to master via PR #59)
+**Status:** COMPLETE — 15 PRs merged (9 P0 + 4 P1 + 2 P2 stretch), QA-08b deferred
 
 ### P0 — Must Ship (ALL COMPLETE)
 
@@ -311,7 +311,43 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprints 8–9: See `ROADMAP.md`
+## Sprint 8: Polish + Juice + Title Screen - PLANNED
 
-**Sprint 8:** Polish + Juice + Gameplay Quality Infrastructure
+**Goal:** Make every action feel impactful. Professional first impression. Fix deferred infrastructure debt.
+**Plan:** See `SPRINT_8_PLAN.md`
+**Branch:** `sprint-8`
+**Status:** COMPLETE — 6 P0 + 5 P1 + 2 P2 merged, all tasks done
+
+### P0 — Must Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| GD-10 | GD | M | Title screen — professional dark fantasy first impression | MERGED (PR #79) |
+| UX-16 | UX | M | Combat juice — screen shake, card play feedback, status pop | MERGED (PR #80) |
+| VARROW-03 | Varrow | M | Victory/defeat narrative — death as dissolution, victory as becoming real | MERGED (PR #81) |
+| AR-07 | AR | M | SFX expansion — 10+ new CC0 sounds for game events | MERGED (PR #82) |
+| BE-09 | BE | M | Starting bonus / Neow — 3-4 run-start options (deferred since Sprint 6) | MERGED (PR #83) |
+| GD-09 | GD | M | Missing enemy art (7 sprites) + sprite sheet rebuild (41 enemies) | MERGED (PR #84) |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| UX-14 | UX | M | Mobile map screen — touch-friendly nodes, path planning | MERGED (PR #86) |
+| QA-09 | QA | M | E2E infrastructure fix — root-cause flakiness, stabilize suite | MERGED (PR #87) |
+| QA-10 | QA | M | Full balance pass — Act 1+2 combined, target win rates | MERGED (PR #88) |
+| UX-15 | UX | S | Narrative UI theming — subtle Endless War motifs | MERGED (PR #89) |
+| JR-06 | JR | S | Bronze Orbs + Stasis — Automaton companion mechanic | MERGED (PR #85) |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| AR-08 | AR | S | Sprite sheet automation — `npm run generate-sprites` | MERGED (PR #90) |
+| GD-11 | GD | S | Card sprite sheets — reduce 96 requests to ~10 | MERGED (PR #91) |
+
+---
+
+## Sprint 9: See `ROADMAP.md`
+
 **Sprint 9:** Ship Prep + QA + 1.0 (Web + PWA)

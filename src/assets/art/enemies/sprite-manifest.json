@@ -1,247 +1,296 @@
 {
   "cellSize": 512,
-  "cols": 6,
+  "cols": 7,
   "rows": 6,
-  "sheetWidth": 3072,
+  "sheetWidth": 3584,
   "sheetHeight": 3072,
   "enemies": {
-    "awakened_one": {
+    "automaton": {
       "x": 0,
       "y": 0,
       "col": 0,
       "row": 0,
       "index": 0
     },
-    "bookOfStabbing": {
+    "awakened_one": {
       "x": 512,
       "y": 0,
       "col": 1,
       "row": 0,
       "index": 1
     },
-    "byrd": {
+    "bookOfStabbing": {
       "x": 1024,
       "y": 0,
       "col": 2,
       "row": 0,
       "index": 2
     },
-    "centurion": {
+    "bronzeOrb": {
       "x": 1536,
       "y": 0,
       "col": 3,
       "row": 0,
       "index": 3
     },
-    "chosen": {
+    "byrd": {
       "x": 2048,
       "y": 0,
       "col": 4,
       "row": 0,
       "index": 4
     },
-    "corruptHeart": {
+    "centurion": {
       "x": 2560,
       "y": 0,
       "col": 5,
       "row": 0,
       "index": 5
     },
-    "cultist": {
+    "chosen": {
+      "x": 3072,
+      "y": 0,
+      "col": 6,
+      "row": 0,
+      "index": 6
+    },
+    "corruptHeart": {
       "x": 0,
       "y": 512,
       "col": 0,
-      "row": 1,
-      "index": 6
-    },
-    "dagger": {
-      "x": 512,
-      "y": 512,
-      "col": 1,
       "row": 1,
       "index": 7
     },
-    "fungiBeast": {
-      "x": 1024,
+    "cultist": {
+      "x": 512,
       "y": 512,
-      "col": 2,
+      "col": 1,
       "row": 1,
       "index": 8
     },
-    "giant_head": {
-      "x": 1536,
+    "dagger": {
+      "x": 1024,
       "y": 512,
-      "col": 3,
+      "col": 2,
       "row": 1,
       "index": 9
     },
-    "gremlinLeader": {
-      "x": 2048,
+    "fungiBeast": {
+      "x": 1536,
       "y": 512,
-      "col": 4,
+      "col": 3,
       "row": 1,
       "index": 10
     },
-    "gremlinNob": {
+    "giant_head": {
+      "x": 2048,
+      "y": 512,
+      "col": 4,
+      "row": 1,
+      "index": 11
+    },
+    "gremlinLeader": {
       "x": 2560,
       "y": 512,
       "col": 5,
       "row": 1,
-      "index": 11
+      "index": 12
     },
-    "hexaghost": {
+    "gremlinMinion": {
+      "x": 3072,
+      "y": 512,
+      "col": 6,
+      "row": 1,
+      "index": 13
+    },
+    "gremlinNob": {
       "x": 0,
       "y": 1024,
       "col": 0,
-      "row": 2,
-      "index": 12
-    },
-    "jawWorm": {
-      "x": 512,
-      "y": 1024,
-      "col": 1,
-      "row": 2,
-      "index": 13
-    },
-    "lagavulin": {
-      "x": 1024,
-      "y": 1024,
-      "col": 2,
       "row": 2,
       "index": 14
     },
-    "looter": {
-      "x": 1536,
+    "hexaghost": {
+      "x": 512,
       "y": 1024,
-      "col": 3,
+      "col": 1,
       "row": 2,
       "index": 15
     },
-    "louse_green": {
-      "x": 2048,
+    "jawWorm": {
+      "x": 1024,
       "y": 1024,
-      "col": 4,
+      "col": 2,
       "row": 2,
       "index": 16
     },
-    "louse_red": {
+    "lagavulin": {
+      "x": 1536,
+      "y": 1024,
+      "col": 3,
+      "row": 2,
+      "index": 17
+    },
+    "looter": {
+      "x": 2048,
+      "y": 1024,
+      "col": 4,
+      "row": 2,
+      "index": 18
+    },
+    "louse_green": {
       "x": 2560,
       "y": 1024,
       "col": 5,
       "row": 2,
-      "index": 17
+      "index": 19
     },
-    "orbWalker": {
+    "louse_red": {
+      "x": 3072,
+      "y": 1024,
+      "col": 6,
+      "row": 2,
+      "index": 20
+    },
+    "mystic": {
       "x": 0,
       "y": 1536,
       "col": 0,
-      "row": 3,
-      "index": 18
-    },
-    "reptomancer": {
-      "x": 512,
-      "y": 1536,
-      "col": 1,
-      "row": 3,
-      "index": 19
-    },
-    "sentryA": {
-      "x": 1024,
-      "y": 1536,
-      "col": 2,
-      "row": 3,
-      "index": 20
-    },
-    "slaverBlue": {
-      "x": 1536,
-      "y": 1536,
-      "col": 3,
       "row": 3,
       "index": 21
     },
-    "slimeBoss": {
-      "x": 2048,
+    "orbWalker": {
+      "x": 512,
       "y": 1536,
-      "col": 4,
+      "col": 1,
       "row": 3,
       "index": 22
     },
-    "slime_large": {
+    "reptomancer": {
+      "x": 1024,
+      "y": 1536,
+      "col": 2,
+      "row": 3,
+      "index": 23
+    },
+    "sentryA": {
+      "x": 1536,
+      "y": 1536,
+      "col": 3,
+      "row": 3,
+      "index": 24
+    },
+    "shelledParasite": {
+      "x": 2048,
+      "y": 1536,
+      "col": 4,
+      "row": 3,
+      "index": 25
+    },
+    "slaverBlue": {
       "x": 2560,
       "y": 1536,
       "col": 5,
       "row": 3,
-      "index": 23
+      "index": 26
     },
-    "slime_medium": {
+    "slimeBoss": {
+      "x": 3072,
+      "y": 1536,
+      "col": 6,
+      "row": 3,
+      "index": 27
+    },
+    "slime_large": {
       "x": 0,
       "y": 2048,
       "col": 0,
       "row": 4,
-      "index": 24
+      "index": 28
     },
-    "slime_small": {
+    "slime_medium": {
       "x": 512,
       "y": 2048,
       "col": 1,
       "row": 4,
-      "index": 25
+      "index": 29
     },
-    "snakePlant": {
+    "slime_small": {
       "x": 1024,
       "y": 2048,
       "col": 2,
       "row": 4,
-      "index": 26
+      "index": 30
     },
-    "spike_slime_medium": {
+    "snakePlant": {
       "x": 1536,
       "y": 2048,
       "col": 3,
       "row": 4,
-      "index": 27
+      "index": 31
     },
-    "spike_slime_small": {
+    "snecko": {
       "x": 2048,
       "y": 2048,
       "col": 4,
       "row": 4,
-      "index": 28
+      "index": 32
     },
-    "spiker": {
+    "sphericGuardian": {
       "x": 2560,
       "y": 2048,
       "col": 5,
       "row": 4,
-      "index": 29
+      "index": 33
     },
-    "theChamp": {
+    "spike_slime_medium": {
+      "x": 3072,
+      "y": 2048,
+      "col": 6,
+      "row": 4,
+      "index": 34
+    },
+    "spike_slime_small": {
       "x": 0,
       "y": 2560,
       "col": 0,
       "row": 5,
-      "index": 30
+      "index": 35
     },
-    "theGuardian": {
+    "spiker": {
       "x": 512,
       "y": 2560,
       "col": 1,
       "row": 5,
-      "index": 31
+      "index": 36
     },
-    "timeEater": {
+    "theChamp": {
       "x": 1024,
       "y": 2560,
       "col": 2,
       "row": 5,
-      "index": 32
+      "index": 37
     },
-    "writhing_mass": {
+    "theGuardian": {
       "x": 1536,
       "y": 2560,
       "col": 3,
       "row": 5,
-      "index": 33
+      "index": 38
+    },
+    "timeEater": {
+      "x": 2048,
+      "y": 2560,
+      "col": 4,
+      "row": 5,
+      "index": 39
+    },
+    "writhing_mass": {
+      "x": 2560,
+      "y": 2560,
+      "col": 5,
+      "row": 5,
+      "index": 40
     }
   }
 }
