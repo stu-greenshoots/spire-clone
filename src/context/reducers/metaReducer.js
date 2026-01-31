@@ -1,5 +1,6 @@
 import { GAME_PHASE } from '../GameContext';
 import { getStarterDeck, getCardById, getRandomCard, RARITY } from '../../data/cards';
+import { getCharacterById } from '../../data/characters';
 import { getStarterRelic, getRelicById, getRandomRelic, RELIC_RARITY } from '../../data/relics';
 import { getPotionById } from '../../data/potions';
 import { getEnemyById, createEnemyInstance } from '../../data/enemies';
@@ -90,9 +91,13 @@ export const metaReducer = (state, action) => {
       const deck = getStarterDeck(characterId);
       const starterRelic = getStarterRelic(characterId);
       const map = generateMap(1);
+      const character = getCharacterById(characterId);
 
       // Apply ascension starting gold modifier (Ascension 6+)
       const startingGold = getAscensionStartGold(ascensionLevel);
+
+      // Apply character-specific max HP (Silent: 70, Ironclad: 80)
+      const maxHp = character?.maxHp || 80;
 
       return {
         ...createInitialState(),
@@ -105,6 +110,8 @@ export const metaReducer = (state, action) => {
         ascension: ascensionLevel,
         player: {
           ...createInitialState().player,
+          maxHp,
+          currentHp: maxHp,
           gold: startingGold
         }
       };
@@ -117,6 +124,8 @@ export const metaReducer = (state, action) => {
       const deck = getStarterDeck(characterId);
       const starterRelic = getStarterRelic(characterId);
       const map = generateMap(1);
+      const dailyCharacter = getCharacterById(characterId);
+      const dailyMaxHp = dailyCharacter?.maxHp || 80;
 
       let newState = {
         ...createInitialState(),
@@ -129,6 +138,8 @@ export const metaReducer = (state, action) => {
         ascension: 0,
         player: {
           ...createInitialState().player,
+          maxHp: dailyMaxHp,
+          currentHp: dailyMaxHp,
           gold: 99
         },
         dailyChallenge: {
