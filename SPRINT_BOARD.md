@@ -316,7 +316,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make every action feel impactful. Professional first impression. Fix deferred infrastructure debt.
 **Plan:** See `SPRINT_8_PLAN.md`
 **Branch:** `sprint-8`
-**Status:** IN PROGRESS — 6 P0 + 2 P1 merged, 5 remaining
+**Status:** IN PROGRESS — 6 P0 + 3 P1 merged, 4 remaining
 
 ### P0 — Must Ship
 
@@ -334,7 +334,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | UX-14 | UX | M | Mobile map screen — touch-friendly nodes, path planning | MERGED (PR #86) |
-| QA-09 | QA | M | E2E infrastructure fix — root-cause flakiness, stabilize suite | PENDING |
+| QA-09 | QA | M | E2E infrastructure fix — root-cause flakiness, stabilize suite | MERGED (PR #87) |
 | QA-10 | QA | M | Full balance pass — Act 1+2 combined, target win rates | PENDING |
 | UX-15 | UX | S | Narrative UI theming — subtle Endless War motifs | PENDING |
 | JR-06 | JR | S | Bronze Orbs + Stasis — Automaton companion mechanic | MERGED (PR #85) |
