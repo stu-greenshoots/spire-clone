@@ -3,35 +3,29 @@ import { useGame } from '../context/GameContext';
 import { hasSave } from '../systems/saveSystem';
 import { loadProgression } from '../systems/progressionSystem';
 import { getAscensionDescription, getMaxAscension } from '../systems/ascensionSystem';
+import Settings from './Settings';
 import StateBuilder from './StateBuilder';
 
 const MainMenu = () => {
   const { startGame, loadGameState, deleteSaveState, openDataEditor } = useGame();
-  const [_titleGlow, setTitleGlow] = useState(0);
   const [hovering, setHovering] = useState(false);
   const [hoveringContinue, setHoveringContinue] = useState(false);
-  const [hoveringEditor, setHoveringEditor] = useState(false);
-  const [hoveringStateBuilder, setHoveringStateBuilder] = useState(false);
+  const [hoveringSettings, setHoveringSettings] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [showStateBuilder, setShowStateBuilder] = useState(false);
   const [saveExists, setSaveExists] = useState(false);
   const [selectedAscension, setSelectedAscension] = useState(0);
   const [unlockedAscension, setUnlockedAscension] = useState(0);
+  const [entered, setEntered] = useState(false);
 
-  // Check for save and unlocked ascension on mount
   useEffect(() => {
     setSaveExists(hasSave());
     const progression = loadProgression();
-    // Unlock Ascension 1 after first win, then +1 for each subsequent win at highest level
     const maxUnlocked = Math.min(progression.highestAscension, getMaxAscension());
     setUnlockedAscension(maxUnlocked);
-  }, []);
-
-  // Animate title glow
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTitleGlow(prev => (prev + 1) % 360);
-    }, 50);
-    return () => clearInterval(interval);
+    // Trigger entrance animation
+    const timer = setTimeout(() => setEntered(true), 100);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -43,7 +37,7 @@ const MainMenu = () => {
       height: '100%',
       padding: '20px',
       textAlign: 'center',
-      background: 'radial-gradient(ellipse at center bottom, #2a2a4a 0%, #1a1a2e 40%, #12121f 100%)',
+      background: 'radial-gradient(ellipse at center bottom, #2a2a4a 0%, #1a1a2e 40%, #0d0d1a 100%)',
       position: 'relative',
       overflow: 'hidden'
     }}>
@@ -82,12 +76,12 @@ const MainMenu = () => {
         left: '50%',
         transform: 'translateX(-50%)',
         width: '100%',
-        maxWidth: '400px',
-        height: '70%',
-        background: 'linear-gradient(180deg, transparent 0%, rgba(40, 30, 60, 0.4) 30%, rgba(30, 25, 50, 0.6) 60%, rgba(20, 20, 40, 0.8) 100%)',
+        maxWidth: '500px',
+        height: '80%',
+        background: 'linear-gradient(180deg, transparent 0%, rgba(40, 30, 60, 0.3) 20%, rgba(30, 25, 50, 0.5) 50%, rgba(20, 20, 40, 0.7) 80%, rgba(15, 15, 30, 0.9) 100%)',
         clipPath: 'polygon(50% 0%, 53% 8%, 58% 12%, 55% 20%, 62% 25%, 58% 35%, 65% 40%, 60% 50%, 70% 55%, 62% 65%, 75% 70%, 65% 80%, 80% 85%, 70% 90%, 85% 95%, 100% 100%, 0% 100%, 15% 95%, 30% 90%, 20% 85%, 35% 80%, 25% 70%, 40% 65%, 30% 55%, 45% 50%, 35% 40%, 48% 35%, 42% 25%, 47% 20%, 45% 12%, 48% 8%)',
         pointerEvents: 'none',
-        filter: 'drop-shadow(0 0 30px rgba(100, 50, 150, 0.3))'
+        filter: 'drop-shadow(0 0 40px rgba(100, 50, 150, 0.25))'
       }} />
 
       {/* Ambient fog */}
@@ -96,8 +90,8 @@ const MainMenu = () => {
         bottom: 0,
         left: 0,
         right: 0,
-        height: '40%',
-        background: 'linear-gradient(180deg, transparent 0%, rgba(50, 40, 80, 0.15) 50%, rgba(30, 25, 60, 0.3) 100%)',
+        height: '50%',
+        background: 'linear-gradient(180deg, transparent 0%, rgba(50, 40, 80, 0.1) 40%, rgba(30, 25, 60, 0.25) 100%)',
         pointerEvents: 'none'
       }} />
 
@@ -120,66 +114,79 @@ const MainMenu = () => {
         pointerEvents: 'none'
       }} />
 
-      {/* Logo/Icon with enhanced glow */}
+      {/* War-pattern vignette overlay */}
       <div style={{
-        fontSize: '90px',
-        marginBottom: '5px',
-        filter: 'drop-shadow(0 0 25px rgba(255, 100, 50, 0.6)) drop-shadow(0 0 50px rgba(255, 50, 0, 0.3))',
-        animation: 'float 3s ease-in-out infinite',
-        zIndex: 1
-      }}>
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'radial-gradient(ellipse at center, transparent 50%, rgba(10, 5, 20, 0.6) 100%)',
+        pointerEvents: 'none'
+      }} />
 
+      {/* Title section with entrance animation */}
+      <div style={{
+        zIndex: 1,
+        opacity: entered ? 1 : 0,
+        transform: entered ? 'translateY(0)' : 'translateY(-20px)',
+        transition: 'opacity 0.8s ease, transform 0.8s ease'
+      }}>
+        <h1 style={{
+          fontSize: 'clamp(36px, 8vw, 56px)',
+          marginBottom: '8px',
+          fontWeight: 'bold',
+          letterSpacing: '8px',
+          color: '#FFD700',
+          textShadow: `
+            0 0 10px rgba(255, 215, 0, 0.8),
+            0 0 20px rgba(255, 215, 0, 0.5),
+            0 0 40px rgba(255, 107, 53, 0.3),
+            0 4px 8px rgba(0, 0, 0, 0.6)
+          `,
+          animation: 'float 5s ease-in-out infinite'
+        }}>
+          SPIRE ASCENT
+        </h1>
+
+        {/* Narrative subtitle — Endless War tone */}
+        <div style={{
+          fontSize: '13px',
+          color: '#8878a0',
+          letterSpacing: '3px',
+          textTransform: 'uppercase',
+          marginBottom: '8px',
+          textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)'
+        }}>
+          The Endless War
+        </div>
+
+        {/* Atmospheric tagline */}
+        <p style={{
+          fontSize: '15px',
+          color: '#9988aa',
+          marginBottom: '40px',
+          maxWidth: '320px',
+          lineHeight: '1.8',
+          textShadow: '0 2px 4px rgba(0, 0, 0, 0.6)',
+          fontStyle: 'italic',
+          margin: '0 auto 40px'
+        }}>
+          The spire remembers every climb. The war unmakes every climber.
+        </p>
       </div>
 
-      {/* Title with enhanced gradient */}
-      <h1 style={{
-        fontSize: '48px',
-        marginBottom: '5px',
-        fontWeight: 'bold',
-        letterSpacing: '6px',
-        color: '#FFD700',
-        textShadow: `
-          0 0 10px rgba(255, 215, 0, 0.8),
-          0 0 20px rgba(255, 215, 0, 0.6),
-          0 0 30px rgba(255, 107, 53, 0.4),
-          0 4px 8px rgba(0, 0, 0, 0.5)
-        `,
-        zIndex: 1,
-        animation: 'float 4s ease-in-out infinite'
-      }}>
-        SPIRE ASCENT
-      </h1>
-
-      {/* Subtitle with improved styling */}
+      {/* Button Container with entrance animation */}
       <div style={{
-        fontSize: '14px',
-        color: '#aa99bb',
-        letterSpacing: '4px',
-        textTransform: 'uppercase',
-        marginBottom: '25px',
-        textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
-        zIndex: 1
-      }}>
-        A Deck-Building Roguelike
-      </div>
-
-      {/* Description with better readability */}
-      <p style={{
-        fontSize: '16px',
-        color: '#ccbbdd',
-        marginBottom: '35px',
-        maxWidth: '340px',
-        lineHeight: '1.7',
-        textShadow: '0 2px 4px rgba(0, 0, 0, 0.6)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
         zIndex: 1,
-        fontStyle: 'italic'
+        opacity: entered ? 1 : 0,
+        transform: entered ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'opacity 1s ease 0.3s, transform 1s ease 0.3s'
       }}>
-        Climb the Spire. Build your deck. Defeat the heart.
-      </p>
-
-      {/* Button Container */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', zIndex: 1 }}>
-        {/* Continue Run Button - only show if save exists */}
+        {/* Continue Run Button */}
         {saveExists && (
           <button
             data-testid="btn-continue"
@@ -191,61 +198,57 @@ const MainMenu = () => {
                 ? 'linear-gradient(180deg, #30dd30 0%, #20bb20 50%, #159915 100%)'
                 : 'linear-gradient(180deg, #20cc20 0%, #15aa15 50%, #108810 100%)',
               color: 'white',
-              border: '3px solid #55ff55',
-              padding: '20px 70px',
-              fontSize: '24px',
-              borderRadius: '35px',
+              border: '2px solid rgba(85, 255, 85, 0.6)',
+              padding: '16px 60px',
+              fontSize: '20px',
+              borderRadius: '8px',
               cursor: 'pointer',
               fontWeight: 'bold',
               letterSpacing: '3px',
               textTransform: 'uppercase',
               boxShadow: hoveringContinue
-                ? '0 0 50px rgba(80, 255, 80, 0.7), 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.3)'
-                : '0 0 35px rgba(50, 200, 50, 0.5), 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.2)',
+                ? '0 0 40px rgba(80, 255, 80, 0.5), 0 8px 24px rgba(0, 0, 0, 0.5)'
+                : '0 0 20px rgba(50, 200, 50, 0.3), 0 4px 16px rgba(0, 0, 0, 0.4)',
               touchAction: 'manipulation',
               transition: 'all 0.3s ease',
               position: 'relative',
               overflow: 'hidden',
-              transform: hoveringContinue ? 'scale(1.05) translateY(-2px)' : 'scale(1)'
+              transform: hoveringContinue ? 'scale(1.03) translateY(-2px)' : 'scale(1)'
             }}
           >
-            {/* Button shine effect */}
             <div style={{
               position: 'absolute',
               top: 0,
               left: '-100%',
               width: '100%',
               height: '100%',
-              background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+              background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
               animation: 'shimmer 2.5s infinite'
             }} />
-            <span style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontSize: '28px' }}>{'\u25B6\uFE0F'}</span>
-              Continue Run
-            </span>
+            <span style={{ position: 'relative', zIndex: 1 }}>Continue Run</span>
           </button>
         )}
 
-        {/* Ascension Selector - only show if player has unlocked ascension */}
+        {/* Ascension Selector */}
         {unlockedAscension > 0 && (
           <div style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '12px',
-            marginBottom: '10px'
+            marginBottom: '4px'
           }}>
             <button
               onClick={() => setSelectedAscension(Math.max(0, selectedAscension - 1))}
               disabled={selectedAscension === 0}
               style={{
-                background: selectedAscension === 0 ? '#444' : '#666',
-                color: selectedAscension === 0 ? '#888' : 'white',
-                border: 'none',
-                borderRadius: '50%',
-                width: '30px',
-                height: '30px',
-                fontSize: '18px',
+                background: selectedAscension === 0 ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.1)',
+                color: selectedAscension === 0 ? '#555' : '#aaa',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '4px',
+                width: '28px',
+                height: '28px',
+                fontSize: '16px',
                 cursor: selectedAscension === 0 ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s ease'
               }}
@@ -255,15 +258,15 @@ const MainMenu = () => {
             <div style={{
               minWidth: '140px',
               textAlign: 'center',
-              color: selectedAscension === 0 ? '#ccbbdd' : '#FFD700',
-              fontSize: '14px',
+              color: selectedAscension === 0 ? '#8878a0' : '#FFD700',
+              fontSize: '13px',
               fontWeight: 'bold',
-              textShadow: selectedAscension > 0 ? '0 0 10px rgba(255, 215, 0, 0.5)' : 'none'
+              textShadow: selectedAscension > 0 ? '0 0 10px rgba(255, 215, 0, 0.4)' : 'none'
             }}>
               {selectedAscension === 0 ? 'Normal' : `Ascension ${selectedAscension}`}
               <div style={{
                 fontSize: '10px',
-                color: '#999',
+                color: '#666',
                 fontWeight: 'normal',
                 marginTop: '2px'
               }}>
@@ -274,13 +277,13 @@ const MainMenu = () => {
               onClick={() => setSelectedAscension(Math.min(unlockedAscension, selectedAscension + 1))}
               disabled={selectedAscension >= unlockedAscension}
               style={{
-                background: selectedAscension >= unlockedAscension ? '#444' : '#666',
-                color: selectedAscension >= unlockedAscension ? '#888' : 'white',
-                border: 'none',
-                borderRadius: '50%',
-                width: '30px',
-                height: '30px',
-                fontSize: '18px',
+                background: selectedAscension >= unlockedAscension ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.1)',
+                color: selectedAscension >= unlockedAscension ? '#555' : '#aaa',
+                border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: '4px',
+                width: '28px',
+                height: '28px',
+                fontSize: '16px',
                 cursor: selectedAscension >= unlockedAscension ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s ease'
               }}
@@ -301,142 +304,181 @@ const MainMenu = () => {
           onMouseLeave={() => setHovering(false)}
           style={{
             background: hovering
-              ? 'linear-gradient(180deg, #dd3030 0%, #bb2020 50%, #991515 100%)'
-              : 'linear-gradient(180deg, #cc2020 0%, #aa1515 50%, #881010 100%)',
+              ? 'linear-gradient(180deg, #cc3333 0%, #aa2020 50%, #881515 100%)'
+              : 'linear-gradient(180deg, #bb2525 0%, #991818 50%, #771010 100%)',
             color: 'white',
-            border: '3px solid #ff5555',
-            padding: '20px 70px',
-            fontSize: '24px',
-            borderRadius: '35px',
+            border: '2px solid rgba(255, 85, 85, 0.6)',
+            padding: '16px 60px',
+            fontSize: '20px',
+            borderRadius: '8px',
             cursor: 'pointer',
             fontWeight: 'bold',
             letterSpacing: '3px',
             textTransform: 'uppercase',
             boxShadow: hovering
-              ? '0 0 50px rgba(255, 80, 80, 0.7), 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 2px 0 rgba(255, 255, 255, 0.3)'
-              : '0 0 35px rgba(200, 50, 50, 0.5), 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.2)',
+              ? '0 0 40px rgba(255, 80, 80, 0.5), 0 8px 24px rgba(0, 0, 0, 0.5)'
+              : '0 0 20px rgba(200, 50, 50, 0.3), 0 4px 16px rgba(0, 0, 0, 0.4)',
             touchAction: 'manipulation',
             transition: 'all 0.3s ease',
             position: 'relative',
             overflow: 'hidden',
-            transform: hovering ? 'scale(1.05) translateY(-2px)' : 'scale(1)'
+            transform: hovering ? 'scale(1.03) translateY(-2px)' : 'scale(1)'
           }}
         >
-          {/* Button shine effect */}
           <div style={{
             position: 'absolute',
             top: 0,
             left: '-100%',
             width: '100%',
             height: '100%',
-            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+            background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
             animation: 'shimmer 2.5s infinite'
           }} />
-          <span style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ fontSize: '28px' }}>{'\u2694\uFE0F'}</span>
-            New Game
-          </span>
+          <span style={{ position: 'relative', zIndex: 1 }}>New Game</span>
         </button>
 
-        {/* Data Editor Button - only show in development */}
-        {import.meta.env.DEV && (
-          <button
-            onClick={openDataEditor}
-            onMouseEnter={() => setHoveringEditor(true)}
-            onMouseLeave={() => setHoveringEditor(false)}
-            style={{
-              background: hoveringEditor
-                ? 'linear-gradient(180deg, #4488dd 0%, #3366bb 50%, #225599 100%)'
-                : 'linear-gradient(180deg, #3377cc 0%, #2255aa 50%, #114488 100%)',
-              color: 'white',
-              border: '2px solid #6699ee',
-              padding: '12px 40px',
-              fontSize: '16px',
-              borderRadius: '25px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              letterSpacing: '2px',
-              textTransform: 'uppercase',
-              boxShadow: hoveringEditor
-                ? '0 0 30px rgba(80, 130, 255, 0.5), 0 6px 20px rgba(0, 0, 0, 0.4)'
-                : '0 0 20px rgba(50, 100, 200, 0.3), 0 4px 15px rgba(0, 0, 0, 0.3)',
-              touchAction: 'manipulation',
-              transition: 'all 0.3s ease',
-              transform: hoveringEditor ? 'scale(1.05) translateY(-2px)' : 'scale(1)'
-            }}
-          >
-            Data Editor
-          </button>
-        )}
+        {/* Settings Button */}
+        <button
+          data-testid="btn-settings"
+          onClick={() => setShowSettings(true)}
+          onMouseEnter={() => setHoveringSettings(true)}
+          onMouseLeave={() => setHoveringSettings(false)}
+          style={{
+            background: hoveringSettings
+              ? 'rgba(255, 255, 255, 0.12)'
+              : 'rgba(255, 255, 255, 0.06)',
+            color: '#9988aa',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            padding: '12px 40px',
+            fontSize: '14px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            touchAction: 'manipulation',
+            transition: 'all 0.3s ease',
+            transform: hoveringSettings ? 'scale(1.03) translateY(-2px)' : 'scale(1)'
+          }}
+        >
+          Settings
+        </button>
 
-        {/* State Builder Button - only show in development */}
+        {/* Dev tools - only in development */}
         {import.meta.env.DEV && (
-          <button
-            onClick={() => setShowStateBuilder(true)}
-            onMouseEnter={() => setHoveringStateBuilder(true)}
-            onMouseLeave={() => setHoveringStateBuilder(false)}
-            style={{
-              background: hoveringStateBuilder
-                ? 'linear-gradient(180deg, #dd8844 0%, #bb6633 50%, #994422 100%)'
-                : 'linear-gradient(180deg, #cc7733 0%, #aa5522 50%, #883311 100%)',
-              color: 'white',
-              border: '2px solid #ee9955',
-              padding: '12px 40px',
-              fontSize: '16px',
-              borderRadius: '25px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              letterSpacing: '2px',
-              textTransform: 'uppercase',
-              boxShadow: hoveringStateBuilder
-                ? '0 0 30px rgba(255, 150, 80, 0.5), 0 6px 20px rgba(0, 0, 0, 0.4)'
-                : '0 0 20px rgba(200, 100, 50, 0.3), 0 4px 15px rgba(0, 0, 0, 0.3)',
-              touchAction: 'manipulation',
-              transition: 'all 0.3s ease',
-              transform: hoveringStateBuilder ? 'scale(1.05) translateY(-2px)' : 'scale(1)'
-            }}
-          >
-            State Builder
-          </button>
+          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginTop: '8px' }}>
+            <button
+              onClick={openDataEditor}
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                color: '#666',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                padding: '8px 20px',
+                fontSize: '11px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                letterSpacing: '1px',
+                textTransform: 'uppercase',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              Data Editor
+            </button>
+            <button
+              onClick={() => setShowStateBuilder(true)}
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                color: '#666',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                padding: '8px 20px',
+                fontSize: '11px',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                letterSpacing: '1px',
+                textTransform: 'uppercase',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              State Builder
+            </button>
+          </div>
         )}
       </div>
 
-      {/* Features Grid - Improved layout */}
-      <div style={{
-        marginTop: '45px',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '12px',
-        maxWidth: '380px',
-        zIndex: 1
-      }}>
-        <FeatureItem icon={'\uD83C\uDCCF'} label="60+ Cards" color="#c41e3a" />
-        <FeatureItem icon={'\uD83D\uDC79'} label="25+ Enemies" color="#ff8844" />
-        <FeatureItem icon={'\uD83D\uDC8E'} label="40+ Relics" color="#0078d4" />
-        <FeatureItem icon={'\uD83C\uDFDB\uFE0F'} label="3 Acts" color="#44aa44" />
-        <FeatureItem icon={'\uD83D\uDC09'} label="Epic Bosses" color="#d4a017" />
-        <FeatureItem icon={'\u2B06\uFE0F'} label="Upgrades" color="#aa44aa" />
-      </div>
-
-      {/* Version/Credit - improved */}
+      {/* Version credit */}
       <div style={{
         position: 'absolute',
-        bottom: '15px',
-        fontSize: '11px',
-        color: '#555',
+        bottom: '12px',
+        fontSize: '10px',
+        color: '#333',
         letterSpacing: '1px',
         zIndex: 1
       }}>
         Inspired by Slay the Spire
       </div>
 
-      {/* Add custom keyframes */}
       <style>{`
         @keyframes twinkle {
           0%, 100% { opacity: 0.8; }
           50% { opacity: 1; }
         }
       `}</style>
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.85)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10
+          }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setShowSettings(false);
+          }}
+        >
+          <div style={{
+            background: 'linear-gradient(180deg, #252538 0%, #1a1a2e 100%)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '12px',
+            padding: '24px',
+            maxWidth: '400px',
+            width: '90%',
+            maxHeight: '80vh',
+            overflow: 'auto',
+            position: 'relative'
+          }}>
+            <button
+              onClick={() => setShowSettings(false)}
+              style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                background: 'rgba(255, 255, 255, 0.1)',
+                color: '#aaa',
+                border: 'none',
+                borderRadius: '4px',
+                width: '28px',
+                height: '28px',
+                fontSize: '16px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              ✕
+            </button>
+            <Settings />
+          </div>
+        </div>
+      )}
 
       {/* State Builder Modal */}
       {showStateBuilder && (
@@ -445,35 +487,5 @@ const MainMenu = () => {
     </div>
   );
 };
-
-// Enhanced Feature Item Component
-const FeatureItem = ({ icon, label, color }) => (
-  <div style={{
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: '5px',
-    background: `linear-gradient(180deg, ${color}25 0%, ${color}10 100%)`,
-    padding: '10px 8px',
-    borderRadius: '12px',
-    border: `1px solid ${color}55`,
-    boxShadow: `0 4px 12px ${color}22, inset 0 1px 0 rgba(255,255,255,0.05)`,
-    transition: 'all 0.2s ease'
-  }}>
-    <span style={{
-      fontSize: '24px',
-      filter: `drop-shadow(0 0 6px ${color})`
-    }}>{icon}</span>
-    <span style={{
-      fontSize: '11px',
-      color: color,
-      fontWeight: 'bold',
-      textShadow: `0 0 8px ${color}66`,
-      textAlign: 'center'
-    }}>
-      {label}
-    </span>
-  </div>
-);
 
 export default MainMenu;
