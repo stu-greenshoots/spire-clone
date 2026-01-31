@@ -42,7 +42,8 @@ export const SOUNDS = {
     shop: 'music_shop',
     event: 'music_event',
     victory: 'music_victory',
-    defeat: 'music_defeat'
+    defeat: 'music_defeat',
+    act3Map: 'music_act3_map'
   }
 };
 
