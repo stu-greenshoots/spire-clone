@@ -1097,6 +1097,423 @@ export const ALL_CARDS = [
     upgradedVersion: { damage: 18, strengthGain: 4, description: 'Deal 18 damage. If this kills an enemy, gain 4 Strength.' }
   },
 
+  // ========== SILENT BASIC CARDS ==========
+  {
+    id: 'shiv',
+    name: 'Shiv',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.BASIC,
+    character: 'silent',
+    cost: 0,
+    damage: 4,
+    exhaust: true,
+    description: 'Deal 4 damage. Exhaust.',
+    upgraded: false,
+    upgradedVersion: { damage: 6, description: 'Deal 6 damage. Exhaust.' }
+  },
+  {
+    id: 'strike_silent',
+    name: 'Strike',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.BASIC,
+    character: 'silent',
+    cost: 1,
+    damage: 6,
+    description: 'Deal 6 damage.',
+    upgraded: false,
+    upgradedVersion: { damage: 9, description: 'Deal 9 damage.' }
+  },
+  {
+    id: 'defend_silent',
+    name: 'Defend',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.BASIC,
+    character: 'silent',
+    cost: 1,
+    block: 5,
+    description: 'Gain 5 Block.',
+    upgraded: false,
+    upgradedVersion: { block: 8, description: 'Gain 8 Block.' }
+  },
+  {
+    id: 'neutralize',
+    name: 'Neutralize',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.BASIC,
+    character: 'silent',
+    cost: 0,
+    damage: 3,
+    effects: [{ type: 'weak', amount: 1 }],
+    description: 'Deal 3 damage. Apply 1 Weak.',
+    upgraded: false,
+    upgradedVersion: { damage: 4, effects: [{ type: 'weak', amount: 2 }], description: 'Deal 4 damage. Apply 2 Weak.' }
+  },
+  {
+    id: 'survivor',
+    name: 'Survivor',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.BASIC,
+    character: 'silent',
+    cost: 1,
+    block: 8,
+    special: 'discardOne',
+    description: 'Gain 8 Block. Discard 1 card.',
+    upgraded: false,
+    upgradedVersion: { block: 11, description: 'Gain 11 Block. Discard 1 card.' }
+  },
+
+  // ========== SILENT COMMON ATTACKS ==========
+  {
+    id: 'daggerSpray',
+    name: 'Dagger Spray',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.COMMON,
+    character: 'silent',
+    cost: 1,
+    damage: 4,
+    hits: 2,
+    targetAll: true,
+    description: 'Deal 4 damage to ALL enemies twice.',
+    upgraded: false,
+    upgradedVersion: { damage: 6, description: 'Deal 6 damage to ALL enemies twice.' }
+  },
+  {
+    id: 'daggerThrow',
+    name: 'Dagger Throw',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.COMMON,
+    character: 'silent',
+    cost: 1,
+    damage: 9,
+    draw: 1,
+    special: 'drawThenDiscard',
+    description: 'Deal 9 damage. Draw 1 card, then discard 1 card.',
+    upgraded: false,
+    upgradedVersion: { damage: 12, description: 'Deal 12 damage. Draw 1 card, then discard 1 card.' }
+  },
+  {
+    id: 'flyingKnee',
+    name: 'Flying Knee',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.COMMON,
+    character: 'silent',
+    cost: 1,
+    damage: 8,
+    special: 'gainEnergyNextTurn',
+    description: 'Deal 8 damage. Next turn, gain 1 Energy.',
+    upgraded: false,
+    upgradedVersion: { damage: 11, description: 'Deal 11 damage. Next turn, gain 1 Energy.' }
+  },
+  {
+    id: 'poisonedStab',
+    name: 'Poisoned Stab',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.COMMON,
+    character: 'silent',
+    cost: 1,
+    damage: 6,
+    effects: [{ type: 'poison', amount: 3 }],
+    description: 'Deal 6 damage. Apply 3 Poison.',
+    upgraded: false,
+    upgradedVersion: { damage: 8, effects: [{ type: 'poison', amount: 4 }], description: 'Deal 8 damage. Apply 4 Poison.' }
+  },
+  {
+    id: 'quickSlash',
+    name: 'Quick Slash',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.COMMON,
+    character: 'silent',
+    cost: 1,
+    damage: 8,
+    draw: 1,
+    description: 'Deal 8 damage. Draw 1 card.',
+    upgraded: false,
+    upgradedVersion: { damage: 12, description: 'Deal 12 damage. Draw 1 card.' }
+  },
+
+  // ========== SILENT COMMON SKILLS ==========
+  {
+    id: 'acrobatics',
+    name: 'Acrobatics',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'silent',
+    cost: 1,
+    draw: 3,
+    special: 'drawThenDiscardOne',
+    description: 'Draw 3 cards. Discard 1 card.',
+    upgraded: false,
+    upgradedVersion: { draw: 4, description: 'Draw 4 cards. Discard 1 card.' }
+  },
+  {
+    id: 'backflip',
+    name: 'Backflip',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'silent',
+    cost: 1,
+    block: 5,
+    draw: 2,
+    description: 'Gain 5 Block. Draw 2 cards.',
+    upgraded: false,
+    upgradedVersion: { block: 8, description: 'Gain 8 Block. Draw 2 cards.' }
+  },
+  {
+    id: 'bladeDance',
+    name: 'Blade Dance',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'silent',
+    cost: 1,
+    special: 'addShivs',
+    shivCount: 3,
+    description: 'Add 3 Shivs to your hand.',
+    upgraded: false,
+    upgradedVersion: { shivCount: 4, description: 'Add 4 Shivs to your hand.' }
+  },
+  {
+    id: 'deadlyPoison',
+    name: 'Deadly Poison',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'silent',
+    cost: 1,
+    effects: [{ type: 'poison', amount: 5 }],
+    description: 'Apply 5 Poison.',
+    upgraded: false,
+    upgradedVersion: { effects: [{ type: 'poison', amount: 7 }], description: 'Apply 7 Poison.' }
+  },
+  {
+    id: 'dodgeAndRoll',
+    name: 'Dodge and Roll',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'silent',
+    cost: 1,
+    block: 4,
+    special: 'blockNextTurn',
+    nextTurnBlock: 4,
+    description: 'Gain 4 Block. Next turn, gain 4 Block.',
+    upgraded: false,
+    upgradedVersion: { block: 6, nextTurnBlock: 6, description: 'Gain 6 Block. Next turn, gain 6 Block.' }
+  },
+
+  // ========== SILENT UNCOMMON ==========
+  {
+    id: 'dash',
+    name: 'Dash',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.UNCOMMON,
+    character: 'silent',
+    cost: 2,
+    damage: 10,
+    block: 10,
+    description: 'Gain 10 Block. Deal 10 damage.',
+    upgraded: false,
+    upgradedVersion: { damage: 13, block: 13, description: 'Gain 13 Block. Deal 13 damage.' }
+  },
+  {
+    id: 'legSweep',
+    name: 'Leg Sweep',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.UNCOMMON,
+    character: 'silent',
+    cost: 2,
+    block: 11,
+    effects: [{ type: 'weak', amount: 2 }],
+    description: 'Apply 2 Weak. Gain 11 Block.',
+    upgraded: false,
+    upgradedVersion: { block: 14, effects: [{ type: 'weak', amount: 3 }], description: 'Apply 3 Weak. Gain 14 Block.' }
+  },
+  {
+    id: 'noxiousFumes',
+    name: 'Noxious Fumes',
+    type: CARD_TYPES.POWER,
+    rarity: RARITY.UNCOMMON,
+    character: 'silent',
+    cost: 1,
+    special: 'noxiousFumes',
+    poisonPerTurn: 2,
+    description: 'At the start of your turn, apply 2 Poison to ALL enemies.',
+    upgraded: false,
+    upgradedVersion: { poisonPerTurn: 3, description: 'At the start of your turn, apply 3 Poison to ALL enemies.' }
+  },
+  {
+    id: 'footwork',
+    name: 'Footwork',
+    type: CARD_TYPES.POWER,
+    rarity: RARITY.UNCOMMON,
+    character: 'silent',
+    cost: 1,
+    special: 'gainDexterity',
+    dexterity: 2,
+    description: 'Gain 2 Dexterity.',
+    upgraded: false,
+    upgradedVersion: { dexterity: 3, description: 'Gain 3 Dexterity.' }
+  },
+  {
+    id: 'predator',
+    name: 'Predator',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.UNCOMMON,
+    character: 'silent',
+    cost: 2,
+    damage: 15,
+    special: 'drawNextTurn',
+    drawNextTurn: 2,
+    description: 'Deal 15 damage. Next turn, draw 2 additional cards.',
+    upgraded: false,
+    upgradedVersion: { damage: 20, description: 'Deal 20 damage. Next turn, draw 2 additional cards.' }
+  },
+  {
+    id: 'flechettes',
+    name: 'Flechettes',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.UNCOMMON,
+    character: 'silent',
+    cost: 1,
+    damage: 4,
+    special: 'damagePerSkillInHand',
+    description: 'Deal 4 damage for each Skill in your hand.',
+    upgraded: false,
+    upgradedVersion: { damage: 6, description: 'Deal 6 damage for each Skill in your hand.' }
+  },
+  {
+    id: 'backstab',
+    name: 'Backstab',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.UNCOMMON,
+    character: 'silent',
+    cost: 0,
+    damage: 11,
+    innate: true,
+    exhaust: true,
+    description: 'Innate. Deal 11 damage. Exhaust.',
+    upgraded: false,
+    upgradedVersion: { damage: 15, description: 'Innate. Deal 15 damage. Exhaust.' }
+  },
+  {
+    id: 'cloakAndDagger',
+    name: 'Cloak and Dagger',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.UNCOMMON,
+    character: 'silent',
+    cost: 1,
+    block: 6,
+    special: 'addShivs',
+    shivCount: 1,
+    description: 'Gain 6 Block. Add 1 Shiv to your hand.',
+    upgraded: false,
+    upgradedVersion: { shivCount: 2, description: 'Gain 6 Block. Add 2 Shivs to your hand.' }
+  },
+  {
+    id: 'finisher',
+    name: 'Finisher',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.UNCOMMON,
+    character: 'silent',
+    cost: 1,
+    damage: 6,
+    special: 'damagePerAttackPlayed',
+    description: 'Deal 6 damage for each Attack played this turn.',
+    upgraded: false,
+    upgradedVersion: { damage: 8, description: 'Deal 8 damage for each Attack played this turn.' }
+  },
+  {
+    id: 'wellLaidPlans',
+    name: 'Well-Laid Plans',
+    type: CARD_TYPES.POWER,
+    rarity: RARITY.UNCOMMON,
+    character: 'silent',
+    cost: 1,
+    special: 'retainCards',
+    retainCount: 1,
+    description: 'At end of turn, Retain up to 1 card.',
+    upgraded: false,
+    upgradedVersion: { retainCount: 2, description: 'At end of turn, Retain up to 2 cards.' }
+  },
+
+  // ========== SILENT RARE ==========
+  {
+    id: 'aThousandCuts',
+    name: 'A Thousand Cuts',
+    type: CARD_TYPES.POWER,
+    rarity: RARITY.RARE,
+    character: 'silent',
+    cost: 2,
+    special: 'thousandCuts',
+    damagePerCard: 1,
+    description: 'Whenever you play a card, deal 1 damage to ALL enemies.',
+    upgraded: false,
+    upgradedVersion: { damagePerCard: 2, description: 'Whenever you play a card, deal 2 damage to ALL enemies.' }
+  },
+  {
+    id: 'adrenaline',
+    name: 'Adrenaline',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.RARE,
+    character: 'silent',
+    cost: 0,
+    draw: 2,
+    energy: 1,
+    exhaust: true,
+    description: 'Draw 2 cards. Gain 1 Energy. Exhaust.',
+    upgraded: false,
+    upgradedVersion: { draw: 3, energy: 2, description: 'Draw 3 cards. Gain 2 Energy. Exhaust.' }
+  },
+  {
+    id: 'bulletTime',
+    name: 'Bullet Time',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.RARE,
+    character: 'silent',
+    cost: 3,
+    special: 'bulletTime',
+    description: 'This turn, cards cost 0. You cannot draw additional cards this turn.',
+    upgraded: false,
+    upgradedVersion: { cost: 2, description: 'This turn, cards cost 0. You cannot draw additional cards this turn.' }
+  },
+  {
+    id: 'corpseExplosion',
+    name: 'Corpse Explosion',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.RARE,
+    character: 'silent',
+    cost: 2,
+    effects: [{ type: 'poison', amount: 6 }],
+    special: 'corpseExplosion',
+    description: 'Apply 6 Poison. When enemy dies, deal damage equal to its max HP to ALL enemies.',
+    upgraded: false,
+    upgradedVersion: { effects: [{ type: 'poison', amount: 9 }], description: 'Apply 9 Poison. When enemy dies, deal damage equal to its max HP to ALL enemies.' }
+  },
+  {
+    id: 'envenom',
+    name: 'Envenom',
+    type: CARD_TYPES.POWER,
+    rarity: RARITY.RARE,
+    character: 'silent',
+    cost: 2,
+    special: 'envenom',
+    poisonOnUnblocked: 1,
+    description: 'Whenever you deal unblocked Attack damage, apply 1 Poison.',
+    upgraded: false,
+    upgradedVersion: { cost: 1, description: 'Whenever you deal unblocked Attack damage, apply 1 Poison.' }
+  },
+  {
+    id: 'glassKnife',
+    name: 'Glass Knife',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.RARE,
+    character: 'silent',
+    cost: 1,
+    damage: 8,
+    hits: 2,
+    special: 'glassKnife',
+    description: 'Deal 8 damage twice. Loses 2 damage each time played this combat.',
+    upgraded: false,
+    upgradedVersion: { damage: 12, description: 'Deal 12 damage twice. Loses 2 damage each time played this combat.' }
+  },
+
   // ========== STATUS/CURSE CARDS ==========
   {
     id: 'wound',
@@ -1211,6 +1628,18 @@ export const getStarterDeck = (characterId = 'ironclad') => {
       deck.push({ ...ALL_CARDS.find(c => c.id === 'defend'), instanceId: `defend_${i}` });
     }
     deck.push({ ...ALL_CARDS.find(c => c.id === 'bash'), instanceId: 'bash_0' });
+    return deck;
+  }
+  if (characterId === 'silent') {
+    const deck = [];
+    for (let i = 0; i < 5; i++) {
+      deck.push({ ...ALL_CARDS.find(c => c.id === 'strike_silent'), instanceId: `strike_silent_${i}` });
+    }
+    for (let i = 0; i < 5; i++) {
+      deck.push({ ...ALL_CARDS.find(c => c.id === 'defend_silent'), instanceId: `defend_silent_${i}` });
+    }
+    deck.push({ ...ALL_CARDS.find(c => c.id === 'neutralize'), instanceId: 'neutralize_0' });
+    deck.push({ ...ALL_CARDS.find(c => c.id === 'survivor'), instanceId: 'survivor_0' });
     return deck;
   }
   // Fallback: return ironclad starter

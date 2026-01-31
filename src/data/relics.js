@@ -22,6 +22,17 @@ export const ALL_RELICS = [
     effect: { type: 'heal', amount: 6 }
   },
 
+  {
+    id: 'ring_of_snake',
+    name: 'Ring of the Snake',
+    rarity: RELIC_RARITY.STARTER,
+    description: 'At the start of each combat, draw 2 additional cards.',
+    emoji: '🐍',
+    trigger: 'onCombatStart',
+    effect: { type: 'draw', amount: 2 },
+    character: 'silent'
+  },
+
   // ========== COMMON ==========
   {
     id: 'anchor',
@@ -512,7 +523,8 @@ export const getBossRelic = (excludeIds = []) => {
 
 export const getStarterRelic = (characterId = 'ironclad') => {
   const STARTER_RELICS = {
-    ironclad: 'burning_blood'
+    ironclad: 'burning_blood',
+    silent: 'ring_of_snake'
   };
   const relicId = STARTER_RELICS[characterId] || STARTER_RELICS.ironclad;
   return ALL_RELICS.find(r => r.id === relicId);

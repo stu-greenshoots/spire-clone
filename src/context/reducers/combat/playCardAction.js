@@ -224,6 +224,7 @@ export const handlePlayCard = (state, action) => {
             if (effect.type === 'vulnerable') newEnemy.vulnerable = (newEnemy.vulnerable || 0) + effect.amount;
             if (effect.type === 'weak') newEnemy.weak = (newEnemy.weak || 0) + effect.amount;
             if (effect.type === 'strengthDown') newEnemy.strength = (newEnemy.strength || 0) - effect.amount;
+            if (effect.type === 'poison') newEnemy.poison = (newEnemy.poison || 0) + effect.amount;
             combatLog.push(`Applied ${effect.amount} ${effect.type} to ${enemy.name}`);
             return newEnemy;
           });
@@ -242,6 +243,7 @@ export const handlePlayCard = (state, action) => {
               if (effect.type === 'vulnerable') updated.vulnerable = (updated.vulnerable || 0) + effect.amount;
               if (effect.type === 'weak') updated.weak = (updated.weak || 0) + effect.amount;
               if (effect.type === 'strengthDown') updated.strength = (updated.strength || 0) - effect.amount;
+              if (effect.type === 'poison') updated.poison = (updated.poison || 0) + effect.amount;
               combatLog.push(`Applied ${effect.amount} ${effect.type} to ${e.name}`);
             }
             return updated;

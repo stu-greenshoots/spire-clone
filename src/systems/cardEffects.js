@@ -161,6 +161,31 @@ const simplePlayerEffects = {
   },
   blockPerAttackEvolved: (card, ctx) => {
     ctx.player.rage = card.rageBlock || 5;
+  },
+  noxiousFumes: (card, ctx) => {
+    ctx.player.noxiousFumes = (ctx.player.noxiousFumes || 0) + (card.poisonPerTurn || 2);
+    ctx.combatLog.push(`Noxious Fumes will apply ${card.poisonPerTurn || 2} Poison each turn`);
+  },
+  gainDexterity: (card, ctx) => {
+    ctx.player.dexterity = (ctx.player.dexterity || 0) + (card.dexterity || 2);
+    ctx.combatLog.push(`Gained ${card.dexterity || 2} Dexterity`);
+  },
+  thousandCuts: (card, ctx) => {
+    ctx.player.thousandCuts = (ctx.player.thousandCuts || 0) + (card.damagePerCard || 1);
+    ctx.combatLog.push(`A Thousand Cuts will deal ${card.damagePerCard || 1} damage per card played`);
+  },
+  retainCards: (card, ctx) => {
+    ctx.player.wellLaidPlans = (ctx.player.wellLaidPlans || 0) + (card.retainCount || 1);
+    ctx.combatLog.push(`Well-Laid Plans: Retain up to ${card.retainCount || 1} card(s) at end of turn`);
+  },
+  envenom: (card, ctx) => {
+    ctx.player.envenom = (ctx.player.envenom || 0) + (card.poisonOnUnblocked || 1);
+    ctx.combatLog.push(`Envenom: apply ${card.poisonOnUnblocked || 1} Poison on unblocked damage`);
+  },
+  bulletTime: (card, ctx) => {
+    ctx.player.bulletTime = true;
+    ctx.player.noDrawThisTurn = true;
+    ctx.combatLog.push('All cards cost 0 this turn. Cannot draw additional cards.');
   }
 };
 
@@ -190,6 +215,14 @@ const addCardEffects = {
   addBurn: (card, ctx) => {
     const burn = ALL_CARDS.find(c => c.id === 'burn');
     ctx.discardPile.push({ ...burn, instanceId: `burn_${Date.now()}` });
+  },
+  addShivs: (card, ctx) => {
+    const shivCard = ALL_CARDS.find(c => c.id === 'shiv');
+    const count = card.shivCount || 3;
+    for (let i = 0; i < count; i++) {
+      ctx.hand.push({ ...shivCard, instanceId: `shiv_${Date.now()}_${i}` });
+    }
+    ctx.combatLog.push(`Added ${count} Shiv(s) to hand`);
   },
   addWoundsToHand: (card, ctx) => {
     const wound = ALL_CARDS.find(c => c.id === 'wound');
