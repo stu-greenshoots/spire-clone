@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { DEFEAT_NARRATIVE, DEFEAT_FOOTER } from '../data/flavorText';
 import { getRelicImage } from '../assets/art/art-config';
+import { calculateChallengeScore, saveChallengeScore } from '../systems/dailyChallengeSystem';
 
 const getDefeatText = (act, currentFloor, currentNode) => {
   const isBoss = currentNode?.type === 'boss';
@@ -24,10 +25,22 @@ const getDefeatText = (act, currentFloor, currentNode) => {
 
 const GameOverScreen = () => {
   const { state, returnToMenu } = useGame();
-  const { player, deck, relics, currentFloor, act } = state;
+  const { player, deck, relics, currentFloor, act, dailyChallenge, runStats } = state;
   const [showContent, setShowContent] = useState(false);
   const defeatText = useMemo(() => getDefeatText(act, currentFloor, state.currentNode), [act, currentFloor, state.currentNode]);
   const footerText = useMemo(() => DEFEAT_FOOTER[Math.floor(Math.random() * DEFEAT_FOOTER.length)], []);
+
+  // Calculate and save daily challenge score
+  const challengeScore = useMemo(() => {
+    if (!dailyChallenge) return null;
+    const score = calculateChallengeScore(
+      { ...runStats, floor: currentFloor },
+      player,
+      dailyChallenge.modifierIds
+    );
+    saveChallengeScore(dailyChallenge.date, score);
+    return score;
+  }, [dailyChallenge, runStats, currentFloor, player]);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 500);
@@ -151,6 +164,26 @@ const GameOverScreen = () => {
           <StatItem label="Max HP" value={player.maxHp} icon={'\u2764\uFE0F'} />
         </div>
       </div>
+
+      {/* Daily Challenge Score */}
+      {challengeScore !== null && (
+        <div style={{
+          background: 'rgba(40, 25, 15, 0.8)',
+          padding: '14px 20px',
+          borderRadius: '10px',
+          marginBottom: '20px',
+          border: '1px solid rgba(255, 180, 85, 0.3)',
+          textAlign: 'center',
+          animation: showContent ? 'fadeIn 0.5s ease 0.5s both' : 'none'
+        }}>
+          <div style={{ color: '#887755', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '4px' }}>
+            Daily Challenge Score
+          </div>
+          <div style={{ color: '#cc9955', fontSize: '26px', fontWeight: 'bold' }}>
+            {challengeScore.toLocaleString()}
+          </div>
+        </div>
+      )}
 
       {/* Relics Display */}
       {relics.length > 0 && (
