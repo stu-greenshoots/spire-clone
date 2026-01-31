@@ -3,6 +3,7 @@ import { useGame } from '../context/GameContext';
 import { hasSave } from '../systems/saveSystem';
 import { loadProgression } from '../systems/progressionSystem';
 import { getAscensionDescription, getMaxAscension } from '../systems/ascensionSystem';
+import { audioManager } from '../systems/audioSystem';
 import Settings from './Settings';
 import StateBuilder from './StateBuilder';
 
@@ -199,7 +200,7 @@ const MainMenu = () => {
                 : 'linear-gradient(180deg, #20cc20 0%, #15aa15 50%, #108810 100%)',
               color: 'white',
               border: '2px solid rgba(85, 255, 85, 0.6)',
-              padding: '16px 60px',
+              padding: '16px 48px',
               fontSize: '20px',
               borderRadius: '8px',
               cursor: 'pointer',
@@ -246,9 +247,9 @@ const MainMenu = () => {
                 color: selectedAscension === 0 ? '#555' : '#aaa',
                 border: '1px solid rgba(255,255,255,0.1)',
                 borderRadius: '4px',
-                width: '28px',
-                height: '28px',
-                fontSize: '16px',
+                width: '44px',
+                height: '44px',
+                fontSize: '18px',
                 cursor: selectedAscension === 0 ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s ease'
               }}
@@ -281,9 +282,9 @@ const MainMenu = () => {
                 color: selectedAscension >= unlockedAscension ? '#555' : '#aaa',
                 border: '1px solid rgba(255,255,255,0.1)',
                 borderRadius: '4px',
-                width: '28px',
-                height: '28px',
-                fontSize: '16px',
+                width: '44px',
+                height: '44px',
+                fontSize: '18px',
                 cursor: selectedAscension >= unlockedAscension ? 'not-allowed' : 'pointer',
                 transition: 'all 0.2s ease'
               }}
@@ -308,7 +309,7 @@ const MainMenu = () => {
               : 'linear-gradient(180deg, #bb2525 0%, #991818 50%, #771010 100%)',
             color: 'white',
             border: '2px solid rgba(255, 85, 85, 0.6)',
-            padding: '16px 60px',
+            padding: '16px 48px',
             fontSize: '20px',
             borderRadius: '8px',
             cursor: 'pointer',
@@ -340,7 +341,7 @@ const MainMenu = () => {
         {/* Settings Button */}
         <button
           data-testid="btn-settings"
-          onClick={() => setShowSettings(true)}
+          onClick={() => { setShowSettings(true); audioManager.duckMusic(); }}
           onMouseEnter={() => setHoveringSettings(true)}
           onMouseLeave={() => setHoveringSettings(false)}
           style={{
@@ -440,7 +441,7 @@ const MainMenu = () => {
             zIndex: 10
           }}
           onClick={(e) => {
-            if (e.target === e.currentTarget) setShowSettings(false);
+            if (e.target === e.currentTarget) { setShowSettings(false); audioManager.unduckMusic(); }
           }}
         >
           <div style={{
@@ -455,7 +456,7 @@ const MainMenu = () => {
             position: 'relative'
           }}>
             <button
-              onClick={() => setShowSettings(false)}
+              onClick={() => { setShowSettings(false); audioManager.unduckMusic(); }}
               style={{
                 position: 'absolute',
                 top: '12px',
@@ -464,9 +465,9 @@ const MainMenu = () => {
                 color: '#aaa',
                 border: 'none',
                 borderRadius: '4px',
-                width: '28px',
-                height: '28px',
-                fontSize: '16px',
+                width: '44px',
+                height: '44px',
+                fontSize: '18px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',

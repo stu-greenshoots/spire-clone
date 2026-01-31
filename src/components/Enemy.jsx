@@ -567,7 +567,7 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
 });
 
 // Status Badge Component
-const StatusBadge = ({ icon, value, color, _label }) => (
+const StatusBadge = memo(function StatusBadge({ icon, value, color, _label }) { return (
   <div style={{
     display: 'flex',
     alignItems: 'center',
@@ -588,6 +588,6 @@ const StatusBadge = ({ icon, value, color, _label }) => (
       {value}
     </span>
   </div>
-);
+); });
 
 export default Enemy;

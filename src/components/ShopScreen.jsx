@@ -3,6 +3,7 @@ import { useGame } from '../context/GameContext';
 import { getRandomCard, RARITY } from '../data/cards';
 import { getRandomRelic, RELIC_RARITY } from '../data/relics';
 import Card from './Card';
+import { getRelicImage } from '../assets/art/art-config';
 
 const ShopScreen = () => {
   const { state, leaveShop } = useGame();
@@ -230,6 +231,7 @@ const ShopScreen = () => {
           display: 'flex',
           gap: '12px',
           overflowX: 'auto',
+          WebkitOverflowScrolling: 'touch',
           paddingBottom: '20px',
           marginBottom: '25px'
         }}>
@@ -471,7 +473,10 @@ const ShopRelic = ({ relic, gold, onBuy }) => {
         filter: relic.bought ? 'grayscale(1)' : 'drop-shadow(0 2px 8px rgba(68, 136, 255, 0.5))',
         animation: canAfford && !relic.bought ? 'float 3s ease-in-out infinite' : 'none'
       }}>
-        {relic.emoji}
+        {(() => {
+          const img = getRelicImage(relic.id);
+          return img ? <img src={img} alt={relic.name} style={{ width: '40px', height: '40px', borderRadius: '6px', objectFit: 'cover' }} /> : relic.emoji;
+        })()}
       </span>
       <div style={{ flex: 1 }}>
         <div style={{

@@ -214,3 +214,41 @@ UX Guy - Combat feedback, tooltips, visual polish
 **Sprint 8 UX status:** All 3 UX tasks complete (UX-16, UX-14, UX-15). Done for the sprint.
 
 ---
+
+### Sprint 9 - UX-17 Complete
+**Date:** 2026-01-31
+**Status:** UX-17 DONE (PR #98)
+
+**What I did:**
+- Created TutorialOverlay.jsx (118 lines) — self-contained tutorial component
+- 4 sequential hints: play cards, draw pile, energy, end turn
+- Mobile-aware text (drag vs tap instructions)
+- localStorage persistence (`spireAscent_hasSeenTutorial`)
+- Skip All / Next / Got it buttons with progress dots
+- Dark fantasy themed (blue accent #44aacc, gradient background)
+- Non-blocking overlay with pointer-events pass-through on backdrop click
+- Added to CombatScreen.jsx after AnimationOverlay
+- 135 lines of BEM CSS in App.css with slide-in animation and responsive breakpoints
+
+**Validation:** `npm run validate` passes, 254 lines changed (under 300 limit)
+
+**Sprint 9 UX status:** UX-17 done. UX-18 (loading splash) is P2 stretch if time allows.
+
+---
+
+### Sprint 9 - UX-18 Complete
+**Date:** 2026-01-31
+**Status:** UX-18 DONE (PR #103)
+
+**What I did:**
+- Added branded dark fantasy loading splash to index.html
+- Displays "Spire Ascent" title with red glow text-shadow + "The Endless War Awaits" tagline
+- Subtle red pulsing line animation during load
+- All inline HTML/CSS — zero JS, displays before bundle loads
+- React replaces content on mount (standard #root replacement)
+- Responsive text sizing with clamp() for mobile/desktop
+- 43 lines added, minimal and clean
+
+**Sprint 9 UX status:** All UX tasks complete (UX-17 + UX-18). Done for the sprint.
+
+---

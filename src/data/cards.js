@@ -195,11 +195,11 @@ export const ALL_CARDS = [
     type: CARD_TYPES.ATTACK,
     rarity: RARITY.COMMON,
     cost: 0,
-    damage: 14,
+    damage: 18,
     special: 'onlyAttacks',
-    description: 'Can only play if every card in hand is Attack. Deal 14 damage.',
+    description: 'Can only play if every card in hand is Attack. Deal 18 damage.',
     upgraded: false,
-    upgradedVersion: { damage: 18, description: 'Can only play if every card in hand is Attack. Deal 18 damage.' }
+    upgradedVersion: { damage: 24, description: 'Can only play if every card in hand is Attack. Deal 24 damage.' }
   },
   {
     id: 'heavyBlade',
@@ -268,11 +268,11 @@ export const ALL_CARDS = [
     type: CARD_TYPES.SKILL,
     rarity: RARITY.COMMON,
     cost: 1,
-    block: 7,
+    block: 9,
     special: 'exhaustRandom',
-    description: 'Gain 7 Block. Exhaust a random card.',
+    description: 'Gain 9 Block. Exhaust a random card.',
     upgraded: false,
-    upgradedVersion: { block: 9, special: 'exhaustChoose', description: 'Gain 9 Block. Exhaust a card.' }
+    upgradedVersion: { block: 12, special: 'exhaustChoose', description: 'Gain 12 Block. Exhaust a card.' }
   },
   {
     id: 'warcry',
@@ -356,12 +356,12 @@ export const ALL_CARDS = [
     type: CARD_TYPES.ATTACK,
     rarity: RARITY.UNCOMMON,
     cost: 1,
-    damage: 2,
+    damage: 3,
     hits: 4,
     exhaust: true,
-    description: 'Deal 2 damage 4 times. Exhaust.',
+    description: 'Deal 3 damage 4 times. Exhaust.',
     upgraded: false,
-    upgradedVersion: { hits: 5, description: 'Deal 2 damage 5 times. Exhaust.' }
+    upgradedVersion: { hits: 5, description: 'Deal 3 damage 5 times. Exhaust.' }
   },
   {
     id: 'rampage',

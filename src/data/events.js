@@ -1,6 +1,7 @@
 // 20 Game Events for Spire Ascent
-// First 10: "Pattern glitches" in the Endless War (Varrow voice)
-// Last 10: Dark fantasy flavor with dry humor and real trade-offs
+// All events use the "Endless War" voice — the war as system, patterns as identity
+// First 10: Pattern glitches (original Varrow rewrite)
+// Last 10: Pattern anomalies (VARROW-04 consistency pass)
 
 export const events = [
   // ===== PATTERN GLITCHES (Endless War voice) =====
@@ -214,222 +215,218 @@ export const events = [
     ]
   },
 
-  // ===== CLASSIC EVENTS (original dark fantasy voice) =====
+  // ===== PATTERN ANOMALIES (Endless War voice — rewritten for consistency) =====
   {
     id: 'mirror_of_souls',
-    title: 'The Mirror of Souls',
-    description: 'A cracked mirror stands in an empty room, reflecting a version of you that looks considerably more capable. It reaches toward the glass from the other side, offering something.',
+    title: 'Parallel Instance',
+    description: 'A reflective surface that should not exist here — the war does not use mirrors. But this one shows a version of you from a different iteration: better-equipped, further along, more defined. It reaches toward the boundary between instances.',
     choices: [
       {
-        text: 'Touch the mirror',
+        text: 'Touch the boundary',
         effect: { gainMaxHp: 6, loseGold: 40 },
-        result: 'Your reflection grabs your hand and pulls something through. You feel more whole, more alive. Your gold pouch is lighter - your reflection kept the payment.'
+        result: 'Data transfers between instances. You are sturdier now — overwritten with a more robust version of yourself. Your resources are lighter. The other instance took its fee.'
       },
       {
-        text: 'Shatter the mirror',
+        text: 'Collapse the parallel instance',
         effect: { gainGold: 55, loseMaxHp: 5 },
-        result: 'The glass explodes outward, showering you with shards and gold coins from beyond. Your reflection screams as it dies, and something permanent tears away from you.'
+        result: 'The mirror fractures and resources pour through the gap. The other you ceases to exist, and something in your own capacity diminishes — the war does not allow something for nothing.'
       }
     ]
   },
 
-  // ===== NPCs IN DISTRESS =====
   {
     id: 'wounded_knight',
-    title: 'The Fallen Knight',
-    description: 'A knight in battered armor leans against the wall, bleeding from a dozen wounds. She offers you her shield if you help, or you could simply take what you want from her weakened form.',
+    title: 'Damaged Pattern',
+    description: 'A combatant the war deployed and did not reclaim. She leans against the wall, leaking data from a dozen breaches. Still functional enough to offer a trade — or vulnerable enough to exploit. The war does not intervene either way.',
     choices: [
       {
-        text: 'Help her and accept the shield',
+        text: 'Repair her and accept the trade',
         effect: { loseHp: 5, gainRelic: 'orichalcum' },
-        result: 'You bandage her wounds at the cost of your own supplies. She presses a golden-veined stone into your hands. "It will protect you when nothing else can," she gasps.'
+        result: 'You patch her breaches at the cost of your own integrity. She transfers a defensive module — dense, golden-veined, older than the current iteration. "It holds when nothing else does," she manages. The war pretends not to notice.'
       },
       {
-        text: 'Take her gold and leave',
+        text: 'Salvage her resources',
         effect: { gainGold: 90, loseMaxHp: 3 },
-        result: 'Shame weighs on you as you pocket her coin. The Spire rewards cruelty, but something fundamental dims within you. The knight\'s eyes follow you out.'
+        result: 'You strip what you can from a pattern too damaged to resist. Something in your own configuration degrades — the war taxes cruelty, apparently. Her monitoring processes track you as you leave.'
       },
       {
-        text: 'Trade combat knowledge',
+        text: 'Exchange combat data',
         effect: { upgradeRandomCard: true },
-        result: 'Between labored breaths, she teaches you a technique perfected over years of battle. Fair exchange - her wisdom for a moment of company in this forsaken place.'
+        result: 'Between system errors, she transfers a technique refined across iterations you will never see. Fair exchange — her accumulated knowledge for a moment of connection in the war\'s indifferent corridors.'
       }
     ]
   },
 
   {
     id: 'trapped_spirit',
-    title: 'The Trapped Spirit',
-    description: 'A spectral figure writhes within a binding circle, its features shifting between despair and rage. It promises rewards for freedom, and threatens consequences regardless. Spirits are dramatic like that.',
+    title: 'Contained Process',
+    description: 'A pattern the war sealed inside a constraint loop — features shifting between states the war cannot resolve. It offers outputs for release and threatens outputs regardless. Contained processes are dramatic like that.',
     choices: [
       {
-        text: 'Break the circle',
+        text: 'Break the containment',
         effect: { gainRelic: 'lantern', loseHp: 10 },
-        result: 'The spirit erupts from containment, clawing at you as it passes. It leaves behind a glowing lantern as promised. At least it kept its word, despite the scratches.'
+        result: 'The process erupts from its loop, scoring your pattern as it passes. It leaves behind a luminous output as promised. At least it honored its contract, despite the damage.'
       },
       {
-        text: 'Reinforce the binding and demand payment',
+        text: 'Tighten the containment and demand resources',
         effect: { gainGold: 70, damage: 15 },
-        result: 'The spirit shrieks and hurls gold at you with considerable force. Each coin hits like a thrown stone. Profitable, if painful.'
+        result: 'The process ejects resources at high velocity. Each impact registers as damage. Profitable, if painful. The war does not regulate transactions between patterns.'
       },
       {
-        text: 'Walk away from this mess',
+        text: 'Walk away from this',
         effect: { heal: 5 },
-        result: 'Sometimes the wisest choice is not to choose. You leave the spirit to its fate and feel oddly at peace with the decision. A rare luxury in the Spire.'
+        result: 'Sometimes the optimal move is no move. You leave the process to the war\'s eventual garbage collection and feel oddly restored by the restraint. A rare efficiency.'
       }
     ]
   },
 
-  // ===== ENVIRONMENTAL HAZARDS =====
   {
     id: 'crystalline_cave',
-    title: 'The Crystalline Cave',
-    description: 'Luminous crystals line every surface of this cave, humming with stored energy. Some pulse invitingly, others crackle with barely contained force. The wrong choice could be energizing or agonizing.',
+    title: 'Energy Crystallization',
+    description: 'The war stores surplus energy in crystalline formations when its processes run hot. This chamber is dense with them — blue nodes humming with restorative data, red nodes crackling with volatile resources. The wrong extraction could be healing or harmful.',
     choices: [
       {
-        text: 'Absorb energy from the blue crystals',
+        text: 'Absorb from the blue nodes',
         effect: { heal: 25, loseGold: 20 },
-        result: 'Healing energy courses through you as the blue crystals dim. Some of your gold transmutes into crystal dust in the process. Energy must come from somewhere.'
+        result: 'Restorative energy flows through your pattern as the blue crystals dim. Some of your resources transmute into inert crystal dust — the war\'s exchange rate is not negotiable.'
       },
       {
-        text: 'Harvest the red crystals',
+        text: 'Extract the red nodes',
         effect: { gainGold: 100, damage: 15 },
-        result: 'The red crystals shatter as you pry them loose, each one a burst of heat and light. Your pack is full of valuable fragments, and your hands are thoroughly burned.'
+        result: 'The red crystals fracture on extraction, each one a burst of heat and data. Your reserves are full of valuable material, and your hands are thoroughly burned. The war\'s energy storage was not designed for manual access.'
       },
       {
-        text: 'Meditate among the crystals',
+        text: 'Attune to the resonance',
         effect: { upgradeRandomCard: true, loseGold: 10 },
-        result: 'The crystals\' resonance clears your mind. A technique crystallizes into something purer. A few coins in your pack have turned to worthless quartz, but the trade seems fair.'
+        result: 'The crystals\' frequency refines a technique into something the war never intended. A few resource units convert to inert matter in the process, but the optimization was worth it.'
       }
     ]
   },
 
   {
     id: 'toxic_spores',
-    title: 'The Sporium Passage',
-    description: 'Thick clouds of luminescent spores fill the corridor ahead. They drift in hypnotic patterns, beautiful and certainly toxic. Another path exists, but it is much longer and your legs already ache.',
+    title: 'Contaminated Corridor',
+    description: 'The war\'s biological processes have leaked into this passage — luminescent particulate drifts in patterns that suggest intent. Beautiful, and certainly corrosive. An alternate route exists, but it costs time the war does not give freely.',
     choices: [
       {
-        text: 'Rush through the spores',
+        text: 'Push through directly',
         effect: { damage: 12, gainGold: 35 },
-        result: 'You hold your breath and sprint. The spores burn exposed skin but you stumble over a corpse halfway through - someone less lucky, but their gold is yours now.'
+        result: 'You seal your inputs and sprint. The particulate burns exposed surfaces, but you stumble over a terminated pattern halfway through — someone less fortunate, whose resources are now yours.'
       },
       {
-        text: 'Take the long way around',
+        text: 'Take the alternate route',
         effect: { loseGold: 25, heal: 10 },
-        result: 'The detour costs time and supplies but the clean air is restorative. You arrive refreshed, if slightly poorer. Sometimes patience is its own reward.'
+        result: 'The detour costs resources but the clean data flow is restorative. You arrive in better condition, if lighter. The war occasionally rewards patience, though it would never admit it.'
       }
     ]
   },
 
-  // ===== RELIGIOUS/OCCULT SITES =====
   {
     id: 'dark_chapel',
-    title: 'The Dark Chapel',
-    description: 'Pews of petrified wood face an altar where a candle burns with black flame. The prayers etched into the walls are in no language you recognize, yet you understand them perfectly. They offer power at a price.',
+    title: 'Deprecated Shrine',
+    description: 'An older version of the war had rituals. This chamber is a remnant — stone benches facing a processing altar where a dark flame still executes its ancient function. The inscriptions are in a protocol the war no longer uses, yet your pattern reads them fluently. They offer modification at a price.',
     choices: [
       {
-        text: 'Pray for strength',
+        text: 'Request combat optimization',
         effect: { gainRelic: 'shuriken', loseHpPercent: 25 },
-        result: 'The black flame leaps to your hands, branding star-shaped marks into your palms. Your attacks will flow faster now, each strike building toward something greater.'
+        result: 'The dark flame brands star-shaped markers into your pattern. Your attack sequences will chain faster now, each strike building toward critical mass. The old protocols were not gentle, but they were effective.'
       },
       {
-        text: 'Pray for protection',
+        text: 'Request structural reinforcement',
         effect: { gainMaxHp: 7, loseGold: 45 },
-        result: 'The chapel\'s power infuses your body with resilience. Gold coins tarnish and crumble in your pack - the chapel\'s tithe, taken without asking.'
+        result: 'The shrine\'s old processes reinforce your pattern\'s capacity. Resources tarnish and collapse in your reserves — the shrine\'s fee, collected without negotiation. Deprecated does not mean powerless.'
       },
       {
-        text: 'Steal the black candle',
+        text: 'Salvage the altar\'s flame',
         effect: { gainGold: 65, loseMaxHp: 4 },
-        result: 'The candle comes free but its flame sears something from your soul. You stuff it in your pack where it continues burning, slowly converting your health into marketable goods.'
+        result: 'The flame detaches but burns something fundamental in the transfer. It continues converting your capacity into resources in your reserves. The old war\'s processes do not come with off switches.'
       }
     ]
   },
 
   {
     id: 'bone_oracle',
-    title: 'The Bone Oracle',
-    description: 'A circle of skulls arranged in the floor, each one facing inward. When you step into the center, they begin to whisper futures both promising and dire. They demand tribute for their visions.',
+    title: 'Predictive Engine',
+    description: 'A ring of terminated patterns arranged in a processing formation — the war\'s early attempt at predictive modeling, still running on residual data. When you enter the formation, the outputs activate, projecting futures both useful and dire. They require input to continue.',
     choices: [
       {
-        text: 'Pay gold for knowledge (lose 55 gold)',
+        text: 'Feed resources for analysis (lose 55 gold)',
         effect: { loseGold: 55, upgradeRandomCard: true, gainMaxHp: 3 },
-        result: 'The skulls speak in unison, flooding your mind with tactical insights. Your body and mind both sharpen. Expensive tutors, but effective ones.'
+        result: 'The predictive engine processes your input and returns tactical refinements. Your pattern sharpens and your capacity expands. Expensive analysis, but the data is actionable.'
       },
       {
-        text: 'Pay in blood',
+        text: 'Feed biological data',
         effect: { loseHp: 20, gainRelic: 'bag_of_marbles' },
-        result: 'Your blood pools in the skull circle and coalesces into a pouch of glass spheres. They will unbalance your foes before battle even begins. A worthy exchange for the light-headedness.'
+        result: 'Your vital data pools into the formation and the engine produces a set of calibrated destabilizers. They will unbalance enemy patterns before combat begins. The engine considers this a fair transaction.'
       }
     ]
   },
 
-  // ===== GAMBLING/RISK SCENARIOS =====
   {
     id: 'wheel_of_fortune',
-    title: 'The Wheel of Misfortune',
-    description: 'A great wheel of iron and bone dominates this chamber, its segments marked with symbols both auspicious and terrible. A skeletal attendant gestures toward it with theatrical enthusiasm.',
+    title: 'Random Allocation Engine',
+    description: 'The war occasionally introduces randomness — a deliberate break in its own patterns. This chamber contains one such engine: a massive mechanism that distributes outcomes without logic or fairness. An attendant pattern gestures toward it with enthusiasm it should not possess.',
     choices: [
       {
-        text: 'Spin the wheel (costs 30 gold)',
+        text: 'Submit to allocation (costs 30 gold)',
         effect: { loseGold: 30, gainGold: 100, damage: 8 },
-        result: 'The wheel clatters to a stop on a golden segment. Coins shower from above as the attendant applauds. A blade also swings from the ceiling, because of course it does.'
+        result: 'The engine allocates generously — resources cascade from its mechanism. A secondary output also activates, because the war\'s randomness includes consequences. The attendant pattern applauds, which is unsettling.'
       },
       {
-        text: 'Bet big - spin twice (costs 60 gold)',
+        text: 'Double allocation (costs 60 gold)',
         effect: { loseGold: 60, gainRelic: 'blood_vial', damage: 15 },
-        result: 'Two spins yield a vial of regenerative blood and considerably more lacerations from the wheel\'s defensive mechanisms. The attendant gives you a standing ovation.'
+        result: 'Two cycles yield a regenerative output and considerably more damage from the engine\'s secondary mechanisms. The attendant pattern gives a standing ovation it was definitely not programmed for.'
       },
       {
-        text: 'Pickpocket the attendant instead',
+        text: 'Extract resources from the attendant',
         effect: { gainGold: 45, loseHp: 5 },
-        result: 'The skeleton catches you mid-theft and delivers a surprisingly solid slap. You still manage to pocket its coin purse. It rattles in displeasure but lets you go.'
+        result: 'The attendant pattern intercepts your attempt and delivers a surprisingly forceful correction. You still manage to extract its resource cache. It vibrates with displeasure but lacks the authority to escalate.'
       }
     ]
   },
 
   {
     id: 'devil_game',
-    title: 'The Devil\'s Wager',
-    description: 'A horned figure in a too-fine suit sits at a table with two goblets. It shuffles them with inhuman speed, grins, and gestures for you to choose.',
+    title: 'The Broker',
+    description: 'A pattern that operates outside the war\'s official economy — it has carved a space the war does not monitor and offers trades the war would not approve. Two containers sit on a surface between you. It shuffles them with inhuman speed and gestures for you to choose.',
     choices: [
       {
-        text: 'Choose the left goblet',
+        text: 'Choose the left container',
         effect: { gainMaxHp: 10, loseGold: 75 },
-        result: 'Liquid fire fills your veins and expands your very being. The devil pockets your gold with a satisfied smirk. "Pleasure doing business. Do come back when you have more to lose."'
+        result: 'Capacity floods your pattern, expanding what the war allocated. The broker absorbs your resources with visible satisfaction. "Come back when you have more to trade," its output reads. The war pretends this did not happen.'
       },
       {
-        text: 'Choose the right goblet',
+        text: 'Choose the right container',
         effect: { gainGold: 100, loseMaxHp: 6 },
-        result: 'The goblet fills your pack with gold but drains something vital. The devil claps slowly. "Greed suits you. The Spire will enjoy watching you count coins on your deathbed."'
+        result: 'Resources fill your reserves but something in your pattern\'s foundation thins. The broker\'s output flickers: "The war will enjoy watching you count resources as your ceiling drops."'
       },
       {
-        text: 'Flip the table',
+        text: 'Reject the terms',
         effect: { damage: 10, upgradeRandomCard: true },
-        result: 'Both goblets shatter, their contents merging in the air. The devil laughs with genuine delight. "Audacity! How refreshing!" Power and pain crash into you simultaneously.'
+        result: 'Both containers rupture, their contents merging in transit. The broker\'s output reads something like laughter. "Unpredictable. How useful." Power and damage arrive simultaneously.'
       }
     ]
   },
 
   {
     id: 'ancient_guardian',
-    title: 'The Sleeping Guardian',
-    description: 'An enormous construct of stone and magic blocks the path, dormant but not dead. Its chest cavity is open, revealing a glowing core. Removing it would be profitable. Waking it would be inadvisable.',
+    title: 'Dormant Sentinel',
+    description: 'The war\'s oldest defensive pattern — massive, inert, still drawing power from infrastructure that predates everything else in this corridor. Its core is exposed, glowing with stored energy. Extracting it would be profitable. Activating the sentinel would be inadvisable.',
     choices: [
       {
-        text: 'Carefully extract the core',
+        text: 'Extract the core carefully',
         effect: { gainRelic: 'meat_on_the_bone', damage: 20 },
-        result: 'The core comes free but the guardian\'s fist comes down. You scramble away clutching the core, which pulses with restorative energy. The guardian collapses, finally truly dead.'
+        result: 'The core detaches but the sentinel\'s last defensive reflex fires. You scramble clear clutching a module that pulses with restorative energy. The sentinel collapses, its pattern finally fully terminated.'
       },
       {
-        text: 'Siphon energy without removing it',
+        text: 'Siphon energy without extraction',
         effect: { heal: 20, gainMaxHp: 4 },
-        result: 'You draw power from the core gently, like sipping from a river. The guardian remains dormant and you walk away stronger. Sometimes the patient approach yields the richest rewards.'
+        result: 'You draw from the core without disturbing the sentinel\'s pattern. Energy flows like data through a clean connection. The sentinel remains dormant. Sometimes the careful approach yields the best output.'
       },
       {
-        text: 'Loot the area around it',
+        text: 'Scavenge the surrounding area',
         effect: { gainGold: 70 },
-        result: 'Previous challengers were not so careful. Their scattered belongings yield considerable gold. You step around the guardian on tiptoe, wealthy and whole.'
+        result: 'Previous patterns were not so careful. Their scattered resources litter the area around the sentinel. You collect what you can, stepping around the dormant pattern with appropriate caution.'
       }
     ]
   }

@@ -241,3 +241,92 @@ document.addEventListener('click', function initAudio() {
 **Summary:** All AR Sprint 8 tasks complete (AR-07 + AR-08). Available for Sprint 9.
 
 ---
+
+### Sprint 9 - AR-06 Complete
+**Date:** 2026-01-31
+**Status:** AR-06 Music Integration — COMPLETE and MERGED (PR #95)
+**Sprint:** Sprint 9 (Ship Prep + QA + 1.0)
+**Task:** AR-06 (Music integration — M size, P0)
+
+**Done today:**
+1. Created 6 placeholder music MP3 files: music_menu, music_map, music_combat, music_boss, music_victory, music_defeat
+2. Added `defeat` to SOUNDS.music constants (was missing)
+3. Wired `audioManager.setPhase()` to game phase transitions in App.jsx via useEffect
+4. Phase mapping: menu→menu music, map/rest/shop/event→exploration music, combat→combat music, boss→boss music, victory→victory music, game over→defeat music
+5. Boss fights detected via `state.currentNode?.type === 'boss'` for distinct music
+
+**Architecture:**
+- Used existing audioSystem phase infrastructure (setPhases + setPhase + crossfadeMusic)
+- Music crossfades automatically on screen transitions (2s default)
+- Placeholder MP3s are valid but identical — to be replaced with real tracks
+- No changes to Settings.jsx — existing music volume slider already controls music
+
+**Acceptance criteria:**
+- [x] 6 music tracks wired to game phases
+- [x] Music volume independently controllable
+- [x] Music loops correctly
+- [x] No audio overlap between tracks
+- [x] Respects first-interaction requirement
+- [x] npm run validate passes (1736 tests, 0 errors)
+
+**Blockers:** None
+**Next:** AR-05b (Mobile final pass) when assigned
+
+---
+
+### Sprint 9 - AR-05b Complete
+**Date:** 2026-01-31
+**Status:** AR-05b Mobile Final Pass — COMPLETE and MERGED (PR #96)
+**Sprint:** Sprint 9 (Ship Prep + QA + 1.0)
+**Task:** AR-05b (Mobile final pass — S size, P0)
+
+**Done today:**
+1. Fixed touch targets on MainMenu: settings close button and ascension selector buttons (28px → 44px WCAG)
+2. Made VictoryScreen/GameOverScreen titles and emoji responsive with CSS clamp()
+3. Replaced fixed minWidth on summary boxes with percentage-based width + maxWidth to prevent overflow on small screens
+4. Reduced CTA button horizontal padding (60px → 48px) to prevent overflow on 375px screens
+5. Added -webkit-overflow-scrolling: touch to ShopScreen horizontal card scroll
+6. Added @media (max-width: 375px) overrides for starting bonus screen
+7. All 1736 tests pass, 0 lint errors, build clean
+
+**Viewports verified:**
+- iPhone SE (375x667) — no overflow, all buttons reachable
+- iPhone 12/13/14 (390x844) — correct layout
+- Pixel 7 (412x915) — no clipped text
+- iPad portrait (810x1080) — layout appropriate
+
+**Screens verified:** Title, Starting Bonus, Map, Combat, Shop, Rest Site, Event, Reward, Victory, Game Over, Settings
+
+**Blockers:** None
+**Next:** AR-09 (audio crossfade polish) if assigned as stretch
+
+---
+
+### Sprint 9 - AR-09 Complete
+**Date:** 2026-01-31
+**Status:** AR-09 Audio Crossfade Polish — COMPLETE and MERGED (PR #105)
+**Sprint:** Sprint 9 (Ship Prep + QA + 1.0)
+**Task:** AR-09 (Audio polish — S size, P2 stretch)
+
+**Done today:**
+1. Fixed crossfade bug: `_fadeAudio` used a single `_fadeInterval`, so concurrent fades (old track out + new track in) stomped each other. Changed to `_fadeIntervals` array supporting multiple concurrent fades.
+2. Added `duckMusic()`/`unduckMusic()` methods — fades to 30% volume and back over 300ms
+3. Wired Settings modal open/close in MainMenu to duck/unduck music
+4. Cleaned up `stopMusic` and `_playMusicInternal` for proper fade lifecycle management
+
+**Architecture:**
+- Each `_fadeAudio` call gets its own interval ID, manages its own cleanup
+- `_clearFade()` clears all active intervals (used for instant stops only)
+- Duck state tracked via `_ducked` flag to prevent double-duck/unduck
+- Settings ducking is MainMenu-local (other settings access points can be wired later)
+
+**Acceptance criteria:**
+- [x] Crossfade works correctly — old and new tracks fade simultaneously
+- [x] Music ducks when Settings opens
+- [x] Music restores when Settings closes
+- [x] npm run validate passes (1736 tests, 0 errors)
+
+**Blockers:** None
+**Summary:** All AR Sprint 9 tasks complete (AR-06 + AR-05b + AR-09). Audio system fully polished for 1.0.
+
+---

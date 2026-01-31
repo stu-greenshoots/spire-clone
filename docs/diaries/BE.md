@@ -3,6 +3,53 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 9 Entries
+
+### BE-PWA: PWA Setup
+**Date:** 2026-01-31
+**Status:** COMPLETE, MERGED (PR #93)
+
+**Done:**
+- Added `vite-plugin-pwa` with workbox service worker (autoUpdate strategy)
+- Manifest: standalone, portrait, dark fantasy theme (#0a0a0f)
+- Generated 192x192 and 512x512 PNG app icons with spire branding
+- Precaches 237 assets (~12MB) for full offline support
+- Apple touch icon added to index.html
+
+**Architecture:**
+- Uses workbox `generateSW` mode — no manual service worker needed
+- Cache-first for all static assets (JS, CSS, images, audio, fonts)
+- `maximumFileSizeToCacheInBytes` set to 10MB to handle sprite sheet files
+- `autoUpdate` register type — service worker updates silently on revisit
+
+**Blockers:** None
+**Next:** BE-20 (Performance audit) when ready
+
+---
+
+### BE-20: Performance Audit
+**Date:** 2026-01-31
+**Status:** COMPLETE, MERGED (PR #99)
+
+**Done:**
+- Bundle size analysis: 565KB JS (167KB gzipped), well under 2MB target
+- Added `useCallback` to `handleCardClick` and `handleEnemyClick` in CombatScreen
+- Added `useMemo` for `passiveEffects` computation in CombatScreen
+- Wrapped `PileButton` in `React.memo` (CombatScreen)
+- Wrapped `StatusBadge` in `React.memo` (Enemy.jsx)
+- Card and Enemy components already had React.memo from prior work
+- 6 screen-level components already lazy-loaded via React.lazy
+
+**Findings:**
+- JS bundle is 565KB — sprite sheet images (~5.3MB) are loaded on demand, not in bundle
+- Inline arrow closures in `.map()` iterations still create new refs per render; deeper refactoring out of scope
+- All 1736 tests pass, no regressions
+
+**Blockers:** None
+**Next:** All BE Sprint 9 tasks complete
+
+---
+
 ## Sprint 8 Entries
 
 ### BE-09: Starting Bonus / Neow

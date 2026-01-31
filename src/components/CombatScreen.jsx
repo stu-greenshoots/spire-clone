@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
 import { useGame, GAME_PHASE } from '../context/GameContext';
 import Card from './Card';
 import Enemy from './Enemy';
@@ -9,6 +9,7 @@ import { ANIMATION_TYPE } from '../constants/animationTypes';
 import CardSelectionModal from './CardSelectionModal';
 import { CARD_TYPES } from '../data/cards';
 import CardTooltip from './CardTooltip';
+import TutorialOverlay from './TutorialOverlay';
 import { getPassiveRelicEffects } from '../systems/combatSystem';
 import { loadSettings, getAnimationDuration } from '../systems/settingsSystem';
 
@@ -310,7 +311,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     }
   }, []);
 
-  const handleCardClick = (card) => {
+  const handleCardClick = useCallback((card) => {
     if (inspectCard) return;
     if (targetingMode) {
       cancelTarget();
@@ -343,9 +344,9 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
       }, 300);
     }
     selectCard(card);
-  };
+  }, [inspectCard, targetingMode, cancelTarget, isMobile, mobileSelectedCard, enemies.length, selectCard]);
 
-  const handleEnemyClick = (enemyInstanceId) => {
+  const handleEnemyClick = useCallback((enemyInstanceId) => {
     if (targetingMode && selectedCard) {
       // Trigger card play animation
       setCardPlaying(selectedCard.instanceId);
@@ -359,7 +360,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
       setShowEnemyInfo(enemy);
     }
     // Mobile: inline info is always visible, no panel needed
-  };
+  }, [targetingMode, selectedCard, playCard, isMobile, enemies]);
 
   const canPlayCard = useCallback((card) => {
     if (card.unplayable) return false;
@@ -539,7 +540,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
 
   const bgStyle = getBackgroundStyle();
 
-  const passiveEffects = getPassiveRelicEffects(state.relics, {});
+  const passiveEffects = useMemo(() => getPassiveRelicEffects(state.relics, {}), [state.relics]);
   const hideIntents = passiveEffects.hideIntents;
 
   return (
@@ -563,6 +564,9 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         animations={animations}
         onAnimationComplete={removeAnimation}
       />
+
+      {/* Tutorial hints for first-time players */}
+      <TutorialOverlay isMobile={isMobile} />
 
       {/* Background scenery elements */}
       <div style={{
@@ -785,6 +789,8 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         {/* Scrollable card container */}
         <div
           data-testid="hand-area"
+          role="group"
+          aria-label={`Hand: ${hand.length} cards`}
           className={isMobile ? 'mobile-card-fan' : ''}
           style={{
           padding: '12px 10px',
@@ -981,7 +987,10 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         </div>
 
         {/* Energy Orb */}
-        <div style={{
+        <div
+          role="status"
+          aria-label={`Energy: ${player.energy} of ${player.maxEnergy}`}
+          style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -1017,6 +1026,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         {/* End Turn Button */}
         <button
           data-testid="btn-end-turn"
+          aria-label="End Turn"
           onClick={endTurn}
           style={{
             padding: '12px 30px',
@@ -1045,7 +1055,10 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
       {inspectCard && (
         <div
           className="card-inspect-overlay"
+          role="dialog"
+          aria-label={`Inspecting card: ${inspectCard.name}`}
           onClick={() => setInspectCard(null)}
+          onKeyDown={(e) => { if (e.key === 'Escape') setInspectCard(null); }}
         >
           <div className="card-inspect-panel" onClick={(e) => e.stopPropagation()}>
             <div className="card-inspect-header">
@@ -1243,8 +1256,9 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
 };
 
 // Pile Button Component
-const PileButton = ({ label, count, onClick, color }) => (
+const PileButton = memo(function PileButton({ label, count, onClick, color }) { return (
   <button
+    aria-label={`${label} pile: ${count} cards`}
     onClick={onClick}
     style={{
       padding: '8px 12px',
@@ -1273,6 +1287,6 @@ const PileButton = ({ label, count, onClick, color }) => (
       {count}
     </span>
   </button>
-);
+); });
 
 export default CombatScreen;

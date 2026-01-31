@@ -440,7 +440,10 @@ const PersistentHeader = () => {
                 fontSize: '36px',
                 filter: 'drop-shadow(0 0 8px rgba(255, 215, 0, 0.5))'
               }}>
-                {selectedRelic.emoji}
+                {(() => {
+                  const img = getRelicImage(selectedRelic.id);
+                  return img ? <img src={img} alt={selectedRelic.name} style={{ width: '36px', height: '36px', borderRadius: '6px', objectFit: 'cover' }} /> : selectedRelic.emoji;
+                })()}
               </span>
               <div>
                 <h3 style={{

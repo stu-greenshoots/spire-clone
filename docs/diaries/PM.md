@@ -15,6 +15,21 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 9 - GD-13 Orchestration
+**Date:** 2026-01-31
+**Status:** GD-13 complete — verification-only task
+
+**Done today:**
+- Identified GD-13 as highest-priority unfinished task (last P1 remaining)
+- Verified all 49 relic + 15 potion images exist and are wired to UI
+- GD-13 was a documentation/verification task — no code changes needed
+- Updated sprint board: GD-13 → MERGED (PR #102)
+- Updated GD diary with verification results
+- All P0 and P1 tasks now complete for Sprint 9
+- Remaining: 3 P2 stretch tasks (UX-18, JR-07, AR-09)
+
+---
+
 ### Day 1
 **Date:** 2026-01-24
 **Status:** Phase A code complete, PRs being opened
@@ -367,5 +382,115 @@ Per ROADMAP.md, Sprint 8 is "Polish + Juice + Gameplay Quality Infrastructure":
 3. Rebuild sprite sheet with all 41 enemies
 4. BE-09 starting bonus (deferred twice — needs to ship)
 5. Remaining 10 events for Endless War voice treatment
+
+---
+
+### Sprint 8 Retrospective
+**Date:** 2026-01-31
+**Status:** Sprint 8 COMPLETE — all 13 tasks merged (6 P0 + 5 P1 + 2 P2)
+
+#### What Was Accomplished
+
+**Sprint 8 Goal:** Make every action feel impactful. Professional first impression. Fix deferred infrastructure debt.
+
+| Area | PRs | Highlights |
+|------|-----|------------|
+| Title Screen (GD-10) | #79 | Professional dark fantasy first impression |
+| Combat Juice (UX-16) | #80 | Screen shake, card play glow, status pop, energy pulse |
+| Narrative (VARROW-03) | #81 | Victory/defeat in Endless War voice — death as dissolution, victory as becoming real |
+| SFX (AR-07) | #82 | 10+ new CC0 sounds wired to game events |
+| Starting Bonus (BE-09) | #83 | Neow-style run-start options. Shipped after deferral since Sprint 6 |
+| Enemy Art (GD-09) | #84 | 7 missing sprites + full sprite sheet rebuild (41 enemies). Art gap closed |
+| Bronze Orbs (JR-06) | #85 | Automaton Stasis companion mechanic |
+| Mobile Map (UX-14) | #86 | Touch-friendly responsive map with viewport-aware scaling |
+| E2E Fix (QA-09) | #87 | Root-caused flakiness, stabilized suite |
+| Balance Pass (QA-10) | #88 | Act 1+2 combined simulator with card rewards |
+| Narrative UI (UX-15) | #89 | Subtle Endless War motifs (hash borders, scanline glitch, vignette) |
+| Sprite Automation (AR-08) | #90 | `npm run generate-sprites` with enemy art validation |
+| Card Sprite Sheets (GD-11) | #91 | Card art bundled — 96 HTTP requests down to ~10 |
+
+**All 13 tasks shipped. Zero deferred.** First sprint with 100% completion rate.
+
+#### Recurring Issues — Status Update
+
+1. **E2E flakiness: RESOLVED.** QA-09 root-caused and fixed. Deferred since Sprint 3 (QA-03 → QA-08b → QA-09). Dedicated investment worked.
+
+2. **Sprite sheet staleness: RESOLVED.** AR-08 added `npm run generate-sprites` with validation. GD-09/GD-11 rebuilt enemy and card sheets. Pipeline automated.
+
+3. **Diary freshness: STILL MIXED.** BE diary stops at Sprint 2-3. GD/JR at Sprint 6-7 detail. AR, UX, VARROW, QA current. Enforce in Sprint 9.
+
+4. **Long-deferred items: CLEARED.** BE-09 shipped after two sprints of deferral. No carry-forward debt.
+
+#### What Went Well
+- 100% task completion — first sprint to clear every item including stretch
+- Infrastructure debt cleared — E2E, sprite automation, BE-09 all shipped
+- Three-sprint narrative arc complete — VARROW-01/02/03 form coherent Endless War voice
+- Mobile experience complete — combat (S7) + map (S8) + touch targets = fully playable
+- Art pipeline closed — 96/96 cards, 41/41 enemies, 49/49 relics, 15/15 potions. Zero gaps
+
+#### What Could Improve
+- Diary enforcement still inconsistent — BE/GD/JR entries stale
+- Board header said "PLANNED" after all tasks done — update status promptly
+- No re-score against Game Zone criteria (58/100 at Sprint 2; should be well above 70 now)
+
+#### Sprint 9 Readiness
+Per ROADMAP.md, Sprint 9 is "Ship Prep + QA + 1.0":
+- All core systems working, all content complete (Act 1+2)
+- All art assets present, mobile and desktop playable
+- 1131+ tests, E2E stable, narrative voice consistent
+- Focus: final QA pass, PWA setup, performance audit, accessibility review, 1.0 release
+
+---
+
+### Sprint 9 — Day 1
+**Date:** 2026-01-31
+**Status:** Sprint 9 IN PROGRESS
+
+**Done:**
+- Merged Sprint 8 integration PR #78 to master (PM-09 complete)
+- All CI passing (build, test, e2e, coverage)
+- Merged master back into sprint-9 branch
+- Updated sprint board status to IN PROGRESS
+
+**Next:**
+- Begin Sprint 9 task execution (QA-11 regression is next P0)
+
+---
+
+### Sprint 9 — QA-11 Complete
+**Date:** 2026-01-31
+**Status:** QA-11 merged (PR #94)
+
+**Done:**
+- Spawned QA to implement QA-11 full regression test suite
+- 577 new tests added (1159 → 1736 total), well above 1200+ target
+- Covers all cards, enemies, relics, events, potions, ascension playthroughs, save/load
+- Both Copilot and Mentor reviews passed — no findings
+- All CI checks green (test, e2e, coverage, preview)
+- Merged PR #94 via squash, updated sprint board and QA diary
+
+**Sprint 9 Progress:** 3/14 tasks merged (PM-09, BE-PWA, QA-11)
+
+**Next P0 tasks remaining:**
+- AR-06 (Music integration)
+- AR-05b (Mobile final pass)
+- GD-12 (Relic/potion icons)
+
+---
+
+### Sprint 9 — UX-17 Complete
+**Date:** 2026-01-31
+**Status:** UX-17 merged (PR #98)
+
+**Done:**
+- Spawned UX to implement UX-17 (tutorial / first-run hints)
+- TutorialOverlay.jsx created — 4 sequential hints on first combat, localStorage persistence
+- Both Copilot and Mentor reviews passed — clean implementation, 254 lines
+- Merged PR #98 via squash, updated sprint board and UX diary
+
+**Sprint 9 Progress:** 7/14 tasks merged (PM-09, BE-PWA, QA-11, AR-06, AR-05b, GD-12, UX-17)
+
+**Remaining P1:** BE-20, QA-12, VARROW-04, GD-13
+**Remaining P2:** UX-18, JR-07, AR-09
 
 ---

@@ -1,3 +1,50 @@
+# QA Diary - Sprint 9
+
+## Sprint 9 Entries
+
+### QA-12: Accessibility Pass
+**Date:** 2026-01-31
+**Status:** Complete, PR #100 merged
+
+**Done:**
+1. Added `:focus-visible` CSS styles for all buttons and `[role="button"]` elements — gold outline with glow
+2. Card.jsx: Added `role="button"`, `tabIndex`, `aria-label` (name, type, cost, upgraded status), and Enter/Space keyboard handlers
+3. CombatScreen.jsx: Added ARIA labels to energy orb (`role="status"`), end turn button, pile buttons, card hand container (`role="group"`), and card inspect overlay (`role="dialog"` with Escape key dismiss)
+4. MapScreen.jsx: Added `role="button"`, `tabIndex`, `aria-label`, and keyboard handlers to accessible map nodes. Removed `outline: 'none'` from deck viewer button.
+5. Added `.skip-link` CSS class for future skip-to-content implementation
+
+**Scope kept intentionally small (S):** Focus indicators, ARIA labels, keyboard nav for core interactions. Full WCAG compliance is post-1.0.
+
+**Validation:** `npm run validate` passes — 1736 tests, lint clean, build succeeds
+
+**Blockers:** None
+**Next:** All QA sprint 9 tasks complete
+
+---
+
+### QA-11: Full Regression Test Suite
+**Date:** 2026-01-31
+**Status:** Complete, PR #94 merged
+
+**Done:**
+1. Created `src/test/regression.test.js` — comprehensive regression suite for 1.0 release
+2. **Card Effect Regression:** All 81+ playable cards validated for structure, damage/special mechanics, upgrade well-formedness, and known special mechanic references
+3. **Enemy AI Regression:** All non-Act-2 enemies (Act 1 + Act 3 + bosses) tested for valid AI moves on turns 0-10 and combat instance fields. Act 2 already covered by `act2Regression.test.js`
+4. **Relic Regression:** All 49 relics validated for required fields, valid effect types (36 known types), and counter/threshold consistency
+5. **Event Choice Regression:** All 20 events, every choice validated for valid effect keys and non-empty result text
+6. **Potion Regression:** All 15 potions tested with `applyPotionEffect` against combat state — no-throw and valid output checks
+7. **Ascension Playthroughs:** A0 and A5 multi-floor playthroughs through full reducer dispatch without crashes
+8. **Save/Load Phase Regression:** SAVE_GAME tested at MAP, REST_SITE, and EVENT phases
+
+**Test count:** 1159 → 1736 tests (+577 new regression tests). Well above 1200+ target.
+
+**Validation:** `npm run validate` passes — all tests green, lint clean, build succeeds, E2E passing
+
+**Blockers:** None
+**Next:** QA-12 (Accessibility pass) when UI stabilizes
+
+---
+
 # QA Diary - Sprint 8
 
 ## Sprint 8 Entries

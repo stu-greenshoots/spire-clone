@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-01-31
-**Current Sprint:** 8 (Polish + Juice + Title Screen) - PLANNED
-**Integration Branch:** `sprint-8`
-**Sprint Plan:** See `SPRINT_8_PLAN.md`
+**Current Sprint:** 9 (Ship Prep + QA + 1.0) - PLANNED
+**Integration Branch:** `sprint-9`
+**Sprint Plan:** See `SPRINT_9_PLAN.md`
 **Roadmap:** See `ROADMAP.md` (4-sprint plan to 1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 7 COMPLETE (15 PRs merged, 1131 tests, mobile combat + Act 2 content + narrative voice)
+**Previous:** Sprint 8 COMPLETE (13 PRs merged, 1159 tests, polish + juice + title screen + 100% completion rate)
 
 ---
 
@@ -311,12 +311,12 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 8: Polish + Juice + Title Screen - PLANNED
+## Sprint 8: Polish + Juice + Title Screen - COMPLETE
 
 **Goal:** Make every action feel impactful. Professional first impression. Fix deferred infrastructure debt.
 **Plan:** See `SPRINT_8_PLAN.md`
-**Branch:** `sprint-8`
-**Status:** COMPLETE — 6 P0 + 5 P1 + 2 P2 merged, all tasks done
+**Branch:** `sprint-8` (PR #78 open → master)
+**Status:** COMPLETE — 13 PRs merged (6 P0 + 5 P1 + 2 P2), 100% completion rate
 
 ### P0 — Must Ship
 
@@ -348,6 +348,54 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 9: See `ROADMAP.md`
+## Sprint 9: Ship Prep + QA + 1.0 - PLANNED
 
-**Sprint 9:** Ship Prep + QA + 1.0 (Web + PWA)
+**Goal:** Production-ready 1.0 on web + PWA. Zero P0 bugs. Full regression. Professional polish.
+**Plan:** See `SPRINT_9_PLAN.md`
+**Branch:** `sprint-9`
+**Status:** IN PROGRESS — PM-09, BE-PWA, QA-11, AR-06, AR-05b, GD-12, UX-17, BE-20, QA-12, VARROW-04, GD-13, UX-18, JR-07 merged
+
+### P0 — Must Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| PM-09 | PM | S | Merge Sprint 8 PR #78 to master | MERGED (PR #78) |
+| QA-11 | QA | L | Full regression — all cards, enemies, relics, events, potions, ascension | MERGED (PR #94) |
+| AR-06 | AR | M | Music integration — 6 tracks (menu, map, combat, boss, victory, defeat) | MERGED (PR #95) |
+| BE-PWA | BE | S | PWA setup — service worker, manifest, offline, installable | MERGED (PR #93) |
+| AR-05b | AR | S | Mobile final pass — portrait responsiveness on real device sizes | MERGED (PR #96) |
+| GD-12 | GD | M | Relic/potion icon batch — 20 most visible icons replace emoji | MERGED (PR #97) |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| UX-17 | UX | M | Tutorial / first-run hints — contextual, non-intrusive | MERGED (PR #98) |
+| BE-20 | BE | S | Performance audit — React.memo, bundle < 2MB, Lighthouse 90+ | MERGED (PR #99) |
+| QA-12 | QA | S | Accessibility pass — keyboard nav, ARIA labels, contrast | MERGED (PR #100) |
+| VARROW-04 | Varrow | S | Narrative polish — final copy pass on all player-facing text | MERGED (PR #101) |
+| GD-13 | GD | S | Placeholder icons — verified all 49 relics + 15 potions have WebP art, no emoji in UI | MERGED (PR #102) |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| UX-18 | UX | S | Loading state — branded splash during initial load | MERGED (PR #103) |
+| JR-07 | JR | S | Card balance fine-tuning — address outliers from regression | MERGED (PR #104) |
+| AR-09 | AR | S | Audio polish — crossfade between music tracks on transitions | MERGED (PR #105) |
+
+### Sprint 9 Validation Gate (1.0 RELEASE GATE)
+
+- [ ] Zero P0 bugs
+- [ ] Full playthrough A0 + A5 without crashes
+- [ ] All 81 cards tested in regression
+- [ ] All 41 enemies tested in regression
+- [ ] All relics/potions have icon art (no emoji)
+- [ ] Music plays on all game phases
+- [ ] PWA installable and works offline
+- [ ] Mobile playable on 390x844 portrait
+- [ ] Bundle size < 2MB
+- [ ] 1200+ tests passing
+- [ ] `npm run validate` passes
+- [ ] Lighthouse performance 90+
+- [ ] Magazine score self-assessment: targeting 75+

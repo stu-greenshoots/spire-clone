@@ -308,7 +308,12 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
   return (
     <div
       className={frameClass}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-label={`${card.name}, ${card.type}, cost ${card.cost === -1 ? 'X' : card.cost}${card.upgraded ? ', upgraded' : ''}${disabled ? ', unavailable' : ''}`}
+      aria-disabled={disabled || undefined}
       onClick={!disabled ? onClick : undefined}
+      onKeyDown={!disabled ? (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick?.(); } } : undefined}
       style={{
         width: `${cardWidth}px`,
         height: `${cardHeight}px`,

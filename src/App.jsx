@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { GameProvider, useGame, GAME_PHASE } from './context/GameContext';
 import MainMenu from './components/MainMenu';
 import CombatScreen from './components/CombatScreen';
@@ -8,6 +8,7 @@ import VictoryScreen from './components/VictoryScreen';
 import PersistentHeader from './components/PersistentHeader';
 import PlayerStatusBar from './components/PlayerStatusBar';
 import DevTools from './components/DevTools';
+import { audioManager, SOUNDS } from './systems/audioSystem';
 import './App.css';
 
 // Lazy load heavy screens for better initial load performance
@@ -18,8 +19,53 @@ const RestSite = lazy(() => import('./components/RestSite'));
 const DataEditor = lazy(() => import('./components/DataEditor'));
 const StartingBonus = lazy(() => import('./components/StartingBonus'));
 
+// Map game phases to music track IDs
+const PHASE_MUSIC_MAP = {
+  menu: SOUNDS.music.menu,
+  map: SOUNDS.music.map,
+  combat: SOUNDS.music.combat,
+  boss: SOUNDS.music.boss,
+  victory: SOUNDS.music.victory,
+  defeat: SOUNDS.music.defeat
+};
+
+function getMusicPhase(gamePhase, currentNode) {
+  switch (gamePhase) {
+    case GAME_PHASE.MAIN_MENU:
+    case GAME_PHASE.STARTING_BONUS:
+      return 'menu';
+    case GAME_PHASE.MAP:
+    case GAME_PHASE.REST_SITE:
+    case GAME_PHASE.SHOP:
+    case GAME_PHASE.EVENT:
+      return 'map';
+    case GAME_PHASE.COMBAT:
+    case GAME_PHASE.COMBAT_REWARD:
+    case GAME_PHASE.CARD_REWARD:
+      return currentNode?.type === 'boss' ? 'boss' : 'combat';
+    case GAME_PHASE.VICTORY:
+      return 'victory';
+    case GAME_PHASE.GAME_OVER:
+      return 'defeat';
+    default:
+      return null;
+  }
+}
+
 const GameContent = () => {
   const { state } = useGame();
+
+  // AR-06: Wire music to game phase transitions
+  useEffect(() => {
+    audioManager.setPhases(PHASE_MUSIC_MAP);
+  }, []);
+
+  useEffect(() => {
+    const musicPhase = getMusicPhase(state.phase, state.currentNode);
+    if (musicPhase) {
+      audioManager.setPhase(musicPhase);
+    }
+  }, [state.phase, state.currentNode]);
 
   // Check if we're in victory/reward phase (show overlay on combat screen)
   const isVictoryPhase = state.phase === GAME_PHASE.COMBAT_REWARD || state.phase === GAME_PHASE.CARD_REWARD;

@@ -104,9 +104,9 @@ describe('Flavor Text Data', () => {
     });
 
     it('should have correct act names', () => {
-      expect(ACT_DESCRIPTIONS[1].name).toBe('The Bottom');
-      expect(ACT_DESCRIPTIONS[2].name).toBe('The City');
-      expect(ACT_DESCRIPTIONS[3].name).toBe('The Summit');
+      expect(ACT_DESCRIPTIONS[1].name).toBe('The Periphery');
+      expect(ACT_DESCRIPTIONS[2].name).toBe('The Infrastructure');
+      expect(ACT_DESCRIPTIONS[3].name).toBe('The Core');
     });
   });
 

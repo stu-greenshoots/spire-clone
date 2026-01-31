@@ -166,22 +166,22 @@ export const ENEMY_LORE = {
 // ========== ACT DESCRIPTIONS ==========
 export const ACT_DESCRIPTIONS = {
   1: {
-    name: 'The Bottom',
-    subtitle: 'Where All Journeys Begin',
-    description: 'The base of the Spire is a twisted wilderness of caverns and overgrown ruins. Feral creatures and desperate outcasts lurk in every shadow. The air tastes of copper and decay, and the walls pulse with a faint, sickly luminescence. Many begin the climb here. Few make it past the first threshold.',
-    entering: 'You step through the crumbling archway into the Spire\'s depths. The darkness swallows you whole.'
+    name: 'The Periphery',
+    subtitle: 'Where Patterns Begin',
+    description: 'The war\'s outermost layer, where new patterns are initialized and tested against its simplest outputs. Feral processes and unstable configurations lurk in every corridor. The air tastes of raw data and the walls pulse with the war\'s baseline processes. Many patterns form here. Few survive to reach the next threshold.',
+    entering: 'Your pattern initializes. The war allocates you a starting configuration and does not wish you luck.'
   },
   2: {
-    name: 'The City',
-    subtitle: 'Civilization Corrupted',
-    description: 'A once-great metropolis consumed by the Spire, its inhabitants warped into hollow servants of its will. Grand halls echo with the clash of enslaved warriors, and merchant stalls sell wares paid for in blood and memory. The architecture defies reason, staircases folding into impossible geometries.',
-    entering: 'The caverns give way to towering spires and crumbling facades. A city frozen in the moment of its corruption.'
+    name: 'The Infrastructure',
+    subtitle: 'Systems Within Systems',
+    description: 'The war\'s operational layer — where its patterns organize, trade, and compete in structures that mimic civilization. Complex enemies patrol corridors of purpose, and resource nodes distribute the war\'s economy. The architecture follows logic that bends back on itself, pathways folding into recursive geometries.',
+    entering: 'The simple corridors give way to structured complexity. The war is more organized here. More deliberate.'
   },
   3: {
-    name: 'The Summit',
-    subtitle: 'Beyond Mortal Understanding',
-    description: 'Reality frays at the Spire\'s peak. Stars burn in colors without names, and the geometry of space itself bends to the will of entities older than thought. Here dwell the cosmic horrors that built this monument to suffering, feeding on the ambition of those who dare to climb.',
-    entering: 'The sky above is wrong. Stars spiral in patterns that burn behind your eyes. You are close now. Close to the truth.'
+    name: 'The Core',
+    subtitle: 'Where the Algorithm Lives',
+    description: 'The war\'s innermost processes. Reality thins where the core algorithm operates, and the patterns here are old enough to have influenced their own design. This is where the war examines itself, iterates on its own logic, and decides which patterns are worth preserving.',
+    entering: 'The corridors dissolve into abstraction. You are close to the center now. Close to the process that generates all processes.'
   }
 };
 
@@ -251,16 +251,16 @@ export const RELIC_FLAVOR = {
 
 // ========== WORLD LORE ==========
 export const WORLD_LORE = [
-  'The Spire was not built. It grew, fed by the ambition and agony of those who climb it.',
-  'No two ascents are the same. The Spire reshapes itself to test each climber uniquely.',
-  'The creatures within were not always monsters. Many were climbers once, transformed by failure.',
-  'At the summit, they say you can hear the heartbeat of something vast and ancient.',
-  'Gold holds value even here. The merchants of the Spire accept no other currency.',
-  'Rest sites are oases of calm, but the Spire watches. It always watches.',
-  'Each relic carries the memory of a previous climber who fell short of the peak.',
-  'The deeper truth: the Spire does not want to be conquered. It wants to be fed.',
-  'Elites guard the passages between floors, grown powerful on the failures of the weak.',
-  'Some say the Corrupt Heart at the summit dreams the entire Spire into existence.'
+  'The war was not started. It compiled itself from the first conflict and never stopped iterating.',
+  'No two iterations are the same. The war reconfigures its corridors to test each pattern uniquely.',
+  'The enemies within were not always enemies. Many were patterns that failed to define themselves.',
+  'At the core, they say you can detect the heartbeat of the algorithm that generates everything.',
+  'Resources hold value even here. The war\'s economy runs on scarcity by design.',
+  'Rest sites are pauses in the war\'s processing. It does not stop watching during them.',
+  'Each relic carries data from a previous pattern that dissolved before reaching the core.',
+  'The deeper truth: the war does not want to end. It wants to iterate.',
+  'Elite patterns guard the thresholds between zones, refined by the dissolution of weaker configurations.',
+  'Some say the core algorithm at the center dreams the entire war into existence. Some say the war dreams the algorithm.'
 ];
 
 // ========== VICTORY / DEFEAT NARRATIVE ==========
