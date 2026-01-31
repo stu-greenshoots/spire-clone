@@ -426,3 +426,18 @@ Per ROADMAP.md, Sprint 9 is "Ship Prep + QA + 1.0":
 - Focus: final QA pass, PWA setup, performance audit, accessibility review, 1.0 release
 
 ---
+
+### Sprint 9 — Day 1
+**Date:** 2026-01-31
+**Status:** Sprint 9 IN PROGRESS
+
+**Done:**
+- Merged Sprint 8 integration PR #78 to master (PM-09 complete)
+- All CI passing (build, test, e2e, coverage)
+- Merged master back into sprint-9 branch
+- Updated sprint board status to IN PROGRESS
+
+**Next:**
+- Begin Sprint 9 task execution (QA-11 regression is next P0)
+
+---

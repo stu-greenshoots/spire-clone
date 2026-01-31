@@ -353,13 +353,13 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Production-ready 1.0 on web + PWA. Zero P0 bugs. Full regression. Professional polish.
 **Plan:** See `SPRINT_9_PLAN.md`
 **Branch:** `sprint-9`
-**Status:** PLANNED — Pending team alignment
+**Status:** IN PROGRESS — PM-09 merged, starting task execution
 
 ### P0 — Must Ship
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| PM-09 | PM | S | Merge Sprint 8 PR #78 to master | PENDING |
+| PM-09 | PM | S | Merge Sprint 8 PR #78 to master | MERGED (PR #78) |
 | QA-11 | QA | L | Full regression — all cards, enemies, relics, events, potions, ascension | PENDING |
 | AR-06 | AR | M | Music integration — 6 tracks (menu, map, combat, boss, victory, defeat) | PENDING |
 | BE-PWA | BE | S | PWA setup — service worker, manifest, offline, installable | PENDING |
