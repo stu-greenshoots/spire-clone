@@ -195,3 +195,22 @@ UX Guy - Combat feedback, tooltips, visual polish
 **Next:** UX-15 (narrative UI theming) remaining for Sprint 8.
 
 ---
+
+### Sprint 8 - UX-15 Complete
+**Date:** 2026-01-31
+**Status:** UX-15 DONE (PR #89)
+
+**What I did:**
+- Added subtle Endless War narrative motifs to UI chrome (CSS-only, ~90 lines)
+- War-pattern diagonal hash borders on panels (deck viewer, tooltips, settings, tutorial)
+- Faint red radial vignette overlay on combat screen via ::before pseudo-element
+- Scanline glitch effect on game-container::after (3% opacity, slow 4s pulse)
+- Vertical hash borders on victory/defeat content panels
+- CSS custom properties for war theme: --war-border-color, --war-glow, --war-accent
+- All effects use pointer-events: none, purely atmospheric
+
+**Validation:** `npm run validate` passes — 1147 tests, lint clean, build clean
+
+**Sprint 8 UX status:** All 3 UX tasks complete (UX-16, UX-14, UX-15). Done for the sprint.
+
+---
