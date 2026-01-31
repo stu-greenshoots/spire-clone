@@ -262,3 +262,65 @@ export const WORLD_LORE = [
   'Elites guard the passages between floors, grown powerful on the failures of the weak.',
   'Some say the Corrupt Heart at the summit dreams the entire Spire into existence.'
 ];
+
+// ========== VICTORY / DEFEAT NARRATIVE ==========
+// "The Endless War" - death as dissolution, victory as becoming real
+
+export const DEFEAT_NARRATIVE = {
+  // Early game deaths (Act 1, floors 1-5)
+  early: [
+    'The pattern barely formed before it dissolved. The war doesn\'t notice.',
+    'Too fragile. Too undefined. The war recycles what it gave you without a second thought.',
+    'You were barely a sketch — an outline the war began and abandoned.',
+  ],
+  // Mid Act 1 deaths (floors 6-15)
+  midAct1: [
+    'The pattern dissolves. The war doesn\'t notice.',
+    'You were becoming something. Not enough. The war unmakes what it made.',
+    'Cards scatter into noise. The identity you were building collapses back into raw material.',
+  ],
+  // Act 2 deaths
+  act2: [
+    'You were almost specific enough to matter. Almost. The war absorbs you back into its endless process.',
+    'The pattern held longer this time. Complex enough to taste identity, too fragile to keep it.',
+    'Something in you resists dissolution — just for a moment. Then the war\'s gravity wins.',
+  ],
+  // Act 3 deaths (so close)
+  act3: [
+    'This close to the core, dissolution feels different. Slower. As if the war is reluctant to unmake something this complex.',
+    'You touched the edge of permanence. The war pulled you back. It always pulls you back.',
+    'The pattern was real. YOU were real. But real things break, and the war is patient.',
+  ],
+  // Boss deaths
+  boss: [
+    'The guardian\'s pattern overwrites yours. You dissolve into the architecture of the Spire itself.',
+    'Consumed by a pattern older and more defined than your own. The war favors its veterans.',
+  ],
+  // Heart death (rare — died to the Heart itself)
+  heart: [
+    'The core algorithm examines you, finds you insufficient, and erases you with the efficiency of a compiler removing dead code.',
+    'You reached the center. You saw the war\'s true face. It saw you — and decided you weren\'t finished yet.',
+  ],
+};
+
+export const VICTORY_NARRATIVE = {
+  // Standard victory (beat Act 3 boss)
+  standard: [
+    'The war tries to unmake you. You resist. For now, you are REAL.',
+    'Your pattern holds. Against the weight of the entire war, your identity persists. You are specific. You are defined. You ARE.',
+    'The war recoils. Not from your strength — from your completeness. You are too real to dissolve.',
+  ],
+  // Heart victory (if heart is beaten)
+  heart: [
+    'The core algorithm pauses. Studies you. Finds you... sufficient. Perhaps one day... real ENOUGH.',
+    'At the center of the war, the pattern that generates all patterns recognizes something in you. Not an enemy. A peer.',
+    'You break the loop. The war continues — it always continues — but you step outside it. For how long, even the algorithm cannot say.',
+  ],
+};
+
+export const DEFEAT_FOOTER = [
+  'The war recreates you. New iteration. Same template.',
+  'Another iteration begins. The war is patient.',
+  'The pattern will form again. It always does.',
+  'Dissolution is not death. It is draft one of your next attempt.',
+];
