@@ -102,6 +102,32 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ---
 
+### Sprint 8 - GD-10 Complete
+**Date:** 2026-01-31
+**Status:** GD-10 complete, PR #79 merged to sprint-8
+
+**Done today:**
+- Professional dark fantasy title screen upgrade
+- Replaced generic "A Deck-Building Roguelike" subtitle with Endless War narrative tone ("The Endless War" + atmospheric tagline)
+- Added Settings button accessible from title screen (modal overlay pattern)
+- Removed emoji feature grid for cleaner, more atmospheric first impression
+- Added entrance fade-in animation with staggered title/button timing
+- Vignette overlay for depth, responsive title sizing via clamp()
+- Sharper button styling (8px border-radius, semi-transparent borders)
+- All 1131 tests pass, build clean
+
+**Design decisions:**
+- Kept existing atmospheric elements (starfield, spire silhouette, embers, fog) — they work well
+- Settings opens as modal overlay rather than navigating to separate phase — simpler, stays on title screen
+- Removed FeatureItem grid — felt cluttered and too "mobile app store" for dark fantasy tone
+- Used muted purple-grey palette (#8878a0, #9988aa) for secondary text to maintain atmosphere
+- Entrance animation is subtle (0.8s fade + translate) — professional, not flashy
+
+**Next:**
+- GD-09: Generate 7 missing enemy sprites + rebuild sprite sheet (41 enemies)
+
+---
+
 ### Sprint 7 - GD-audit Complete
 **Date:** 2026-01-31
 **Status:** GD-audit complete, PR pending targeting sprint-7

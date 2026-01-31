@@ -316,13 +316,13 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make every action feel impactful. Professional first impression. Fix deferred infrastructure debt.
 **Plan:** See `SPRINT_8_PLAN.md`
 **Branch:** `sprint-8`
-**Status:** PLANNED — 14 tasks (6 P0 + 5 P1 + 2 P2 stretch + 1 deferred carry)
+**Status:** IN PROGRESS — 1 P0 merged, 13 remaining
 
 ### P0 — Must Ship
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| GD-10 | GD | M | Title screen — professional dark fantasy first impression | PENDING |
+| GD-10 | GD | M | Title screen — professional dark fantasy first impression | MERGED (PR #79) |
 | UX-16 | UX | M | Combat juice — screen shake, card play feedback, status pop | PENDING |
 | VARROW-03 | Varrow | M | Victory/defeat narrative — death as dissolution, victory as becoming real | PENDING |
 | AR-07 | AR | M | SFX expansion — 10+ new CC0 sounds for game events | PENDING |
