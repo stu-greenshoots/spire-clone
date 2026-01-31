@@ -1199,33 +1199,47 @@ export const ALL_CARDS = [
   }
 ];
 
-export const getStarterDeck = () => {
-  const deck = [];
-  for (let i = 0; i < 5; i++) {
-    deck.push({ ...ALL_CARDS.find(c => c.id === 'strike'), instanceId: `strike_${i}` });
+export const getStarterDeck = (characterId = 'ironclad') => {
+  // Import character data dynamically to avoid circular dependencies
+  // For now, support ironclad (default) — future characters define their own starters
+  if (characterId === 'ironclad') {
+    const deck = [];
+    for (let i = 0; i < 5; i++) {
+      deck.push({ ...ALL_CARDS.find(c => c.id === 'strike'), instanceId: `strike_${i}` });
+    }
+    for (let i = 0; i < 4; i++) {
+      deck.push({ ...ALL_CARDS.find(c => c.id === 'defend'), instanceId: `defend_${i}` });
+    }
+    deck.push({ ...ALL_CARDS.find(c => c.id === 'bash'), instanceId: 'bash_0' });
+    return deck;
   }
-  for (let i = 0; i < 4; i++) {
-    deck.push({ ...ALL_CARDS.find(c => c.id === 'defend'), instanceId: `defend_${i}` });
-  }
-  deck.push({ ...ALL_CARDS.find(c => c.id === 'bash'), instanceId: 'bash_0' });
-  return deck;
+  // Fallback: return ironclad starter
+  return getStarterDeck('ironclad');
 };
 
 export const getCardById = (id) => ALL_CARDS.find(c => c.id === id);
 
-export const getRandomCard = (rarity = null, type = null) => {
+export const getRandomCard = (rarity = null, type = null, characterId = null) => {
   let cards = ALL_CARDS.filter(c =>
     c.rarity !== RARITY.BASIC &&
     c.rarity !== RARITY.CURSE &&
     c.type !== CARD_TYPES.STATUS &&
     c.type !== CARD_TYPES.CURSE
   );
+  // Filter by character: cards without a character field belong to ironclad
+  // Colorless cards (character: 'neutral') are available to all characters
+  if (characterId) {
+    cards = cards.filter(c => {
+      const cardChar = c.character || 'ironclad';
+      return cardChar === characterId || cardChar === 'neutral';
+    });
+  }
   if (rarity) cards = cards.filter(c => c.rarity === rarity);
   if (type) cards = cards.filter(c => c.type === type);
   return cards[Math.floor(Math.random() * cards.length)];
 };
 
-export const getCardRewards = (count = 3) => {
+export const getCardRewards = (count = 3, characterId = null) => {
   const rewards = [];
   for (let i = 0; i < count; i++) {
     const roll = Math.random();
@@ -1234,7 +1248,7 @@ export const getCardRewards = (count = 3) => {
     else if (roll < 0.9) rarity = RARITY.UNCOMMON;
     else rarity = RARITY.RARE;
 
-    const card = getRandomCard(rarity);
+    const card = getRandomCard(rarity, null, characterId);
     if (card && !rewards.find(r => r.id === card.id)) {
       rewards.push({ ...card, instanceId: `${card.id}_${Date.now()}_${i}` });
     } else {

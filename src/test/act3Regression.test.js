@@ -52,6 +52,7 @@ const runAI = (enemy, instance, turns, allies = []) => {
 function dispatch(state, action) {
   switch (action.type) {
     case 'START_GAME':
+    case 'SELECT_CHARACTER':
     case 'SELECT_STARTING_BONUS':
     case 'REST':
     case 'UPGRADE_CARD':
@@ -649,6 +650,7 @@ describe('3-Act Playthrough Regression', () => {
   const runPlaythrough = (ascensionLevel, maxFloors = 3) => {
     let state = createInitialState();
     state = dispatch(state, { type: 'START_GAME', payload: { ascensionLevel } });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
     expect(state.phase).toBe(GAME_PHASE.MAP);
 
@@ -690,6 +692,7 @@ describe('3-Act Playthrough Regression', () => {
   it('game state tracks act number', () => {
     let state = createInitialState();
     state = dispatch(state, { type: 'START_GAME', payload: { ascensionLevel: 0 } });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
     expect(state.act).toBeDefined();
     expect(state.act).toBeGreaterThanOrEqual(1);

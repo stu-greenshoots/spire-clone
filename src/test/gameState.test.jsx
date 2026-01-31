@@ -55,7 +55,7 @@ describe('Game State', () => {
         capturedContext.startGame();
       });
 
-      expect(capturedContext.state.phase).toBe(GAME_PHASE.STARTING_BONUS);
+      expect(capturedContext.state.phase).toBe(GAME_PHASE.CHARACTER_SELECT);
     });
 
     it('should provide necessary game functions', () => {

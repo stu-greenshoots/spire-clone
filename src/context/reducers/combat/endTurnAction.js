@@ -283,7 +283,7 @@ export const handleEndTurn = (state) => {
   // Check victory
   if (newEnemies.length === 0) {
     const goldReward = 10 + Math.floor(Math.random() * 15);
-    const cardRewards = getCardRewards(3);
+    const cardRewards = getCardRewards(3, state.character);
 
     const { effects: endEffects } = triggerRelics(newRelics, 'onCombatEnd', {
       playerHpPercent: newPlayer.currentHp / newPlayer.maxHp
