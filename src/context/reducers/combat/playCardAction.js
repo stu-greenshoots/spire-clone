@@ -3,7 +3,7 @@ import { ALL_CARDS, CARD_TYPES, getCardRewards, getRandomCard } from '../../../d
 import { getRandomRelic, getBossRelic } from '../../../data/relics';
 import { shuffleArray } from '../../../utils/mapGenerator';
 import { calculateDamage, calculateBlock, applyDamageToTarget } from '../../../systems/combatSystem';
-import { createSplitSlimes } from '../../../systems/enemySystem';
+import { createSplitSlimes, createSummonedEnemy, getEnemyIntent } from '../../../systems/enemySystem';
 import { handleSpecialEffect, SUPPORTED_EFFECTS } from '../../../systems/cardEffects';
 import { triggerRelics } from '../../../systems/relicSystem';
 import { autoSave } from '../../../systems/saveSystem';
@@ -486,6 +486,32 @@ export const handlePlayCard = (state, action) => {
     if (enemy.sporeCloud) {
       newPlayer.weak = (newPlayer.weak || 0) + 2;
       combatLog.push(`${enemy.name}'s Spore Cloud applied 2 Weak`);
+    }
+
+    // Bronze Automaton phase 2: spawn 2 Bronze Orbs
+    if (enemy.onDeath === 'phase2Automaton') {
+      const timestamp = Date.now();
+      for (let i = 0; i < 2; i++) {
+        const orb = createSummonedEnemy('bronzeOrb', timestamp, i);
+        if (orb) {
+          // Stasis: each orb captures a random card from hand
+          if (newHand.length > 0) {
+            const captureIdx = Math.floor(Math.random() * newHand.length);
+            orb.stasis = newHand[captureIdx];
+            newHand = [...newHand.slice(0, captureIdx), ...newHand.slice(captureIdx + 1)];
+            combatLog.push(`${orb.name} captured ${orb.stasis.name} with Stasis!`);
+          }
+          orb.intentData = getEnemyIntent(orb, 0);
+          spawnedEnemies.push(orb);
+        }
+      }
+      combatLog.push('Bronze Automaton spawns Bronze Orbs!');
+    }
+
+    // Bronze Orb death: return stasis card to discard pile
+    if (enemy.id === 'bronzeOrb' && enemy.stasis) {
+      newDiscardPile = [...newDiscardPile, enemy.stasis];
+      combatLog.push(`${enemy.stasis.name} released from Stasis!`);
     }
   });
 

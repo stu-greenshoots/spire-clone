@@ -216,6 +216,31 @@ export const handleEndTurn = (state) => {
       newPlayer.weak = (newPlayer.weak || 0) + 2;
       combatLog.push(`${enemy.name}'s Spore Cloud applied 2 Weak`);
     }
+
+    // Bronze Automaton phase 2: spawn 2 Bronze Orbs on death
+    if (enemy.currentHp <= 0 && enemy.onDeath === 'phase2Automaton') {
+      const timestamp = Date.now();
+      for (let i = 0; i < 2; i++) {
+        const orb = createSummonedEnemy('bronzeOrb', timestamp, i);
+        if (orb) {
+          if (newHand.length > 0) {
+            const captureIdx = Math.floor(Math.random() * newHand.length);
+            orb.stasis = newHand[captureIdx];
+            newHand = [...newHand.slice(0, captureIdx), ...newHand.slice(captureIdx + 1)];
+            combatLog.push(`${orb.name} captured ${orb.stasis.name} with Stasis!`);
+          }
+          orb.intentData = getEnemyIntent(orb, 0);
+          spawnedEnemies.push(orb);
+        }
+      }
+      combatLog.push('Bronze Automaton spawns Bronze Orbs!');
+    }
+
+    // Bronze Orb death: return stasis card to discard pile
+    if (enemy.currentHp <= 0 && enemy.id === 'bronzeOrb' && enemy.stasis) {
+      newDiscardPile = [...newDiscardPile, enemy.stasis];
+      combatLog.push(`${enemy.stasis.name} released from Stasis!`);
+    }
   });
 
   // Filter dead enemies and add spawns
