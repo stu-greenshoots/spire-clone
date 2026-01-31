@@ -2,6 +2,28 @@
 
 ## Sprint 11 Entries
 
+### JR-09b: The Silent — Starter Deck & Character Integration
+**Date:** 2026-01-31
+**Status:** MERGED (PR #123)
+
+**Done:**
+- Fixed character-specific maxHp not being applied in SELECT_CHARACTER reducer (Silent was getting 80 HP instead of 70)
+- Same fix applied to START_DAILY_CHALLENGE path
+- Added 10 integration tests in silentIntegration.test.js covering:
+  - Silent character selection (70 HP, 12-card deck, Ring of the Snake relic, character state)
+  - Ironclad regression (80 HP, 10 cards, Burning Blood — unchanged)
+  - Ring of the Snake combat draw bonus (7 cards at combat start vs 5 for Ironclad)
+- 2105 tests passing, lint clean, build clean
+
+**Files changed:** metaReducer.js (+11 lines), silentIntegration.test.js (new, 132 lines)
+
+**Key finding:** Most JR-09b acceptance criteria were already met by BE-23 (character system) and JR-09a (card pool). The real gap was: (1) character HP bug, and (2) no integration tests proving the full Silent flow works end-to-end.
+
+**Blockers:** None
+**Next:** All JR Sprint 11 P0 tasks complete. Available for QA-15 support or reviews.
+
+---
+
 ### JR-09a: The Silent — 30 card pool
 **Date:** 2026-01-31
 **Status:** MERGED (PR #122)
