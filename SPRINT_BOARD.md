@@ -362,7 +362,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | PM-09 | PM | S | Merge Sprint 8 PR #78 to master | MERGED (PR #78) |
 | QA-11 | QA | L | Full regression — all cards, enemies, relics, events, potions, ascension | PENDING |
 | AR-06 | AR | M | Music integration — 6 tracks (menu, map, combat, boss, victory, defeat) | PENDING |
-| BE-PWA | BE | S | PWA setup — service worker, manifest, offline, installable | PENDING |
+| BE-PWA | BE | S | PWA setup — service worker, manifest, offline, installable | MERGED (PR #93) |
 | AR-05b | AR | S | Mobile final pass — portrait responsiveness on real device sizes | PENDING |
 | GD-12 | GD | M | Relic/potion icon batch — 20 most visible icons replace emoji | PENDING |
 
