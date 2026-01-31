@@ -144,6 +144,7 @@ export const ENEMY_LORE = {
   slaverBlue: 'Binds victims with enchanted chains that drain the will to resist.',
   writhing_mass: 'A shapeless horror of fused flesh and screaming faces.',
   giant_head: 'A colossal stone sentinel that counts down to annihilation.',
+  nemesis: 'A phantom executioner that phases between dimensions, striking from beyond the veil.',
   reptomancer: 'A serpent-witch who conjures living blades from venom and spite.',
   dagger: 'Conjured weapons given fleeting life, eager to fulfill their purpose.',
   orbWalker: 'Crystalline constructs that patrol the upper reaches with burning light.',

@@ -432,6 +432,7 @@ export const handleEndTurn = (state) => {
     }
     if (e.vulnerable > 0) e.vulnerable--;
     if (e.weak > 0) e.weak--;
+    if (e.intangible > 0) e.intangible--;
     if (e.ritual > 0) {
       e.strength = (e.strength || 0) + e.ritual;
       combatLog.push(`${e.name} gains ${e.ritual} Strength from Ritual`);
