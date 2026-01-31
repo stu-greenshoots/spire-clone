@@ -407,7 +407,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Ship Act 3 content (8 enemies + Awakened One boss), daily challenge mode, and post-launch polish. First post-1.0 content update.
 **Plan:** See `SPRINT_10_PLAN.md`
 **Branch:** `sprint-10`
-**Status:** IN PROGRESS — 8/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21, VARROW-05, BE-22)
+**Status:** IN PROGRESS — 9/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21, VARROW-05, BE-22, UX-19)
 
 ### P0 — Must Ship
 
@@ -425,7 +425,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| UX-19 | UX | M | Daily challenge mode — seeded runs, modifiers, scoring | PENDING |
+| UX-19 | UX | M | Daily challenge mode — seeded runs, modifiers, scoring | MERGED (PR #113) |
 | BE-22 | BE | S | Daily challenge infrastructure — seeded RNG, modifier system | MERGED (PR #112) |
 | QA-13 | QA | M | Act 3 regression + balance — all new enemies, 3-act playthrough | PENDING |
 | GD-14 | GD | M | Act 3 enemy art — 8 sprites, sprite sheet rebuild | PENDING |

@@ -252,3 +252,18 @@ UX Guy - Combat feedback, tooltips, visual polish
 **Sprint 9 UX status:** All UX tasks complete (UX-17 + UX-18). Done for the sprint.
 
 ---
+
+### Sprint 10 - UX-19 Complete
+**Date:** 2026-01-31
+**Status:** UX-19 DONE (PR #113)
+
+**What I did:**
+- Added "Daily Challenge" button to MainMenu (amber/gold theme, between New Game and Settings)
+- Created DailyChallengePanel modal showing today's date, active modifiers with score multiplier indicators, and personal best score
+- Added challenge score calculation and display to VictoryScreen and GameOverScreen
+- Scores auto-save to localStorage via BE-22's dailyChallengeSystem infrastructure
+- 268 lines changed across 3 files
+
+**Sprint 10 UX status:** UX-19 done. UX-20 (re-review self-assessment) is P2 stretch.
+
+---
