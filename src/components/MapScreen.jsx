@@ -2,6 +2,19 @@ import { useGame } from '../context/GameContext';
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import DeckViewer from './DeckViewer';
 
+// Hook to track viewport width for responsive layout
+const useViewportWidth = () => {
+  const [width, setWidth] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth : 1024
+  );
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  return width;
+};
+
 // SVG icon paths for each node type
 const NODE_ICONS = {
   combat: {
@@ -62,6 +75,8 @@ const MapScreen = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const lastKnownFloorRef = useRef(null);
   const [isDeckViewerOpen, setIsDeckViewerOpen] = useState(false);
+  const viewportWidth = useViewportWidth();
+  const isMobile = viewportWidth < 480;
 
   // Keyboard shortcut: 'D' key toggles deck viewer
   useEffect(() => {
@@ -101,7 +116,8 @@ const MapScreen = () => {
 
   // Calculate SVG dimensions and node positions
   const layout = useMemo(() => {
-    const width = 360;
+    // Responsive width: fit viewport on mobile, cap at 360 on desktop
+    const width = isMobile ? Math.max(280, viewportWidth - 32) : 360;
     const floorHeight = 65;
     const height = MAP_PADDING_TOP + (totalFloors - 1) * floorHeight + MAP_PADDING_BOTTOM;
 
@@ -124,7 +140,7 @@ const MapScreen = () => {
     });
 
     return { width, height, positions };
-  }, [map, totalFloors]);
+  }, [map, totalFloors, isMobile, viewportWidth]);
 
   // Auto-scroll to current floor on mount and floor change
   // VP-04: Restore saved scroll position if returning to same floor
@@ -236,18 +252,19 @@ const MapScreen = () => {
       minHeight: 0,
       overflow: 'hidden',
       background: '#0a0a12',
-      paddingTop: '90px'
+      paddingTop: isMobile ? '60px' : '90px',
+      maxWidth: '100vw'
     }}>
       {/* Map Header */}
       <div style={{
         textAlign: 'center',
-        padding: '10px 16px',
+        padding: isMobile ? '6px 10px' : '10px 16px',
         background: 'linear-gradient(180deg, rgba(20, 18, 30, 0.95) 0%, rgba(12, 10, 20, 0.8) 100%)',
         borderBottom: '1px solid #2a2235',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: '20px'
+        gap: isMobile ? '10px' : '20px'
       }}>
         <h2 style={{
           margin: 0,
@@ -324,8 +341,10 @@ const MapScreen = () => {
           onScroll={handleScroll}
           style={{
             flex: 1,
-            overflow: 'auto',
-            position: 'relative'
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            position: 'relative',
+            WebkitOverflowScrolling: 'touch'
           }}
         >
         <svg
@@ -570,14 +589,14 @@ const MapScreen = () => {
         </svg>
         </div>
 
-        {/* Scroll Position Bar / Mini-map */}
+        {/* Scroll Position Bar / Mini-map — hidden on mobile to save space */}
         <div
           data-testid="scroll-position-bar"
           style={{
             width: '24px',
             background: 'linear-gradient(180deg, #1a0a2e 0%, #0a0812 100%)',
             borderLeft: '1px solid #2a2235',
-            display: 'flex',
+            display: isMobile ? 'none' : 'flex',
             flexDirection: 'column',
             padding: '8px 4px',
             position: 'relative'
@@ -658,12 +677,12 @@ const MapScreen = () => {
 
       {/* Legend */}
       <div style={{
-        padding: '8px 12px',
+        padding: isMobile ? '6px 8px' : '8px 12px',
         background: 'linear-gradient(180deg, rgba(15, 12, 25, 0.98) 0%, rgba(10, 8, 18, 1) 100%)',
         display: 'flex',
         justifyContent: 'center',
-        gap: '16px',
-        fontSize: '10px',
+        gap: isMobile ? '8px' : '16px',
+        fontSize: isMobile ? '9px' : '10px',
         flexWrap: 'wrap',
         borderTop: '1px solid #1a1525'
       }}>
