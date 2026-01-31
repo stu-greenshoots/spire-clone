@@ -18,6 +18,7 @@ const EventScreen = lazy(() => import('./components/EventScreen'));
 const RestSite = lazy(() => import('./components/RestSite'));
 const DataEditor = import.meta.env.DEV ? lazy(() => import('./components/DataEditor')) : null;
 const StartingBonus = lazy(() => import('./components/StartingBonus'));
+const CharacterSelect = lazy(() => import('./components/CharacterSelect'));
 
 // Map game phases to music track IDs
 const PHASE_MUSIC_MAP = {
@@ -33,6 +34,7 @@ const PHASE_MUSIC_MAP = {
 function getMusicPhase(gamePhase, currentNode, act) {
   switch (gamePhase) {
     case GAME_PHASE.MAIN_MENU:
+    case GAME_PHASE.CHARACTER_SELECT:
     case GAME_PHASE.STARTING_BONUS:
       return 'menu';
     case GAME_PHASE.MAP:
@@ -75,6 +77,8 @@ const GameContent = () => {
     switch (state.phase) {
       case GAME_PHASE.MAIN_MENU:
         return <MainMenu />;
+      case GAME_PHASE.CHARACTER_SELECT:
+        return <CharacterSelect />;
       case GAME_PHASE.STARTING_BONUS:
         return <StartingBonus />;
       case GAME_PHASE.MAP:
@@ -107,7 +111,7 @@ const GameContent = () => {
     }
   };
 
-  const hideChrome = state.phase === GAME_PHASE.DATA_EDITOR || state.phase === GAME_PHASE.MAIN_MENU || state.phase === GAME_PHASE.STARTING_BONUS;
+  const hideChrome = state.phase === GAME_PHASE.DATA_EDITOR || state.phase === GAME_PHASE.MAIN_MENU || state.phase === GAME_PHASE.CHARACTER_SELECT || state.phase === GAME_PHASE.STARTING_BONUS;
   // Hide player status bar during victory overlay to avoid duplicate info
   const hideStatusBar = hideChrome || isVictoryPhase;
 

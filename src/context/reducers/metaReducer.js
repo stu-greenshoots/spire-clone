@@ -76,8 +76,19 @@ export const metaReducer = (state, action) => {
       // Delete any existing save when starting new game
       deleteSave();
       const ascensionLevel = action.payload?.ascensionLevel || 0;
-      const deck = getStarterDeck();
-      const starterRelic = getStarterRelic();
+
+      return {
+        ...createInitialState(),
+        phase: GAME_PHASE.CHARACTER_SELECT,
+        ascension: ascensionLevel
+      };
+    }
+
+    case 'SELECT_CHARACTER': {
+      const { characterId } = action.payload;
+      const ascensionLevel = state.ascension || 0;
+      const deck = getStarterDeck(characterId);
+      const starterRelic = getStarterRelic(characterId);
       const map = generateMap(1);
 
       // Apply ascension starting gold modifier (Ascension 6+)
@@ -86,6 +97,7 @@ export const metaReducer = (state, action) => {
       return {
         ...createInitialState(),
         phase: GAME_PHASE.STARTING_BONUS,
+        character: characterId,
         deck,
         relics: [starterRelic],
         map,
@@ -101,13 +113,15 @@ export const metaReducer = (state, action) => {
     case 'START_DAILY_CHALLENGE': {
       deleteSave();
       const { seed, date, modifierIds } = action.payload;
-      const deck = getStarterDeck();
-      const starterRelic = getStarterRelic();
+      const characterId = action.payload.characterId || 'ironclad';
+      const deck = getStarterDeck(characterId);
+      const starterRelic = getStarterRelic(characterId);
       const map = generateMap(1);
 
       let newState = {
         ...createInitialState(),
         phase: GAME_PHASE.STARTING_BONUS,
+        character: characterId,
         deck,
         relics: [starterRelic],
         map,
@@ -182,7 +196,7 @@ export const metaReducer = (state, action) => {
           );
           if (starters.length > 0) {
             const target = starters[Math.floor(Math.random() * starters.length)];
-            const newCard = getRandomCard(RARITY.COMMON, target.type);
+            const newCard = getRandomCard(RARITY.COMMON, target.type, state.character);
             if (newCard) {
               newState.deck = state.deck.map(c => {
                 if (c.instanceId === target.instanceId) {
@@ -352,6 +366,7 @@ export const metaReducer = (state, action) => {
         currentFloor: saveData.currentFloor,
         act: saveData.act,
         ascension: saveData.ascension || 0,
+        character: saveData.character || 'ironclad',
       };
     }
 

@@ -510,6 +510,10 @@ export const getBossRelic = (excludeIds = []) => {
   return relics[Math.floor(Math.random() * relics.length)];
 };
 
-export const getStarterRelic = () => {
-  return ALL_RELICS.find(r => r.id === 'burning_blood');
+export const getStarterRelic = (characterId = 'ironclad') => {
+  const STARTER_RELICS = {
+    ironclad: 'burning_blood'
+  };
+  const relicId = STARTER_RELICS[characterId] || STARTER_RELICS.ironclad;
+  return ALL_RELICS.find(r => r.id === relicId);
 };

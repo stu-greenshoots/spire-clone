@@ -33,6 +33,7 @@ vi.mock('../systems/saveSystem', () => ({
 function dispatch(state, action) {
   switch (action.type) {
     case 'START_GAME':
+    case 'SELECT_CHARACTER':
     case 'SELECT_STARTING_BONUS':
     case 'REST':
     case 'UPGRADE_CARD':
@@ -91,6 +92,7 @@ describe('Full Game Playthrough', () => {
     expect(state.phase).toBe(GAME_PHASE.MAIN_MENU);
 
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     expect(state.phase).toBe(GAME_PHASE.MAP);
@@ -104,6 +106,7 @@ describe('Full Game Playthrough', () => {
 
   it('navigates to a combat node and enters combat', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     // Find the first floor's combat node
@@ -123,6 +126,7 @@ describe('Full Game Playthrough', () => {
 
   it('plays cards in combat without crashing', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     // Enter combat
@@ -157,6 +161,7 @@ describe('Full Game Playthrough', () => {
 
   it('completes a full combat encounter through end turns', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     // Enter combat
@@ -215,6 +220,7 @@ describe('Full Game Playthrough', () => {
 
   it('collects rewards after combat victory', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     // Set up a state where combat is won (simulate reward phase directly)
@@ -251,6 +257,7 @@ describe('Full Game Playthrough', () => {
 
   it('selects a card reward and adds to deck', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
     const deckSizeBefore = state.deck.length;
 
@@ -270,6 +277,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles rest site - heal option', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     // Simulate taking damage
@@ -287,6 +295,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles rest site - upgrade card option', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     // Find an upgradeable card
@@ -305,6 +314,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles event - skip option', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
     state = { ...state, phase: GAME_PHASE.EVENT };
 
@@ -314,6 +324,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles potion use during combat', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     // Enter combat
@@ -340,6 +351,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles potion discard', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     const healthPotion = getPotionById('health_potion');
@@ -351,6 +363,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles end turn - enemy attacks and new hand drawn', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     const firstFloor = state.map[0];
@@ -370,6 +383,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles return to menu', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
     state = dispatch(state, { type: 'RETURN_TO_MENU' });
     expect(state.phase).toBe(GAME_PHASE.MAIN_MENU);
@@ -377,6 +391,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles proceed to map after rewards', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
     state = {
       ...state,
@@ -390,6 +405,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles cancel target during combat', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     const firstFloor = state.map[0];
@@ -409,6 +425,7 @@ describe('Full Game Playthrough', () => {
 
   it('completes multi-floor progression without crashes', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     // Play through 3 floors
@@ -468,6 +485,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles Girya lift at rest site', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
     const girya = { id: 'girya', name: 'Girya', liftCount: 0 };
     state = {
@@ -485,6 +503,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles strength potion use in combat', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     const firstFloor = state.map[0];
@@ -504,6 +523,7 @@ describe('Full Game Playthrough', () => {
 
   it('handles block potion use in combat', () => {
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
 
     const firstFloor = state.map[0];
@@ -523,6 +543,7 @@ describe('Full Game Playthrough', () => {
   it('exercises the full game lifecycle: menu → play → die/win → menu', () => {
     // Start
     state = dispatch(state, { type: 'START_GAME' });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
     expect(state.phase).toBe(GAME_PHASE.MAP);
 

@@ -31,6 +31,7 @@ vi.mock('../systems/saveSystem', () => ({
 function dispatch(state, action) {
   switch (action.type) {
     case 'START_GAME':
+    case 'SELECT_CHARACTER':
     case 'SELECT_STARTING_BONUS':
     case 'REST':
     case 'UPGRADE_CARD':
@@ -381,6 +382,7 @@ describe('Ascension Playthrough Regression', () => {
     expect(state.phase).toBe(GAME_PHASE.MAIN_MENU);
 
     state = dispatch(state, { type: 'START_GAME', payload: { ascensionLevel } });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
     expect(state.phase).toBe(GAME_PHASE.MAP);
     expect(state.ascension).toBe(ascensionLevel);
@@ -431,6 +433,7 @@ describe('Ascension Playthrough Regression', () => {
   it('A5 applies ascension modifiers (reduced starting gold)', () => {
     let state = createInitialState();
     state = dispatch(state, { type: 'START_GAME', payload: { ascensionLevel: 5 } });
+    state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
     state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
     expect(state.ascension).toBe(5);
     // A0 starts with 99 gold, A5 should have same or less
@@ -449,6 +452,7 @@ describe('Save/Load Phase Regression', () => {
     it(`SAVE_GAME does not crash in ${phase} phase`, () => {
       let state = createInitialState();
       state = dispatch(state, { type: 'START_GAME' });
+      state = dispatch(state, { type: 'SELECT_CHARACTER', payload: { characterId: 'ironclad' } });
       state = dispatch(state, { type: 'SELECT_STARTING_BONUS', payload: { bonusId: 'skip' } });
       state = { ...state, phase };
 

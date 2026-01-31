@@ -62,7 +62,8 @@ export const saveGame = (state) => {
         map: state.map,
         currentNode: state.currentNode,
         ascension: state.ascension || 0,
-        phase: state.phase || null
+        phase: state.phase || null,
+        character: state.character || 'ironclad'
       }
     };
     // Simple checksum for corruption detection

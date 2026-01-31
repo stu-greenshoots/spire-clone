@@ -532,7 +532,7 @@ export const handlePlayCard = (state, action) => {
     });
     newPlayer.currentHp = Math.min(newPlayer.maxHp, newPlayer.currentHp + endEffects.heal);
 
-    const cardRewards = getCardRewards(3);
+    const cardRewards = getCardRewards(3, state.character);
     let relicReward = null;
     if (state.currentNode?.type === 'elite' || state.currentNode?.type === 'boss') {
       relicReward = state.currentNode?.type === 'boss'

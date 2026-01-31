@@ -27,6 +27,7 @@ export const GAME_PHASE = {
   EVENT: 'event',
   GAME_OVER: 'game_over',
   VICTORY: 'victory',
+  CHARACTER_SELECT: 'character_select',
   STARTING_BONUS: 'starting_bonus',
   // Data editor
   DATA_EDITOR: 'data_editor',
@@ -122,7 +123,9 @@ export const createInitialState = () => ({
     floor: 0
   },
   // Daily challenge state (null when not in a daily challenge)
-  dailyChallenge: null
+  dailyChallenge: null,
+  // Character ID (e.g., 'ironclad', 'silent')
+  character: null
 });
 
 // Re-export combat calculation functions for testing (implementations in combatSystem.js)
@@ -136,6 +139,10 @@ export const applyDamageToTarget = combatApplyDamageToTarget;
 const gameReducer = (state, action) => {
   switch (action.type) {
     case 'START_GAME': {
+      return metaReducer(state, action);
+    }
+
+    case 'SELECT_CHARACTER': {
       return metaReducer(state, action);
     }
 
@@ -284,6 +291,10 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'START_GAME', payload: { ascensionLevel } });
   }, []);
 
+  const selectCharacter = useCallback((characterId) => {
+    dispatch({ type: 'SELECT_CHARACTER', payload: { characterId } });
+  }, []);
+
   const startDailyChallenge = useCallback((challenge) => {
     dispatch({ type: 'START_DAILY_CHALLENGE', payload: challenge });
   }, []);
@@ -407,6 +418,7 @@ export const GameProvider = ({ children }) => {
   const value = {
     state,
     startGame,
+    selectCharacter,
     startDailyChallenge,
     selectNode,
     selectCard,

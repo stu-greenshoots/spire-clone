@@ -36,13 +36,28 @@ describe('Starting Bonus (BE-09)', () => {
     };
   });
 
-  describe('START_GAME transitions to STARTING_BONUS', () => {
-    it('should set phase to STARTING_BONUS', () => {
+  describe('START_GAME transitions to CHARACTER_SELECT', () => {
+    it('should set phase to CHARACTER_SELECT', () => {
       const result = metaReducer(createInitialState(), {
         type: 'START_GAME',
         payload: { ascensionLevel: 0 }
       });
+      expect(result.phase).toBe(GAME_PHASE.CHARACTER_SELECT);
+    });
+
+    it('SELECT_CHARACTER transitions to STARTING_BONUS with deck and relic', () => {
+      const selectState = metaReducer(createInitialState(), {
+        type: 'START_GAME',
+        payload: { ascensionLevel: 0 }
+      });
+      const result = metaReducer(selectState, {
+        type: 'SELECT_CHARACTER',
+        payload: { characterId: 'ironclad' }
+      });
       expect(result.phase).toBe(GAME_PHASE.STARTING_BONUS);
+      expect(result.deck.length).toBe(10);
+      expect(result.relics.length).toBe(1);
+      expect(result.character).toBe('ironclad');
     });
   });
 
