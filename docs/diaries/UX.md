@@ -119,3 +119,57 @@ UX Guy - Combat feedback, tooltips, visual polish
 - Sprint 7 UX-13 should use this doc as its requirements input
 
 ---
+
+### Sprint 7 - UX-13c Complete
+**Date:** 2026-01-31
+**Status:** UX-13c DONE (PR #73)
+
+**What I did:**
+- Added long-press (500ms) card inspect modal for mobile
+- Made enemy info stay inline on mobile (no more full-screen panel on tap)
+- Added compact mobile enemy wrappers (max-width: 110px)
+- Desktop behavior unchanged
+
+**Next:** UX-13 complete (a, b, c all done). Ready for QA-08b viewport testing.
+
+---
+
+### Sprint 7 - UX-12 Complete
+**Date:** 2026-01-31
+**Status:** UX-12 DONE (PR #76)
+
+**What I did:**
+- Smart card targeting: non-attack cards (skills, powers) can now be played by dropping anywhere during drag-and-drop
+- Attack cards with single enemy already auto-targeted via reducer — no change needed
+- Attack cards with multiple enemies still require explicit enemy selection
+- Click-to-play path was already correct, no changes needed
+
+**Analysis:** The reducer (`selectCardAction.js`) already handled single-enemy auto-targeting correctly. The only gap was the drag-and-drop path in `handleDragEnd` which required dropping in the enemy area (upper 60%) even for non-attack cards. Fixed by checking card type first and playing non-attacks on any drop location.
+
+**Next:** Awaiting reviews on PR #76.
+
+---
+
+### Sprint 8 - UX-16 Complete
+**Date:** 2026-01-31
+**Status:** UX-16 DONE (PR #80)
+
+**What I did:**
+- Screen shake on player damage (light/medium/heavy tiers based on damage amount)
+- Screen shake on heavy enemy hits (>15 damage)
+- All shakes respect `screenShake` setting and `animationSpeed` multiplier
+- Enhanced cardFlyToEnemy with initial brightness flash (glow before fly)
+- Energy orb now pulses on both spend AND gain (was spend-only)
+- Floating status effect labels when vulnerable/weak/strength/platedArmor/artifact applied to enemies
+- Floating status effect labels when vulnerable/weak/strength applied to player
+- All animations fire-and-forget, non-blocking
+
+**Technical notes:**
+- Used existing CSS shake classes (shake-light, shake-medium, shake-heavy) already in App.css
+- `loadSettings()` called directly in effects (consistent with useEnemyTurnSequence pattern)
+- Status tracking uses refs for previous values (same pattern as prevEnemyHp)
+- Extracted player status fields to variables to satisfy exhaustive-deps lint rule
+
+**Next:** UX-14 (mobile map screen) and UX-15 (narrative UI theming) remaining for Sprint 8.
+
+---
