@@ -374,7 +374,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | BE-20 | BE | S | Performance audit — React.memo, bundle < 2MB, Lighthouse 90+ | MERGED (PR #99) |
 | QA-12 | QA | S | Accessibility pass — keyboard nav, ARIA labels, contrast | MERGED (PR #100) |
 | VARROW-04 | Varrow | S | Narrative polish — final copy pass on all player-facing text | MERGED (PR #101) |
-| GD-13 | GD | S | Placeholder icons — colored silhouettes for remaining relics/potions | PENDING |
+| GD-13 | GD | S | Placeholder icons — verified all 49 relics + 15 potions have WebP art, no emoji in UI | MERGED (PR #102) |
 
 ### P2 — Stretch
 
