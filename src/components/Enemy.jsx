@@ -561,6 +561,9 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
         {enemy.artifact > 0 && (
           <StatusBadge icon="" value={enemy.artifact} color="#ffcc44" label="ART" />
         )}
+        {enemy.intangible > 0 && (
+          <StatusBadge icon="" value={enemy.intangible} color="#aaaaff" label="INT" />
+        )}
       </div>
     </div>
   );

@@ -614,6 +614,33 @@ export const ALL_ENEMIES = [
     slowCountMax: 4 // Reduced from 5
   },
   {
+    id: 'nemesis',
+    name: 'Nemesis',
+    hp: { min: 185, max: 200 },
+    type: 'elite',
+    act: 3,
+    emoji: '👻',
+    moveset: [
+      { id: 'scythe', intent: INTENT.ATTACK_DEBUFF, damage: 45, special: 'addBurn', message: 'Scythe' },
+      { id: 'attackBurn', intent: INTENT.ATTACK_DEBUFF, damage: 6, times: 3, special: 'addBurn', message: 'Attack Burn' },
+      { id: 'debilitate', intent: INTENT.DEBUFF, effects: [{ type: 'frail', amount: 3, target: 'player' }, { type: 'weak', amount: 3, target: 'player' }], message: 'Debilitate' }
+    ],
+    ai: (enemy, turn, lastMove) => {
+      // Alternates intangible turns: intangible on even turns (0, 2, 4...)
+      // On intangible turns, uses debilitate
+      // On vulnerable turns, alternates between scythe and multi-attack
+      if (turn % 2 === 0) {
+        // Intangible turn — gains intangible via special handling, uses debilitate
+        return enemy.moveset[2]; // debilitate
+      }
+      // Attack turn — alternate between scythe and multi-attack
+      if (lastMove?.id === 'scythe') return enemy.moveset[1];
+      return enemy.moveset[0]; // scythe
+    },
+    // Nemesis gains intangible on even turns — handled in enemyTurnAction
+    nemesisIntangible: true
+  },
+  {
     id: 'reptomancer',
     name: 'Reptomancer',
     hp: { min: 180, max: 180 },
@@ -925,7 +952,8 @@ export const createEnemyInstance = (enemy, index = 0) => {
     intentData: null,
     asleep: enemy.asleep || false,
     hasSplit: false,
-    stasis: null
+    stasis: null,
+    intangible: 0
   };
 };
 

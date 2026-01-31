@@ -186,6 +186,12 @@ export const processEnemyTurns = (ctx) => {
       ));
     }
 
+    // Nemesis intangible: gains intangible when using debilitate
+    if (newEnemy.nemesisIntangible && move.id === 'debilitate') {
+      newEnemy.intangible = 1;
+      combatLog.push(`${enemy.name} becomes Intangible!`);
+    }
+
     // Update last move
     newEnemy.lastMove = move;
     newEnemy.moveIndex = (newEnemy.moveIndex || 0) + 1;
