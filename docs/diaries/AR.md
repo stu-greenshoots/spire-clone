@@ -186,3 +186,29 @@ document.addEventListener('click', function initAudio() {
 **Summary:** AR-03 verification COMPLETE. Settings.jsx confirmed production-ready. All features functional, all tests passing, zero regressions. Task merged to sprint-5.
 
 ---
+
+### Sprint 8 - AR-07 Complete
+**Date:** 2026-01-31
+**Status:** AR-07 SFX Expansion — COMPLETE and MERGED (PR #82)
+**Sprint:** Sprint 8 (Polish + Juice + Title Screen)
+**Task:** AR-07 (SFX expansion — M size, P0)
+
+**Done today:**
+1. Added 5 new sound IDs to SOUNDS constants: heavyHit, bossIntro, potionUse, cardUpgrade, mapStep
+2. Wired 12 playSFX calls across 7 files to game events:
+   - Combat: enemy attack, heavy hit (>15 dmg), player hurt, enemy death, combat victory, boss intro, potion use
+   - UI: card upgrade (rest site), map step (node selection), gold gain, relic pickup
+   - Card play + block already wired from Sprint 3
+3. Added 80ms debounce mechanism to prevent overlapping rapid sounds (e.g., multi-hit attacks)
+4. Generated 5 placeholder CC0 MP3 files for new sound IDs
+5. All 1131 tests pass, 0 lint errors, build clean
+
+**Architecture decisions:**
+- Debounce is per-soundId (different sounds can overlap, only rapid duplicates are suppressed)
+- Sound layering: heavy hits play BOTH enemyAttack + heavyHit for extra impact
+- Placeholder MP3s are valid but silent — to be replaced with real CC0 sounds before 1.0
+
+**Blockers:** None
+**Next:** AR-08 (sprite sheet automation) if assigned, otherwise available for Sprint 8 support
+
+---
