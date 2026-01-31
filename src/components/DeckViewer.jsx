@@ -53,10 +53,15 @@ const DeckViewer = ({ deck, relics, runStats, onClose }) => {
 
         <div className="deck-card-grid">
           {filteredDeck.map((card, idx) => (
-            <div key={card.instanceId || idx} className={`deck-card-item card-type-${card.type}`}>
+            <div key={card.instanceId || idx} className={`deck-card-item card-type-${card.type}${card.rarity && card.rarity !== 'basic' && card.rarity !== 'common' ? ` card-rarity-${card.rarity}` : ''}`}>
               <div className="deck-card-cost">{card.cost >= 0 ? card.cost : 'X'}</div>
               <div className="deck-card-name">{card.name}{card.upgraded ? '+' : ''}</div>
               <div className="deck-card-desc">{card.description}</div>
+              {card.rarity && card.rarity !== 'basic' && card.rarity !== 'common' && (
+                <div className={`deck-card-rarity deck-card-rarity--${card.rarity}`}>
+                  {card.rarity}
+                </div>
+              )}
             </div>
           ))}
         </div>

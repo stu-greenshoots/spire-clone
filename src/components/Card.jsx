@@ -176,9 +176,9 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
 
   const getRarityColor = () => {
     switch (card.rarity) {
-      case 'rare': return { color: '#FFD700', glow: 'rgba(255, 215, 0, 0.6)' };
-      case 'uncommon': return { color: '#00BFFF', glow: 'rgba(0, 191, 255, 0.5)' };
-      default: return { color: '#666666', glow: 'rgba(100, 100, 100, 0.3)' };
+      case 'rare': return { color: '#FFD700', glow: 'rgba(255, 215, 0, 0.6)', label: 'Rare', labelBg: 'rgba(255, 215, 0, 0.15)' };
+      case 'uncommon': return { color: '#00BFFF', glow: 'rgba(0, 191, 255, 0.5)', label: 'Uncommon', labelBg: 'rgba(0, 191, 255, 0.12)' };
+      default: return { color: '#666666', glow: 'rgba(100, 100, 100, 0.3)', label: null, labelBg: null };
     }
   };
 
@@ -329,7 +329,11 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
         color: 'white',
         boxShadow: selected
           ? `0 0 20px rgba(255, 215, 0, 0.8), 0 8px 25px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.2)`
-          : `0 4px 15px rgba(0, 0, 0, 0.4), 0 2px 5px ${rarity.glow}, inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 3px 0 8px ${colors.main}33`,
+          : card.rarity === 'rare'
+            ? `0 4px 15px rgba(0, 0, 0, 0.4), 0 0 12px ${rarity.glow}, 0 0 24px rgba(255, 215, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 3px 0 8px ${colors.main}33`
+            : card.rarity === 'uncommon'
+              ? `0 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px ${rarity.glow}, inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 3px 0 8px ${colors.main}33`
+              : `0 4px 15px rgba(0, 0, 0, 0.4), 0 2px 5px ${rarity.glow}, inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 3px 0 8px ${colors.main}33`,
         transform: selected ? 'scale(1.12) translateY(-15px)' : 'scale(1)',
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         position: 'relative',
@@ -478,6 +482,25 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
       }}>
         {card.type}
       </div>
+
+      {/* Rarity Label for uncommon/rare */}
+      {rarity.label && !small && (
+        <div style={{
+          fontSize: '6px',
+          textAlign: 'center',
+          color: rarity.color,
+          textTransform: 'uppercase',
+          letterSpacing: '1.5px',
+          fontWeight: '700',
+          background: rarity.labelBg,
+          padding: '1px 4px',
+          margin: '0 6px',
+          borderRadius: '2px',
+          textShadow: `0 0 4px ${rarity.glow}`
+        }}>
+          {rarity.label}
+        </div>
+      )}
 
       {/* Card Description with Keyword Highlights */}
       <div style={{
