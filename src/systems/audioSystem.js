@@ -41,7 +41,8 @@ export const SOUNDS = {
     map: 'music_map',
     shop: 'music_shop',
     event: 'music_event',
-    victory: 'music_victory'
+    victory: 'music_victory',
+    defeat: 'music_defeat'
   }
 };
 
