@@ -27,6 +27,7 @@ export const GAME_PHASE = {
   EVENT: 'event',
   GAME_OVER: 'game_over',
   VICTORY: 'victory',
+  STARTING_BONUS: 'starting_bonus',
   // Data editor
   DATA_EDITOR: 'data_editor',
   // Card selection sub-phases
@@ -252,6 +253,10 @@ const gameReducer = (state, action) => {
       return metaReducer(state, action);
     }
 
+    case 'SELECT_STARTING_BONUS': {
+      return metaReducer(state, action);
+    }
+
     case 'LOAD_SCENARIO': {
       return metaReducer(state, action);
     }
@@ -373,6 +378,10 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'DISCARD_POTION', payload: { slotIndex } });
   }, []);
 
+  const selectStartingBonus = useCallback((bonusId) => {
+    dispatch({ type: 'SELECT_STARTING_BONUS', payload: { bonusId } });
+  }, []);
+
   const loadScenario = useCallback((scenario) => {
     dispatch({ type: 'LOAD_SCENARIO', payload: scenario });
   }, []);
@@ -406,6 +415,7 @@ export const GameProvider = ({ children }) => {
     deleteSaveState,
     usePotion,
     discardPotion,
+    selectStartingBonus,
     loadScenario
   };
 
