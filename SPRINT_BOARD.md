@@ -316,7 +316,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make every action feel impactful. Professional first impression. Fix deferred infrastructure debt.
 **Plan:** See `SPRINT_8_PLAN.md`
 **Branch:** `sprint-8`
-**Status:** IN PROGRESS — 6 P0 + 5 P1 + 1 P2 merged, 1 remaining (GD-11 P2 stretch)
+**Status:** COMPLETE — 6 P0 + 5 P1 + 2 P2 merged, all tasks done
 
 ### P0 — Must Ship
 
@@ -344,7 +344,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | AR-08 | AR | S | Sprite sheet automation — `npm run generate-sprites` | MERGED (PR #90) |
-| GD-11 | GD | S | Card sprite sheets — reduce 96 requests to ~10 | PENDING |
+| GD-11 | GD | S | Card sprite sheets — reduce 96 requests to ~10 | MERGED (PR #91) |
 
 ---
 

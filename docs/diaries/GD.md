@@ -102,6 +102,37 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ---
 
+### Sprint 8 - GD-11 Complete
+**Date:** 2026-01-31
+**Status:** GD-11 complete, PR #91 merged to sprint-8
+
+**Done today:**
+- Bundled 96 individual card art images into a single sprite sheet
+- Extended `generate-sprite-sheets.js` to support `--type=cards` flag (reusable for any asset type)
+- Generated 5120x5120 sprite sheet (10 cols × 10 rows, 3199KB vs 3466KB individual)
+- Added `getCardSpriteInfo()` to art-config.js following enemy sprite pattern
+- Updated `getCardArtInfo()` to try sprite sheet first, fall back to individual images
+- Updated Card.jsx to render from sprite sheet via CSS `background-position`
+- Added `npm run generate-card-sprites` script to package.json
+
+**Performance impact:**
+- Network requests: 96 → 1
+- Total size: 3466KB → 3199KB (8% smaller)
+- Fallback chain preserved: sprite sheet → individual image → icon
+
+**Design decisions:**
+- Used 10-column grid (vs 7 for enemies) to keep sheet roughly square at 96 images
+- Card art display is smaller (88px vs 512px cells), so scale factor handles the mapping
+- Individual images still bundled as eager fallback — could be optimized to lazy in future
+
+**Validation:** `npm run validate` passes — 1159 tests, lint clean, build clean
+
+**Next:**
+- All GD Sprint 8 tasks complete (GD-10, GD-09, GD-11)
+- Sprint 8 is fully done from GD perspective
+
+---
+
 ### Sprint 8 - GD-09 Complete
 **Date:** 2026-01-31
 **Status:** GD-09 complete, PR #84 merged to sprint-8
