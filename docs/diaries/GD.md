@@ -14,6 +14,30 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 9 - GD-12 Complete
+**Date:** 2026-01-31
+**Status:** GD-12 complete, PR #97 merged to sprint-9
+
+**Done today:**
+- Wired existing relic WebP assets to all UI components that were still showing emoji
+- All 49 relic images already existed in `src/assets/art/relics/` — only PersistentHeader's header row used `getRelicImage()`
+- Updated 6 components: RewardScreen, ShopScreen, DeckViewer, VictoryScreen, GameOverScreen, PersistentHeader (popup)
+- Each uses `getRelicImage(relic.id)` with emoji fallback if image not found
+- All 15 potion images already wired via PotionSlots — no changes needed
+
+**Key finding:**
+- The task was scoped as "generate 20 icons" but all 49 relic + 15 potion images already existed from earlier sprints
+- The real gap was that most components hardcoded `relic.emoji` instead of using `getRelicImage()`
+- No new art generation needed — purely a wiring fix
+
+**Validation:** `npm run validate` passes — 1736 tests, lint clean, build clean
+
+**Next:**
+- GD-13 (placeholder icons) may also be a no-op — verify whether any relics/potions are actually missing images
+- If all have images, GD-13 becomes "verify all assets load" rather than "generate silhouettes"
+
+---
+
 ### Magazine Review Notes (58/100)
 **Date:** 2026-01-24
 **Context:** Game Zone preview review — Presentation scored 6/10

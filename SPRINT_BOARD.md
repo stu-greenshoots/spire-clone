@@ -353,7 +353,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Production-ready 1.0 on web + PWA. Zero P0 bugs. Full regression. Professional polish.
 **Plan:** See `SPRINT_9_PLAN.md`
 **Branch:** `sprint-9`
-**Status:** IN PROGRESS — PM-09, BE-PWA, QA-11, AR-06, AR-05b merged
+**Status:** IN PROGRESS — PM-09, BE-PWA, QA-11, AR-06, AR-05b, GD-12 merged
 
 ### P0 — Must Ship
 
@@ -364,7 +364,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | AR-06 | AR | M | Music integration — 6 tracks (menu, map, combat, boss, victory, defeat) | MERGED (PR #95) |
 | BE-PWA | BE | S | PWA setup — service worker, manifest, offline, installable | MERGED (PR #93) |
 | AR-05b | AR | S | Mobile final pass — portrait responsiveness on real device sizes | MERGED (PR #96) |
-| GD-12 | GD | M | Relic/potion icon batch — 20 most visible icons replace emoji | PENDING |
+| GD-12 | GD | M | Relic/potion icon batch — 20 most visible icons replace emoji | MERGED (PR #97) |
 
 ### P1 — Should Ship
 
