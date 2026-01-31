@@ -1,9 +1,9 @@
 import { useGame, GAME_PHASE } from '../context/GameContext';
 import Card from './Card';
-import { getRelicImage } from '../assets/art/art-config';
+import { getRelicImage, getPotionImage } from '../assets/art/art-config';
 
 const RewardScreen = ({ isOverlay = false }) => {
-  const { state, collectGold, collectRelic, openCardRewards, selectCardReward, skipCardReward, proceedToMap } = useGame();
+  const { state, collectGold, collectRelic, collectPotion, openCardRewards, selectCardReward, skipCardReward, proceedToMap } = useGame();
   const { phase, combatRewards, cardRewards, player } = state;
 
   // Overlay styles for victory screen
@@ -189,6 +189,21 @@ const RewardScreen = ({ isOverlay = false }) => {
               />
             )}
 
+            {/* Potion Reward */}
+            {combatRewards?.potionReward && (
+              <RewardButton
+                testId="reward-potion"
+                icon={(() => {
+                  const img = getPotionImage(combatRewards.potionReward.id);
+                  return img ? <img src={img} alt={combatRewards.potionReward.name} style={{ width: '36px', height: '36px', borderRadius: '6px', objectFit: 'cover' }} /> : '\uD83E\uDDEA';
+                })()}
+                title={combatRewards.potionReward.name}
+                subtitle={combatRewards.potionReward.description}
+                onClick={collectPotion}
+                color="#44CC88"
+              />
+            )}
+
             {/* Card Reward */}
             {combatRewards?.cardRewards && combatRewards.cardRewards.length > 0 && (
               <RewardButton
@@ -342,6 +357,21 @@ const RewardScreen = ({ isOverlay = false }) => {
             subtitle={combatRewards.relicReward.description}
             onClick={collectRelic}
             color="#44AAFF"
+          />
+        )}
+
+        {/* Potion Reward */}
+        {combatRewards?.potionReward && (
+          <RewardButton
+            testId="reward-potion"
+            icon={(() => {
+              const img = getPotionImage(combatRewards.potionReward.id);
+              return img ? <img src={img} alt={combatRewards.potionReward.name} style={{ width: '36px', height: '36px', borderRadius: '6px', objectFit: 'cover' }} /> : '\uD83E\uDDEA';
+            })()}
+            title={combatRewards.potionReward.name}
+            subtitle={combatRewards.potionReward.description}
+            onClick={collectPotion}
+            color="#44CC88"
           />
         )}
 

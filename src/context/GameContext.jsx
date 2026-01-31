@@ -169,6 +169,10 @@ const gameReducer = (state, action) => {
       return rewardReducer(state, action);
     }
 
+    case 'COLLECT_POTION': {
+      return rewardReducer(state, action);
+    }
+
     case 'OPEN_CARD_REWARDS': {
       return rewardReducer(state, action);
     }
@@ -302,6 +306,10 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'COLLECT_RELIC' });
   }, []);
 
+  const collectPotion = useCallback(() => {
+    dispatch({ type: 'COLLECT_POTION' });
+  }, []);
+
   const openCardRewards = useCallback(() => {
     dispatch({ type: 'OPEN_CARD_REWARDS' });
   }, []);
@@ -396,6 +404,7 @@ export const GameProvider = ({ children }) => {
     endTurn,
     collectGold,
     collectRelic,
+    collectPotion,
     openCardRewards,
     selectCardReward,
     skipCardReward,

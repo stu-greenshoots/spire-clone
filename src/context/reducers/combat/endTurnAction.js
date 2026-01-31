@@ -5,6 +5,7 @@ import { applyDamageToTarget as combatApplyDamageToTarget } from '../../../syste
 import { getEnemyIntent, createSplitSlimes, createSummonedEnemy } from '../../../systems/enemySystem';
 import { triggerRelics, getPassiveRelicEffects } from '../../../systems/relicSystem';
 import { deleteSave, autoSave } from '../../../systems/saveSystem';
+import { getPotionRewards } from '../../../systems/potionSystem';
 import { processEnemyTurns } from './enemyTurnAction';
 import { loadProgression, updateRunStats as updateProgressionStats } from '../../../systems/progressionSystem';
 
@@ -289,6 +290,17 @@ export const handleEndTurn = (state) => {
     });
     newPlayer.currentHp = Math.min(newPlayer.maxHp, newPlayer.currentHp + endEffects.heal);
 
+    // Potion reward: 40% chance from normal/elite, 100% from boss
+    const hasEmptySlot = state.potions.some(p => p === null);
+    let potionReward = null;
+    if (hasEmptySlot) {
+      const potionChance = state.currentNode?.type === 'boss' ? 1.0 : 0.4;
+      if (Math.random() < potionChance) {
+        const potionRewards = getPotionRewards(1, state.currentFloor);
+        potionReward = potionRewards.length > 0 ? potionRewards[0] : null;
+      }
+    }
+
     const victoryState = {
       ...state,
       phase: GAME_PHASE.COMBAT_REWARD,
@@ -298,7 +310,8 @@ export const handleEndTurn = (state) => {
       combatLog,
       combatRewards: {
         gold: goldReward,
-        cardRewards
+        cardRewards,
+        potionReward
       }
     };
     autoSave(victoryState);
