@@ -398,8 +398,26 @@ const Card = memo(function Card({ card, onClick, selected, disabled, small, play
         overflow: 'hidden',
         position: 'relative'
       }}>
-        {/* Show image if available, otherwise show icon */}
-        {artInfo.hasImage ? (
+        {/* Show sprite sheet, individual image, or fallback icon */}
+        {artInfo.sprite ? (
+          (() => {
+            const displayWidth = small ? 67 : 88;
+            const scale = displayWidth / artInfo.sprite.cellSize;
+            return (
+              <div
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  backgroundImage: `url(${artInfo.sprite.spriteUrl})`,
+                  backgroundPosition: `-${artInfo.sprite.x * scale}px -${artInfo.sprite.y * scale}px`,
+                  backgroundSize: `${artInfo.sprite.sheetWidth * scale}px ${artInfo.sprite.sheetHeight * scale}px`,
+                  backgroundRepeat: 'no-repeat',
+                  borderRadius: '3px'
+                }}
+              />
+            );
+          })()
+        ) : artInfo.hasImage ? (
           <img
             src={artInfo.imageUrl}
             alt={card.name}
