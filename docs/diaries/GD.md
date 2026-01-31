@@ -102,6 +102,30 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ---
 
+### Sprint 8 - GD-09 Complete
+**Date:** 2026-01-31
+**Status:** GD-09 complete, PR #84 merged to sprint-8
+
+**Done today:**
+- Generated placeholder art for 7 missing Act 2 enemies: automaton, bronzeOrb, gremlinMinion, mystic, shelledParasite, snecko, sphericGuardian
+- Each is 512x512 WebP with dark fantasy themed radial gradient and enemy name text
+- Rebuilt sprite sheet from 34 → 41 enemies using 7-column grid (3584x3072px, 2033KB)
+- Updated sprite-manifest.json with all 41 entries
+- All enemies now served from sprite sheet — no ASCII fallbacks in normal play
+
+**Design decisions:**
+- Used themed color palettes per enemy type (bronze for mechanical, purple for mystic, teal for reptile, etc.)
+- Placeholder style is serviceable — can be replaced with higher-quality art later
+- Changed grid from 6 to 7 columns to fit 41 enemies in 6 rows
+
+**Validation:** `npm run validate` passes — 1137 tests, lint clean, build clean
+
+**Next:**
+- GD-11 (P2 stretch): Card sprite sheets if time permits
+- AR-08 depends on GD-09 completion — now unblocked
+
+---
+
 ### Sprint 8 - GD-10 Complete
 **Date:** 2026-01-31
 **Status:** GD-10 complete, PR #79 merged to sprint-8
