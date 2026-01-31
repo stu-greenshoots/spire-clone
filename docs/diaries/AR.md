@@ -1,3 +1,37 @@
+# AR Diary - Sprint 10
+
+## Sprint 10 Entries
+
+### AR-10: Act 3 Music Track
+**Date:** 2026-01-31
+**Status:** Complete, PR #116 merged
+**Sprint:** Sprint 10 (Act 3 + Daily Challenge + Post-Launch Polish)
+**Task:** AR-10 (Act 3 music track — S size, P1)
+
+**Done:**
+1. Added `act3Map: 'music_act3_map'` to SOUNDS.music constants in audioSystem.js
+2. Created placeholder MP3 file (`public/sounds/music_act3_map.mp3`) — copy of map track, to be replaced with unique Act 3 music
+3. Updated `getMusicPhase()` in App.jsx to accept `act` parameter and return `act3_map` when `act >= 3`
+4. Added `act3_map` to PHASE_MUSIC_MAP for audioManager phase registration
+5. Added `state.act` to useEffect dependency array for proper crossfade on act transition
+
+**Architecture:**
+- Follows existing phase-based music pattern (setPhases/setPhase/crossfadeMusic)
+- Act 3 detection via `state.act >= 3` — clean, no floor-number magic
+- Crossfade happens automatically via audioManager.setPhase when act changes
+- Placeholder MP3 is valid audio — to be replaced with distinct Act 3 exploration track
+
+**Acceptance criteria:**
+- [x] Act 3 map has distinct music phase
+- [x] Crossfade works on act boundary
+- [x] Volume controls apply
+- [x] npm run validate passes (1973 tests, 0 errors)
+
+**Blockers:** None
+**Summary:** All AR Sprint 10 tasks complete.
+
+---
+
 # AR Diary - Sprint 3
 
 ## Role
