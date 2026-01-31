@@ -1,5 +1,6 @@
 import { useGame, GAME_PHASE } from '../context/GameContext';
 import Card from './Card';
+import { getRelicImage } from '../assets/art/art-config';
 
 const RewardScreen = ({ isOverlay = false }) => {
   const { state, collectGold, collectRelic, openCardRewards, selectCardReward, skipCardReward, proceedToMap } = useGame();
@@ -177,7 +178,10 @@ const RewardScreen = ({ isOverlay = false }) => {
             {/* Relic Reward */}
             {combatRewards?.relicReward && (
               <RewardButton
-                icon={combatRewards.relicReward.emoji}
+                icon={(() => {
+                  const img = getRelicImage(combatRewards.relicReward.id);
+                  return img ? <img src={img} alt={combatRewards.relicReward.name} style={{ width: '36px', height: '36px', borderRadius: '6px', objectFit: 'cover' }} /> : combatRewards.relicReward.emoji;
+                })()}
                 title={combatRewards.relicReward.name}
                 subtitle={combatRewards.relicReward.description}
                 onClick={collectRelic}
@@ -330,7 +334,10 @@ const RewardScreen = ({ isOverlay = false }) => {
         {/* Relic Reward */}
         {combatRewards?.relicReward && (
           <RewardButton
-            icon={combatRewards.relicReward.emoji}
+            icon={(() => {
+              const img = getRelicImage(combatRewards.relicReward.id);
+              return img ? <img src={img} alt={combatRewards.relicReward.name} style={{ width: '36px', height: '36px', borderRadius: '6px', objectFit: 'cover' }} /> : combatRewards.relicReward.emoji;
+            })()}
             title={combatRewards.relicReward.name}
             subtitle={combatRewards.relicReward.description}
             onClick={collectRelic}

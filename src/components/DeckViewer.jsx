@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CARD_TYPES } from '../data/cards';
 import { SimpleTooltip } from './Tooltip';
+import { getRelicImage } from '../assets/art/art-config';
 
 const DeckViewer = ({ deck, relics, runStats, onClose }) => {
   const [sortBy, setSortBy] = useState('type'); // 'type', 'cost', 'name'
@@ -79,7 +80,10 @@ const DeckViewer = ({ deck, relics, runStats, onClose }) => {
                   delay={150}
                 >
                   <div className="deck-relic-item">
-                    <span className="relic-emoji">{relic.emoji}</span>
+                    {(() => {
+                      const img = getRelicImage(relic.id);
+                      return img ? <img src={img} alt={relic.name} style={{ width: '24px', height: '24px', borderRadius: '4px', objectFit: 'cover' }} /> : <span className="relic-emoji">{relic.emoji}</span>;
+                    })()}
                     <span className="relic-name">{relic.name}</span>
                   </div>
                 </SimpleTooltip>
