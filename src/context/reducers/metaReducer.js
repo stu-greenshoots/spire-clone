@@ -10,6 +10,7 @@ import { getPassiveRelicEffects } from '../../systems/relicSystem';
 import { createInitialState } from '../GameContext';
 import { loadProgression, updateRunStats, saveProgression } from '../../systems/progressionSystem';
 import { getAscensionStartGold } from '../../systems/ascensionSystem';
+import { applyDailyChallengeModifiers } from '../../systems/dailyChallengeSystem';
 import { audioManager, SOUNDS } from '../../systems/audioSystem';
 
 /**
@@ -95,6 +96,39 @@ export const metaReducer = (state, action) => {
           gold: startingGold
         }
       };
+    }
+
+    case 'START_DAILY_CHALLENGE': {
+      deleteSave();
+      const { seed, date, modifierIds } = action.payload;
+      const deck = getStarterDeck();
+      const starterRelic = getStarterRelic();
+      const map = generateMap(1);
+
+      let newState = {
+        ...createInitialState(),
+        phase: GAME_PHASE.STARTING_BONUS,
+        deck,
+        relics: [starterRelic],
+        map,
+        currentFloor: -1,
+        ascension: 0,
+        player: {
+          ...createInitialState().player,
+          gold: 99
+        },
+        dailyChallenge: {
+          seed,
+          date,
+          modifierIds,
+          startTime: Date.now()
+        }
+      };
+
+      // Apply daily challenge modifiers to initial state
+      newState = applyDailyChallengeModifiers(newState, modifierIds);
+
+      return newState;
     }
 
     case 'SELECT_STARTING_BONUS': {
