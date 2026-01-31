@@ -336,29 +336,34 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     }
 
     const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+    const card = draggingCard;
+    const isAttack = card.type === 'attack';
 
     if (containerRef.current) {
       const containerRect = containerRef.current.getBoundingClientRect();
       const relativeY = clientY - containerRect.top;
       const containerHeight = containerRect.height;
+      const inEnemyArea = relativeY < containerHeight * 0.6;
 
-      // Check if dropped in enemy area (upper 60% of screen)
-      if (relativeY < containerHeight * 0.6) {
-        const card = draggingCard;
-
-        // For attack cards that need targeting
-        if (card.type === 'attack' && enemies.length > 1) {
+      // Non-attack cards (skills, powers) can be played by dropping anywhere
+      if (!isAttack) {
+        setCardPlaying(card.instanceId);
+        setTimeout(() => setCardPlaying(null), 300);
+        selectCard(card);
+      } else if (inEnemyArea) {
+        // Attack cards must be dropped in enemy area
+        if (enemies.length > 1) {
           if (dropTargetEnemy !== null) {
             // Play card on specific enemy
             setCardPlaying(card.instanceId);
             setTimeout(() => setCardPlaying(null), 300);
             playCard(card, dropTargetEnemy);
           } else {
-            // Entered targeting mode
+            // Enter targeting mode
             selectCard(card);
           }
         } else {
-          // Non-targeted cards or single enemy
+          // Single enemy - auto-target
           setCardPlaying(card.instanceId);
           setTimeout(() => setCardPlaying(null), 300);
           selectCard(card);
