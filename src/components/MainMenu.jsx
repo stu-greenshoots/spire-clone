@@ -3,6 +3,7 @@ import { useGame } from '../context/GameContext';
 import { hasSave } from '../systems/saveSystem';
 import { loadProgression } from '../systems/progressionSystem';
 import { getAscensionDescription, getMaxAscension } from '../systems/ascensionSystem';
+import { audioManager } from '../systems/audioSystem';
 import Settings from './Settings';
 import StateBuilder from './StateBuilder';
 
@@ -340,7 +341,7 @@ const MainMenu = () => {
         {/* Settings Button */}
         <button
           data-testid="btn-settings"
-          onClick={() => setShowSettings(true)}
+          onClick={() => { setShowSettings(true); audioManager.duckMusic(); }}
           onMouseEnter={() => setHoveringSettings(true)}
           onMouseLeave={() => setHoveringSettings(false)}
           style={{
@@ -440,7 +441,7 @@ const MainMenu = () => {
             zIndex: 10
           }}
           onClick={(e) => {
-            if (e.target === e.currentTarget) setShowSettings(false);
+            if (e.target === e.currentTarget) { setShowSettings(false); audioManager.unduckMusic(); }
           }}
         >
           <div style={{
@@ -455,7 +456,7 @@ const MainMenu = () => {
             position: 'relative'
           }}>
             <button
-              onClick={() => setShowSettings(false)}
+              onClick={() => { setShowSettings(false); audioManager.unduckMusic(); }}
               style={{
                 position: 'absolute',
                 top: '12px',
