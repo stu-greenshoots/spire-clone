@@ -3,7 +3,7 @@ import { GAME_PHASE } from '../GameContext';
 export const shopReducer = (state, action) => {
   switch (action.type) {
     case 'LEAVE_SHOP': {
-      const { gold: shopGold, deck: shopDeck, relics: shopRelics } = action.payload;
+      const { gold: shopGold, deck: shopDeck, relics: shopRelics, potions: shopPotions } = action.payload;
       return {
         ...state,
         player: {
@@ -12,6 +12,7 @@ export const shopReducer = (state, action) => {
         },
         deck: shopDeck,
         relics: shopRelics,
+        ...(shopPotions ? { potions: shopPotions } : {}),
         phase: GAME_PHASE.MAP
       };
     }

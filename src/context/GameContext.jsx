@@ -347,8 +347,8 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'PROCEED_TO_MAP' });
   }, []);
 
-  const leaveShop = useCallback((gold, deck, relics) => {
-    dispatch({ type: 'LEAVE_SHOP', payload: { gold, deck, relics } });
+  const leaveShop = useCallback((gold, deck, relics, potions) => {
+    dispatch({ type: 'LEAVE_SHOP', payload: { gold, deck, relics, potions } });
   }, []);
 
   const rest = useCallback(() => {

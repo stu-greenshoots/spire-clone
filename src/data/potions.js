@@ -180,3 +180,15 @@ export const getPotionById = (id) => ALL_POTIONS.find(p => p.id === id);
  * @returns {Array} Array of potions matching the rarity
  */
 export const getPotionsByRarity = (rarity) => ALL_POTIONS.filter(p => p.rarity === rarity);
+
+/**
+ * Get a random potion, optionally filtered by rarity, excluding specific IDs
+ * @param {string|null} rarity - Optional rarity filter
+ * @param {string[]} excludeIds - IDs to exclude
+ * @returns {Object|undefined} A random potion
+ */
+export const getRandomPotion = (rarity = null, excludeIds = []) => {
+  let potions = ALL_POTIONS.filter(p => !excludeIds.includes(p.id));
+  if (rarity) potions = potions.filter(p => p.rarity === rarity);
+  return potions[Math.floor(Math.random() * potions.length)];
+};

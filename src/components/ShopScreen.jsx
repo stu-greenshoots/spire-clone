@@ -2,16 +2,18 @@ import { useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { getRandomCard, RARITY } from '../data/cards';
 import { getRandomRelic, RELIC_RARITY } from '../data/relics';
+import { getRandomPotion, POTION_RARITY } from '../data/potions';
 import Card from './Card';
-import { getRelicImage } from '../assets/art/art-config';
+import { getRelicImage, getPotionImage } from '../assets/art/art-config';
 
 const ShopScreen = () => {
   const { state, leaveShop } = useGame();
-  const { player, deck, relics } = state;
+  const { player, deck, relics, potions } = state;
 
   const [gold, setGold] = useState(player.gold);
   const [purchasedDeck, setPurchasedDeck] = useState([...deck]);
   const [purchasedRelics, setPurchasedRelics] = useState([...relics]);
+  const [purchasedPotions, setPurchasedPotions] = useState([...potions]);
 
   // Generate shop items once
   const shopItems = useMemo(() => {
@@ -31,7 +33,14 @@ const ShopScreen = () => {
     const relic = getRandomRelic(RELIC_RARITY.UNCOMMON, purchasedRelics.map(r => r.id));
     const removal = { type: 'removal', price: 75 };
 
-    return { cards, relic: relic ? { ...relic, price: 150 + Math.floor(Math.random() * 50), bought: false } : null, removal };
+    // 2 potions: 1 common, 1 uncommon
+    const shopPotions = [];
+    const commonPotion = getRandomPotion(POTION_RARITY.COMMON);
+    if (commonPotion) shopPotions.push({ ...commonPotion, price: 50 + Math.floor(Math.random() * 25), bought: false });
+    const uncommonPotion = getRandomPotion(POTION_RARITY.UNCOMMON, commonPotion ? [commonPotion.id] : []);
+    if (uncommonPotion) shopPotions.push({ ...uncommonPotion, price: 75 + Math.floor(Math.random() * 50), bought: false });
+
+    return { cards, relic: relic ? { ...relic, price: 150 + Math.floor(Math.random() * 50), bought: false } : null, potions: shopPotions, removal };
   }, [purchasedRelics]);
 
   const [shopState, setShopState] = useState(shopItems);
@@ -55,6 +64,20 @@ const ShopScreen = () => {
     }
   };
 
+  const buyPotion = (potionIndex) => {
+    const potion = shopState.potions[potionIndex];
+    if (!potion || potion.bought || gold < potion.price) return;
+    const emptySlot = purchasedPotions.indexOf(null);
+    if (emptySlot === -1) return; // No empty potion slot
+    setGold(gold - potion.price);
+    const newPotions = [...purchasedPotions];
+    newPotions[emptySlot] = { ...potion };
+    setPurchasedPotions(newPotions);
+    const newShopPotions = [...shopState.potions];
+    newShopPotions[potionIndex] = { ...potion, bought: true };
+    setShopState({ ...shopState, potions: newShopPotions });
+  };
+
   const [showRemoval, setShowRemoval] = useState(false);
 
   const removeCard = (cardIndex) => {
@@ -68,7 +91,7 @@ const ShopScreen = () => {
   };
 
   const handleLeave = () => {
-    leaveShop(gold, purchasedDeck, purchasedRelics);
+    leaveShop(gold, purchasedDeck, purchasedRelics, purchasedPotions);
   };
 
   if (showRemoval) {
@@ -254,6 +277,113 @@ const ShopScreen = () => {
               gold={gold}
               onBuy={buyRelic}
             />
+          </>
+        )}
+
+        {/* Potions Section */}
+        {shopState.potions && shopState.potions.length > 0 && (
+          <>
+            <SectionHeader icon={'\uD83E\uDDEA'} title="Potions" />
+            <div style={{
+              display: 'flex',
+              gap: '12px',
+              marginBottom: '25px',
+              flexWrap: 'wrap'
+            }}>
+              {shopState.potions.map((potion, idx) => {
+                const hasEmptySlot = purchasedPotions.indexOf(null) !== -1;
+                const canAfford = gold >= potion.price && !potion.bought && hasEmptySlot;
+                return (
+                  <div
+                    key={`${potion.id}_${idx}`}
+                    onClick={() => canAfford && buyPotion(idx)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      padding: '12px 15px',
+                      flex: '1 1 200px',
+                      background: potion.bought
+                        ? 'rgba(30, 30, 40, 0.5)'
+                        : canAfford
+                          ? 'linear-gradient(180deg, rgba(68, 170, 68, 0.2) 0%, rgba(68, 170, 68, 0.1) 100%)'
+                          : 'rgba(30, 30, 40, 0.5)',
+                      border: potion.bought
+                        ? '2px solid #333'
+                        : canAfford
+                          ? '2px solid #44aa44'
+                          : '2px solid #444',
+                      borderRadius: '12px',
+                      opacity: potion.bought ? 0.3 : canAfford ? 1 : 0.6,
+                      cursor: potion.bought ? 'default' : canAfford ? 'pointer' : 'not-allowed',
+                      touchAction: 'manipulation',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span style={{ fontSize: '32px' }}>
+                      {(() => {
+                        const img = getPotionImage(potion.id);
+                        return img ? <img src={img} alt={potion.name} style={{ width: '32px', height: '32px', borderRadius: '6px', objectFit: 'cover' }} /> : '\uD83E\uDDEA';
+                      })()}
+                    </span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{
+                        fontWeight: 'bold',
+                        fontSize: '14px',
+                        color: potion.bought ? '#666' : '#88cc88',
+                        marginBottom: '2px'
+                      }}>
+                        {potion.name}
+                      </div>
+                      <div style={{
+                        fontSize: '11px',
+                        color: potion.bought ? '#444' : '#88aa88',
+                        lineHeight: '1.3'
+                      }}>
+                        {potion.description}
+                      </div>
+                      {!hasEmptySlot && !potion.bought && (
+                        <div style={{ fontSize: '10px', color: '#aa4444', marginTop: '2px' }}>
+                          No empty potion slot
+                        </div>
+                      )}
+                    </div>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      background: potion.bought
+                        ? 'rgba(50, 50, 50, 0.5)'
+                        : canAfford
+                          ? 'rgba(255, 215, 0, 0.2)'
+                          : 'rgba(170, 68, 68, 0.2)',
+                      padding: '4px 10px',
+                      borderRadius: '12px',
+                      border: potion.bought
+                        ? '1px solid #444'
+                        : canAfford
+                          ? '1px solid #FFD700'
+                          : '1px solid #aa4444'
+                    }}>
+                      {potion.bought ? (
+                        <span style={{ color: '#666', fontSize: '12px', fontWeight: 'bold' }}>SOLD</span>
+                      ) : (
+                        <>
+                          <span style={{ fontSize: '12px' }}>{'\uD83D\uDCB0'}</span>
+                          <span style={{
+                            color: canAfford ? '#FFD700' : '#aa4444',
+                            fontSize: '13px',
+                            fontWeight: 'bold'
+                          }}>
+                            {potion.price}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </>
         )}
 
