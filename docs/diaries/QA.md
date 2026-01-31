@@ -2,6 +2,26 @@
 
 ## Sprint 9 Entries
 
+### QA-12: Accessibility Pass
+**Date:** 2026-01-31
+**Status:** Complete, PR #100 merged
+
+**Done:**
+1. Added `:focus-visible` CSS styles for all buttons and `[role="button"]` elements — gold outline with glow
+2. Card.jsx: Added `role="button"`, `tabIndex`, `aria-label` (name, type, cost, upgraded status), and Enter/Space keyboard handlers
+3. CombatScreen.jsx: Added ARIA labels to energy orb (`role="status"`), end turn button, pile buttons, card hand container (`role="group"`), and card inspect overlay (`role="dialog"` with Escape key dismiss)
+4. MapScreen.jsx: Added `role="button"`, `tabIndex`, `aria-label`, and keyboard handlers to accessible map nodes. Removed `outline: 'none'` from deck viewer button.
+5. Added `.skip-link` CSS class for future skip-to-content implementation
+
+**Scope kept intentionally small (S):** Focus indicators, ARIA labels, keyboard nav for core interactions. Full WCAG compliance is post-1.0.
+
+**Validation:** `npm run validate` passes — 1736 tests, lint clean, build succeeds
+
+**Blockers:** None
+**Next:** All QA sprint 9 tasks complete
+
+---
+
 ### QA-11: Full Regression Test Suite
 **Date:** 2026-01-31
 **Status:** Complete, PR #94 merged
