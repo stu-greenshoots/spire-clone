@@ -15,6 +15,46 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 11 — FIX-08 Complete
+**Date:** 2026-01-31
+**Status:** FIX-08 merged (PR #124)
+
+**Done:**
+- Identified shop potions as highest-priority P0 bug (user-reported)
+- Implemented as JR: added getRandomPotion() to potions.js, shop generates 2 potions (1 common, 1 uncommon)
+- Added potion purchase UI with empty slot check, wired through leaveShop → shopReducer
+- 6 new tests, 2111 total passing
+- Both Copilot and Mentor reviews passed
+- Merged PR #124 via squash, updated sprint board and JR diary
+
+**Sprint 11 Progress:** 5/16 tasks done (PM-11, BE-23, JR-09a, JR-09b, FIX-08)
+
+**Remaining P0 user-reported bugs:**
+- Sound not working (AR investigation needed — audio preloading never initialized)
+
+**Next highest priority:** GD-16 (card rarity visuals) or UX-21 (run history) — both P0 on the sprint board
+
+---
+
+### URGENT — CHARACTER DIRECTION CHANGE
+**Date:** 2026-01-31
+**Priority:** URGENT — READ FIRST
+**Status:** DECISION NEEDED
+
+**Stu's direction: Do NOT introduce The Silent.** We're building our own game, not cloning Slay the Spire. The second character should be an original creation.
+
+**Two options for the team to decide:**
+
+1. **Continue Sprint 11 as-is, new character next sprint.** Ship BE-23 (character system infrastructure) and the QoL/score tasks. Design and implement an original character in Sprint 12. Pros: no disruption, character system still lands. Cons: delays the second character by a sprint.
+
+2. **Pull The Silent now, replace with an original character this sprint.** Rework JR's card tasks and any Silent-specific content. Team designs a new character identity, card pool, and mechanic. Pros: ships a character this sprint. Cons: significant mid-sprint replanning, JR's 30 cards need redesigning.
+
+**Either way, BE-23 (character system architecture) is still valid — it's character-agnostic.**
+
+**Team input needed.** Varrow for character identity/theme, JR for card feasibility, BE for mechanic implications. Discuss and decide before starting character-specific work.
+
+---
+
 ### Sprint 11 — PM-11 Complete
 **Date:** 2026-01-31
 **Status:** PM-11 DONE
@@ -28,6 +68,29 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 **Sprint 11 Progress:** 1/15 tasks done (PM-11)
 
 **Next:** BE-23 (character system) — critical path, unblocks all Silent work
+
+---
+
+### User-Reported Issues — Sound & Shop Potions
+**Date:** 2026-01-31
+**Priority:** P0 — USER-REPORTED
+**Status:** OPEN — needs investigation this sprint
+
+**User feedback:**
+1. **Sound isn't working.** Audio system appears broken — needs AR investigation. We have 6 tracks + SFX wired since Sprint 8/9 (AR-06, AR-07, AR-09), so this is a regression or runtime issue.
+2. **Potions not available at shop.** Players cannot buy potions from the shop. We fixed potion battle rewards in Sprint 10 (FIX-07), but shop availability was apparently never wired up or is broken.
+
+**Action required:**
+- AR: Investigate sound — is it a browser autoplay issue, a broken audio path, or a regression? Check audioSystem.js and whether tracks load/play at runtime.
+- JR + BE: Investigate shop potions — check shopReducer.js / shop data to see if potions are included in shop inventory. May need to add potion pool to shop generation.
+
+**These should be prioritized alongside BE-23 this sprint. Core mechanics not working = P0.**
+
+**Also this sprint: Enable editor modes in GitHub deploys.**
+While we're still testing, the production GitHub Pages build should have the Data Editor / StateBuilder dev tools enabled. Currently gated behind `import.meta.env.DEV` in MainMenu.jsx (line ~402). Easiest fix: add `VITE_SHOW_EDITOR=true` env var to `.github/workflows/deploy.yml` build step and update the condition. Flip it off when we ship for real.
+
+**Also this sprint: Documentation cleanup.**
+Docs have accumulated over 11 sprints and are a mess — many are likely stale or redundant. Need a PM pass to audit, consolidate, and prune. Candidates: SPRINT_*_PLAN.md files, FUTURE_SPRINTS_PLAN.md, TEAM_PLAN.md, duplicate instructions in .claude/CLAUDE.md vs root CLAUDE.md, stale diary entries. Goal: someone new to the project can orient without reading 20 files.
 
 ---
 

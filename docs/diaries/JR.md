@@ -2,6 +2,23 @@
 
 ## Sprint 11 Entries
 
+### FIX-08: Add potions to shop inventory
+**Date:** 2026-01-31
+**Status:** MERGED (PR #124)
+
+**Root cause:** Shop inventory generation in ShopScreen.jsx only created cards, relics, and card removal service. Potions were completely missing from the shop despite being a core mechanic with 15 potions defined.
+
+**Fix:** Added `getRandomPotion(rarity, excludeIds)` to potions.js. Shop now generates 2 potions (1 common at 50-74g, 1 uncommon at 75-124g). Added buy logic with empty slot check and "No empty potion slot" feedback. Wired potions through `leaveShop` → `shopReducer` for state persistence.
+
+**Files changed:** potions.js, ShopScreen.jsx, GameContext.jsx, shopReducer.js, shopPotions.test.js (5 files, +219/-7)
+
+**Tests:** 6 new tests for getRandomPotion and shopReducer potions. 2111 total passing.
+
+**Blockers:** None
+**Next:** Available for QA-15 support or other tasks.
+
+---
+
 ### JR-09b: The Silent — Starter Deck & Character Integration
 **Date:** 2026-01-31
 **Status:** MERGED (PR #123)
