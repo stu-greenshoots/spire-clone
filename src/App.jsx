@@ -26,10 +26,11 @@ const PHASE_MUSIC_MAP = {
   combat: SOUNDS.music.combat,
   boss: SOUNDS.music.boss,
   victory: SOUNDS.music.victory,
-  defeat: SOUNDS.music.defeat
+  defeat: SOUNDS.music.defeat,
+  act3_map: SOUNDS.music.act3Map
 };
 
-function getMusicPhase(gamePhase, currentNode) {
+function getMusicPhase(gamePhase, currentNode, act) {
   switch (gamePhase) {
     case GAME_PHASE.MAIN_MENU:
     case GAME_PHASE.STARTING_BONUS:
@@ -38,7 +39,7 @@ function getMusicPhase(gamePhase, currentNode) {
     case GAME_PHASE.REST_SITE:
     case GAME_PHASE.SHOP:
     case GAME_PHASE.EVENT:
-      return 'map';
+      return act >= 3 ? 'act3_map' : 'map';
     case GAME_PHASE.COMBAT:
     case GAME_PHASE.COMBAT_REWARD:
     case GAME_PHASE.CARD_REWARD:
@@ -61,11 +62,11 @@ const GameContent = () => {
   }, []);
 
   useEffect(() => {
-    const musicPhase = getMusicPhase(state.phase, state.currentNode);
+    const musicPhase = getMusicPhase(state.phase, state.currentNode, state.act);
     if (musicPhase) {
       audioManager.setPhase(musicPhase);
     }
-  }, [state.phase, state.currentNode]);
+  }, [state.phase, state.currentNode, state.act]);
 
   // Check if we're in victory/reward phase (show overlay on combat screen)
   const isVictoryPhase = state.phase === GAME_PHASE.COMBAT_REWARD || state.phase === GAME_PHASE.CARD_REWARD;
