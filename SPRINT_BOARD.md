@@ -316,7 +316,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make every action feel impactful. Professional first impression. Fix deferred infrastructure debt.
 **Plan:** See `SPRINT_8_PLAN.md`
 **Branch:** `sprint-8`
-**Status:** IN PROGRESS — 4 P0 merged, 10 remaining
+**Status:** IN PROGRESS — 5 P0 merged, 9 remaining
 
 ### P0 — Must Ship
 
@@ -326,7 +326,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | UX-16 | UX | M | Combat juice — screen shake, card play feedback, status pop | MERGED (PR #80) |
 | VARROW-03 | Varrow | M | Victory/defeat narrative — death as dissolution, victory as becoming real | MERGED (PR #81) |
 | AR-07 | AR | M | SFX expansion — 10+ new CC0 sounds for game events | MERGED (PR #82) |
-| BE-09 | BE | M | Starting bonus / Neow — 3-4 run-start options (deferred since Sprint 6) | PENDING |
+| BE-09 | BE | M | Starting bonus / Neow — 3-4 run-start options (deferred since Sprint 6) | MERGED (PR #83) |
 | GD-09 | GD | M | Missing enemy art (7 sprites) + sprite sheet rebuild (41 enemies) | PENDING |
 
 ### P1 — Should Ship

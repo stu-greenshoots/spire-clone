@@ -1,7 +1,37 @@
-# BE Diary - Sprint 3
+# BE Diary
 
 ## Role
 Back Ender - Architecture, state management, performance
+
+## Sprint 8 Entries
+
+### BE-09: Starting Bonus / Neow
+**Date:** 2026-01-31
+**Status:** COMPLETE, MERGED (PR #83)
+
+**Done:**
+- Added STARTING_BONUS game phase between START_GAME and MAP
+- 4 bonus options: random common relic, 100 gold, upgrade starter card, transform starter card
+- Skip option for purists
+- New StartingBonus.jsx component (119 lines) with Endless War theming
+- SELECT_STARTING_BONUS reducer in metaReducer.js (72 lines of new logic)
+- 6 new tests in startingBonus.test.js
+- Updated 20 START_GAME dispatches in fullPlaythrough.test.js
+- Updated E2E fixture to handle bonus screen
+- All 1137 tests pass, lint clean, build clean
+
+**Architecture:**
+- Phase flow: MAIN_MENU → STARTING_BONUS → MAP (was MAIN_MENU → MAP)
+- Save/load safe: LOAD_GAME always restores to MAP phase
+- Bonus selection auto-saves after applying choice
+- Transform uses getRandomCard with same type filter for thematic replacement
+
+**Blockers:** None
+**Next:** Available for Sprint 8 support
+
+---
+
+## Sprint 3 Entries
 
 ## Owned Files
 `src/context/`, `src/context/reducers/`
