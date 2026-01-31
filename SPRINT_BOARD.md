@@ -271,34 +271,34 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 7: Mobile Combat + Act 2 Content + Narrative Voice - PLANNED
+## Sprint 7: Mobile Combat + Act 2 Content + Narrative Voice - IN PROGRESS
 
 **Goal:** Make combat feel professional on mobile. Correct and expand the Act 2 enemy roster. Extend the Endless War narrative.
 **Plan:** See `SPRINT_7_PLAN.md`
-**Branch:** `sprint-7` (to be created)
-**Status:** PLANNED — Team-aligned, Mentor-approved
+**Branch:** `sprint-7`
+**Status:** IN PROGRESS — 9/9 P0 COMPLETE + 3/5 P1 merged, QA tasks remaining
 
-### P0 — Must Ship
+### P0 — Must Ship (ALL COMPLETE)
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| GD-08 | GD | S | Style guide — palette, fonts, spacing, component patterns | PENDING |
-| BE-18 | BE | M | Act 2 enemy systems — Plated Armor, Confused, Artifact, Lifesteal | PENDING |
-| UX-13a | UX | M | Mobile combat: collapsible HUD + vertical zones + header rework | PENDING |
-| UX-13b | UX | M | Mobile combat: card fan/arc + tap-to-play | PENDING |
-| UX-13c | UX | S | Mobile combat: long-press inspect + inline enemy info | PENDING |
-| JR-03a | JR | M | Act 2 enemies: Centurion + Mystic (ally pair) + Snecko | PENDING |
-| JR-03b | JR | M | Act 2 enemies: Chosen + Shelled Parasite + Byrd | PENDING |
-| JR-03c | JR | M | Act 2 enemies: Book of Stabbing + Gremlin Leader + Reptomancer (+ Dagger) | PENDING |
-| VARROW-02 | Varrow | M | Event rewrite — 10 events become "pattern glitches" in the Endless War | PENDING |
+| GD-08 | GD | S | Style guide — palette, fonts, spacing, component patterns | MERGED (PR #60) |
+| BE-18 | BE | M | Act 2 enemy systems — Plated Armor, Confused, Artifact, Lifesteal | MERGED (PR #62) |
+| UX-13a | UX | M | Mobile combat: collapsible HUD + vertical zones + header rework | MERGED (PR #65) |
+| UX-13b | UX | M | Mobile combat: card fan/arc + tap-to-play | MERGED (PR #70) |
+| UX-13c | UX | S | Mobile combat: long-press inspect + inline enemy info | MERGED (PR #73) |
+| JR-03a | JR | M | Act 2 enemies: Centurion + Mystic (ally pair) + Snecko | MERGED (PR #63) |
+| JR-03b | JR | M | Act 2 enemies: Chosen + Shelled Parasite + Byrd | MERGED (PR #64) |
+| JR-03c | JR | M | Act 2 enemies: Book of Stabbing + Gremlin Leader + Reptomancer (+ Dagger) | MERGED (PR #66) |
+| VARROW-02 | Varrow | M | Event rewrite — 10 events become "pattern glitches" in the Endless War | MERGED (PR #61) |
 
 ### P1 — Should Ship
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| JR-03d | JR | L | Automaton boss + Bronze Orbs (simplified — no Stasis) | PENDING |
-| BE-19 | BE | S | Encounter weighting for Act 2 map (DEC-017) | PENDING |
-| AR-05a | AR | S | Touch targets — 44px minimum on all interactive elements | PENDING |
+| JR-03d | JR | L | Automaton boss + Bronze Orbs (simplified — no Stasis) | MERGED (PR #68) |
+| BE-19 | BE | S | Encounter weighting for Act 2 map (DEC-017) | MERGED (PR #71) |
+| AR-05a | AR | S | Touch targets — 44px minimum on all interactive elements | MERGED (PR #72) |
 | QA-08a | QA | M | Act 2 enemy regression — AI patterns, new systems | PENDING |
 | QA-08b | QA | S | Combat redesign viewport testing — desktop + mobile | PENDING |
 
@@ -313,5 +313,5 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ## Sprints 8–9: See `ROADMAP.md`
 
-**Sprint 8:** Polish + Juice + Title Screen
+**Sprint 8:** Polish + Juice + Gameplay Quality Infrastructure
 **Sprint 9:** Ship Prep + QA + 1.0 (Web + PWA)
