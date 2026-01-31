@@ -9,6 +9,7 @@ import { ANIMATION_TYPE } from '../constants/animationTypes';
 import CardSelectionModal from './CardSelectionModal';
 import { CARD_TYPES } from '../data/cards';
 import CardTooltip from './CardTooltip';
+import TutorialOverlay from './TutorialOverlay';
 import { getPassiveRelicEffects } from '../systems/combatSystem';
 import { loadSettings, getAnimationDuration } from '../systems/settingsSystem';
 
@@ -563,6 +564,9 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         animations={animations}
         onAnimationComplete={removeAnimation}
       />
+
+      {/* Tutorial hints for first-time players */}
+      <TutorialOverlay isMobile={isMobile} />
 
       {/* Background scenery elements */}
       <div style={{
