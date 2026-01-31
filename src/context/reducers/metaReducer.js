@@ -10,6 +10,7 @@ import { getPassiveRelicEffects } from '../../systems/relicSystem';
 import { createInitialState } from '../GameContext';
 import { loadProgression, updateRunStats, saveProgression } from '../../systems/progressionSystem';
 import { getAscensionStartGold } from '../../systems/ascensionSystem';
+import { audioManager, SOUNDS } from '../../systems/audioSystem';
 
 /**
  * Reconstruct a full card object from its serialized form.
@@ -144,6 +145,8 @@ export const metaReducer = (state, action) => {
       const newDeck = state.deck.map(c =>
         c.instanceId === cardId ? upgradedCard : c
       );
+
+      audioManager.playSFX(SOUNDS.ui.cardUpgrade, 'ui');
 
       const upgradeState = {
         ...state,

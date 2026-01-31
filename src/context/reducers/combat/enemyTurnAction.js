@@ -2,6 +2,7 @@ import { ALL_CARDS } from '../../../data/cards';
 import { shuffleArray } from '../../../utils/mapGenerator';
 import { applyDamageToTarget as combatApplyDamageToTarget } from '../../../systems/combatSystem';
 import { triggerRelics } from '../../../systems/relicSystem';
+import { audioManager, SOUNDS } from '../../../systems/audioSystem';
 
 const applyDamageToTarget = combatApplyDamageToTarget;
 
@@ -85,6 +86,14 @@ export const processEnemyTurns = (ctx) => {
 
           hpLost = remainingDamage;
           newPlayer.currentHp = Math.max(0, newPlayer.currentHp - remainingDamage);
+        }
+
+        // AR-07: Play enemy attack sound, heavy hit if > 15 damage
+        audioManager.playSFX(SOUNDS.combat.enemyAttack, 'combat');
+        if (hpLost > 15) {
+          audioManager.playSFX(SOUNDS.combat.heavyHit, 'combat');
+        } else if (hpLost > 0) {
+          audioManager.playSFX(SOUNDS.combat.playerHurt, 'combat');
         }
 
         // Trigger onHpLoss relics

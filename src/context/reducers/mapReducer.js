@@ -9,6 +9,7 @@ import {
   shouldAddWoundAtCombatStart,
   createWoundCard
 } from '../../systems/ascensionSystem';
+import { audioManager, SOUNDS } from '../../systems/audioSystem';
 
 export const mapReducer = (state, action) => {
   switch (action.type) {
@@ -16,6 +17,9 @@ export const mapReducer = (state, action) => {
       const { nodeId } = action.payload;
       const [floor, index] = nodeId.split('-').map(Number);
       const node = state.map[floor][index];
+
+      // AR-07: Play map step sound on node selection
+      audioManager.playSFX(SOUNDS.ui.mapStep, 'ui');
 
       // Update node as visited
       const newMap = state.map.map((f, fi) =>
@@ -162,6 +166,7 @@ export const mapReducer = (state, action) => {
       }
 
       if (node.type === 'boss') {
+        audioManager.playSFX(SOUNDS.combat.bossIntro, 'combat');
         let enemies = getBossEncounter(state.act);
 
         // Apply ascension modifiers to boss (DEC-015: apply at SELECT_NODE)

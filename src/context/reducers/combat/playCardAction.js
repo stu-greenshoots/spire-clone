@@ -464,6 +464,9 @@ export const handlePlayCard = (state, action) => {
 
   // Check for enemy deaths and handle splits/spawns
   const dyingEnemies = newEnemies.filter(e => e.currentHp <= 0);
+  if (dyingEnemies.length > 0) {
+    audioManager.playSFX(SOUNDS.combat.enemyDeath, 'combat');
+  }
   let spawnedEnemies = [];
 
   dyingEnemies.forEach(enemy => {
@@ -491,6 +494,7 @@ export const handlePlayCard = (state, action) => {
 
   // Check victory
   if (newEnemies.length === 0) {
+    audioManager.playSFX(SOUNDS.combat.victory, 'combat');
     const goldReward = 10 + Math.floor(Math.random() * 15) +
       (state.currentNode?.type === 'elite' ? 25 : 0) +
       (state.currentNode?.type === 'boss' ? 50 : 0);
