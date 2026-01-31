@@ -1,4 +1,33 @@
-# JR Diary - Sprint 10
+# JR Diary - Sprint 11
+
+## Sprint 11 Entries
+
+### JR-09a: The Silent — 30 card pool
+**Date:** 2026-01-31
+**Status:** MERGED (PR #122)
+
+**Done:**
+- Added 31 Silent cards: 5 basic (strike, defend, neutralize, survivor, shiv), 10 common, 10 uncommon, 7 rare
+- Implemented poison mechanic: poison application via card effects, poison tick at start of player turn in endTurnAction, poison death + victory handling
+- Implemented Silent specials: discardOne, addShivs, drawThenDiscard, noxiousFumes, envenom, glassKnife, corpseExplosion, bulletTime, thousandCuts, and more
+- Added Ring of the Snake starter relic (draw 2 at combat start)
+- Added flavor text for all 31 cards + relic
+- Updated regression test knownSpecials (18 new entries)
+- Added silentCards.test.js with card structure validation
+- 2095 tests passing, lint clean, build clean
+
+**Files changed:** cards.js, characters.js, relics.js, flavorText.js, cardEffects.js, endTurnAction.js, playCardAction.js, regression.test.js, silentCards.test.js (9 files, +795/-4)
+
+**Design decisions:**
+- Poison tick happens at start of player turn (StS-accurate), decrements by 1 per turn
+- Noxious Fumes applies before poison tick (so fumes poison doesn't damage until next turn)
+- Victory-on-poison-death follows existing victory pattern (gold, card rewards, potion rewards)
+- Shiv is exhaust + 0-cost, upgrades to 6 damage (StS-accurate)
+
+**Blockers:** None
+**Next:** JR-09b (Silent starter deck + character selection integration)
+
+---
 
 ## Sprint 10 Entries
 
