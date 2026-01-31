@@ -51,6 +51,7 @@ async function main() {
   });
 
   const enemiesDir = path.join(__dirname, '../src/assets/art/enemies');
+  const enemiesDataPath = path.join(__dirname, '../src/data/enemies.js');
 
   // Find all enemy WebP images (exclude sprite sheets themselves)
   const files = fs.readdirSync(enemiesDir)
@@ -60,6 +61,19 @@ async function main() {
   if (files.length === 0) {
     console.log('No enemy images found.');
     return;
+  }
+
+  // Cross-reference enemy data IDs against art files
+  const artIds = new Set(files.map(f => path.parse(f).name));
+  const enemiesSource = fs.readFileSync(enemiesDataPath, 'utf-8');
+  const dataIds = [...enemiesSource.matchAll(/^\s+id:\s*'([^']+)'/gm)].map(m => m[1]);
+  const missingArt = dataIds.filter(id => !artIds.has(id));
+
+  if (missingArt.length > 0) {
+    console.error('ERROR: Enemies defined in data but missing art:');
+    missingArt.forEach(id => console.error(`  - ${id}`));
+    console.error(`\nAdd WebP images to ${enemiesDir} for these enemies.`);
+    process.exit(1);
   }
 
   console.log('='.repeat(60));
