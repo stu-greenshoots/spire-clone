@@ -78,6 +78,6 @@ describe('MainMenu Component', () => {
 
   it('renders the subtitle text', () => {
     render(<MainMenu />);
-    expect(screen.getByText(/Deck-Building/i)).toBeInTheDocument();
+    expect(screen.getByText(/Endless War/i)).toBeInTheDocument();
   });
 });
