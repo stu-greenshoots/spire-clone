@@ -15,6 +15,88 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 10 Retrospective
+**Date:** 2026-01-31
+**Status:** Sprint 10 COMPLETE — 15/15 tasks merged. Third consecutive 100% completion sprint.
+
+#### What Was Accomplished
+
+**Sprint 10 Goal:** Ship Act 3 content, daily challenge mode, and post-launch polish. First post-1.0 content update.
+
+**Final tally:** 15 tasks completed (7 P0 + 5 P1 + 3 P2). Zero deferred. 13 PRs merged (#107–#119), plus 2 tasks resolved without PRs (PM-10 infra, JR-08c pre-existing).
+
+| Area | PRs | Highlights |
+|------|-----|------------|
+| Infra (PM-10) | — | Merged Sprint 9 to master, tagged v1.0.0, created sprint-10 branch |
+| P0 Bug Fix (FIX-07) | #107 | Potions never awarded from battles — reward system wired up |
+| Act 3 Enemies (JR-08a/b/c) | #108, #109 | Nemesis, Giant Head, Transient, Spire Growth, Maw + Awakened One (pre-existing) |
+| Act 3 Map (BE-21) | #110 | Floors 35-50, act-specific encounter distribution |
+| Act 3 Narrative (VARROW-05) | #111 | 5 reality fracture events in Endless War voice |
+| Daily Challenge Infra (BE-22) | #112 | Seeded RNG, modifier system, scoring |
+| Daily Challenge UI (UX-19) | #113 | Menu button, modifier preview, score display |
+| Act 3 Regression (QA-13) | #114 | 103 new tests — enemy AI, 3-act playthrough, daily challenge, balance |
+| Act 3 Enemy Art (GD-14) | #115 | 4 new sprites, sprite sheet rebuild (45 enemies) |
+| Act 3 Music (AR-10) | #116 | Distinct exploration track for floors 35+ |
+| DataEditor Removal (QA-14) | #117 | Stripped 51KB dead weight from production bundle |
+| Re-review Assessment (UX-20) | #118 | Projected score 85/100 (up from 58/100 at Sprint 2) |
+| Act 3 Event Art (GD-15) | #119 | 5 WebP scene illustrations for reality fracture events |
+
+**Test count:** 1973 at sprint end (up from 1736 at Sprint 9 end). +237 tests.
+
+#### Recurring Issues — Status Update
+
+1. **Diary freshness: STILL MIXED.** BE diary stops at early sprints. GD/JR entries get updated per-task but lack session-level reflection. AR, UX, QA, VARROW are current. This pattern has persisted since Sprint 7 without causing delivery problems, but it's a context loss risk. Recommendation: make diary update a merge prerequisite in Sprint 11.
+
+2. **Pre-existing content discovery.** JR-08c (Awakened One) and several Act 3 enemies were already implemented. Three enemies from JR-08b also existed. This isn't a problem — it's efficient — but the sprint plan should audit existing content before assigning tasks. We lost no time here (tasks were just marked done), but better planning would have allocated JR to other work.
+
+3. **Validation gate not formally signed off.** Sprint board lists gate items with `- [ ]` checkboxes, none checked. The items are all met based on test counts and PR evidence, but the ceremony of checking them off hasn't happened. Low-priority process gap.
+
+4. **Sprint-10 → master merge still pending.** Draft PR #106 exists but sprint-10 hasn't been merged to master yet. Needs to happen before Sprint 11 starts.
+
+#### What Went Well
+
+- **Third consecutive 100% completion sprint.** Team estimation and delivery are now consistently reliable. All stretch items shipped.
+- **P0 bug (FIX-07) caught and fixed first.** Potion rewards were completely broken — identified from user feedback, prioritized correctly, fixed before content work began.
+- **Act 3 is real content.** 8 enemies + Awakened One boss + 5 events + map extension + art + music. The game now has a proper 3-act structure.
+- **Daily challenge adds replayability.** Seeded RNG + modifiers + scoring gives players a reason to return daily — smart addition alongside content.
+- **Score trajectory: 58 → 85.** UX-20 self-assessment shows dramatic improvement. Every original complaint from Game Zone has been addressed or substantially improved.
+- **JR consistency.** Delivered 3 enemy batch PRs on schedule again. Most consistent contributor across sprints.
+- **VARROW voice work.** Reality fracture events maintain the Endless War tone established over Sprints 6-9. Narrative coherence is strong.
+
+#### What Could Improve
+
+- **Audit existing content before sprint planning.** Would have avoided assigning already-done work (JR-08c, partial JR-08b).
+- **Merge to master promptly.** Sprint-10 work is done but not merged. Should be same-day.
+- **Formal validation gate sign-off.** Check the boxes on the sprint board.
+- **Diary enforcement.** Three sprints of noting this. Either enforce it or accept it's not happening.
+
+#### Project Status at Sprint 10 End
+
+| Metric | Value |
+|--------|-------|
+| Tests | 1973 passing |
+| Lint | 0 errors |
+| Build | Passing |
+| Content | 81 cards, 45+ enemies (3 acts), 49 relics, 15 potions, 25 events |
+| Acts | 3 complete (Act 1 + Act 2 + Act 3 with Awakened One boss) |
+| Daily Challenge | Functional with seeded runs, modifiers, scoring |
+| Art | 100% coverage — all enemies, events, relics, potions have art |
+| Music | 7 tracks (6 original + Act 3 exploration) |
+| Self-assessed Score | 85/100 (up from 58/100 at Sprint 2) |
+| Sprints completed | 10 |
+| Total PRs merged | ~119 |
+| Consecutive 100% sprints | 3 (Sprints 8, 9, 10) |
+
+#### Sprint 11 Recommendations
+
+1. Merge sprint-10 to master first (PM task)
+2. Consider Act 3 balance tuning — new enemies may need QA pass
+3. Address remaining Game Zone feedback gaps (15% unresolved per UX-20)
+4. Decide: more content (Act 4? More cards?) vs. distribution (Steam, mobile stores)
+5. Enforce diary updates or drop the requirement
+
+---
+
 ### Sprint 10 — GD-15 Complete (Sprint 10 COMPLETE)
 **Date:** 2026-01-31
 **Status:** GD-15 merged (PR #119) — Sprint 10 is now 15/15 tasks done
