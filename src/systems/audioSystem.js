@@ -67,7 +67,10 @@ class AudioManager {
     // Current music state
     this.currentMusic = null;
     this.musicFading = false;
-    this._fadeInterval = null;
+    this._fadeIntervals = []; // AR-09: Support multiple concurrent fades
+
+    // AR-09: Music ducking (temporary volume reduction for settings/pause)
+    this._ducked = false;
 
     // Audio cache
     this._audioCache = {};
@@ -226,9 +229,14 @@ class AudioManager {
    * Internal music playback (called after user gesture verified)
    */
   _playMusicInternal(trackId, { loop = true, fadeIn = 1000 } = {}) {
-    // Stop current music first
+    // Stop current music first (instant stop since we're starting fresh)
     if (this.currentMusic) {
-      this.stopMusic({ fadeOut: 0 });
+      const { audio: oldAudio } = this.currentMusic;
+      this._clearFade();
+      oldAudio.pause();
+      oldAudio.currentTime = 0;
+      this.currentMusic = null;
+      this.musicFading = false;
     }
 
     const audio = this._getAudio(trackId);
@@ -267,11 +275,11 @@ class AudioManager {
 
     if (fadeOut > 0 && audio.volume > 0) {
       this.musicFading = true;
+      this.currentMusic = null;
       this._fadeAudio(audio, audio.volume, 0, fadeOut, () => {
         audio.pause();
         audio.currentTime = 0;
-        this.currentMusic = null;
-        this.musicFading = false;
+        if (this.currentMusic === null) this.musicFading = false;
       });
     } else {
       this._clearFade();
@@ -328,11 +336,10 @@ class AudioManager {
   }
 
   /**
-   * Fade audio volume from start to end over duration (ms)
+   * Fade audio volume from start to end over duration (ms).
+   * AR-09: Returns interval ID so multiple fades can run concurrently.
    */
   _fadeAudio(audio, fromVolume, toVolume, duration, onComplete) {
-    this._clearFade();
-
     const steps = 20;
     const stepTime = duration / steps;
     const volumeStep = (toVolume - fromVolume) / steps;
@@ -340,7 +347,7 @@ class AudioManager {
 
     audio.volume = fromVolume;
 
-    this._fadeInterval = setInterval(() => {
+    const intervalId = setInterval(() => {
       currentStep++;
       const newVolume = Math.max(0, Math.min(1, fromVolume + volumeStep * currentStep));
       try {
@@ -350,7 +357,8 @@ class AudioManager {
       }
 
       if (currentStep >= steps) {
-        this._clearFade();
+        clearInterval(intervalId);
+        this._fadeIntervals = this._fadeIntervals.filter(id => id !== intervalId);
         try {
           audio.volume = Math.max(0, Math.min(1, toVolume));
         } catch {
@@ -359,16 +367,17 @@ class AudioManager {
         if (onComplete) onComplete();
       }
     }, stepTime);
+
+    this._fadeIntervals.push(intervalId);
+    return intervalId;
   }
 
   /**
-   * Clear any active fade interval
+   * Clear all active fade intervals
    */
   _clearFade() {
-    if (this._fadeInterval) {
-      clearInterval(this._fadeInterval);
-      this._fadeInterval = null;
-    }
+    this._fadeIntervals.forEach(id => clearInterval(id));
+    this._fadeIntervals = [];
   }
 
   /**
@@ -426,6 +435,29 @@ class AudioManager {
         // Silent fallback
       }
     }
+  }
+
+  /**
+   * AR-09: Temporarily reduce music volume (e.g., when settings/pause opens).
+   * Fades to 30% of current volume over 300ms.
+   */
+  duckMusic(fadeDuration = 300) {
+    if (this._ducked || !this.currentMusic) return;
+    this._ducked = true;
+    const { audio } = this.currentMusic;
+    const targetVolume = this._getEffectiveVolume('music') * 0.3;
+    this._fadeAudio(audio, audio.volume, targetVolume, fadeDuration);
+  }
+
+  /**
+   * AR-09: Restore music volume after ducking.
+   */
+  unduckMusic(fadeDuration = 300) {
+    if (!this._ducked || !this.currentMusic) return;
+    this._ducked = false;
+    const { audio } = this.currentMusic;
+    const targetVolume = this._getEffectiveVolume('music');
+    this._fadeAudio(audio, audio.volume, targetVolume, fadeDuration);
   }
 
   /**
