@@ -646,6 +646,32 @@ The game is ready for 1.0 release pending final validation gate sign-off.
 
 ---
 
+### Sprint 10 — BE-21 Complete + JR-08c Discovery
+**Date:** 2026-01-31
+**Status:** BE-21 merged (PR #110), JR-08c marked DONE
+
+**Done:**
+- Discovered JR-08c (Awakened One boss) was already fully implemented — data, mechanics, dialogue, tests all pre-existing
+- Marked JR-08c as DONE (pre-existing) on sprint board
+- Implemented BE-21 as BE: made `generateMap(act)` act-aware with per-act distribution config
+- Act 3 gets more elites (22% vs 15%), fewer rest sites, fewer combat-only floors
+- 13 new tests in mapGenerator.test.js, 1807 total passing
+- Both Copilot and Mentor reviews passed — clean implementation
+- Merged PR #110 via squash, updated sprint board and BE diary
+
+**Sprint 10 Progress:** 6/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21)
+
+**Next P0 tasks:**
+- VARROW-05: Act 3 narrative (last remaining P0)
+
+**Next P1 tasks:**
+- UX-19 + BE-22: Daily challenge (BE-22 infra first, then UX-19 UI)
+- QA-13: Act 3 regression
+- GD-14: Act 3 enemy art
+- AR-10: Act 3 music
+
+---
+
 ### Sprint 10 — JR-08b Complete
 **Date:** 2026-01-31
 **Status:** JR-08b merged (PR #109)

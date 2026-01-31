@@ -3,6 +3,31 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 10 Entries
+
+### BE-21: Act 3 Map Generation
+**Date:** 2026-01-31
+**Status:** MERGED (PR #110)
+
+**Done:**
+- Made `generateMap(act)` act-aware — previously ignored the act parameter
+- Extracted `ACT_DISTRIBUTIONS` config with per-act probability thresholds
+- Act 3: more elites (22% vs 15%), fewer rest sites (10% vs 12%), fewer combat-only floors (40% vs 50%)
+- Act 2 also gets slightly different distribution (45% combat, 17% elite)
+- 13 new tests covering structure, connectivity, and statistical act differences
+- 1807 tests passing total
+
+**Architecture:**
+- Distribution is config-driven — easy to tune per act without touching logic
+- Fallback to Act 1 distribution for unknown acts
+- Map structure (15 floors, boss at end, guaranteed rests) unchanged across all acts
+- Encounter system already handled Act 3 enemies via `act <= 3` filter
+
+**Blockers:** None
+**Next:** BE-22 (Daily challenge infrastructure) when assigned
+
+---
+
 ## Sprint 9 Entries
 
 ### BE-PWA: PWA Setup

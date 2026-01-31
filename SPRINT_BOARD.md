@@ -407,7 +407,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Ship Act 3 content (8 enemies + Awakened One boss), daily challenge mode, and post-launch polish. First post-1.0 content update.
 **Plan:** See `SPRINT_10_PLAN.md`
 **Branch:** `sprint-10`
-**Status:** IN PROGRESS — 5/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c)
+**Status:** IN PROGRESS — 6/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21)
 
 ### P0 — Must Ship
 
@@ -418,7 +418,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | JR-08a | JR | M | Act 3 enemies batch 1 — Giant Head, Nemesis, Reptomancer (elites) | MERGED (PR #108) |
 | JR-08b | JR | M | Act 3 enemies batch 2 — Writhing Mass, Transient, Spire Growth, Maw, Orb Walker | MERGED (PR #109) |
 | JR-08c | JR | M | Act 3 boss — Awakened One (two-phase, power reaction) | DONE (pre-existing) |
-| BE-21 | BE | M | Act 3 map generation — floors 35-50, encounter pools, boss node | PENDING |
+| BE-21 | BE | M | Act 3 map generation — floors 35-50, encounter pools, boss node | MERGED (PR #110) |
 | VARROW-05 | Varrow | M | Act 3 narrative — Awakened One dialogue, 5 "reality fracture" events | PENDING |
 
 ### P1 — Should Ship
