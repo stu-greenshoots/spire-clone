@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { VICTORY_NARRATIVE } from '../data/flavorText';
+import { getRelicImage } from '../assets/art/art-config';
 
 const getVictoryText = (defeatedHeart) => {
   const pool = defeatedHeart ? VICTORY_NARRATIVE.heart : VICTORY_NARRATIVE.standard;
@@ -166,7 +167,10 @@ const VictoryScreen = () => {
                 cursor: 'help'
               }}
             >
-              {relic.emoji}
+              {(() => {
+                const img = getRelicImage(relic.id);
+                return img ? <img src={img} alt={relic.name} style={{ width: '32px', height: '32px', borderRadius: '6px', objectFit: 'cover' }} /> : relic.emoji;
+              })()}
             </div>
           ))}
         </div>

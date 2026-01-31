@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { DEFEAT_NARRATIVE, DEFEAT_FOOTER } from '../data/flavorText';
+import { getRelicImage } from '../assets/art/art-config';
 
 const getDefeatText = (act, currentFloor, currentNode) => {
   const isBoss = currentNode?.type === 'boss';
@@ -173,7 +174,10 @@ const GameOverScreen = () => {
                 cursor: 'help'
               }}
             >
-              {relic.emoji}
+              {(() => {
+                const img = getRelicImage(relic.id);
+                return img ? <img src={img} alt={relic.name} style={{ width: '26px', height: '26px', borderRadius: '4px', objectFit: 'cover' }} /> : relic.emoji;
+              })()}
             </div>
           ))}
         </div>
