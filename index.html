@@ -23,7 +23,49 @@
     </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- UX-18: Branded loading splash — replaced by React on mount -->
+      <div id="loading-splash" style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        background: radial-gradient(ellipse at center, #141420 0%, #0a0a0f 70%);
+        color: #c8b89a;
+        font-family: Georgia, 'Times New Roman', serif;
+        user-select: none;
+      ">
+        <div style="
+          font-size: clamp(28px, 6vw, 48px);
+          font-weight: bold;
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          text-shadow: 0 0 20px rgba(200, 60, 60, 0.4), 0 2px 4px rgba(0,0,0,0.8);
+          margin-bottom: 16px;
+        ">Spire Ascent</div>
+        <div style="
+          font-size: clamp(11px, 2.5vw, 14px);
+          color: #665e50;
+          letter-spacing: 6px;
+          text-transform: uppercase;
+          margin-bottom: 40px;
+        ">The Endless War Awaits</div>
+        <div style="
+          width: 120px;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #c83c3c, transparent);
+          animation: splash-pulse 1.5s ease-in-out infinite;
+        "></div>
+        <style>
+          @keyframes splash-pulse {
+            0%, 100% { opacity: 0.3; transform: scaleX(0.6); }
+            50% { opacity: 1; transform: scaleX(1); }
+          }
+        </style>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
