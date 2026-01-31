@@ -14,6 +14,31 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 10 - GD-15 Complete
+**Date:** 2026-01-31
+**Status:** GD-15 complete, PR #119 merged to sprint-10
+
+**Done today:**
+- Generated 5 placeholder WebP images (512x512) for Act 3 reality fracture events
+- Events: reality_seam, dissolving_pattern, core_echo, identity_fork, war_memory
+- Color palettes: purple for Reality Seam, green for Dissolving, orange for Core Echo, magenta for Identity Fork, yellow for War Memory
+- Added `getEventImage()` to art-config.js following existing pattern
+- Updated EventScreen.jsx to render event art first with emoji fallback
+- Created `scripts/generate-event-art.js` for reproducible generation
+
+**Key finding:**
+- EventScreen.jsx uses a LOCAL `EVENTS` array with emoji+color fields, not the Act 3 events from src/data/events.js
+- The image fallback approach works for both: events with art get images, events without get emoji
+- 8 files changed, 120 insertions, 9 deletions — well under 300 line limit
+
+**Validation:** `npm run validate` passes — 1973 tests, lint clean, build clean
+
+**Next:**
+- All GD Sprint 10 tasks complete (GD-14, GD-15)
+- Placeholder art could be upgraded to higher quality in future sprints
+
+---
+
 ### Sprint 10 - GD-14 Complete
 **Date:** 2026-01-31
 **Status:** GD-14 complete, PR #115 merged to sprint-10

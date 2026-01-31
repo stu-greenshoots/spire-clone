@@ -407,7 +407,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Ship Act 3 content (8 enemies + Awakened One boss), daily challenge mode, and post-launch polish. First post-1.0 content update.
 **Plan:** See `SPRINT_10_PLAN.md`
 **Branch:** `sprint-10`
-**Status:** IN PROGRESS — 14/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21, VARROW-05, BE-22, UX-19, QA-13, GD-14, AR-10, QA-14, UX-20)
+**Status:** COMPLETE — 15/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21, VARROW-05, BE-22, UX-19, QA-13, GD-14, AR-10, QA-14, UX-20, GD-15)
 
 ### P0 — Must Ship
 
@@ -437,7 +437,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 |------|-------|------|-------------|--------|
 | UX-20 | UX | S | Re-review self-assessment — score against Game Zone rubric | MERGED (PR #118) |
 | QA-14 | QA | S | DataEditor removal — strip 51KB dead weight from production | MERGED (PR #117) |
-| GD-15 | GD | S | Act 3 event art — 5 scene illustrations for reality fractures | PENDING |
+| GD-15 | GD | S | Act 3 event art — 5 scene illustrations for reality fractures | MERGED (PR #119) |
 
 ### Sprint 10 Validation Gate
 
