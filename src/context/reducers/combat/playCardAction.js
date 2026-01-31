@@ -1,6 +1,7 @@
 import { GAME_PHASE } from '../../GameContext';
 import { ALL_CARDS, CARD_TYPES, getCardRewards, getRandomCard } from '../../../data/cards';
 import { getRandomRelic, getBossRelic } from '../../../data/relics';
+import { getPotionRewards } from '../../../systems/potionSystem';
 import { shuffleArray } from '../../../utils/mapGenerator';
 import { calculateDamage, calculateBlock, applyDamageToTarget } from '../../../systems/combatSystem';
 import { createSplitSlimes, createSummonedEnemy, getEnemyIntent } from '../../../systems/enemySystem';
@@ -539,6 +540,17 @@ export const handlePlayCard = (state, action) => {
         : getRandomRelic(null, state.relics.map(r => r.id));
     }
 
+    // Potion reward: 40% chance from normal/elite, 100% from boss
+    const hasEmptySlot = state.potions.some(p => p === null);
+    let potionReward = null;
+    if (hasEmptySlot) {
+      const potionChance = state.currentNode?.type === 'boss' ? 1.0 : 0.4;
+      if (Math.random() < potionChance) {
+        const potionRewards = getPotionRewards(1, state.currentFloor);
+        potionReward = potionRewards.length > 0 ? potionRewards[0] : null;
+      }
+    }
+
     // Track gold earned in run stats
     newRunStats.goldEarned += goldReward;
 
@@ -559,7 +571,8 @@ export const handlePlayCard = (state, action) => {
       combatRewards: {
         gold: goldReward,
         cardRewards,
-        relicReward
+        relicReward,
+        potionReward
       }
     };
     autoSave(victoryState);
