@@ -1,3 +1,26 @@
+# QA Diary - Sprint 7
+
+## Sprint 7 Entries
+
+### QA-08b: Combat Redesign Viewport Testing
+**Date:** 2026-01-31
+**Status:** Complete, PR pending review
+
+**Done:**
+- Created `tests/e2e/specs/viewport-regression.spec.js` with 8 E2E test scenarios
+- Desktop (1920x1080): no overflow, all cards/enemies visible, full header rendered
+- Mobile (390x844): compact header visible, card fan class applied, no horizontal overflow
+- Mobile: HUD expand/collapse toggle verified
+- Mobile: long-press card inspect overlay verified (touchstart/touchend simulation)
+- Mobile: touch target size checks on end turn button and pile buttons
+- Tablet (768x1024): boundary breakpoint resilience check
+- `npm run validate` passes (lint, unit tests, build)
+
+**Blockers:** None
+**Next:** Await review; then QA-08a (Act 2 enemy regression)
+
+---
+
 # QA Diary - Sprint 6
 
 ## Sprint 6 Entries
