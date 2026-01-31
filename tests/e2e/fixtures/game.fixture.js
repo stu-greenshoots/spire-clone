@@ -14,7 +14,12 @@ export const test = base.extend({
     const actions = {
       startNewGame: async () => {
         await page.click(SELECTORS.newGameButton);
-        // Wait for map to render (The Spire header appears)
+        // Skip starting bonus to go straight to map
+        const skipBtn = page.locator('[data-testid="bonus-skip"]');
+        await skipBtn.waitFor({ timeout: 3000 }).catch(() => {});
+        if (await skipBtn.isVisible().catch(() => false)) {
+          await skipBtn.click();
+        }
         await page.waitForTimeout(500);
       },
 
