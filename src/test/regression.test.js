@@ -291,12 +291,12 @@ describe('Relic Regression - All Relics', () => {
 });
 
 // ============================================================
-// 4. Event Choice Regression - All 20 events
+// 4. Event Choice Regression - All 25 events
 // ============================================================
 
 describe('Event Choice Regression', () => {
-  it('has exactly 20 events', () => {
-    expect(events.length).toBe(20);
+  it('has exactly 25 events', () => {
+    expect(events.length).toBe(25);
   });
 
   describe('Every event choice has valid effect keys and result text', () => {

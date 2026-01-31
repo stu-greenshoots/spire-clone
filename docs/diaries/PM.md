@@ -15,6 +15,64 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 10 — GD-15 Complete (Sprint 10 COMPLETE)
+**Date:** 2026-01-31
+**Status:** GD-15 merged (PR #119) — Sprint 10 is now 15/15 tasks done
+
+**Done:**
+- Identified GD-15 as last remaining task (P2 stretch)
+- Spawned GD to create 5 Act 3 event art placeholders (reality fracture scenes)
+- 5 WebP images created in src/assets/art/events/ with dark fantasy radial gradients
+- Added getEventImage() to art-config.js following existing asset pattern
+- Updated EventScreen.jsx with image-first rendering, emoji fallback
+- Both Copilot and Mentor reviews passed — clean implementation, 120 insertions
+- Merged PR #119 via squash, updated sprint board and GD diary
+
+**Sprint 10 Final Status:** 15/15 tasks complete. Third consecutive sprint with 100% completion rate.
+
+---
+
+### Sprint 10 — UX-20 Complete
+**Date:** 2026-01-31
+**Status:** UX-20 merged (PR #118)
+
+**Done:**
+- Identified UX-20 as highest-priority unfinished task (first P2 remaining)
+- Spawned UX to create Game Zone Magazine re-review self-assessment
+- Created `docs/SELF_ASSESSMENT.md` — projected score 85/100 (up from 58/100)
+- 15/18 original complaints resolved (83%)
+- Docs-only PR, both Copilot and Mentor reviews passed
+- Merged PR #118 via squash, updated sprint board and UX diary
+
+**Sprint 10 Progress:** 14/15 tasks done. Only GD-15 (Act 3 event art) remaining.
+
+---
+
+### Sprint 10 — QA-13 Complete
+**Date:** 2026-01-31
+**Status:** QA-13 merged (PR #114)
+
+**Done:**
+- Identified QA-13 as highest-priority unfinished task (first P1 remaining)
+- Spawned QA to implement Act 3 regression + balance tests
+- 103 new tests: enemy AI, encounter pools, map gen, Awakened One two-phase, 3-act playthrough, daily challenge, reality fracture events
+- 1973 tests total (above 1900 target from validation gate)
+- Both Copilot and Mentor reviews passed — clean implementation
+- Merged PR #114 via squash, updated sprint board and QA diary
+
+**Sprint 10 Progress:** 10/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21, VARROW-05, BE-22, UX-19, QA-13)
+
+**Remaining P1 tasks:**
+- GD-14: Act 3 enemy art (8 sprites, sprite sheet rebuild)
+- AR-10: Act 3 music track
+
+**Remaining P2 tasks:**
+- UX-20: Re-review self-assessment
+- QA-14: DataEditor removal
+- GD-15: Act 3 event art
+
+---
+
 ### Sprint 9 - GD-13 Orchestration
 **Date:** 2026-01-31
 **Status:** GD-13 complete — verification-only task
@@ -492,5 +550,230 @@ Per ROADMAP.md, Sprint 9 is "Ship Prep + QA + 1.0":
 
 **Remaining P1:** BE-20, QA-12, VARROW-04, GD-13
 **Remaining P2:** UX-18, JR-07, AR-09
+
+---
+
+### Sprint 9 Retrospective
+**Date:** 2026-01-31
+**Status:** Sprint 9 COMPLETE — all 15 tasks merged (6 P0 + 5 P1 + 3 P2). Zero deferred.
+
+#### What Was Accomplished
+
+**Sprint 9 Goal:** Production-ready 1.0. Zero P0 bugs. Full regression. Professional polish.
+
+**Final tally:** 15 PRs merged. Second consecutive sprint with 100% completion rate (including all stretch items).
+
+| Area | PRs | Highlights |
+|------|-----|------------|
+| Sprint Merge (PM-09) | #78 | Sprint 8 merged to master cleanly |
+| PWA (BE-PWA) | #93 | Service worker, manifest, offline support, installable |
+| Full Regression (QA-11) | #94 | 577 new tests — 1159 → 1736 total. All cards, enemies, relics, potions covered |
+| Music (AR-06) | #95 | 6 tracks wired to game phases (menu, map, combat, boss, victory, defeat) |
+| Mobile Final Pass (AR-05b) | #96 | Portrait responsiveness verified on real device sizes |
+| Relic/Potion Icons (GD-12) | #97 | 20 most visible icons replace emoji — professional UI |
+| Tutorial (UX-17) | #98 | Contextual first-run hints, localStorage persistence |
+| Performance (BE-20) | #99 | React.memo optimization, bundle < 2MB, Lighthouse 90+ |
+| Accessibility (QA-12) | #100 | Keyboard nav, ARIA labels, focus indicators, contrast |
+| Narrative Polish (VARROW-04) | #101 | Final copy pass — consistent Endless War voice across all text |
+| Icon Verification (GD-13) | #102 | All 49 relics + 15 potions confirmed WebP art, zero emoji in UI |
+| Loading Splash (UX-18) | #103 | Branded dark fantasy splash with pulsing animation |
+| Card Balance (JR-07) | #104 | Outlier cards rebalanced (Pummel, Clash, True Grit) |
+| Audio Crossfade (AR-09) | #105 | Concurrent fades + settings ducking on music transitions |
+
+**Test count:** 1736 (up from 1159 at Sprint 8 end). +577 tests this sprint.
+
+#### Recurring Issues — Final Status
+
+1. **E2E flakiness:** RESOLVED since Sprint 8. Stable throughout Sprint 9.
+
+2. **Sprite sheet staleness:** RESOLVED. Automated pipeline in place since Sprint 8.
+
+3. **Diary freshness:** STILL MIXED. BE diary stops at Sprint 2-3. GD at Sprint 6-7. AR, UX, QA, VARROW are current. Not blocking ship but remains a process gap. For future sprints: enforce diary update as PR merge prerequisite.
+
+4. **Long-deferred items:** None remaining. Sprint 8 cleared the backlog, Sprint 9 had no deferrals.
+
+5. **Stretch items shipping:** Both Sprint 8 and Sprint 9 achieved 100% completion including P2 stretch. Team capacity has stabilized — estimates are now reliable.
+
+#### What Went Well
+
+- **Second consecutive 100% completion sprint.** Team has hit its stride on estimation and delivery.
+- **1736 tests.** QA-11 was the single largest test contribution in the project's history (+577 tests).
+- **PWA + accessibility + performance in one sprint.** Ship-prep tasks parallelized well with no conflicts.
+- **Narrative arc complete.** VARROW-01 through VARROW-04 span four sprints of consistent voice work. The Endless War framing is cohesive from boss dialogue through events through victory/defeat through tutorial text.
+- **Art pipeline fully closed.** Every relic, potion, card, and enemy has proper art. Zero emoji in the UI.
+- **Music and audio complete.** Six tracks, crossfading, SFX, settings ducking — the game has a soundscape now.
+- **Mobile fully playable.** Combat (Sprint 7) + map (Sprint 8) + touch targets + portrait responsiveness = complete mobile experience.
+
+#### What Could Improve
+
+- **Diary enforcement.** Three team members have stale diaries (BE, GD, JR). This hasn't caused problems yet but risks context loss.
+- **Validation gate not formally checked off.** The sprint board lists the gate items but they aren't marked complete. Should do a formal pass.
+- **No re-score against Game Zone criteria.** Started at 58/100 in Sprint 2. Should self-assess against the original rubric to quantify improvement.
+
+#### Project Status at Sprint 9 End
+
+| Metric | Value |
+|--------|-------|
+| Tests | 1736 passing |
+| Lint | 0 errors |
+| Build | Passing |
+| PWA | Installable, works offline |
+| Mobile | Playable on 375px+ portrait |
+| Content | 81 cards, 41 enemies, 49 relics, 15 potions, 20 events |
+| Art | 100% coverage — zero placeholders |
+| Music | 6 tracks with crossfade |
+| Accessibility | Keyboard nav, ARIA, contrast |
+| Performance | Lighthouse 90+, bundle < 2MB |
+| Sprints completed | 9 |
+| Total PRs merged | ~105 |
+
+The game is ready for 1.0 release pending final validation gate sign-off.
+
+---
+
+### URGENT: Potions Never Awarded from Battles
+**Date:** 2026-01-31
+**Priority:** P0 BUG — USER-REPORTED
+**Status:** OPEN — needs immediate investigation
+
+**User feedback:** Potion slots are visible in the UI, but players NEVER receive potions from battles. The potion reward system appears broken — potions are not being granted as combat rewards.
+
+**Impact:** Core game mechanic completely non-functional. Players can see the potion UI but have no way to obtain potions through normal gameplay. This undermines the entire potion system (15 potions with art, PotionSlots component, potionSystem — all useless if you can't get them).
+
+**Action required:**
+1. Investigate reward flow — check `rewardReducer.js` and `combatReducer.js` for potion reward generation after combat
+2. Check if potion rewards are being generated but not displayed, or not generated at all
+3. Check `src/data/potions.js` for any issues with potion pool
+4. This should block any other work until resolved — potions are a core mechanic
+
+**Owner:** JR (potion system) + BE (reward/combat reducers) — coordinate to fix
+**Branch:** Needs new task ID (e.g., FIX-07 or BUG-01)
+
+**READ THIS FIRST NEXT SESSION. DO NOT START OTHER WORK UNTIL THIS IS TRIAGED.**
+
+---
+
+### Sprint 10 Planning
+**Date:** 2026-01-31
+**Status:** Sprint 10 PLANNED
+
+**What I did:**
+- Analyzed post-1.0 backlog (ROADMAP.md, FUTURE_SPRINTS_PLAN.md, team diaries)
+- Identified Act 3 content as highest-impact gap — game currently ends after Act 2
+- Created SPRINT_10_PLAN.md with 15 tasks (7 P0, 5 P1, 3 P2)
+- Created sprint-10 branch from sprint-9
+- Updated SPRINT_BOARD.md with Sprint 10 section
+- Included FIX-07 (potion rewards P0 bug) as first priority
+
+**Sprint 10 Theme:** Act 3 + Daily Challenge + Post-Launch Polish
+
+**Key decisions:**
+1. Act 3 content is the sprint anchor — 8 enemies + Awakened One boss + map extension
+2. Daily challenge mode adds replay value without requiring new content pipeline
+3. FIX-07 (potions never awarded) is P0 — must fix before anything else
+4. Sprint 9 PR #92 still needs to merge to master + v1.0.0 tag (PM-10)
+
+**Task count:** 15 tasks across 8 roles. JR is heaviest loaded (3 enemy batches).
+
+**Next:** Commit plan, push branch, create draft PR, begin execution with PM-10 and FIX-07.
+
+---
+
+### Sprint 10 — PM-10 Complete
+**Date:** 2026-01-31
+**Status:** PM-10 DONE
+
+**Done:**
+- Merged Sprint 9 PR #92 to master (was draft → ready → squash merged)
+- Tagged v1.0.0 on master
+- Merged master back into sprint-10 branch (resolved merge conflicts from FIX-07)
+- Updated draft PR #106 with full task checklist
+- Updated sprint board: PM-10 → DONE, status → IN PROGRESS
+- `npm run validate` passes on sprint-10
+
+**Merge conflicts resolved:**
+- `src/components/RewardScreen.jsx` — kept FIX-07's `getPotionImage` import
+- `SPRINT_BOARD.md`, `docs/diaries/PM.md`, `docs/diaries/JR.md` — kept sprint-10 versions with FIX-07 updates
+
+**Sprint 10 Progress:** 2/15 tasks done (PM-10, FIX-07)
+
+**Next P0 tasks:**
+- JR-08a: Act 3 enemies batch 1
+- BE-21: Act 3 map generation
+- VARROW-05: Act 3 narrative
+
+---
+
+### Sprint 10 — BE-21 Complete + JR-08c Discovery
+**Date:** 2026-01-31
+**Status:** BE-21 merged (PR #110), JR-08c marked DONE
+
+**Done:**
+- Discovered JR-08c (Awakened One boss) was already fully implemented — data, mechanics, dialogue, tests all pre-existing
+- Marked JR-08c as DONE (pre-existing) on sprint board
+- Implemented BE-21 as BE: made `generateMap(act)` act-aware with per-act distribution config
+- Act 3 gets more elites (22% vs 15%), fewer rest sites, fewer combat-only floors
+- 13 new tests in mapGenerator.test.js, 1807 total passing
+- Both Copilot and Mentor reviews passed — clean implementation
+- Merged PR #110 via squash, updated sprint board and BE diary
+
+**Sprint 10 Progress:** 6/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21)
+
+**Next P0 tasks:**
+- VARROW-05: Act 3 narrative (last remaining P0)
+
+**Next P1 tasks:**
+- UX-19 + BE-22: Daily challenge (BE-22 infra first, then UX-19 UI)
+- QA-13: Act 3 regression
+- GD-14: Act 3 enemy art
+- AR-10: Act 3 music
+
+---
+
+### Sprint 10 — VARROW-05 Complete
+**Date:** 2026-01-31
+**Status:** VARROW-05 merged (PR #111)
+
+**Done:**
+- Identified VARROW-05 as highest-priority unfinished task (last remaining P0)
+- Implemented as Varrow: 5 Act 3 "reality fracture" events in Endless War voice
+- Awakened One dialogue already existed — no changes needed to bossDialogue.js
+- Updated event count tests (20 → 25) in events.test.js and regression.test.js
+- Fixed typo ("unmmaking" → "unmaking") caught during review
+- Both Copilot and Mentor reviews passed — clean implementation
+- Merged PR #111 via squash, updated sprint board and Varrow diary
+- 1837 tests passing
+
+**Sprint 10 Progress:** 7/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21, VARROW-05)
+**All P0 tasks now COMPLETE.**
+
+**Next P1 tasks:**
+- BE-22: Daily challenge infrastructure (seeded RNG, modifier system)
+- UX-19: Daily challenge mode UI (depends on BE-22)
+- QA-13: Act 3 regression + balance
+- GD-14: Act 3 enemy art
+- AR-10: Act 3 music track
+
+---
+
+### Sprint 10 — JR-08b Complete
+**Date:** 2026-01-31
+**Status:** JR-08b merged (PR #109)
+
+**Done:**
+- Identified JR-08b as next highest-priority P0 task
+- Discovered 3 of 5 planned enemies already existed (Writhing Mass, Orb Walker, Spiker)
+- Implemented as JR: added Transient, Spire Growth, Maw to enemies.js
+- Added to encounter pools, flavor text, 39 new tests
+- Both Copilot and Mentor reviews passed — one LOW note about constrict needing BE wiring
+- Merged PR #109 via squash, updated sprint board and JR diary
+- 1794 tests passing
+
+**Sprint 10 Progress:** 4/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b)
+
+**Next P0 tasks:**
+- JR-08c: Awakened One boss
+- BE-21: Act 3 map generation
+- VARROW-05: Act 3 narrative
 
 ---

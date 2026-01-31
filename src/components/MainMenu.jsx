@@ -4,16 +4,19 @@ import { hasSave } from '../systems/saveSystem';
 import { loadProgression } from '../systems/progressionSystem';
 import { getAscensionDescription, getMaxAscension } from '../systems/ascensionSystem';
 import { audioManager } from '../systems/audioSystem';
+import { getDailyChallenge, getModifierDetails, getChallengeScore } from '../systems/dailyChallengeSystem';
 import Settings from './Settings';
 import StateBuilder from './StateBuilder';
 
 const MainMenu = () => {
-  const { startGame, loadGameState, deleteSaveState, openDataEditor } = useGame();
+  const { startGame, startDailyChallenge, loadGameState, deleteSaveState, openDataEditor } = useGame();
   const [hovering, setHovering] = useState(false);
   const [hoveringContinue, setHoveringContinue] = useState(false);
   const [hoveringSettings, setHoveringSettings] = useState(false);
+  const [hoveringChallenge, setHoveringChallenge] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showStateBuilder, setShowStateBuilder] = useState(false);
+  const [showDailyChallenge, setShowDailyChallenge] = useState(false);
   const [saveExists, setSaveExists] = useState(false);
   const [selectedAscension, setSelectedAscension] = useState(0);
   const [unlockedAscension, setUnlockedAscension] = useState(0);
@@ -338,6 +341,36 @@ const MainMenu = () => {
           <span style={{ position: 'relative', zIndex: 1 }}>New Game</span>
         </button>
 
+        {/* Daily Challenge Button */}
+        <button
+          data-testid="btn-daily-challenge"
+          onClick={() => setShowDailyChallenge(true)}
+          onMouseEnter={() => setHoveringChallenge(true)}
+          onMouseLeave={() => setHoveringChallenge(false)}
+          style={{
+            background: hoveringChallenge
+              ? 'linear-gradient(180deg, #cc8833 0%, #aa6620 50%, #885515 100%)'
+              : 'linear-gradient(180deg, #bb7725 0%, #995518 50%, #774410 100%)',
+            color: 'white',
+            border: '2px solid rgba(255, 180, 85, 0.6)',
+            padding: '14px 44px',
+            fontSize: '17px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            boxShadow: hoveringChallenge
+              ? '0 0 30px rgba(255, 160, 60, 0.4), 0 6px 20px rgba(0, 0, 0, 0.4)'
+              : '0 0 15px rgba(200, 120, 40, 0.3), 0 4px 12px rgba(0, 0, 0, 0.3)',
+            touchAction: 'manipulation',
+            transition: 'all 0.3s ease',
+            transform: hoveringChallenge ? 'scale(1.03) translateY(-2px)' : 'scale(1)'
+          }}
+        >
+          Daily Challenge
+        </button>
+
         {/* Settings Button */}
         <button
           data-testid="btn-settings"
@@ -485,6 +518,171 @@ const MainMenu = () => {
       {showStateBuilder && (
         <StateBuilder onClose={() => setShowStateBuilder(false)} />
       )}
+
+      {/* Daily Challenge Modal */}
+      {showDailyChallenge && (
+        <DailyChallengePanel
+          onClose={() => setShowDailyChallenge(false)}
+          onStart={(challenge) => {
+            deleteSaveState();
+            startDailyChallenge(challenge);
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+// Daily Challenge Panel — shows today's modifiers, personal best, and start button
+const DailyChallengePanel = ({ onClose, onStart }) => {
+  const challenge = getDailyChallenge();
+  const modifiers = getModifierDetails(challenge.modifierIds);
+  const personalBest = getChallengeScore(challenge.date);
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0, bottom: 0,
+        background: 'rgba(0, 0, 0, 0.85)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10
+      }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div style={{
+        background: 'linear-gradient(180deg, #2a2520 0%, #1a1510 100%)',
+        border: '2px solid rgba(255, 180, 85, 0.4)',
+        borderRadius: '12px',
+        padding: '28px 24px',
+        maxWidth: '380px',
+        width: '90%',
+        position: 'relative',
+        boxShadow: '0 0 40px rgba(200, 120, 40, 0.2), 0 8px 32px rgba(0, 0, 0, 0.6)'
+      }}>
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute', top: '12px', right: '12px',
+            background: 'rgba(255, 255, 255, 0.1)', color: '#aaa',
+            border: 'none', borderRadius: '4px',
+            width: '44px', height: '44px', fontSize: '18px',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}
+        >
+          ✕
+        </button>
+
+        {/* Title */}
+        <h2 style={{
+          color: '#FFB855',
+          fontSize: '22px',
+          letterSpacing: '3px',
+          textTransform: 'uppercase',
+          marginBottom: '6px',
+          textShadow: '0 0 15px rgba(255, 180, 85, 0.4)'
+        }}>
+          Daily Challenge
+        </h2>
+
+        {/* Date */}
+        <div style={{
+          color: '#887766',
+          fontSize: '13px',
+          marginBottom: '20px',
+          letterSpacing: '1px'
+        }}>
+          {challenge.date}
+        </div>
+
+        {/* Modifiers */}
+        <div style={{ marginBottom: '20px' }}>
+          <div style={{
+            color: '#aa9988',
+            fontSize: '11px',
+            textTransform: 'uppercase',
+            letterSpacing: '2px',
+            marginBottom: '10px'
+          }}>
+            Today&apos;s Modifiers
+          </div>
+          {modifiers.map((mod) => (
+            <div key={mod.id} style={{
+              background: 'rgba(255, 180, 85, 0.08)',
+              border: '1px solid rgba(255, 180, 85, 0.2)',
+              borderRadius: '6px',
+              padding: '10px 14px',
+              marginBottom: '8px'
+            }}>
+              <div style={{
+                color: '#FFB855',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                marginBottom: '3px'
+              }}>
+                {mod.name}
+                <span style={{
+                  fontSize: '11px',
+                  color: mod.scoreMultiplier >= 1 ? '#66cc66' : '#cc6666',
+                  marginLeft: '8px',
+                  fontWeight: 'normal'
+                }}>
+                  {mod.scoreMultiplier >= 1 ? '+' : ''}{Math.round((mod.scoreMultiplier - 1) * 100)}% score
+                </span>
+              </div>
+              <div style={{ color: '#998877', fontSize: '12px' }}>
+                {mod.description}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Personal Best */}
+        {personalBest !== null && (
+          <div style={{
+            background: 'rgba(255, 215, 0, 0.06)',
+            border: '1px solid rgba(255, 215, 0, 0.15)',
+            borderRadius: '6px',
+            padding: '10px 14px',
+            marginBottom: '20px',
+            textAlign: 'center'
+          }}>
+            <div style={{ color: '#887755', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              Personal Best
+            </div>
+            <div style={{ color: '#FFD700', fontSize: '24px', fontWeight: 'bold' }}>
+              {personalBest.toLocaleString()}
+            </div>
+          </div>
+        )}
+
+        {/* Start Button */}
+        <button
+          data-testid="btn-start-daily"
+          onClick={() => onStart(challenge)}
+          style={{
+            width: '100%',
+            background: 'linear-gradient(180deg, #cc8833 0%, #aa6620 50%, #885515 100%)',
+            color: 'white',
+            border: '2px solid rgba(255, 180, 85, 0.6)',
+            padding: '14px',
+            fontSize: '18px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            letterSpacing: '3px',
+            textTransform: 'uppercase',
+            boxShadow: '0 0 20px rgba(255, 160, 60, 0.3)',
+            touchAction: 'manipulation',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          Begin Challenge
+        </button>
+      </div>
     </div>
   );
 };

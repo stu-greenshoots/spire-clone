@@ -203,6 +203,11 @@ export const applyDamageToTarget = (target, damage) => {
   let newHp = target.currentHp;
   let newFlight = target.flight;
 
+  // Enemy intangible: reduce all damage to 1
+  if (target.intangible > 0 && remainingDamage > 0) {
+    remainingDamage = 1;
+  }
+
   // Enemy flight: reduce incoming damage by 50% per stack, lose 1 stack
   if (newFlight > 0) {
     remainingDamage = Math.floor(remainingDamage * 0.5);

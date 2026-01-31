@@ -1,4 +1,64 @@
-# JR Diary - Sprint 9
+# JR Diary - Sprint 10
+
+## Sprint 10 Entries
+
+### JR-08b: Act 3 enemies batch 2 — normals
+**Date:** 2026-01-31
+**Status:** MERGED (PR #109)
+
+**Done:**
+- Added 3 new Act 3 normal enemies: Transient (999 HP, fades after 5 turns), Spire Growth (170-180 HP, constrict + strength scaling), Maw (300 HP, drool-slam-roar-nom cycle)
+- Writhing Mass, Orb Walker, and Spiker already existed — this completes the Act 3 normal pool (6 enemies)
+- Added all 3 to STRONG_NORMAL_ENEMIES encounter pool
+- Added flavor text for all 3 enemies
+- 39 new tests in act3Normals.test.js, 1794 total passing
+
+**Files changed:** enemies.js, flavorText.js, act3Normals.test.js (3 files, +295/-1)
+
+**Design decisions:**
+- Transient uses fadeTimer flag (5 turns) — fade special needs combat system wiring to kill enemy
+- Spire Growth has constrict property — constrict damage-per-turn needs BE wiring
+- Maw follows drool→slam→roar→nom→drool deterministic cycle
+
+**Blockers:** None
+**Next:** JR-08c (Awakened One boss)
+
+---
+
+### JR-08a: Act 3 enemies batch 1 — Nemesis elite
+**Date:** 2026-01-31
+**Status:** MERGED (PR #108)
+
+**Done:**
+- Added Nemesis as Act 3 elite (185-200 HP) — the only missing Act 3 elite. Giant Head and Reptomancer already existed.
+- Implemented enemy intangible system: `applyDamageToTarget` reduces all damage to 1 when enemy has intangible > 0
+- Nemesis AI: alternating pattern — even turns use Debilitate (Frail 3 + Weak 3) and gain Intangible 1, odd turns alternate between Scythe (45 dmg + Burn) and Attack Burn (6×3 + Burn)
+- Added intangible decrement at end of turn, intangible badge in Enemy component, lore in flavorText
+- 17 new tests, 1755 total passing
+
+**Files changed:** enemies.js, combatSystem.js, enemyTurnAction.js, endTurnAction.js, Enemy.jsx, flavorText.js, nemesis.test.js (7 files, +198/-1)
+
+**Design decisions:**
+- Enemy intangible is generic (works for any enemy), not Nemesis-specific — future enemies can use it
+- Nemesis grants intangible via `nemesisIntangible` flag + move ID check, not turn counter
+- `addBurn` special reused from existing Orb Walker / Hexaghost pattern
+
+**Blockers:** None
+**Next:** JR-08b (Act 3 normals) or JR-08c (Awakened One boss)
+
+---
+
+### FIX-07: Wire potion rewards into combat victory flow
+**Date:** 2026-01-31
+**Status:** MERGED (PR #107)
+
+**Root cause:** Potion rewards were completely missing from the victory flow. `combatRewards` only contained `gold` and `cardRewards` — no `potionReward` field was ever set, and RewardScreen.jsx had no potion section.
+
+**Fix:** Added potion reward generation to both victory paths (endTurnAction.js and playCardAction.js), 40% drop rate for normal/elite fights, 100% for bosses. Only offered when player has an empty potion slot. Added COLLECT_POTION reducer action and RewardScreen UI with potion art.
+
+**Files changed:** endTurnAction.js, playCardAction.js, rewardReducer.js, GameContext.jsx, RewardScreen.jsx (5 files, +87/-4 lines)
+
+---
 
 ## Sprint 9 Entries
 

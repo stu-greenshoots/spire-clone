@@ -614,6 +614,33 @@ export const ALL_ENEMIES = [
     slowCountMax: 4 // Reduced from 5
   },
   {
+    id: 'nemesis',
+    name: 'Nemesis',
+    hp: { min: 185, max: 200 },
+    type: 'elite',
+    act: 3,
+    emoji: '👻',
+    moveset: [
+      { id: 'scythe', intent: INTENT.ATTACK_DEBUFF, damage: 45, special: 'addBurn', message: 'Scythe' },
+      { id: 'attackBurn', intent: INTENT.ATTACK_DEBUFF, damage: 6, times: 3, special: 'addBurn', message: 'Attack Burn' },
+      { id: 'debilitate', intent: INTENT.DEBUFF, effects: [{ type: 'frail', amount: 3, target: 'player' }, { type: 'weak', amount: 3, target: 'player' }], message: 'Debilitate' }
+    ],
+    ai: (enemy, turn, lastMove) => {
+      // Alternates intangible turns: intangible on even turns (0, 2, 4...)
+      // On intangible turns, uses debilitate
+      // On vulnerable turns, alternates between scythe and multi-attack
+      if (turn % 2 === 0) {
+        // Intangible turn — gains intangible via special handling, uses debilitate
+        return enemy.moveset[2]; // debilitate
+      }
+      // Attack turn — alternate between scythe and multi-attack
+      if (lastMove?.id === 'scythe') return enemy.moveset[1];
+      return enemy.moveset[0]; // scythe
+    },
+    // Nemesis gains intangible on even turns — handled in enemyTurnAction
+    nemesisIntangible: true
+  },
+  {
     id: 'reptomancer',
     name: 'Reptomancer',
     hp: { min: 180, max: 180 },
@@ -682,6 +709,68 @@ export const ALL_ENEMIES = [
     ai: (enemy, turn, _lastMove) => {
       if (turn % 3 === 0) return enemy.moveset[1];
       return enemy.moveset[0];
+    }
+  },
+  {
+    id: 'transient',
+    name: 'Transient',
+    hp: { min: 999, max: 999 },
+    type: 'normal',
+    act: 3,
+    emoji: '👻',
+    fadeTimer: 5, // Fades (dies) after 5 turns
+    moveset: [
+      { id: 'attack', intent: INTENT.ATTACK, damage: 30, message: 'Attack' },
+      { id: 'heavyAttack', intent: INTENT.ATTACK, damage: 40, message: 'Heavy Attack' },
+      { id: 'fade', intent: INTENT.UNKNOWN, special: 'fade', message: 'Fading...' }
+    ],
+    ai: (enemy, turn, _lastMove) => {
+      // Escalating damage, fades after 5 turns
+      if (turn >= 4) return enemy.moveset[2]; // Fade on turn 5+
+      if (turn >= 2) return enemy.moveset[1]; // Heavy attack turns 2-4
+      return enemy.moveset[0]; // Normal attack turns 0-1
+    }
+  },
+  {
+    id: 'spireGrowth',
+    name: 'Spire Growth',
+    hp: { min: 170, max: 180 },
+    type: 'normal',
+    act: 3,
+    emoji: '🌑',
+    constrict: 6, // Deals 6 damage to player at end of each player turn
+    moveset: [
+      { id: 'smash', intent: INTENT.ATTACK, damage: 22, message: 'Smash' },
+      { id: 'constrict', intent: INTENT.DEBUFF, effects: [{ type: 'constrict', amount: 6, target: 'player' }], message: 'Constrict' },
+      { id: 'grow', intent: INTENT.BUFF, effects: [{ type: 'strength', amount: 3 }], message: 'Grow' }
+    ],
+    ai: (enemy, turn, lastMove) => {
+      // Opens with constrict, then alternates grow and smash
+      if (turn === 0) return enemy.moveset[1];
+      if (lastMove?.id === 'constrict' || lastMove?.id === 'smash') return enemy.moveset[2];
+      return enemy.moveset[0];
+    }
+  },
+  {
+    id: 'maw',
+    name: 'Maw',
+    hp: { min: 300, max: 300 },
+    type: 'normal',
+    act: 3,
+    emoji: '👄',
+    moveset: [
+      { id: 'drool', intent: INTENT.STRONG_DEBUFF, effects: [{ type: 'weak', amount: 2, target: 'player' }, { type: 'frail', amount: 2, target: 'player' }], message: 'Drool' },
+      { id: 'slam', intent: INTENT.ATTACK, damage: 25, message: 'Slam' },
+      { id: 'nomNom', intent: INTENT.ATTACK_BUFF, damage: 5, times: 3, special: 'healSelf', healAmount: 10, message: 'Nom Nom' },
+      { id: 'roar', intent: INTENT.BUFF, effects: [{ type: 'strength', amount: 4 }], message: 'Roar' }
+    ],
+    ai: (enemy, turn, lastMove) => {
+      // Drool -> Slam pattern, with occasional roar/nom
+      if (turn === 0) return enemy.moveset[0]; // Open with drool
+      if (lastMove?.id === 'drool') return enemy.moveset[1]; // Follow drool with slam
+      if (lastMove?.id === 'slam') return enemy.moveset[3]; // Roar after slam
+      if (lastMove?.id === 'roar') return enemy.moveset[2]; // Nom after roar
+      return enemy.moveset[0]; // Reset to drool
     }
   },
 
@@ -925,14 +1014,15 @@ export const createEnemyInstance = (enemy, index = 0) => {
     intentData: null,
     asleep: enemy.asleep || false,
     hasSplit: false,
-    stasis: null
+    stasis: null,
+    intangible: 0
   };
 };
 
 // Weak enemies suitable for multi-spawn encounters (low damage, manageable HP)
 const WEAK_ENEMIES = ['louse_red', 'louse_green', 'slime_small', 'spike_slime_small', 'fungiBeast'];
 const MEDIUM_ENEMIES = ['slime_medium', 'spike_slime_medium', 'cultist', 'mystic', 'byrd'];
-const STRONG_NORMAL_ENEMIES = ['jawWorm', 'looter', 'chosen', 'snakePlant', 'centurion', 'slaverBlue', 'snecko', 'shelledParasite', 'sphericGuardian', 'writhing_mass', 'orbWalker', 'spiker'];
+const STRONG_NORMAL_ENEMIES = ['jawWorm', 'looter', 'chosen', 'snakePlant', 'centurion', 'slaverBlue', 'snecko', 'shelledParasite', 'sphericGuardian', 'writhing_mass', 'orbWalker', 'spiker', 'transient', 'spireGrowth', 'maw'];
 
 // Act 2 encounter weighting (DEC-017)
 // Common enemies appear ~60% of the time, uncommon ~25%, pair ~15%

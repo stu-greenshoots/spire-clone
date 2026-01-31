@@ -53,6 +53,24 @@ export const rewardReducer = (state, action) => {
       };
     }
 
+    case 'COLLECT_POTION': {
+      const potion = state.combatRewards.potionReward;
+      if (!potion) return state;
+      const potions = [...state.potions];
+      const emptySlot = potions.indexOf(null);
+      if (emptySlot === -1) return state;
+      potions[emptySlot] = { ...potion };
+      audioManager.playSFX(SOUNDS.ui.relicPickup, 'ui');
+      return {
+        ...state,
+        potions,
+        combatRewards: {
+          ...state.combatRewards,
+          potionReward: null
+        }
+      };
+    }
+
     case 'OPEN_CARD_REWARDS': {
       return {
         ...state,

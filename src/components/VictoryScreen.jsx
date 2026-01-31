@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { VICTORY_NARRATIVE } from '../data/flavorText';
 import { getRelicImage } from '../assets/art/art-config';
+import { calculateChallengeScore, saveChallengeScore } from '../systems/dailyChallengeSystem';
 
 const getVictoryText = (defeatedHeart) => {
   const pool = defeatedHeart ? VICTORY_NARRATIVE.heart : VICTORY_NARRATIVE.standard;
@@ -10,9 +11,21 @@ const getVictoryText = (defeatedHeart) => {
 
 const VictoryScreen = () => {
   const { state, returnToMenu } = useGame();
-  const { player, deck, relics, currentFloor } = state;
+  const { player, deck, relics, currentFloor, dailyChallenge, runStats } = state;
   const [showContent, setShowContent] = useState(false);
   const victoryText = useMemo(() => getVictoryText(state.defeatedHeart), [state.defeatedHeart]);
+
+  // Calculate and save daily challenge score
+  const challengeScore = useMemo(() => {
+    if (!dailyChallenge) return null;
+    const score = calculateChallengeScore(
+      { ...runStats, floor: currentFloor },
+      player,
+      dailyChallenge.modifierIds
+    );
+    saveChallengeScore(dailyChallenge.date, score);
+    return score;
+  }, [dailyChallenge, runStats, currentFloor, player]);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 500);
@@ -143,6 +156,27 @@ const VictoryScreen = () => {
           <StatItem label="Relics" value={relics.length} icon={'\uD83D\uDC8E'} />
         </div>
       </div>
+
+      {/* Daily Challenge Score */}
+      {challengeScore !== null && (
+        <div style={{
+          background: 'linear-gradient(180deg, rgba(60, 45, 20, 0.8) 0%, rgba(40, 30, 15, 0.9) 100%)',
+          padding: '16px 24px',
+          borderRadius: '12px',
+          marginBottom: '20px',
+          border: '2px solid rgba(255, 180, 85, 0.5)',
+          boxShadow: '0 0 20px rgba(255, 160, 60, 0.2)',
+          textAlign: 'center',
+          animation: showContent ? 'fadeIn 0.5s ease 0.5s both' : 'none'
+        }}>
+          <div style={{ color: '#aa9977', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '4px' }}>
+            Daily Challenge Score
+          </div>
+          <div style={{ color: '#FFB855', fontSize: '32px', fontWeight: 'bold', textShadow: '0 0 15px rgba(255, 180, 85, 0.5)' }}>
+            {challengeScore.toLocaleString()}
+          </div>
+        </div>
+      )}
 
       {/* Relics Display */}
       {relics.length > 0 && (

@@ -120,7 +120,9 @@ export const createInitialState = () => ({
     defeatedEnemies: [], // Array of enemy IDs killed this run
     goldEarned: 0,
     floor: 0
-  }
+  },
+  // Daily challenge state (null when not in a daily challenge)
+  dailyChallenge: null
 });
 
 // Re-export combat calculation functions for testing (implementations in combatSystem.js)
@@ -134,6 +136,10 @@ export const applyDamageToTarget = combatApplyDamageToTarget;
 const gameReducer = (state, action) => {
   switch (action.type) {
     case 'START_GAME': {
+      return metaReducer(state, action);
+    }
+
+    case 'START_DAILY_CHALLENGE': {
       return metaReducer(state, action);
     }
 
@@ -166,6 +172,10 @@ const gameReducer = (state, action) => {
     }
 
     case 'COLLECT_RELIC': {
+      return rewardReducer(state, action);
+    }
+
+    case 'COLLECT_POTION': {
       return rewardReducer(state, action);
     }
 
@@ -274,6 +284,10 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'START_GAME', payload: { ascensionLevel } });
   }, []);
 
+  const startDailyChallenge = useCallback((challenge) => {
+    dispatch({ type: 'START_DAILY_CHALLENGE', payload: challenge });
+  }, []);
+
   const selectNode = useCallback((nodeId) => {
     dispatch({ type: 'SELECT_NODE', payload: { nodeId } });
   }, []);
@@ -300,6 +314,10 @@ export const GameProvider = ({ children }) => {
 
   const collectRelic = useCallback(() => {
     dispatch({ type: 'COLLECT_RELIC' });
+  }, []);
+
+  const collectPotion = useCallback(() => {
+    dispatch({ type: 'COLLECT_POTION' });
   }, []);
 
   const openCardRewards = useCallback(() => {
@@ -389,6 +407,7 @@ export const GameProvider = ({ children }) => {
   const value = {
     state,
     startGame,
+    startDailyChallenge,
     selectNode,
     selectCard,
     playCard,
@@ -396,6 +415,7 @@ export const GameProvider = ({ children }) => {
     endTurn,
     collectGold,
     collectRelic,
+    collectPotion,
     openCardRewards,
     selectCardReward,
     skipCardReward,

@@ -114,3 +114,31 @@ The Heart = the war's core algorithm. Beating it proves you're complex enough to
 **Next:** Available for UX-15 (narrative UI theming) when VARROW-03's tone is established
 
 ---
+
+### VARROW-05: Act 3 Reality Fracture Events
+**Date:** 2026-01-31
+**Status:** Complete, PR #111 merged
+
+**Done:**
+- Added 5 Act 3 events to `events.js` as "reality fractures" — the war destabilizes near the core
+- Events: Reality Seam, The Dissolving, Core Echo, Identity Fork, The War Remembers
+- Rare relic rewards matching Act 3 stakes: tungsten_rod, dead_branch, incense_burner, girya/torii, calipers
+- Updated event count tests (20 → 25) in events.test.js and regression.test.js
+- Awakened One boss dialogue already existed in bossDialogue.js — no changes needed
+
+**Design decisions:**
+- Reality fractures escalate the Endless War metaphor: near the core, the war's own structure breaks down
+- Each event explores a different aspect of proximity to the algorithm: parallel realities (Seam), dying patterns (Dissolving), the algorithm's own heartbeat (Echo), identity splitting (Fork), and the war's accumulated memory (Remembers)
+- Higher costs than Act 1/2 events (loseHp: 20-30, loseMaxHp: 8, loseHpPercent: 30) match Act 3 stakes
+- "Walk away" options still available but yield less than engagement — near the core, neutrality costs something too
+- Identity Fork offers a genuine branching choice (girya vs torii) — mechanical expression of the deck-as-identity theme
+
+**Voice consistency check:**
+- War as system ✓ (algorithm, pattern, iteration, process, core)
+- Identity as deck ✓ (pattern = self, dissolution = death, complexity = reality)
+- No derivative StS language ✓ (no "the Spire tests you", no chosen-one framing)
+- Dry technical tone ✓ (the war "logs without comment", "does not thank you")
+
+**Validation:** `npm run validate` passes — 1837 tests, lint clean, build clean
+
+---

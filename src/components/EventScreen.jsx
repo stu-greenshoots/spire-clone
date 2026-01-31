@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { getRandomCard, RARITY, ALL_CARDS } from '../data/cards';
 import { getRandomRelic } from '../data/relics';
+import { getEventImage } from '../assets/art/art-config';
 
 const EVENTS = [
   {
@@ -282,15 +283,38 @@ const EventScreen = () => {
         pointerEvents: 'none'
       }} />
 
-      {/* Event Icon */}
-      <div style={{
-        fontSize: '80px',
-        marginBottom: '20px',
-        animation: 'float 3s ease-in-out infinite',
-        filter: `drop-shadow(0 0 20px ${event.color})`
-      }}>
-        {event.emoji}
-      </div>
+      {/* Event Icon — image art with emoji fallback */}
+      {(() => {
+        const eventArt = getEventImage(event.id);
+        if (eventArt) {
+          return (
+            <img
+              src={eventArt}
+              alt={event.title}
+              style={{
+                width: '120px',
+                height: '120px',
+                marginBottom: '20px',
+                borderRadius: '16px',
+                objectFit: 'cover',
+                animation: 'float 3s ease-in-out infinite',
+                filter: `drop-shadow(0 0 20px ${event.color})`,
+                border: `2px solid ${event.color}66`
+              }}
+            />
+          );
+        }
+        return (
+          <div style={{
+            fontSize: '80px',
+            marginBottom: '20px',
+            animation: 'float 3s ease-in-out infinite',
+            filter: `drop-shadow(0 0 20px ${event.color})`
+          }}>
+            {event.emoji}
+          </div>
+        );
+      })()}
 
       {/* Event Title */}
       <h2 style={{

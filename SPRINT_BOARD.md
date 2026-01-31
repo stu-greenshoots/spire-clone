@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-01-31
-**Current Sprint:** 9 (Ship Prep + QA + 1.0) - PLANNED
-**Integration Branch:** `sprint-9`
-**Sprint Plan:** See `SPRINT_9_PLAN.md`
-**Roadmap:** See `ROADMAP.md` (4-sprint plan to 1.0)
+**Current Sprint:** 10 (Act 3 + Daily Challenge + Post-Launch Polish) - PLANNED
+**Integration Branch:** `sprint-10`
+**Sprint Plan:** See `SPRINT_10_PLAN.md`
+**Roadmap:** See `ROADMAP.md` (original 4-sprint plan to 1.0, now post-1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 8 COMPLETE (13 PRs merged, 1159 tests, polish + juice + title screen + 100% completion rate)
+**Previous:** Sprint 9 COMPLETE (15 PRs merged, 1736 tests, 1.0 release prep + 100% completion rate)
 
 ---
 
@@ -348,12 +348,12 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 9: Ship Prep + QA + 1.0 - PLANNED
+## Sprint 9: Ship Prep + QA + 1.0 - COMPLETE
 
 **Goal:** Production-ready 1.0 on web + PWA. Zero P0 bugs. Full regression. Professional polish.
 **Plan:** See `SPRINT_9_PLAN.md`
-**Branch:** `sprint-9`
-**Status:** IN PROGRESS — PM-09, BE-PWA, QA-11, AR-06, AR-05b, GD-12, UX-17, BE-20, QA-12, VARROW-04, GD-13, UX-18, JR-07 merged
+**Branch:** `sprint-9` (PR #92 open → master)
+**Status:** COMPLETE — All 15 tasks merged (6 P0 + 5 P1 + 3 P2). 1736 tests. 100% completion rate.
 
 ### P0 — Must Ship
 
@@ -399,3 +399,54 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [ ] `npm run validate` passes
 - [ ] Lighthouse performance 90+
 - [ ] Magazine score self-assessment: targeting 75+
+
+---
+
+## Sprint 10: Act 3 + Daily Challenge + Post-Launch Polish - PLANNED
+
+**Goal:** Ship Act 3 content (8 enemies + Awakened One boss), daily challenge mode, and post-launch polish. First post-1.0 content update.
+**Plan:** See `SPRINT_10_PLAN.md`
+**Branch:** `sprint-10`
+**Status:** COMPLETE — 15/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21, VARROW-05, BE-22, UX-19, QA-13, GD-14, AR-10, QA-14, UX-20, GD-15)
+
+### P0 — Must Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| PM-10 | PM | S | Merge Sprint 9 PR #92 to master, tag v1.0.0, create sprint-10 infra | DONE |
+| FIX-07 | JR/BE | S | **P0 BUG:** Potions never awarded from battles — reward system broken | MERGED (PR #107) |
+| JR-08a | JR | M | Act 3 enemies batch 1 — Giant Head, Nemesis, Reptomancer (elites) | MERGED (PR #108) |
+| JR-08b | JR | M | Act 3 enemies batch 2 — Writhing Mass, Transient, Spire Growth, Maw, Orb Walker | MERGED (PR #109) |
+| JR-08c | JR | M | Act 3 boss — Awakened One (two-phase, power reaction) | DONE (pre-existing) |
+| BE-21 | BE | M | Act 3 map generation — floors 35-50, encounter pools, boss node | MERGED (PR #110) |
+| VARROW-05 | Varrow | M | Act 3 narrative — Awakened One dialogue, 5 "reality fracture" events | MERGED (PR #111) |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| UX-19 | UX | M | Daily challenge mode — seeded runs, modifiers, scoring | MERGED (PR #113) |
+| BE-22 | BE | S | Daily challenge infrastructure — seeded RNG, modifier system | MERGED (PR #112) |
+| QA-13 | QA | M | Act 3 regression + balance — all new enemies, 3-act playthrough | MERGED (PR #114) |
+| GD-14 | GD | M | Act 3 enemy art — 4 sprites, sprite sheet rebuild (45 enemies) | MERGED (PR #115) |
+| AR-10 | AR | S | Act 3 music track — new exploration track for floors 35+ | MERGED (PR #116) |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| UX-20 | UX | S | Re-review self-assessment — score against Game Zone rubric | MERGED (PR #118) |
+| QA-14 | QA | S | DataEditor removal — strip 51KB dead weight from production | MERGED (PR #117) |
+| GD-15 | GD | S | Act 3 event art — 5 scene illustrations for reality fractures | MERGED (PR #119) |
+
+### Sprint 10 Validation Gate
+
+- [ ] Full 3-act playthrough (A0 + A5) without crashes
+- [ ] 8 Act 3 enemies + Awakened One boss functional
+- [ ] Awakened One two-phase transition works
+- [ ] Act 3 map generates correctly (floors 35-50)
+- [ ] Boss dialogue and 5 events in Endless War voice
+- [ ] Daily challenge mode functional with seeded runs
+- [ ] 1800+ tests passing
+- [ ] `npm run validate` passes
+- [ ] Act 3 win rate: 15-25% at A0

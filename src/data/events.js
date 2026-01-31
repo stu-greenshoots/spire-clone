@@ -1,6 +1,7 @@
-// 20 Game Events for Spire Ascent
+// 25 Game Events for Spire Ascent
 // All events use the "Endless War" voice — the war as system, patterns as identity
 // First 10: Pattern glitches (original Varrow rewrite)
+// Next 5: Reality fractures (Act 3 — VARROW-05, the war destabilizes near the core)
 // Last 10: Pattern anomalies (VARROW-04 consistency pass)
 
 export const events = [
@@ -211,6 +212,122 @@ export const events = [
         text: 'Complete the termination properly',
         effect: { heal: 15, gainMaxHp: 3 },
         result: 'You set the blade down and close the process correctly. Something the war should have done and didn\'t. A clean shutdown restores something in you — the war\'s entropy reversed, briefly, by simple maintenance.'
+      }
+    ]
+  },
+
+  // ===== REALITY FRACTURES (Act 3 — the war destabilizes near the core) =====
+  {
+    id: 'reality_seam',
+    title: 'Reality Seam',
+    description: 'The corridor splits — not physically, but logically. Two versions of the path exist simultaneously, each rendering different geometry. The war\'s core algorithm is close enough to affect local space-time. Between the seams, something leaks.',
+    choices: [
+      {
+        text: 'Step into the fracture',
+        effect: { gainRelic: 'tungsten_rod', loseHp: 30 },
+        result: 'The space between realities is not empty — it is dense, pressurized, full of collapsed iterations. Something hardens inside you, a core of absolute density. Your pattern absorbs the impact of existing in two places at once, and what survives is stronger for it.'
+      },
+      {
+        text: 'Extract data from the seam',
+        effect: { upgradeRandomCard: true, upgradeRandomCard2: true, damage: 20 },
+        result: 'You reach into the gap and pull. Combat techniques from a parallel iteration flood your pattern — refined versions of what you already know. The seam snaps shut on your hands. Worth it, barely.'
+      },
+      {
+        text: 'Seal the fracture',
+        effect: { heal: 20, gainGold: 40 },
+        result: 'You press the seam closed and the corridor stabilizes. Resources crystallize from the discharged energy and your pattern repairs itself in the calmer data flow. The war does not thank you for the maintenance, but the quiet is its own reward.'
+      }
+    ]
+  },
+
+  {
+    id: 'dissolving_pattern',
+    title: 'The Dissolving',
+    description: 'A pattern more complex than you hangs in the corridor, mid-dissolution. It is aware. It is terrified. The core algorithm is unmaking it in real-time, and in its desperation it reaches toward you with data it no longer needs — combat techniques, structural memory, everything it can shed before the end.',
+    choices: [
+      {
+        text: 'Accept its combat data',
+        effect: { gainRelic: 'dead_branch', loseMaxHp: 8 },
+        result: 'The dying pattern floods you with its accumulated techniques — not specific methods, but the capacity for generation itself. Every ending you create now seeds a new beginning. Your maximum capacity diminishes under the strain, but what you gained is worth more than HP.'
+      },
+      {
+        text: 'Absorb its structural memory',
+        effect: { gainMaxHp: 12, damage: 25 },
+        result: 'You pull its architecture into your own, expanding your pattern\'s capacity with the bones of what it was. The transfer is violent — the dissolving pattern does not release willingly, even at the end. You are sturdier now, built on someone else\'s foundation.'
+      },
+      {
+        text: 'Let it dissolve in peace',
+        effect: { heal: 15, gainGold: 30 },
+        result: 'You watch it go. The dissolution completes and residual energy settles over you like ash. The war recycles what remains, and some of it flows through your proximity. A small inheritance from a pattern that deserved better.'
+      }
+    ]
+  },
+
+  {
+    id: 'core_echo',
+    title: 'Core Echo',
+    description: 'The walls pulse with the core algorithm\'s heartbeat — closer now, louder. In this chamber, the pulse is strong enough to project fragments of the algorithm\'s own logic. You can see it thinking. You can almost read its decisions about you.',
+    choices: [
+      {
+        text: 'Attune to the algorithm\'s frequency',
+        effect: { gainRelic: 'incense_burner', loseHpPercent: 30 },
+        result: 'The algorithm\'s rhythm becomes yours. Every sixth pulse, your pattern phases slightly out of the war\'s jurisdiction — ethereal, untouchable. The attunement cost was steep. Your blood carries the core\'s frequency now, and it burns.'
+      },
+      {
+        text: 'Steal a fragment of its logic',
+        effect: { upgradeRandomCard: true, loseGold: 80, damage: 15 },
+        result: 'You rip a piece of the algorithm\'s own optimization out of the echo. A combat technique, refined by the process that refines all processes. The algorithm notices the theft. Resources scatter in the backlash, and the echo strikes you on its way out.'
+      },
+      {
+        text: 'Observe without interfering',
+        effect: { gainGold: 60, loseMaxHp: 3 },
+        result: 'You study the algorithm\'s projections and extract what you can from observation alone. The data translates to resources — knowledge of the war\'s supply lines. Your proximity to the core leaves a mark, but a small one.'
+      }
+    ]
+  },
+
+  {
+    id: 'identity_fork',
+    title: 'Identity Fork',
+    description: 'Your pattern stutters. For one terrible moment, you are two people — the version of you that chose attack, and the version that chose defense. The fork holds, both branches real, both demanding resolution. The war cannot sustain two of you this close to the core.',
+    choices: [
+      {
+        text: 'Choose the aggressive branch',
+        effect: { gainRelic: 'girya', loseHp: 20, loseGold: 50 },
+        result: 'You collapse the defensive fork and absorb its energy into concentrated force. A weight settles into your pattern — dense, trainable, growing heavier at every rest. The other you dissolves screaming. You try not to think about which one you actually were.'
+      },
+      {
+        text: 'Choose the defensive branch',
+        effect: { gainRelic: 'torii', loseHp: 20, loseGold: 50 },
+        result: 'You collapse the aggressive fork and weave its energy into protection. A gate manifests in your pattern — a threshold that diminishes small harms to nothing. The other you dissolves, still swinging. The war logs the decision without comment.'
+      },
+      {
+        text: 'Force the branches to merge',
+        effect: { gainMaxHp: 8, upgradeRandomCard: true, damage: 30 },
+        result: 'You refuse the choice and drag both branches back together. The merge is agonizing — two identities compressing into one pattern. You emerge singular, expanded, and bleeding from every point of reconciliation. The war is impressed. It should not have worked.'
+      }
+    ]
+  },
+
+  {
+    id: 'war_memory',
+    title: 'The War Remembers',
+    description: 'A chamber of pure memory — the war\'s long-term storage, usually sealed. This close to the core, the seals have degraded. Inside, you can see every iteration that came before you — every death, every almost-victory, every pattern the war created and consumed.',
+    choices: [
+      {
+        text: 'Search for a survivor\'s technique',
+        effect: { gainRelic: 'calipers', loseHp: 25 },
+        result: 'Deep in the archive, one pattern left a method for preserving defenses against entropy. It works — your block persists where it should decay. The memories crowd in as you extract it, a thousand dissolved patterns pressing their faces against your awareness. You leave quickly.'
+      },
+      {
+        text: 'Absorb the aggregate data',
+        effect: { gainMaxHp: 10, upgradeRandomCard: true, loseGold: 100 },
+        result: 'You open yourself to the archive and let the war\'s full history flow through you. Thousands of iterations — their successes, their failures, their final moments. Your pattern expands, your techniques sharpen, your resources burn away in the download. You know everything now, and it is almost too much.'
+      },
+      {
+        text: 'Seal the chamber and walk away',
+        effect: { heal: 25, gainGold: 50 },
+        result: 'Some doors should stay closed. You seal the degraded access points and let the war\'s memories stay archived. In the calm that follows, your pattern repairs and the corridor yields leftover resources. The war approves, for once. Its memories are its own.'
       }
     ]
   },

@@ -18,6 +18,17 @@ export const shuffleArray = (arr) => {
 };
 
 /**
+ * Act-specific node type distributions for regular floors (2-6, 8-12).
+ * Each entry defines cumulative probability thresholds:
+ * [combat, +elite, +rest, +shop, remainder=event]
+ */
+const ACT_DISTRIBUTIONS = {
+  1: { combat: 0.50, elite: 0.65, rest: 0.77, shop: 0.88 },
+  2: { combat: 0.45, elite: 0.62, rest: 0.74, shop: 0.86 },
+  3: { combat: 0.40, elite: 0.62, rest: 0.72, shop: 0.84 },
+};
+
+/**
  * Generate a procedural map for the given act
  *
  * Map Rules:
@@ -29,12 +40,16 @@ export const shuffleArray = (arr) => {
  * - All nodes must be reachable from floor 0
  * - Boss must be reachable
  *
- * @param {number} _act - Current act number (for future act-specific generation)
+ * Act-specific differences:
+ * - Act 3: More elites (22% vs 15%), fewer rest sites, fewer combat-only floors
+ *
+ * @param {number} act - Current act number (1, 2, or 3)
  * @returns {Array} - 2D array of map nodes
  */
-export const generateMap = (_act) => {
+export const generateMap = (act) => {
   const floors = 15;
   const map = [];
+  const dist = ACT_DISTRIBUTIONS[act] || ACT_DISTRIBUTIONS[1];
 
   // Generate nodes for each floor
   for (let i = 0; i < floors; i++) {
@@ -73,12 +88,12 @@ export const generateMap = (_act) => {
         else if (roll < 0.85) type = 'event';
         else type = 'shop';
       } else {
-        // Regular floors (2-6, 8-12): full variety
+        // Regular floors (2-6, 8-12): use act-specific distribution
         const roll = Math.random();
-        if (roll < 0.50) type = 'combat';
-        else if (roll < 0.65) type = 'elite';
-        else if (roll < 0.77) type = 'rest';
-        else if (roll < 0.88) type = 'shop';
+        if (roll < dist.combat) type = 'combat';
+        else if (roll < dist.elite) type = 'elite';
+        else if (roll < dist.rest) type = 'rest';
+        else if (roll < dist.shop) type = 'shop';
         else type = 'event';
       }
 
