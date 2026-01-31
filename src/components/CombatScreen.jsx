@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo, memo } from 'react';
 import { useGame, GAME_PHASE } from '../context/GameContext';
 import Card from './Card';
 import Enemy from './Enemy';
@@ -311,7 +311,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     }
   }, []);
 
-  const handleCardClick = (card) => {
+  const handleCardClick = useCallback((card) => {
     if (inspectCard) return;
     if (targetingMode) {
       cancelTarget();
@@ -344,9 +344,9 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
       }, 300);
     }
     selectCard(card);
-  };
+  }, [inspectCard, targetingMode, cancelTarget, isMobile, mobileSelectedCard, enemies.length, selectCard]);
 
-  const handleEnemyClick = (enemyInstanceId) => {
+  const handleEnemyClick = useCallback((enemyInstanceId) => {
     if (targetingMode && selectedCard) {
       // Trigger card play animation
       setCardPlaying(selectedCard.instanceId);
@@ -360,7 +360,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
       setShowEnemyInfo(enemy);
     }
     // Mobile: inline info is always visible, no panel needed
-  };
+  }, [targetingMode, selectedCard, playCard, isMobile, enemies]);
 
   const canPlayCard = useCallback((card) => {
     if (card.unplayable) return false;
@@ -540,7 +540,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
 
   const bgStyle = getBackgroundStyle();
 
-  const passiveEffects = getPassiveRelicEffects(state.relics, {});
+  const passiveEffects = useMemo(() => getPassiveRelicEffects(state.relics, {}), [state.relics]);
   const hideIntents = passiveEffects.hideIntents;
 
   return (
@@ -1247,7 +1247,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
 };
 
 // Pile Button Component
-const PileButton = ({ label, count, onClick, color }) => (
+const PileButton = memo(function PileButton({ label, count, onClick, color }) { return (
   <button
     onClick={onClick}
     style={{
@@ -1277,6 +1277,6 @@ const PileButton = ({ label, count, onClick, color }) => (
       {count}
     </span>
   </button>
-);
+); });
 
 export default CombatScreen;
