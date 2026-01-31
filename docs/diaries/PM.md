@@ -462,3 +462,20 @@ Per ROADMAP.md, Sprint 9 is "Ship Prep + QA + 1.0":
 - GD-12 (Relic/potion icons)
 
 ---
+
+### Sprint 9 — UX-17 Complete
+**Date:** 2026-01-31
+**Status:** UX-17 merged (PR #98)
+
+**Done:**
+- Spawned UX to implement UX-17 (tutorial / first-run hints)
+- TutorialOverlay.jsx created — 4 sequential hints on first combat, localStorage persistence
+- Both Copilot and Mentor reviews passed — clean implementation, 254 lines
+- Merged PR #98 via squash, updated sprint board and UX diary
+
+**Sprint 9 Progress:** 7/14 tasks merged (PM-09, BE-PWA, QA-11, AR-06, AR-05b, GD-12, UX-17)
+
+**Remaining P1:** BE-20, QA-12, VARROW-04, GD-13
+**Remaining P2:** UX-18, JR-07, AR-09
+
+---

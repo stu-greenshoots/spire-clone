@@ -353,7 +353,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Production-ready 1.0 on web + PWA. Zero P0 bugs. Full regression. Professional polish.
 **Plan:** See `SPRINT_9_PLAN.md`
 **Branch:** `sprint-9`
-**Status:** IN PROGRESS — PM-09, BE-PWA, QA-11, AR-06, AR-05b, GD-12 merged
+**Status:** IN PROGRESS — PM-09, BE-PWA, QA-11, AR-06, AR-05b, GD-12, UX-17 merged
 
 ### P0 — Must Ship
 
@@ -370,7 +370,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| UX-17 | UX | M | Tutorial / first-run hints — contextual, non-intrusive | PENDING |
+| UX-17 | UX | M | Tutorial / first-run hints — contextual, non-intrusive | MERGED (PR #98) |
 | BE-20 | BE | S | Performance audit — React.memo, bundle < 2MB, Lighthouse 90+ | PENDING |
 | QA-12 | QA | S | Accessibility pass — keyboard nav, ARIA labels, contrast | PENDING |
 | VARROW-04 | Varrow | S | Narrative polish — final copy pass on all player-facing text | PENDING |
