@@ -15,6 +15,21 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 9 - GD-13 Orchestration
+**Date:** 2026-01-31
+**Status:** GD-13 complete — verification-only task
+
+**Done today:**
+- Identified GD-13 as highest-priority unfinished task (last P1 remaining)
+- Verified all 49 relic + 15 potion images exist and are wired to UI
+- GD-13 was a documentation/verification task — no code changes needed
+- Updated sprint board: GD-13 → MERGED (PR #102)
+- Updated GD diary with verification results
+- All P0 and P1 tasks now complete for Sprint 9
+- Remaining: 3 P2 stretch tasks (UX-18, JR-07, AR-09)
+
+---
+
 ### Day 1
 **Date:** 2026-01-24
 **Status:** Phase A code complete, PRs being opened
