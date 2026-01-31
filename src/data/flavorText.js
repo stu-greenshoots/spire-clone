@@ -115,7 +115,40 @@ export const CARD_FLAVOR = {
   warcryPlus: 'A battle cry that echoes through the halls of the Spire itself.',
   flameStrike: 'The air ignites as the blade carves through reality.',
   evolvedRage: 'Fury refined into something primal and unstoppable.',
-  demonStrike: 'A blow channeled from the deepest pits, seething with infernal might.'
+  demonStrike: 'A blow channeled from the deepest pits, seething with infernal might.',
+
+  // Silent Cards
+  strike_silent: 'A precise strike from the shadows. No wasted motion.',
+  defend_silent: 'Fluid evasion honed through years of silent training.',
+  neutralize: 'A toxin-laced blade that numbs before it cuts.',
+  survivor: 'Adapt or perish. The Silent learned this lesson long ago.',
+  quickSlash: 'Speed kills. The blade arrives before the thought to dodge.',
+  poisonedStab: 'The wound is small. The poison is not.',
+  daggerThrow: 'A flick of the wrist sends death spinning through the air.',
+  daggerSpray: 'A storm of steel that finds every gap in armor.',
+  flyingKnee: 'Momentum converted to devastation in a single, fluid motion.',
+  backflip: 'Grace under pressure. The dodge becomes the draw.',
+  deadlyPoison: 'Distilled from the venom of creatures that should not exist.',
+  bladeDance: 'Each shiv is a syllable in a sentence that spells death.',
+  acrobatics: 'The hand empties and refills like breath — in, out, in.',
+  backstab: 'The first blow is free. The Silent makes it count.',
+  dash: 'Neither fully attack nor defense — a perfect balance of both.',
+  legSweep: 'Topple the mighty. Even giants fall when their legs are taken.',
+  dodgeAndRoll: 'Today\'s defense becomes tomorrow\'s shield.',
+  predator: 'Patient hunters are rewarded. The kill reveals what comes next.',
+  noxiousFumes: 'The air itself becomes a weapon, seeping into every wound.',
+  footwork: 'Nimble feet make for stronger shields.',
+  flechettes: 'Each skill mastered adds another blade to the volley.',
+  cloakAndDagger: 'Vanish into shadow. Emerge with steel.',
+  finisher: 'Every attack this turn was a setup. This is the payoff.',
+  wellLaidPlans: 'The Silent always has a card up her sleeve. Literally.',
+  aThousandCuts: 'Every card played draws a thin line of blood.',
+  bulletTime: 'Time slows. Everything becomes free. Everything exhausts.',
+  corpseExplosion: 'The poison within becomes the explosion without.',
+  envenom: 'Each strike carries a gift that keeps on giving.',
+  glassKnife: 'Beautiful and deadly, but fragile with each swing.',
+  adrenaline: 'A surge of clarity that costs nothing and gives everything.',
+  shiv: 'A tiny blade with a singular purpose.'
 };
 
 // ========== ENEMY LORE ==========
@@ -193,6 +226,7 @@ export const ACT_DESCRIPTIONS = {
 export const RELIC_FLAVOR = {
   // Starter
   burning_blood: 'Vitae drawn from a dying phoenix. Its warmth mends wounds after every battle.',
+  ring_of_snake: 'Coiled serpent silver that whispers secrets at the start of every battle.',
 
   // Common
   anchor: 'Cast from the hull of a ship that sailed between worlds. It holds fast against any tide.',

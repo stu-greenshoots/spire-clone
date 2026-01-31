@@ -176,7 +176,13 @@ describe('Card Effect Regression', () => {
       'combustStack', 'doubleNextAttacks2', 'costReduceOnHpLoss', 'damagePerStatus',
       'gainEnergyOnExhaust3', 'blockPerAttackEvolved', 'gainStrengthOnKill',
       'burnDamage', 'voidCard', 'painCurse', 'regretCurse', 'doubtCurse',
-      'decayCurse', 'perfectedStrikeUp'
+      'decayCurse', 'perfectedStrikeUp',
+      // Silent specials
+      'discardOne', 'drawThenDiscard', 'gainEnergyNextTurn', 'drawThenDiscardOne',
+      'addShivs', 'blockNextTurn', 'noxiousFumes', 'gainDexterity', 'drawNextTurn',
+      'damagePerSkillInHand', 'damagePerAttackPlayed', 'retainCards', 'thousandCuts',
+      'bulletTime', 'corpseExplosion', 'envenom', 'glassKnife',
+      'escalatingDamage8', 'bonusPerStrike3', 'doubleNextAttacks3', 'exhaustChoose'
     ];
     const specialCards = ALL_CARDS.filter(c => c.special);
     specialCards.forEach(card => {

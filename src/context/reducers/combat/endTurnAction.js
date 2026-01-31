@@ -322,6 +322,64 @@ export const handleEndTurn = (state) => {
   const newTurn = state.turn + 1;
   combatLog.push(`--- Turn ${newTurn + 1} ---`);
 
+  // Apply poison damage to enemies at start of player turn
+  newEnemies = newEnemies.map(enemy => {
+    if (enemy.currentHp <= 0 || !enemy.poison || enemy.poison <= 0) return enemy;
+    const poisonDamage = enemy.poison;
+    const updatedEnemy = { ...enemy };
+    updatedEnemy.currentHp = Math.max(0, updatedEnemy.currentHp - poisonDamage);
+    updatedEnemy.poison = updatedEnemy.poison - 1;
+    combatLog.push(`${enemy.name} took ${poisonDamage} Poison damage (${updatedEnemy.poison} remaining)`);
+    return updatedEnemy;
+  });
+
+  // Apply Noxious Fumes at start of player turn
+  if (newPlayer.noxiousFumes > 0) {
+    newEnemies = newEnemies.map(enemy => {
+      if (enemy.currentHp <= 0) return enemy;
+      const updatedEnemy = { ...enemy };
+      updatedEnemy.poison = (updatedEnemy.poison || 0) + newPlayer.noxiousFumes;
+      combatLog.push(`Noxious Fumes applied ${newPlayer.noxiousFumes} Poison to ${enemy.name}`);
+      return updatedEnemy;
+    });
+  }
+
+  // Filter dead enemies from poison
+  const poisonDeaths = newEnemies.filter(e => e.currentHp <= 0);
+  if (poisonDeaths.length > 0) {
+    newEnemies = newEnemies.filter(e => e.currentHp > 0);
+  }
+
+  // Check victory after poison deaths
+  if (newEnemies.length === 0) {
+    const goldReward = 10 + Math.floor(Math.random() * 15);
+    const cardRewards = getCardRewards(3, state.character);
+    const { effects: endEffects } = triggerRelics(newRelics, 'onCombatEnd', {
+      playerHpPercent: newPlayer.currentHp / newPlayer.maxHp
+    });
+    newPlayer.currentHp = Math.min(newPlayer.maxHp, newPlayer.currentHp + endEffects.heal);
+    const hasEmptySlot = state.potions.some(p => p === null);
+    let potionReward = null;
+    if (hasEmptySlot) {
+      const potionChance = state.currentNode?.type === 'boss' ? 1.0 : 0.4;
+      if (Math.random() < potionChance) {
+        const potionRewards = getPotionRewards(1, state.currentFloor);
+        potionReward = potionRewards.length > 0 ? potionRewards[0] : null;
+      }
+    }
+    const victoryState = {
+      ...state,
+      phase: GAME_PHASE.COMBAT_REWARD,
+      player: newPlayer,
+      enemies: newEnemies,
+      relics: newRelics,
+      combatLog,
+      combatRewards: { gold: goldReward, cardRewards, potionReward }
+    };
+    autoSave(victoryState);
+    return victoryState;
+  }
+
   // Remove block (unless Barricade)
   if (!newPlayer.barricade) {
     // Calipers: keep block minus 15
