@@ -1530,5 +1530,48 @@ button:active {
   .hud-expand-btn:hover {
     transform: none !important;
   }
+
+  /* ==================== UX-13b: Mobile Card Fan/Arc ==================== */
+
+  /* Fan container: centered, no scroll, allow overflow for arc */
+  .mobile-card-fan {
+    overflow: visible !important;
+    padding-bottom: 15px !important;
+    min-height: 170px !important;
+    position: relative;
+  }
+
+  /* Each card slot in the fan: overlap via negative margin */
+  .mobile-card-slot {
+    margin-left: -18px;
+    margin-right: -18px;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), z-index 0s;
+    will-change: transform;
+  }
+
+  .mobile-card-slot:first-child {
+    margin-left: 0;
+  }
+
+  .mobile-card-slot:last-child {
+    margin-right: 0;
+  }
+
+  /* Selected card lifts and enlarges */
+  .mobile-card-selected {
+    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.6));
+  }
+
+  /* Tap hint bar */
+  .mobile-tap-hint {
+    text-align: center;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: #FFD700;
+    background: rgba(255, 215, 0, 0.08);
+    border-top: 1px solid rgba(255, 215, 0, 0.2);
+    letter-spacing: 0.5px;
+    animation: fadeIn 0.2s ease;
+  }
 }
 
