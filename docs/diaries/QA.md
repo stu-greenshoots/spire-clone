@@ -1,3 +1,64 @@
+# QA Diary - Sprint 8
+
+## Sprint 8 Entries
+
+### QA-09: E2E Infrastructure Fix
+**Date:** 2026-01-31
+**Status:** Complete, PR pending review
+
+**Root causes identified:**
+1. **Missing starting bonus skip** — The corrupted progression test clicked `newGameButton` directly without handling the starting bonus screen (added by BE-09). This caused the test to hang waiting for map nodes that never appeared because the bonus selection screen was blocking.
+2. **Fixed timeouts throughout** — Combat helper used `waitForTimeout(300)`, `waitForTimeout(200)`, `waitForTimeout(500)` for card play animations, targeting resolution, and enemy turns. These are inherently flaky because animation timing varies with system load and sequential enemy turns (VP-08) can take 600ms+ per enemy.
+3. **No viewport coverage** — Tests only ran at default Playwright viewport. No coverage for desktop (1920x1080) or mobile (390x844) layouts, which meant responsive layout regressions from UX-13/UX-14 went undetected.
+
+**Fixes applied:**
+1. **Corrupted progression test** — Added `gameActions` fixture parameter and used `startNewGame()` (which handles bonus skip) instead of raw button click. Increased map visibility timeout to 10s.
+2. **Replaced all fixed timeouts with condition-based polling:**
+   - Card play: now waits for hand count to change, targeting to activate, or combat to end
+   - Targeting resolution: polls until targeting banner disappears
+   - Enemy turn: polls for end-turn button, proceed button, or game-over indicators (increased max from 8s to 10s)
+   - Reward collection: waits for gold button visibility/hidden state
+   - Map transitions: waits for map nodes to appear
+   - Added `waitForCondition()` utility for reusable polling
+3. **Boss dialogue spec** — Replaced 4 `waitForTimeout` calls with condition-based waits (bonus skip, dialogue dismiss, non-combat node resolution)
+4. **Added viewport test spec** — 7 tests covering desktop (1920x1080) and mobile (390x844): menu rendering, map rendering, combat rendering, overflow checks, touch target sizes.
+
+**Results:**
+- 19 E2E tests, 3/3 consecutive runs passing
+- Zero fixed-timeout waits remaining in combat helper and fixture
+- `npm run validate` passes (lint clean, all unit tests pass, build succeeds)
+
+**Blockers:** None
+**Next:** Await review on PR
+
+---
+
+# QA Diary - Sprint 7
+
+## Sprint 7 Entries
+
+### QA-08a: Act 2 Enemy Regression Tests
+**Date:** 2026-01-31
+**Status:** Complete, PR #75 ready for review
+
+**Done:**
+- Created `src/test/act2Regression.test.js` with 63 regression tests
+- All 16 Act 2 enemy AIs validated for turns 0-10 (valid moves with id property)
+- Centurion+Mystic pair fight: shield when hurt, heal when hurt, cycle when healthy, attack when alone
+- New systems: confused (Snecko glare), plated armor (Shelled Parasite), lifesteal (Chosen/Parasite), artifact (Chosen/Automaton)
+- Automaton boss 3-turn pattern verified over 9 turns
+- Minion spawning: Gremlin Leader encourage/stab/enrage, Reptomancer summon/resummon
+- Multi-attack values verified: Book of Stabbing, Byrd peck, Centurion fury, Chosen poke, Automaton dual, Dagger stab, Leader stab
+- createEnemyInstance field propagation for all Act 2 enemies
+
+**Validation:** `npm run validate` passes - 1131 tests, lint clean, build clean
+**PR:** https://github.com/stu-greenshoots/spire-clone/pull/75
+
+**Blockers:** None
+**Next:** Await review on PR #75
+
+---
+
 # QA Diary - Sprint 6
 
 ## Sprint 6 Entries
