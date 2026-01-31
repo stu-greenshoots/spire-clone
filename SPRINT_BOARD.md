@@ -458,7 +458,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Introduce The Silent (second character class), resolve all remaining Game Zone complaints, push toward 90+ score.
 **Plan:** See `SPRINT_11_PLAN.md`
 **Branch:** `sprint-11`
-**Status:** IN PROGRESS — PM-11 complete, BE-23 next
+**Status:** IN PROGRESS — PM-11 + BE-23 complete
 
 ### P0 — Must Ship
 
@@ -467,7 +467,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | PM-11 | PM | S | Merge Sprint 10 to master, create sprint-11 branch, draft PR | DONE |
 | JR-09a | JR | L | The Silent — 30 card pool (Shiv, poison, discard synergies) | PENDING |
 | JR-09b | JR | M | The Silent — starter deck, character selection integration | PENDING |
-| BE-23 | BE | M | Character system — selection screen, character-specific card pools, starter decks | PENDING |
+| BE-23 | BE | M | Character system — selection screen, character-specific card pools, starter decks | MERGED (PR #121) |
 | GD-16 | GD | M | Card rarity visuals — distinct borders/glow for common, uncommon, rare | PENDING |
 | UX-21 | UX | M | Run history & statistics — past runs, win/loss, per-character stats | PENDING |
 

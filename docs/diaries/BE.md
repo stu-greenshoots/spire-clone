@@ -3,6 +3,34 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 11 Entries
+
+### BE-23: Character System
+**Date:** 2026-01-31
+**Status:** MERGED (PR #121)
+
+**Done:**
+- Added CHARACTER_SELECT phase between START_GAME and STARTING_BONUS
+- Created `src/data/characters.js` with character definitions (Ironclad only for now)
+- Created `CharacterSelect.jsx` component with dark fantasy styling
+- Added `character` field to game state and save/load serialization
+- Modified `getStarterDeck()`, `getStarterRelic()` to accept characterId
+- Modified `getRandomCard()`, `getCardRewards()` to filter by character pool
+- Updated card reward generation in playCardAction.js and endTurnAction.js
+- Updated all 5 test files (dispatch helpers + game flow tests)
+- 1974 tests passing, lint clean, build clean
+
+**Architecture:**
+- Cards without a `character` field default to `'ironclad'` — zero changes to existing card definitions
+- `character: 'neutral'` cards will be available to all characters (future)
+- Phase flow: MAIN_MENU → CHARACTER_SELECT → STARTING_BONUS → MAP
+- Shop/event `getRandomCard` calls don't pass character yet — acceptable until Silent cards exist (JR-09b)
+
+**Blockers:** None
+**Next:** BE-24 (Act 3 balance tuning) after QA-13 data, or support JR-09a/b integration
+
+---
+
 ## Sprint 10 Entries
 
 ### BE-22: Daily Challenge Infrastructure
