@@ -16,7 +16,7 @@ const MapScreen = lazy(() => import('./components/MapScreen'));
 const ShopScreen = lazy(() => import('./components/ShopScreen'));
 const EventScreen = lazy(() => import('./components/EventScreen'));
 const RestSite = lazy(() => import('./components/RestSite'));
-const DataEditor = lazy(() => import('./components/DataEditor'));
+const DataEditor = import.meta.env.DEV ? lazy(() => import('./components/DataEditor')) : null;
 const StartingBonus = lazy(() => import('./components/StartingBonus'));
 
 // Map game phases to music track IDs
@@ -101,7 +101,7 @@ const GameContent = () => {
       case GAME_PHASE.VICTORY:
         return <VictoryScreen />;
       case GAME_PHASE.DATA_EDITOR:
-        return <DataEditor />;
+        return DataEditor ? <DataEditor /> : <MainMenu />;
       default:
         return <MainMenu />;
     }
