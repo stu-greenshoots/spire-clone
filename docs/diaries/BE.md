@@ -5,6 +5,30 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 10 Entries
 
+### BE-22: Daily Challenge Infrastructure
+**Date:** 2026-01-31
+**Status:** MERGED (PR #112)
+
+**Done:**
+- Created `src/utils/seededRandom.js` — Mulberry32 PRNG with `next()`, `nextInt()`, `pick()`, `shuffle()`, date-based seed generation
+- Created `src/systems/dailyChallengeSystem.js` — 6 modifiers (Fortified Foes, Exhaustion, Golden Age, Gifted, Fragile, Elite Hunter), daily challenge generation, modifier application, score calculation, localStorage persistence
+- Wired `START_DAILY_CHALLENGE` action into GameContext + metaReducer
+- Added `dailyChallenge` field to game state (null by default — zero impact on normal play)
+- 63 new tests covering RNG determinism, challenge generation, modifiers, scoring, persistence
+- 1870 tests passing total
+
+**Architecture:**
+- Modifier system follows ascensionSystem pattern — modifiers object with flags consumed by combat system
+- `playerMods` apply at START_DAILY_CHALLENGE (energy, HP); `modifiers` are combat-time flags (enemy HP, gold multiplier)
+- Score = (floors × 10) + (kills × 5) + HP + gold + (damage/10), multiplied by modifier difficulty multipliers
+- LocalStorage auto-cleans entries older than 30 days
+- RNG not yet threaded through all Math.random() calls — that's UX-19 integration work
+
+**Blockers:** None
+**Next:** All BE Sprint 10 tasks complete
+
+---
+
 ### BE-21: Act 3 Map Generation
 **Date:** 2026-01-31
 **Status:** MERGED (PR #110)
