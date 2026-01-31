@@ -494,3 +494,81 @@ Per ROADMAP.md, Sprint 9 is "Ship Prep + QA + 1.0":
 **Remaining P2:** UX-18, JR-07, AR-09
 
 ---
+
+### Sprint 9 Retrospective
+**Date:** 2026-01-31
+**Status:** Sprint 9 COMPLETE — all 15 tasks merged (6 P0 + 5 P1 + 3 P2). Zero deferred.
+
+#### What Was Accomplished
+
+**Sprint 9 Goal:** Production-ready 1.0. Zero P0 bugs. Full regression. Professional polish.
+
+**Final tally:** 15 PRs merged. Second consecutive sprint with 100% completion rate (including all stretch items).
+
+| Area | PRs | Highlights |
+|------|-----|------------|
+| Sprint Merge (PM-09) | #78 | Sprint 8 merged to master cleanly |
+| PWA (BE-PWA) | #93 | Service worker, manifest, offline support, installable |
+| Full Regression (QA-11) | #94 | 577 new tests — 1159 → 1736 total. All cards, enemies, relics, potions covered |
+| Music (AR-06) | #95 | 6 tracks wired to game phases (menu, map, combat, boss, victory, defeat) |
+| Mobile Final Pass (AR-05b) | #96 | Portrait responsiveness verified on real device sizes |
+| Relic/Potion Icons (GD-12) | #97 | 20 most visible icons replace emoji — professional UI |
+| Tutorial (UX-17) | #98 | Contextual first-run hints, localStorage persistence |
+| Performance (BE-20) | #99 | React.memo optimization, bundle < 2MB, Lighthouse 90+ |
+| Accessibility (QA-12) | #100 | Keyboard nav, ARIA labels, focus indicators, contrast |
+| Narrative Polish (VARROW-04) | #101 | Final copy pass — consistent Endless War voice across all text |
+| Icon Verification (GD-13) | #102 | All 49 relics + 15 potions confirmed WebP art, zero emoji in UI |
+| Loading Splash (UX-18) | #103 | Branded dark fantasy splash with pulsing animation |
+| Card Balance (JR-07) | #104 | Outlier cards rebalanced (Pummel, Clash, True Grit) |
+| Audio Crossfade (AR-09) | #105 | Concurrent fades + settings ducking on music transitions |
+
+**Test count:** 1736 (up from 1159 at Sprint 8 end). +577 tests this sprint.
+
+#### Recurring Issues — Final Status
+
+1. **E2E flakiness:** RESOLVED since Sprint 8. Stable throughout Sprint 9.
+
+2. **Sprite sheet staleness:** RESOLVED. Automated pipeline in place since Sprint 8.
+
+3. **Diary freshness:** STILL MIXED. BE diary stops at Sprint 2-3. GD at Sprint 6-7. AR, UX, QA, VARROW are current. Not blocking ship but remains a process gap. For future sprints: enforce diary update as PR merge prerequisite.
+
+4. **Long-deferred items:** None remaining. Sprint 8 cleared the backlog, Sprint 9 had no deferrals.
+
+5. **Stretch items shipping:** Both Sprint 8 and Sprint 9 achieved 100% completion including P2 stretch. Team capacity has stabilized — estimates are now reliable.
+
+#### What Went Well
+
+- **Second consecutive 100% completion sprint.** Team has hit its stride on estimation and delivery.
+- **1736 tests.** QA-11 was the single largest test contribution in the project's history (+577 tests).
+- **PWA + accessibility + performance in one sprint.** Ship-prep tasks parallelized well with no conflicts.
+- **Narrative arc complete.** VARROW-01 through VARROW-04 span four sprints of consistent voice work. The Endless War framing is cohesive from boss dialogue through events through victory/defeat through tutorial text.
+- **Art pipeline fully closed.** Every relic, potion, card, and enemy has proper art. Zero emoji in the UI.
+- **Music and audio complete.** Six tracks, crossfading, SFX, settings ducking — the game has a soundscape now.
+- **Mobile fully playable.** Combat (Sprint 7) + map (Sprint 8) + touch targets + portrait responsiveness = complete mobile experience.
+
+#### What Could Improve
+
+- **Diary enforcement.** Three team members have stale diaries (BE, GD, JR). This hasn't caused problems yet but risks context loss.
+- **Validation gate not formally checked off.** The sprint board lists the gate items but they aren't marked complete. Should do a formal pass.
+- **No re-score against Game Zone criteria.** Started at 58/100 in Sprint 2. Should self-assess against the original rubric to quantify improvement.
+
+#### Project Status at Sprint 9 End
+
+| Metric | Value |
+|--------|-------|
+| Tests | 1736 passing |
+| Lint | 0 errors |
+| Build | Passing |
+| PWA | Installable, works offline |
+| Mobile | Playable on 375px+ portrait |
+| Content | 81 cards, 41 enemies, 49 relics, 15 potions, 20 events |
+| Art | 100% coverage — zero placeholders |
+| Music | 6 tracks with crossfade |
+| Accessibility | Keyboard nav, ARIA, contrast |
+| Performance | Lighthouse 90+, bundle < 2MB |
+| Sprints completed | 9 |
+| Total PRs merged | ~105 |
+
+The game is ready for 1.0 release pending final validation gate sign-off.
+
+---
