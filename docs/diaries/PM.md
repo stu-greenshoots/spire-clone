@@ -672,6 +672,32 @@ The game is ready for 1.0 release pending final validation gate sign-off.
 
 ---
 
+### Sprint 10 — VARROW-05 Complete
+**Date:** 2026-01-31
+**Status:** VARROW-05 merged (PR #111)
+
+**Done:**
+- Identified VARROW-05 as highest-priority unfinished task (last remaining P0)
+- Implemented as Varrow: 5 Act 3 "reality fracture" events in Endless War voice
+- Awakened One dialogue already existed — no changes needed to bossDialogue.js
+- Updated event count tests (20 → 25) in events.test.js and regression.test.js
+- Fixed typo ("unmmaking" → "unmaking") caught during review
+- Both Copilot and Mentor reviews passed — clean implementation
+- Merged PR #111 via squash, updated sprint board and Varrow diary
+- 1837 tests passing
+
+**Sprint 10 Progress:** 7/15 tasks done (PM-10, FIX-07, JR-08a, JR-08b, JR-08c, BE-21, VARROW-05)
+**All P0 tasks now COMPLETE.**
+
+**Next P1 tasks:**
+- BE-22: Daily challenge infrastructure (seeded RNG, modifier system)
+- UX-19: Daily challenge mode UI (depends on BE-22)
+- QA-13: Act 3 regression + balance
+- GD-14: Act 3 enemy art
+- AR-10: Act 3 music track
+
+---
+
 ### Sprint 10 — JR-08b Complete
 **Date:** 2026-01-31
 **Status:** JR-08b merged (PR #109)
