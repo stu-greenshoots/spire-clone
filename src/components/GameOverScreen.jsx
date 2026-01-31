@@ -81,7 +81,7 @@ const GameOverScreen = () => {
 
       {/* Skull Icon */}
       <div style={{
-        fontSize: '90px',
+        fontSize: 'clamp(56px, 14vw, 90px)',
         marginBottom: '20px',
         filter: 'drop-shadow(0 0 20px rgba(170, 68, 68, 0.6))',
         animation: showContent ? 'shake 0.5s ease' : 'none'
@@ -92,7 +92,7 @@ const GameOverScreen = () => {
       {/* Title */}
       <h1 style={{
         color: '#AA4444',
-        fontSize: '38px',
+        fontSize: 'clamp(26px, 7vw, 38px)',
         marginBottom: '10px',
         textShadow: '0 0 20px rgba(170, 68, 68, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.8)',
         letterSpacing: '4px',
@@ -119,10 +119,11 @@ const GameOverScreen = () => {
       {/* Run Summary */}
       <div style={{
         background: 'linear-gradient(180deg, rgba(30, 20, 20, 0.9) 0%, rgba(20, 15, 15, 0.95) 100%)',
-        padding: '25px 35px',
+        padding: '20px clamp(16px, 5vw, 35px)',
         borderRadius: '15px',
         marginBottom: '30px',
-        minWidth: '240px',
+        width: '90%',
+        maxWidth: '320px',
         border: '2px solid #553333',
         boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(170, 68, 68, 0.1)',
         animation: showContent ? 'fadeIn 0.5s ease 0.4s both' : 'none'
@@ -182,7 +183,7 @@ const GameOverScreen = () => {
       <button
         onClick={returnToMenu}
         style={{
-          padding: '18px 55px',
+          padding: '18px 48px',
           fontSize: '18px',
           background: 'linear-gradient(180deg, #aa2020 0%, #881515 50%, #661010 100%)',
           color: 'white',

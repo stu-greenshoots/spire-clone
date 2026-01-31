@@ -1777,6 +1777,20 @@ button:active {
   }
 }
 
+/* ==================== AR-05b: Extra-small phone overrides (iPhone SE, 375x667) ==================== */
+@media (max-width: 375px) {
+  /* Starting bonus screen fits on small viewports */
+  .starting-bonus-screen {
+    padding: 1rem !important;
+    gap: 1rem !important;
+  }
+
+  /* Victory/defeat emoji icons scale down */
+  .game-container button {
+    max-width: 100%;
+  }
+}
+
 /* ==================== NARRATIVE UI THEMING (UX-15) ==================== */
 /* Subtle Endless War motifs — war-pattern borders, glitch transitions */
 

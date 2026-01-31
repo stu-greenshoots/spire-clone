@@ -230,6 +230,7 @@ const ShopScreen = () => {
           display: 'flex',
           gap: '12px',
           overflowX: 'auto',
+          WebkitOverflowScrolling: 'touch',
           paddingBottom: '20px',
           marginBottom: '25px'
         }}>
