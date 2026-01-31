@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-01-31
-**Current Sprint:** 10 (Act 3 + Daily Challenge + Post-Launch Polish) - PLANNED
-**Integration Branch:** `sprint-10`
-**Sprint Plan:** See `SPRINT_10_PLAN.md`
+**Current Sprint:** 11 (Second Character + QoL + Score Push) - PLANNED
+**Integration Branch:** `sprint-11`
+**Sprint Plan:** See `SPRINT_11_PLAN.md`
 **Roadmap:** See `ROADMAP.md` (original 4-sprint plan to 1.0, now post-1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 9 COMPLETE (15 PRs merged, 1736 tests, 1.0 release prep + 100% completion rate)
+**Previous:** Sprint 10 COMPLETE (15 PRs merged, 1973 tests, Act 3 + Daily Challenge + 100% completion rate)
 
 ---
 
@@ -450,3 +450,56 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [ ] 1800+ tests passing
 - [ ] `npm run validate` passes
 - [ ] Act 3 win rate: 15-25% at A0
+
+---
+
+## Sprint 11: Second Character + QoL + Score Push - PLANNED
+
+**Goal:** Introduce The Silent (second character class), resolve all remaining Game Zone complaints, push toward 90+ score.
+**Plan:** See `SPRINT_11_PLAN.md`
+**Branch:** `sprint-11`
+**Status:** PLANNED — Pending team alignment
+
+### P0 — Must Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| PM-11 | PM | S | Merge Sprint 10 to master, create sprint-11 branch, draft PR | PENDING |
+| JR-09a | JR | L | The Silent — 30 card pool (Shiv, poison, discard synergies) | PENDING |
+| JR-09b | JR | M | The Silent — starter deck, character selection integration | PENDING |
+| BE-23 | BE | M | Character system — selection screen, character-specific card pools, starter decks | PENDING |
+| GD-16 | GD | M | Card rarity visuals — distinct borders/glow for common, uncommon, rare | PENDING |
+| UX-21 | UX | M | Run history & statistics — past runs, win/loss, per-character stats | PENDING |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| VARROW-06 | Varrow | M | Silent narrative — character-specific flavor, boss dialogue variants | PENDING |
+| UX-22 | UX | S | Skip-reward confirmation — last unresolved Game Zone complaint | PENDING |
+| GD-17 | GD | S | Silent character art — portrait + combat silhouette | PENDING |
+| QA-15 | QA | M | Silent regression + balance — 30 cards, character selection, win rates | PENDING |
+| AR-11 | AR | S | Silent audio — Shiv swoosh, poison sizzle, 3-4 new SFX | PENDING |
+| BE-24 | BE | S | Act 3 balance tuning — adjust stats based on QA-13 data | PENDING |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| UX-23 | UX | S | Map visited-node indicator — grey out visited nodes | PENDING |
+| QA-16 | QA | S | Diary enforcement audit — verify all diaries updated | PENDING |
+| GD-18 | GD | S | Silent card art — 30 illustrations, sprite sheet rebuild | PENDING |
+
+### Sprint 11 Validation Gate
+
+- [ ] Character selection screen functional
+- [ ] Silent playable with 30-card pool through all 3 acts
+- [ ] Ironclad completely unaffected by character system
+- [ ] Card rarity visually distinct in reward selection
+- [ ] Run history screen shows past runs with statistics
+- [ ] Skip-reward confirmation works
+- [ ] Silent narrative text in Endless War voice
+- [ ] 2100+ tests passing
+- [ ] `npm run validate` passes
+- [ ] Win rate: Silent 20-30% A0, Ironclad unchanged
+- [ ] All 3 original unresolved Game Zone complaints addressed

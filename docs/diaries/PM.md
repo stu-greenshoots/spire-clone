@@ -15,6 +15,36 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 11 Planning
+**Date:** 2026-01-31
+**Status:** Sprint 11 PLANNED
+
+**What I did:**
+- Analyzed post-Sprint 10 state: 85/100 self-assessed score, 3 unresolved Game Zone complaints, 1973 tests
+- Identified The Silent (second character class) as single highest-impact addition for gameplay depth
+- Created SPRINT_11_PLAN.md with 15 tasks (6 P0, 6 P1, 3 P2)
+- Updated SPRINT_BOARD.md with Sprint 11 section
+- Created sprint-11 branch from sprint-10
+- Created draft PR sprint-11 → master
+
+**Sprint 11 Theme:** Second Character + QoL + Score Push
+
+**Key decisions:**
+1. The Silent is the sprint anchor — 30 cards + character system is the largest feature since Act 3
+2. All 3 remaining Game Zone complaints addressed (run history, card rarity visuals, skip-reward confirmation)
+3. Character system architecture (BE-23) must land first — unblocks all Silent work
+4. Sprint-10 → master merge included as PM-11 (first task)
+5. Diary enforcement added as QA-16 stretch — three sprints of noting this issue
+
+**Task count:** 15 tasks across 8 roles. JR heaviest (L + M for 30 cards + integration). BE has critical-path work (character system).
+
+**Risks:**
+- Poison mechanic may need new reducer logic (BE coordination with JR)
+- Character-specific card pools require careful filtering to avoid breaking Ironclad
+- 30 cards is a lot of content — JR has been consistent but this is the largest single batch
+
+---
+
 ### Sprint 10 Retrospective
 **Date:** 2026-01-31
 **Status:** Sprint 10 COMPLETE — 15/15 tasks merged. Third consecutive 100% completion sprint.
