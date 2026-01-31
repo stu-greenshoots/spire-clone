@@ -312,8 +312,7 @@ const MapScreen = () => {
             borderRadius: '12px',
             border: '1px solid #2a2235',
             cursor: 'pointer',
-            transition: 'all 0.15s ease',
-            outline: 'none'
+            transition: 'all 0.15s ease'
           }}
           onMouseOver={(e) => {
             e.currentTarget.style.background = 'rgba(100, 100, 200, 0.2)';
@@ -494,7 +493,11 @@ const MapScreen = () => {
                 <g
                   key={node.id}
                   data-testid={`map-node-${node.id}`}
+                  role={accessible ? 'button' : undefined}
+                  tabIndex={accessible ? 0 : undefined}
+                  aria-label={`${node.type} node${accessible ? ', available' : node.visited ? ', visited' : ''}`}
                   onClick={() => accessible && selectNode(node.id)}
+                  onKeyDown={(e) => { if (accessible && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); selectNode(node.id); } }}
                   style={{ cursor: accessible ? 'pointer' : 'default' }}
                   opacity={nodeOpacity}
                 >
