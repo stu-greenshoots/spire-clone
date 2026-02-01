@@ -14,6 +14,48 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 14 Retrospective
+**Date:** 2026-02-01
+
+#### What Was Accomplished
+Sprint 14 delivered 14/14 tasks (5 P0, 6 P1, 3 P2) — eighth consecutive sprint with 100% completion. Key outcomes:
+
+1. **Audio system fixed (P0):** The game had zero sound output for 7 sprints. FIX-10 (PR #166) identified the root cause as a broken base path for GitHub Pages deployment. BE-28 (PR #167) overhauled the audio init lifecycle with proper AudioContext management, autoplay policy handling, and error recovery.
+2. **Real CC0 sounds:** AR-15 replaced all 20+ placeholder MP3s with distinct synthesized CC0 audio — 7 music tracks and 15+ SFX. AR-16 added per-act ambient audio layers.
+3. **Art quality improvements:** GD-24 improved 10 card illustrations, GD-25 improved 5 boss/elite sprites, GD-26 added per-act background illustrations.
+4. **Audio UX:** UX-29 delivered working volume sliders, mute toggle, and visual feedback. Volume controls now actually change volume.
+5. **Card balance:** JR-13 reviewed 157 cards and buffed 4 underperforming Defect orb cards.
+6. **Fourth character concept:** VARROW-10 produced a full design doc for The Watcher (stances, mantra, narrative integration).
+7. **QA:** QA-21 added 59 audio regression tests (2713 total). QA-22 resolved the recurring validation gate ceremony gap.
+8. **Self-assessment:** UX-30 re-scored the game post-audio fix, targeting 97+.
+
+#### Metrics
+- **Tests:** 2713 passing (up from 2627 in Sprint 13)
+- **PRs merged:** 13 (PR #166–#178)
+- **Completion rate:** 100% (8th consecutive)
+- **Audio:** From zero output to full soundtrack + SFX + ambient layers
+
+#### Recurring Issues & Observations
+1. **Audio was broken for 7 sprints (Sprint 7–13).** This is the biggest process failure of the project. The audio system was "working" in tests but produced zero output in production. Root cause: base path mismatch for GitHub Pages. Lesson: runtime smoke tests on the deployed build are essential — unit tests alone masked this for months.
+2. **Validation gates left unchecked.** QA-22 found 46 unchecked gate items across Sprints 9–14. This was noted in every retro since Sprint 9 but only now formally resolved. The ceremony task should be built into every sprint going forward.
+3. **Placeholder assets persisted too long.** All MP3s were copies of the same file since Sprint 9. AR-15 finally replaced them, but this should have been caught by any manual listen test. Automated uniqueness checks (file hash comparison) would catch this instantly.
+4. **PM diary is 1600+ lines.** The diary format doesn't scale well. Consider archiving per-sprint or switching to a summary-only format for completed sprints.
+5. **Most diary entries stop at Sprint 3 or earlier** for BE, JR, QA, UX, GD. Only AR and PM have entries past Sprint 9. Diary discipline degraded as the project scaled. The QA-18 CI warning for stale diaries hasn't been enforced.
+
+#### What Went Well
+- Eighth consecutive 100% completion sprint — the team delivery cadence is rock-solid
+- Audio fix was the right P0 call — sound transforms the game experience
+- VARROW-10 Watcher concept shows strong narrative-mechanic integration
+- QA-22 finally closed the validation gate ceremony gap
+
+#### What To Improve
+- **Deploy smoke tests:** Add a post-deploy check that verifies audio actually plays, assets actually load, on the real GitHub Pages URL
+- **Enforce diary updates:** Make the QA-18 stale diary CI check block merges, not just warn
+- **Archive old diary entries:** Keep only current sprint + previous sprint in active diaries
+- **Asset uniqueness CI:** Add a file-hash check to ensure no two audio/art files are identical
+
+---
+
 ### Sprint 14 — QA-22 Complete (Sprint 14 COMPLETE)
 **Date:** 2026-02-01
 **Status:** QA-22 merged (PR #178) — Sprint 14 is now 14/14 tasks done
