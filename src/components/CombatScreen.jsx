@@ -8,7 +8,7 @@ import { useAnimations } from '../hooks/useAnimations';
 import { ANIMATION_TYPE } from '../constants/animationTypes';
 import CardSelectionModal from './CardSelectionModal';
 import { CARD_TYPES } from '../data/cards';
-import { getOrbImage } from '../assets/art/art-config';
+import { getOrbImage, getBackgroundImage } from '../assets/art/art-config';
 import CardTooltip from './CardTooltip';
 import TutorialOverlay from './TutorialOverlay';
 import BossDialogue from './BossDialogue';
@@ -712,6 +712,25 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
           onDismiss={() => setBossDialogue(null)}
         />
       )}
+
+      {/* Act-specific background illustration */}
+      {(() => {
+        const actBg = getBackgroundImage(`act${state.act || 1}`);
+        return actBg ? (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: `url(${actBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.3,
+            pointerEvents: 'none'
+          }} />
+        ) : null;
+      })()}
 
       {/* Background scenery elements */}
       <div style={{

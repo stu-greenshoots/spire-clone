@@ -1,6 +1,7 @@
 import { useGame } from '../context/GameContext';
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import DeckViewer from './DeckViewer';
+import { getBackgroundImage } from '../assets/art/art-config';
 
 // Hook to track viewport width for responsive layout
 const useViewportWidth = () => {
@@ -253,8 +254,28 @@ const MapScreen = () => {
       overflow: 'hidden',
       background: act === 2 ? '#0a0f12' : act === 3 ? '#120a08' : act === 4 ? '#12080a' : '#0a0a12',
       paddingTop: isMobile ? '60px' : '90px',
-      maxWidth: '100vw'
+      maxWidth: '100vw',
+      position: 'relative'
     }}>
+      {/* Act-specific background illustration */}
+      {(() => {
+        const actBg = getBackgroundImage(`act${act}`);
+        return actBg ? (
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundImage: `url(${actBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.2,
+            pointerEvents: 'none',
+            zIndex: 0
+          }} />
+        ) : null;
+      })()}
       {/* Map Header */}
       <div style={{
         textAlign: 'center',

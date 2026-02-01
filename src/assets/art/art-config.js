@@ -263,6 +263,25 @@ export const getOrbImage = (orbType) => {
 };
 
 // ============================================
+// BACKGROUND ART CONFIGURATION
+// ============================================
+
+export const getBackgroundImage = (actId) => {
+  try {
+    const images = import.meta.glob('./backgrounds/*.{webp,png,jpg,jpeg}', { eager: true });
+    const imagePath = Object.keys(images).find(path => {
+      const filename = path.split('/').pop().split('.')[0];
+      return filename.toLowerCase() === actId.toLowerCase();
+    });
+    if (!imagePath) return null;
+    const imageModule = images[imagePath];
+    return typeof imageModule === 'string' ? imageModule : imageModule.default;
+  } catch {
+    return null;
+  }
+};
+
+// ============================================
 // THEME SETTINGS
 // ============================================
 
@@ -299,6 +318,7 @@ export const POTION_COLORS = {
 };
 
 export default {
+  getBackgroundImage,
   getCardImage,
   getCardArtInfo,
   getCharacterImage,
