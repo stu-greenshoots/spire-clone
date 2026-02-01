@@ -595,7 +595,7 @@ export const ALL_ENEMIES = [
   {
     id: 'giant_head',
     name: 'Giant Head',
-    hp: { min: 520, max: 560 },
+    hp: { min: 480, max: 520 },
     type: 'elite',
     act: 3,
     emoji: '🗿',
@@ -734,7 +734,7 @@ export const ALL_ENEMIES = [
   {
     id: 'spireGrowth',
     name: 'Spire Growth',
-    hp: { min: 170, max: 180 },
+    hp: { min: 150, max: 165 },
     type: 'normal',
     act: 3,
     emoji: '🌑',
@@ -754,7 +754,7 @@ export const ALL_ENEMIES = [
   {
     id: 'maw',
     name: 'Maw',
-    hp: { min: 300, max: 300 },
+    hp: { min: 240, max: 260 },
     type: 'normal',
     act: 3,
     emoji: '👄',
