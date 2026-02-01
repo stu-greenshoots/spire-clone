@@ -23,6 +23,37 @@ Create a story that:
 
 ## Entries
 
+### VARROW-12: Endless Mode Narrative
+**Date:** 2026-02-01
+**Status:** Complete, PR #204 merged
+
+**Done:**
+- Added `ENDLESS_DEFEAT_NARRATIVE` to flavorText.js — 4 loop-depth tiers (early/mid/deep/extreme, 3 texts each)
+- Added `ENDLESS_LOOP_MILESTONES` — generic pool + specific milestones at loops 3, 5, 7, 10, 15, 25
+- Added `ENDLESS_DEFEAT_FOOTER` — 4 endless-specific footer messages
+- Added `ENDLESS_BOSS_DIALOGUE` to bossDialogue.js — 3 recognition tiers (early/mid/deep) for all 7 bosses
+- Updated `getBossDialogue()` to accept optional `endlessLoop` param (backward compatible)
+- Updated GameOverScreen — endless-aware defeat text selection by loop depth
+- Updated EndlessTransition — milestone text replaces generic transition text
+- Updated CombatScreen — passes endlessLoop to getBossDialogue for boss recognition
+- 12 new tests (3181 total passing), lint clean, build clean
+
+**Design decisions:**
+- Loop dissolution deepens with persistence: early loops = the war working harder to unmake you, extreme loops = the war can't remember how you were made
+- Boss recognition escalates: loop 2+ = hesitation/awareness, loop 5+ = deep recognition/respect, loop 10+ = architectural accommodation
+- Milestone text at transition screen rather than mid-combat — narrative beats should punctuate, not interrupt
+- Endless overrides stack ON TOP of character overrides (Base → Character → Endless) — the war's recognition of persistence transcends character identity
+
+**Voice consistency check:**
+- War as system ✓ (algorithm, architecture, subsystems, rate limiter, event horizon)
+- Identity as persistence ✓ (pattern endurance, loop depth = reality density)
+- No derivative language ✓ (no "the Spire grows stronger", no chosen-one framing)
+- Dry technical tone with escalating warmth ✓ (the war shifts from indifference to reluctant respect to genuine awe)
+
+**Validation:** `npm run validate` passes — 3181 tests, lint clean, build clean
+
+---
+
 ### Day 1 - The Pitch
 **Date:** 2026-01-25
 **Status:** Pitch delivered: "The Endless War"

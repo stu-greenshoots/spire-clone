@@ -14,6 +14,22 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — VARROW-12 Complete
+**Date:** 2026-02-01
+**Status:** VARROW-12 merged (PR #204) — Sprint 16 now 8/14 tasks done
+
+**Done:**
+- Implemented as Varrow: Endless mode narrative — loop dissolution text, milestone dialogue, boss recognition
+- 4-tier defeat narrative (early/mid/deep/extreme), loop milestones (3,5,7,10,15,25), 3-tier boss recognition
+- getBossDialogue updated with backward-compatible endlessLoop param
+- 12 new tests (3181 total passing), lint clean, build clean
+- Both Copilot and Mentor reviews passed (one minor style fix applied)
+- Merged PR #204 via squash, updated sprint board and Varrow diary
+
+**Next:** Continue with P1 tasks (QA-25, AR-18).
+
+---
+
 ### Sprint 16 — GD-30 Complete
 **Date:** 2026-02-01
 **Status:** GD-30 merged (PR #203) — Sprint 16 now 7/14 tasks done
