@@ -7,6 +7,7 @@ import { audioManager } from '../systems/audioSystem';
 import { getDailyChallenge, getModifierDetails, getChallengeScore } from '../systems/dailyChallengeSystem';
 import Settings from './Settings';
 import StateBuilder from './StateBuilder';
+import CardCompendium from './CardCompendium';
 
 const MainMenu = () => {
   const { startGame, startDailyChallenge, loadGameState, deleteSaveState, openDataEditor } = useGame();
@@ -19,6 +20,8 @@ const MainMenu = () => {
   const [showStateBuilder, setShowStateBuilder] = useState(false);
   const [showDailyChallenge, setShowDailyChallenge] = useState(false);
   const [showRunHistory, setShowRunHistory] = useState(false);
+  const [showCompendium, setShowCompendium] = useState(false);
+  const [hoveringCompendium, setHoveringCompendium] = useState(false);
   const [saveExists, setSaveExists] = useState(false);
   const [selectedAscension, setSelectedAscension] = useState(0);
   const [unlockedAscension, setUnlockedAscension] = useState(0);
@@ -400,6 +403,33 @@ const MainMenu = () => {
           Run History
         </button>
 
+        {/* Card Compendium Button */}
+        <button
+          data-testid="btn-card-compendium"
+          onClick={() => setShowCompendium(true)}
+          onMouseEnter={() => setHoveringCompendium(true)}
+          onMouseLeave={() => setHoveringCompendium(false)}
+          style={{
+            background: hoveringCompendium
+              ? 'rgba(255, 255, 255, 0.12)'
+              : 'rgba(255, 255, 255, 0.06)',
+            color: '#9988aa',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            padding: '12px 40px',
+            fontSize: '14px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            touchAction: 'manipulation',
+            transition: 'all 0.3s ease',
+            transform: hoveringCompendium ? 'scale(1.03) translateY(-2px)' : 'scale(1)'
+          }}
+        >
+          Card Compendium
+        </button>
+
         {/* Settings Button */}
         <button
           data-testid="btn-settings"
@@ -562,6 +592,11 @@ const MainMenu = () => {
       {/* Run History Modal */}
       {showRunHistory && (
         <RunHistoryPanel onClose={() => setShowRunHistory(false)} />
+      )}
+
+      {/* Card Compendium Modal */}
+      {showCompendium && (
+        <CardCompendium onClose={() => setShowCompendium(false)} />
       )}
     </div>
   );
