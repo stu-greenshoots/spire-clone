@@ -225,6 +225,25 @@ export const getEventImage = (eventId) => {
 };
 
 // ============================================
+// CHARACTER ART CONFIGURATION
+// ============================================
+
+export const getCharacterImage = (characterId) => {
+  try {
+    const images = import.meta.glob('./characters/*.{webp,png,jpg,jpeg}', { eager: true });
+    const imagePath = Object.keys(images).find(path => {
+      const filename = path.split('/').pop().split('.')[0];
+      return filename.toLowerCase() === characterId.toLowerCase();
+    });
+    if (!imagePath) return null;
+    const imageModule = images[imagePath];
+    return typeof imageModule === 'string' ? imageModule : imageModule.default;
+  } catch {
+    return null;
+  }
+};
+
+// ============================================
 // THEME SETTINGS
 // ============================================
 
@@ -263,6 +282,7 @@ export const POTION_COLORS = {
 export default {
   getCardImage,
   getCardArtInfo,
+  getCharacterImage,
   getEnemyImage,
   getEnemyArtInfo,
   getEnemySpriteInfo,
