@@ -1,3 +1,30 @@
+# QA Diary - Sprint 11
+
+## Sprint 11 Entries
+
+### QA-15: Silent Regression + Balance
+**Date:** 2026-02-01
+**Status:** Complete, PR #131 merged
+
+**Done:**
+1. Created `src/test/silentRegression.test.js` — comprehensive regression tests for The Silent
+2. **Silent Card Validation:** All 31 cards (30 + Shiv token) validated for required fields, damage, specials, upgrades
+3. **Starter Deck:** 12-card composition verified (5 Strike, 5 Defend, Neutralize, Survivor) with unique instanceIds
+4. **Card Mechanics:** Shiv generation, poison application, draw/discard synergy, power cards, rare cards all validated
+5. **Character Selection:** SELECT_CHARACTER with 'silent' produces correct deck, 70 HP, Ring of the Snake
+6. **Ironclad Unaffected:** Starter deck, relic, card pool all unchanged — no Silent cards leak
+7. **Playthrough:** A0 Silent 3-floor combat playthrough via reducer dispatch without crashes
+8. **Balance:** Silent vs enemies — win/loss variance confirmed, 2-character comparison functional
+
+**Test count:** 2241 tests total (up from ~2111). +130 new regression tests.
+
+**Validation:** `npm run validate` passes — all tests green, lint clean, build succeeds
+
+**Blockers:** None
+**Next:** All QA Sprint 11 tasks complete (QA-16 diary audit is P2 stretch)
+
+---
+
 # QA Diary - Sprint 10
 
 ## Sprint 10 Entries

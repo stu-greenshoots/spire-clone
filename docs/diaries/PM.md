@@ -15,6 +15,24 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 11 — QA-15 Complete
+**Date:** 2026-02-01
+**Status:** QA-15 merged (PR #131)
+
+**Done:**
+- Spawned QA to implement Silent regression + balance tests
+- 130 new tests: card validation, starter deck, mechanics, character selection, Ironclad regression, playthrough, balance
+- 2241 tests total passing
+- Both Copilot and Mentor reviews passed — clean implementation, 599 insertions
+- Merged PR #131 via squash, updated sprint board and QA diary
+
+**Sprint 11 Progress:** 11/16 tasks done (PM-11, BE-23, JR-09a, JR-09b, FIX-08, GD-16, UX-21, UX-22, VARROW-06, GD-17, QA-15)
+**All P0 tasks complete. 4/6 P1 tasks complete.**
+
+**Next highest priority:** AR-11 (Silent audio), BE-24 (Act 3 balance)
+
+---
+
 ### Sprint 11 — GD-17 Complete
 **Date:** 2026-02-01
 **Status:** GD-17 merged (PR #130)
