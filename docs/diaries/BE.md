@@ -5,6 +5,30 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 12 Entries
 
+### BE-26: Heart Unlock Gate
+**Date:** 2026-02-01
+**Status:** IN REVIEW
+
+**Done:**
+- Added `characterWins` field to `DEFAULT_PROGRESSION` — tracks wins per character as `{ ironclad: N, silent: N }`
+- Updated `updateRunStats()` to increment character-specific win counter on victory
+- Added `isHeartUnlocked(progression)` export — returns true only when both ironclad and silent have ≥1 win
+- Passed `character` field through `runData` in metaReducer's `UPDATE_PROGRESSION` case
+- Gated Act 3→4 transition in mapReducer's `PROCEED_TO_MAP`: if Heart not unlocked, Act 3 boss win → VICTORY (same as pre-Heart behavior)
+- 11 new tests: 5 for characterWins tracking, 5 for isHeartUnlocked, 1 for null/undefined safety
+- 2292 tests passing, lint clean, build clean
+
+**Architecture:**
+- `characterWins` is a simple object keyed by character ID — extensible for future characters
+- Old saves without `characterWins` default to `{}` via DEFAULT_PROGRESSION spread
+- Gate check uses `loadProgression()` at transition time — always reads latest persisted state
+- Players who beat Act 3 without unlock simply get the normal victory screen
+
+**Blockers:** None
+**Next:** QA-17 can now test full 4-act flow with unlock requirement
+
+---
+
 ### BE-25: Heart Boss Infrastructure
 **Date:** 2026-02-01
 **Status:** MERGED (PR #138)

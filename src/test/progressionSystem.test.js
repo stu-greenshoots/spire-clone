@@ -10,6 +10,7 @@ import {
   loadProgression,
   saveProgression,
   updateRunStats,
+  isHeartUnlocked,
   getAchievements,
   getUnlockMilestones,
   ACHIEVEMENTS,
@@ -513,6 +514,74 @@ describe('progressionSystem', () => {
     it('getUnlockMilestones returns milestone list', () => {
       const milestones = getUnlockMilestones();
       expect(milestones).toBe(UNLOCK_MILESTONES);
+    });
+  });
+
+  describe('Character wins tracking (BE-26)', () => {
+    it('tracks character wins on victory', () => {
+      const progression = loadProgression();
+      const runData = { won: true, floor: 50, character: 'ironclad' };
+
+      const updated = updateRunStats(progression, runData);
+
+      expect(updated.characterWins.ironclad).toBe(1);
+    });
+
+    it('does not track character wins on defeat', () => {
+      const progression = loadProgression();
+      const runData = { won: false, floor: 10, character: 'ironclad' };
+
+      const updated = updateRunStats(progression, runData);
+
+      expect(updated.characterWins.ironclad).toBeUndefined();
+    });
+
+    it('accumulates character wins across runs', () => {
+      const progression = loadProgression();
+      progression.characterWins = { ironclad: 2 };
+      const runData = { won: true, floor: 50, character: 'ironclad' };
+
+      const updated = updateRunStats(progression, runData);
+
+      expect(updated.characterWins.ironclad).toBe(3);
+    });
+
+    it('tracks wins independently per character', () => {
+      let progression = loadProgression();
+      progression = updateRunStats(progression, { won: true, floor: 50, character: 'ironclad' });
+      progression = updateRunStats(progression, { won: true, floor: 50, character: 'silent' });
+
+      expect(progression.characterWins.ironclad).toBe(1);
+      expect(progression.characterWins.silent).toBe(1);
+    });
+
+    it('defaults characterWins to empty object for old saves', () => {
+      const progression = loadProgression();
+      expect(progression.characterWins).toEqual({});
+    });
+  });
+
+  describe('isHeartUnlocked (BE-26)', () => {
+    it('returns false with no wins', () => {
+      expect(isHeartUnlocked({ characterWins: {} })).toBe(false);
+    });
+
+    it('returns false with only ironclad wins', () => {
+      expect(isHeartUnlocked({ characterWins: { ironclad: 3 } })).toBe(false);
+    });
+
+    it('returns false with only silent wins', () => {
+      expect(isHeartUnlocked({ characterWins: { silent: 2 } })).toBe(false);
+    });
+
+    it('returns true with both character wins', () => {
+      expect(isHeartUnlocked({ characterWins: { ironclad: 1, silent: 1 } })).toBe(true);
+    });
+
+    it('handles null/undefined progression gracefully', () => {
+      expect(isHeartUnlocked(null)).toBe(false);
+      expect(isHeartUnlocked(undefined)).toBe(false);
+      expect(isHeartUnlocked({})).toBe(false);
     });
   });
 
