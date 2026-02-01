@@ -13,6 +13,7 @@ import { INTENT } from '../data/enemies';
 import { shuffleArray } from '../utils/mapGenerator';
 import { calculateDamage, calculateBlock, applyDamageToTarget } from './combatSystem';
 import { channelOrb, evokeOrbs, applyOrbEvoke } from './orbSystem';
+import { audioManager, SOUNDS } from './audioSystem';
 
 /**
  * Helper to handle exhaust triggers (Dark Embrace, Feel No Pain, Dead Branch)
@@ -545,6 +546,7 @@ const complexEffects = {
       const result = channelOrb(ctx.player, 'lightning', ctx.enemies, ctx.combatLog);
       ctx.enemies = result.enemies;
     }
+    audioManager.playSFX(SOUNDS.combat.orbLightning, 'combat');
   },
   channelFrost: (card, ctx) => {
     const count = card.orbCount || 1;
@@ -554,6 +556,7 @@ const complexEffects = {
     }
     // Track for Blizzard damage calculation
     ctx.player.frostChanneled = (ctx.player.frostChanneled || 0) + count;
+    audioManager.playSFX(SOUNDS.combat.orbFrost, 'combat');
   },
   channelDark: (card, ctx) => {
     const count = card.orbCount || 1;
@@ -561,6 +564,7 @@ const complexEffects = {
       const result = channelOrb(ctx.player, 'dark', ctx.enemies, ctx.combatLog);
       ctx.enemies = result.enemies;
     }
+    audioManager.playSFX(SOUNDS.combat.orbDark, 'combat');
   },
   channelPlasma: (card, ctx) => {
     const count = card.orbCount || 1;
@@ -568,15 +572,18 @@ const complexEffects = {
       const result = channelOrb(ctx.player, 'plasma', ctx.enemies, ctx.combatLog);
       ctx.enemies = result.enemies;
     }
+    audioManager.playSFX(SOUNDS.combat.orbPlasma, 'combat');
   },
   evokeOrb: (card, ctx) => {
     const count = card.evokeCount || 1;
     const result = evokeOrbs(ctx.player, ctx.enemies, ctx.combatLog, { count });
     ctx.enemies = result.enemies;
+    audioManager.playSFX(SOUNDS.combat.orbEvoke, 'combat');
   },
   evokeAllOrbs: (card, ctx) => {
     const result = evokeOrbs(ctx.player, ctx.enemies, ctx.combatLog, { all: true });
     ctx.enemies = result.enemies;
+    audioManager.playSFX(SOUNDS.combat.orbEvoke, 'combat');
   },
 
   // Defect specials
@@ -593,6 +600,7 @@ const complexEffects = {
       result = applyOrbEvoke(orb, ctx.player, ctx.enemies, focus, ctx.combatLog);
       ctx.enemies = result.enemies;
       ctx.player.orbs = orbs.slice(1);
+      audioManager.playSFX(SOUNDS.combat.orbEvoke, 'combat');
     }
   },
   drawPerOrb: (card, ctx) => {
