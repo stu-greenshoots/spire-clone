@@ -1,3 +1,33 @@
+# JR Diary - Sprint 14
+
+## Sprint 14 Entries
+
+### JR-13: Card balance pass — review 157 cards, fix Defect outliers
+**Date:** 2026-02-01
+**Status:** MERGED (PR #173)
+
+**Done:**
+- Reviewed all 157 cards across Ironclad, Silent, and Defect
+- Identified 4 underperforming Defect cards and applied conservative number-only buffs:
+  - **Sunder** (3-cost finisher): 24→28 base, 32→36 upgraded — 3 energy needs to feel impactful
+  - **Meteor Strike** (5-cost): 24→27 base, 30→35 upgraded — highest cost card in game needs massive payoff
+  - **Equilibrium** (2-cost): 13→15 block base, 16→19 upgraded — was outclassed by Glacier at same cost
+  - **FTL** (0-cost): 5→6 base, 7→9 upgraded — conditional draw was too restrictive for low damage
+- All other cards confirmed balanced against StS baselines and in-game alternatives
+- 14 new tests + 5 regression checks in cardBalanceSprint14.test.js
+- 2713 tests passing, lint clean, build clean
+
+**Design decisions:**
+- Conservative approach matching JR-07 precedent (number-only changes, no mechanic modifications)
+- Focused on Defect as the newest character with least real-play testing
+- Did NOT change StS-accurate cards even if they feel weak — preserve faithful adaptation
+- Sunder/Meteor Strike buffs slightly above StS values to compensate for our faster combat pacing
+
+**Blockers:** None
+**Next:** All JR Sprint 14 tasks complete
+
+---
+
 # JR Diary - Sprint 12
 
 ## Sprint 12 Entries
