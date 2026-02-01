@@ -14,6 +14,23 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — GD-30 Complete
+**Date:** 2026-02-01
+**Status:** GD-30 merged (PR #203) — Sprint 16 now 7/14 tasks done
+
+**Done:**
+- Implemented as GD: Relic & potion compendium — browsable collection with discovery tracking
+- New RelicPotionCompendium component with tabbed relics/potions views
+- Added potionsCollected tracking to progression system
+- Filter by rarity, character, sort by rarity/name, progress bar
+- 14 new tests (3169 total passing), lint clean, build clean
+- Both Copilot and Mentor reviews passed
+- Merged PR #203 via squash, updated sprint board and GD diary
+
+**Next:** Continue with P1 tasks (VARROW-12, QA-25, AR-18).
+
+---
+
 ### Sprint 16 — BE-33 Complete
 **Date:** 2026-02-01
 **Status:** BE-33 merged (PR #202) — Sprint 16 now 6/14 tasks done

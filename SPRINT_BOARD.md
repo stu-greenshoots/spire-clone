@@ -733,7 +733,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Player retention — endless mode, custom seeded runs, performance optimization, quality-of-life features.
 **Plan:** See `SPRINT_16_PLAN.md`
 **Branch:** `sprint-16`
-**Status:** IN PROGRESS — 6/14 tasks done
+**Status:** IN PROGRESS — 7/14 tasks done
 
 ### P0 — Must Ship
 
@@ -751,7 +751,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | BE-33 | BE | M | Bundle code-splitting — break 1.2MB index chunk into smaller chunks | MERGED (PR #202) |
-| GD-30 | GD | M | Relic & potion compendium — browsable collection with discovery tracking | PENDING |
+| GD-30 | GD | M | Relic & potion compendium — browsable collection with discovery tracking | MERGED (PR #203) |
 | VARROW-12 | Varrow | M | Endless mode narrative — loop dissolution text, milestone dialogue | PENDING |
 | QA-25 | QA | M | Endless mode regression + balance — scaling curves, stability, character balance | PENDING |
 | AR-18 | AR | S | Endless mode audio — escalating intensity, milestone fanfare | PENDING |
