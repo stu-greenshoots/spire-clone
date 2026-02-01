@@ -25,8 +25,12 @@ export const handlePlayCard = (state, action) => {
     return { ...state, selectedCard: null, targetingMode: false };
   }
 
-  // Play card sound
-  audioManager.playSFX(SOUNDS.combat.cardPlay, 'combat');
+  // Play card sound — Shiv gets a distinct swoosh
+  if (card.id === 'shiv') {
+    audioManager.playSFX(SOUNDS.combat.shivPlay, 'combat');
+  } else {
+    audioManager.playSFX(SOUNDS.combat.cardPlay, 'combat');
+  }
 
   // For X-cost cards, don't deduct energy here (done in xCost special handler)
   let newPlayer = { ...state.player, energy: isXCost ? state.player.energy : state.player.energy - effectiveCost };
@@ -224,7 +228,10 @@ export const handlePlayCard = (state, action) => {
             if (effect.type === 'vulnerable') newEnemy.vulnerable = (newEnemy.vulnerable || 0) + effect.amount;
             if (effect.type === 'weak') newEnemy.weak = (newEnemy.weak || 0) + effect.amount;
             if (effect.type === 'strengthDown') newEnemy.strength = (newEnemy.strength || 0) - effect.amount;
-            if (effect.type === 'poison') newEnemy.poison = (newEnemy.poison || 0) + effect.amount;
+            if (effect.type === 'poison') {
+              newEnemy.poison = (newEnemy.poison || 0) + effect.amount;
+              audioManager.playSFX(SOUNDS.combat.poisonApply, 'combat');
+            }
             combatLog.push(`Applied ${effect.amount} ${effect.type} to ${enemy.name}`);
             return newEnemy;
           });
@@ -243,7 +250,10 @@ export const handlePlayCard = (state, action) => {
               if (effect.type === 'vulnerable') updated.vulnerable = (updated.vulnerable || 0) + effect.amount;
               if (effect.type === 'weak') updated.weak = (updated.weak || 0) + effect.amount;
               if (effect.type === 'strengthDown') updated.strength = (updated.strength || 0) - effect.amount;
-              if (effect.type === 'poison') updated.poison = (updated.poison || 0) + effect.amount;
+              if (effect.type === 'poison') {
+                updated.poison = (updated.poison || 0) + effect.amount;
+                audioManager.playSFX(SOUNDS.combat.poisonApply, 'combat');
+              }
               combatLog.push(`Applied ${effect.amount} ${effect.type} to ${e.name}`);
             }
             return updated;
