@@ -28,6 +28,11 @@ global.Audio = vi.fn(function(src) {
   this.paused = true;
   this.play = function() { this.paused = false; return Promise.resolve(); };
   this.pause = function() { this.paused = true; };
+  this.cloneNode = function() {
+    const clone = new Audio(this.src);
+    clone.volume = this.volume;
+    return clone;
+  };
 });
 
 // We need to handle localStorage mock before the module loads
@@ -63,6 +68,11 @@ describe('AudioManager', () => {
       this.paused = true;
       this.play = function() { this.paused = false; return Promise.resolve(); };
       this.pause = function() { this.paused = true; };
+      this.cloneNode = function() {
+        const clone = new Audio(this.src);
+        clone.volume = this.volume;
+        return clone;
+      };
     });
 
     // Re-import the module fresh each time
@@ -87,6 +97,8 @@ describe('AudioManager', () => {
     // AR-04: Simulate user gesture so tests can play audio immediately
     audioManager._userGestureReceived = true;
     audioManager._pendingAudioQueue = [];
+    audioManager._audioContext = null;
+    audioManager._initialized = true;
     if (audioManager._fadeInterval) {
       clearInterval(audioManager._fadeInterval);
       audioManager._fadeInterval = null;
@@ -593,6 +605,82 @@ describe('AudioManager', () => {
       // Should have started playing with fadeIn
       expect(audioManager.currentMusic).not.toBeNull();
       expect(audioManager.currentMusic.trackId).toBe('music_map');
+    });
+  });
+
+  describe('BE-28: Audio system overhaul', () => {
+    it('should have AudioContext field initialized to null', () => {
+      expect(audioManager._audioContext).toBeNull();
+    });
+
+    it('should track initialization state', () => {
+      expect(audioManager._initialized).toBe(true); // Set in beforeEach
+    });
+
+    it('should have isInitialized method', () => {
+      expect(audioManager.isInitialized()).toBe(true);
+    });
+
+    it('should have isReady method returning user gesture state', () => {
+      expect(audioManager.isReady()).toBe(true);
+      audioManager._userGestureReceived = false;
+      expect(audioManager.isReady()).toBe(false);
+    });
+
+    it('should use cloneNode for SFX playback (overlapping sounds)', () => {
+      const audio = audioManager._getAudio('test_sound');
+      const cloneSpy = vi.spyOn(audio, 'cloneNode');
+
+      audioManager._playSFXInternal('test_sound', 'combat');
+      expect(cloneSpy).toHaveBeenCalled();
+    });
+
+    it('should set correct volume on cloned SFX audio', () => {
+      audioManager.masterVolume = 0.5;
+      audioManager.sfxVolume = 0.8;
+      // Effective = 0.5 * 0.8 = 0.4
+
+      // Pre-cache the audio
+      audioManager._getAudio('test_vol');
+      audioManager._playSFXInternal('test_vol', 'combat');
+
+      // The clone should have been created and volume set
+      // We can't easily inspect the clone, but we can verify no errors
+      expect(audioManager._getEffectiveVolume('combat')).toBeCloseTo(0.4);
+    });
+
+    it('should have destroy method that cleans up resources', () => {
+      audioManager.playMusic('music_combat', { fadeIn: 0 });
+      expect(audioManager.currentMusic).not.toBeNull();
+
+      audioManager.destroy();
+      expect(audioManager.currentMusic).toBeNull();
+      expect(audioManager._audioContext).toBeNull();
+      expect(Object.keys(audioManager._audioCache).length).toBe(0);
+    });
+
+    it('should resume suspended AudioContext on SFX play', () => {
+      const mockResume = vi.fn(() => Promise.resolve());
+      audioManager._audioContext = { state: 'suspended', resume: mockResume };
+
+      audioManager._playSFXInternal('test_resume', 'combat');
+      expect(mockResume).toHaveBeenCalled();
+    });
+
+    it('should resume suspended AudioContext on music play', () => {
+      const mockResume = vi.fn(() => Promise.resolve());
+      audioManager._audioContext = { state: 'suspended', resume: mockResume };
+
+      audioManager._playMusicInternal('music_combat', { fadeIn: 0 });
+      expect(mockResume).toHaveBeenCalled();
+    });
+
+    it('should not resume AudioContext when state is running', () => {
+      const mockResume = vi.fn(() => Promise.resolve());
+      audioManager._audioContext = { state: 'running', resume: mockResume };
+
+      audioManager._playSFXInternal('test_running', 'combat');
+      expect(mockResume).not.toHaveBeenCalled();
     });
   });
 

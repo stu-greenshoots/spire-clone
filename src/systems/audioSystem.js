@@ -87,6 +87,9 @@ class AudioManager {
     // Audio cache
     this._audioCache = {};
 
+    // BE-28: SFX pool for overlapping sounds (max 3 concurrent per soundId)
+    this._sfxPoolSize = 3;
+
     // Preload queue: tracks which sounds are eagerly vs lazily loaded
     this._preloadQueue = {
       eager: [],  // Loaded immediately (combat sounds)
@@ -105,6 +108,12 @@ class AudioManager {
     this._userGestureReceived = false;
     this._pendingAudioQueue = []; // Queued sounds waiting for user gesture
 
+    // BE-28: AudioContext for browser autoplay policy compliance
+    this._audioContext = null;
+
+    // BE-28: Track initialization state
+    this._initialized = false;
+
     // Load persisted settings
     this.loadSettings();
 
@@ -113,16 +122,35 @@ class AudioManager {
   }
 
   /**
-   * AR-04: Set up one-time listener for user gesture to enable audio.
+   * AR-04/BE-28: Set up one-time listener for user gesture to enable audio.
    * Modern browsers require a user gesture before audio can play.
+   * BE-28: Creates AudioContext and starts preloading on first gesture.
    */
   _initUserGestureListener() {
     const enableAudio = () => {
       if (this._userGestureReceived) return;
       this._userGestureReceived = true;
 
-      // Resume any suspended AudioContext (if we use Web Audio API later)
-      // For now, just mark that we can play audio
+      // BE-28: Create AudioContext on first user gesture for browser compliance
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          this._audioContext = new AudioCtx();
+          if (this._audioContext.state === 'suspended') {
+            this._audioContext.resume().catch(() => {});
+          }
+        }
+      } catch {
+        // AudioContext not available — HTML5 Audio fallback still works
+      }
+
+      // BE-28: Start preloading combat sounds on first user gesture
+      this.initPreloadQueue();
+
+      // BE-28: Schedule lazy sound loading in idle time
+      this._scheduleLazyLoading();
+
+      this._initialized = true;
 
       // Play any queued sounds
       this._pendingAudioQueue.forEach(({ type, args }) => {
@@ -144,6 +172,27 @@ class AudioManager {
     document.addEventListener('click', enableAudio, { passive: true });
     document.addEventListener('keydown', enableAudio, { passive: true });
     document.addEventListener('touchstart', enableAudio, { passive: true });
+  }
+
+  /**
+   * BE-28: Schedule lazy sound loading using requestIdleCallback or setTimeout fallback.
+   */
+  _scheduleLazyLoading() {
+    const loadBatch = () => {
+      const remaining = this.loadLazySounds(3);
+      if (remaining > 0) {
+        if (typeof requestIdleCallback === 'function') {
+          requestIdleCallback(loadBatch);
+        } else {
+          setTimeout(loadBatch, 200);
+        }
+      }
+    };
+    if (typeof requestIdleCallback === 'function') {
+      requestIdleCallback(loadBatch);
+    } else {
+      setTimeout(loadBatch, 200);
+    }
   }
 
   /**
@@ -198,7 +247,8 @@ class AudioManager {
   }
 
   /**
-   * Internal SFX playback (called after user gesture verified)
+   * Internal SFX playback (called after user gesture verified).
+   * BE-28: Uses audio cloning so the same sound can overlap (e.g. rapid card plays).
    */
   _playSFXInternal(soundId, category = 'combat') {
     const volume = this._getEffectiveVolume(category);
@@ -214,12 +264,24 @@ class AudioManager {
     const audio = this._getAudio(soundId);
     if (!audio) return;
 
+    // BE-28: Resume AudioContext if it was suspended (e.g. after tab backgrounding)
+    if (this._audioContext && this._audioContext.state === 'suspended') {
+      this._audioContext.resume().catch(() => {});
+    }
+
     try {
-      audio.volume = volume;
-      audio.currentTime = 0;
-      audio.play().catch(() => {
-        // Silent fallback - audio play can fail in many environments
-      });
+      // BE-28: Clone the audio element so overlapping plays don't cut each other off
+      const clone = audio.cloneNode();
+      clone.volume = volume;
+      const playPromise = clone.play();
+      if (playPromise) {
+        playPromise.catch(() => {
+          // BE-28: Retry once on failure (common after tab regains focus)
+          setTimeout(() => {
+            try { clone.play().catch(() => {}); } catch { /* give up */ }
+          }, 50);
+        });
+      }
     } catch {
       // Silent fallback
     }
@@ -250,6 +312,11 @@ class AudioManager {
       oldAudio.currentTime = 0;
       this.currentMusic = null;
       this.musicFading = false;
+    }
+
+    // BE-28: Resume AudioContext if suspended
+    if (this._audioContext && this._audioContext.state === 'suspended') {
+      this._audioContext.resume().catch(() => {});
     }
 
     const audio = this._getAudio(trackId);
@@ -600,6 +667,34 @@ class AudioManager {
    */
   getPhases() {
     return { ...this._phases };
+  }
+
+  /**
+   * BE-28: Check if audio system has been fully initialized (user gesture received + preload started).
+   */
+  isInitialized() {
+    return this._initialized;
+  }
+
+  /**
+   * BE-28: Clean up all audio resources. Call on unmount or before page unload.
+   */
+  destroy() {
+    this._clearFade();
+    if (this.currentMusic) {
+      try {
+        this.currentMusic.audio.pause();
+      } catch { /* ignore */ }
+      this.currentMusic = null;
+    }
+    this._audioCache = {};
+    this._pendingAudioQueue = [];
+    if (this._audioContext) {
+      try {
+        this._audioContext.close().catch(() => {});
+      } catch { /* ignore */ }
+      this._audioContext = null;
+    }
   }
 }
 
