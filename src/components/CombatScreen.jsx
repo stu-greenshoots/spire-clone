@@ -10,6 +10,8 @@ import CardSelectionModal from './CardSelectionModal';
 import { CARD_TYPES } from '../data/cards';
 import CardTooltip from './CardTooltip';
 import TutorialOverlay from './TutorialOverlay';
+import BossDialogue from './BossDialogue';
+import { getBossDialogue } from '../data/bossDialogue';
 import { getPassiveRelicEffects } from '../systems/combatSystem';
 import { loadSettings, getAnimationDuration } from '../systems/settingsSystem';
 
@@ -62,6 +64,11 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
   const prevPlayerEnergy = useRef(player.energy);
   const prevHandSize = useRef(hand.length);
   const lastDragUpdate = useRef(0);
+
+  // Boss dialogue state
+  const [bossDialogue, setBossDialogue] = useState(null);
+  const shownDialogues = useRef(new Set());
+  const prevBossPhases = useRef({});
 
   // Store current enemy data for death animations
   useEffect(() => {
@@ -489,6 +496,108 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     }
   }, [isDragging, handleDragMove, handleDragEnd]);
 
+  // Boss dialogue detection and display
+  useEffect(() => {
+    const boss = enemies.find(e => e.type === 'boss');
+    if (!boss) return;
+
+    const bossData = getBossDialogue(boss.id, state.character);
+    if (!bossData) return;
+
+    const dialogueKey = `${boss.instanceId}`;
+
+    // Show intro dialogue on first encounter
+    if (!shownDialogues.current.has(`${dialogueKey}-intro`)) {
+      shownDialogues.current.add(`${dialogueKey}-intro`);
+      setBossDialogue({
+        boss: { ...bossData, name: boss.name, emoji: boss.emoji },
+        trigger: 'intro'
+      });
+      return;
+    }
+
+    // Check for phase transitions
+    const prevPhase = prevBossPhases.current[boss.instanceId] || {};
+
+    // Awakened One rebirth detection (reborn flag changes from false/undefined to true)
+    if (boss.id === 'awakened_one' && boss.reborn && !prevPhase.reborn) {
+      if (!shownDialogues.current.has(`${dialogueKey}-phaseTransition`)) {
+        shownDialogues.current.add(`${dialogueKey}-phaseTransition`);
+        setBossDialogue({
+          boss: { ...bossData, name: boss.name, emoji: boss.emoji },
+          trigger: 'phaseTransition'
+        });
+        prevBossPhases.current[boss.instanceId] = { ...prevPhase, reborn: true };
+        return;
+      }
+    }
+
+    // Corrupt Heart shield break detection (invincible drops to 0)
+    if (boss.id === 'corruptHeart' && prevPhase.invincible > 0 && boss.invincible === 0) {
+      if (!shownDialogues.current.has(`${dialogueKey}-phaseTransition`)) {
+        shownDialogues.current.add(`${dialogueKey}-phaseTransition`);
+        setBossDialogue({
+          boss: { ...bossData, name: boss.name, emoji: boss.emoji },
+          trigger: 'phaseTransition'
+        });
+        prevBossPhases.current[boss.instanceId] = { ...prevPhase, invincible: 0 };
+        return;
+      }
+    }
+
+    // Guardian defensive mode shift detection (defensiveMode toggle)
+    if (boss.id === 'theGuardian' && prevPhase.defensiveMode !== undefined &&
+        boss.defensiveMode !== prevPhase.defensiveMode) {
+      if (!shownDialogues.current.has(`${dialogueKey}-phaseTransition`)) {
+        shownDialogues.current.add(`${dialogueKey}-phaseTransition`);
+        setBossDialogue({
+          boss: { ...bossData, name: boss.name, emoji: boss.emoji },
+          trigger: 'phaseTransition'
+        });
+        prevBossPhases.current[boss.instanceId] = { ...prevPhase, defensiveMode: boss.defensiveMode };
+        return;
+      }
+    }
+
+    // Mid-fight dialogue at 50% HP
+    const hpPercent = boss.currentHp / boss.maxHp;
+    if (hpPercent <= 0.5 && !shownDialogues.current.has(`${dialogueKey}-midFight`)) {
+      shownDialogues.current.add(`${dialogueKey}-midFight`);
+      setBossDialogue({
+        boss: { ...bossData, name: boss.name, emoji: boss.emoji },
+        trigger: 'midFight'
+      });
+      return;
+    }
+
+    // Update phase tracking
+    prevBossPhases.current[boss.instanceId] = {
+      reborn: boss.reborn,
+      invincible: boss.invincible,
+      defensiveMode: boss.defensiveMode
+    };
+  }, [enemies, state.character]);
+
+  // Boss death dialogue detection
+  useEffect(() => {
+    const currentEnemyIds = new Set(enemies.map(e => e.instanceId));
+    const removedEnemyIds = [...prevEnemyIds.current].filter(id => !currentEnemyIds.has(id));
+
+    removedEnemyIds.forEach(id => {
+      const enemyData = prevEnemyData.current[id];
+      if (enemyData && enemyData.type === 'boss') {
+        const bossData = getBossDialogue(enemyData.id, state.character);
+        if (bossData && !shownDialogues.current.has(`${id}-death`)) {
+          shownDialogues.current.add(`${id}-death`);
+          setBossDialogue({
+            boss: { ...bossData, name: enemyData.name, emoji: enemyData.emoji },
+            trigger: 'death'
+          });
+        }
+      }
+    });
+  }, [enemies, state.character]);
+
   // Determine background based on enemy type
   const getBackgroundStyle = () => {
     const hasBoss = enemies.some(e => e.type === 'boss');
@@ -567,6 +676,15 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
 
       {/* Tutorial hints for first-time players */}
       <TutorialOverlay isMobile={isMobile} />
+
+      {/* Boss dialogue overlay */}
+      {bossDialogue && (
+        <BossDialogue
+          boss={bossDialogue.boss}
+          trigger={bossDialogue.trigger}
+          onDismiss={() => setBossDialogue(null)}
+        />
+      )}
 
       {/* Background scenery elements */}
       <div style={{
