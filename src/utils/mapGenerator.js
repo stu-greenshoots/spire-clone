@@ -8,10 +8,11 @@
  * @param {Array} arr - Array to shuffle
  * @returns {Array} - New shuffled array
  */
-export const shuffleArray = (arr) => {
+export const shuffleArray = (arr, rng = null) => {
   const newArr = [...arr];
+  const rand = rng ? () => rng.next() : Math.random;
   for (let i = newArr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(rand() * (i + 1));
     [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
   }
   return newArr;
@@ -46,7 +47,8 @@ const ACT_DISTRIBUTIONS = {
  * @param {number} act - Current act number (1, 2, or 3)
  * @returns {Array} - 2D array of map nodes
  */
-export const generateMap = (act) => {
+export const generateMap = (act, rng = null) => {
+  const rand = rng ? () => rng.next() : Math.random;
   // Act 4: single boss node (The Heart)
   if (act === 4) {
     return [[{
@@ -78,7 +80,7 @@ export const generateMap = (act) => {
       continue;
     }
 
-    const nodesInFloor = Math.floor(Math.random() * 3) + 2; // 2-4 nodes
+    const nodesInFloor = Math.floor(rand() * 3) + 2; // 2-4 nodes
     const floorNodes = [];
 
     for (let j = 0; j < nodesInFloor; j++) {
@@ -95,13 +97,13 @@ export const generateMap = (act) => {
         type = 'rest';
       } else if (i === 1) {
         // Second floor: no elites yet, mostly combat with some events
-        const roll = Math.random();
+        const roll = rand();
         if (roll < 0.7) type = 'combat';
         else if (roll < 0.85) type = 'event';
         else type = 'shop';
       } else {
         // Regular floors (2-6, 8-12): use act-specific distribution
-        const roll = Math.random();
+        const roll = rand();
         if (roll < dist.combat) type = 'combat';
         else if (roll < dist.elite) type = 'elite';
         else if (roll < dist.rest) type = 'rest';
@@ -128,7 +130,7 @@ export const generateMap = (act) => {
 
     currentFloor.forEach((node, idx) => {
       // Each node gets 1-2 connections
-      const connectCount = Math.floor(Math.random() * 2) + 1;
+      const connectCount = Math.floor(rand() * 2) + 1;
 
       // Calculate proportional target position
       // Maps current position to equivalent position in next floor
@@ -144,7 +146,7 @@ export const generateMap = (act) => {
       if (connectCount > 1 && nextFloor.length > 1) {
         // Try to add a connection to an adjacent node
         const possibleOffsets = [-1, 1];
-        shuffleArray(possibleOffsets);
+        shuffleArray(possibleOffsets, rng);
 
         for (const offset of possibleOffsets) {
           const newTarget = baseTarget + offset;
@@ -190,7 +192,7 @@ export const generateMap = (act) => {
 
         if (reachablePrev.length > 0) {
           // Connect from a random reachable node
-          const connector = reachablePrev[Math.floor(Math.random() * reachablePrev.length)];
+          const connector = reachablePrev[Math.floor(rand() * reachablePrev.length)];
           connector.connections.push(node.id);
           reachable.add(node.id);
 

@@ -274,7 +274,8 @@ export const addRunToHistory = (runData) => {
       enemiesKilled: runData.enemiesKilled || 0,
       elitesKilled: runData.elitesKilled || 0,
       bossesKilled: runData.bossesKilled || 0,
-      duration: runData.duration || 0
+      duration: runData.duration || 0,
+      seed: runData.seed || null
     });
     // Keep only last 20
     const trimmed = history.slice(0, 20);

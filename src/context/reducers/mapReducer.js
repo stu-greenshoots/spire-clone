@@ -4,6 +4,7 @@ import { shuffleArray, generateMap } from '../../utils/mapGenerator';
 import { triggerRelics, getPassiveRelicEffects } from '../../systems/relicSystem';
 import { getEnemyIntent } from '../../systems/enemySystem';
 import { saveGame, deleteSave } from '../../systems/saveSystem';
+import { SeededRNG, stringToSeed } from '../../utils/seededRandom';
 import {
   applyAscensionToEnemies,
   shouldAddWoundAtCombatStart,
@@ -13,6 +14,17 @@ import { audioManager, SOUNDS } from '../../systems/audioSystem';
 import { channelOrb } from '../../systems/orbSystem';
 import { getCardById } from '../../data/cards';
 import { loadProgression, isHeartUnlocked } from '../../systems/progressionSystem';
+
+/**
+ * Create a seeded RNG for map generation if the run has a custom seed.
+ * Incorporates act number and loop count so each act gets a different map.
+ */
+const getMapRng = (state, act) => {
+  if (!state.customSeed) return null;
+  const loop = state.endlessLoop || 0;
+  const combinedSeed = stringToSeed(state.customSeed) + act * 7919 + loop * 104729;
+  return new SeededRNG(combinedSeed);
+};
 
 /**
  * Apply endless mode scaling to enemies.
@@ -411,7 +423,7 @@ export const mapReducer = (state, action) => {
         endlessLoop: newLoop,
         act: 1,
         currentFloor: -1,
-        map: generateMap(1),
+        map: generateMap(1, getMapRng(state, 1)),
         combatRewards: null
       };
       saveGame(endlessState);
@@ -436,7 +448,7 @@ export const mapReducer = (state, action) => {
             phase: GAME_PHASE.MAP,
             act: state.act + 1,
             currentFloor: -1,
-            map: generateMap(state.act + 1),
+            map: generateMap(state.act + 1, getMapRng(state, state.act + 1)),
             combatRewards: null
           };
           saveGame(newActState);
@@ -467,7 +479,7 @@ export const mapReducer = (state, action) => {
           phase: GAME_PHASE.MAP,
           act: state.act + 1,
           currentFloor: -1,
-          map: generateMap(state.act + 1),
+          map: generateMap(state.act + 1, getMapRng(state, state.act + 1)),
           combatRewards: null
         };
         // Auto-save after completing boss

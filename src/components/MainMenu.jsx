@@ -910,12 +910,13 @@ const RunHistoryPanel = ({ onClose }) => {
                   </span>
                   <span style={{ color: '#555', fontSize: '11px' }}>{formatDate(run.date)}</span>
                 </div>
-                <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: '#888' }}>
+                <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: '#888', flexWrap: 'wrap' }}>
                   <span>Floor {run.floor}</span>
                   <span>Act {run.act}</span>
                   {run.ascension > 0 && <span style={{ color: '#FFD700' }}>A{run.ascension}</span>}
                   <span>{run.deckSize} cards</span>
                   <span>{run.relicCount} relics</span>
+                  {run.seed && <span style={{ color: '#aa99cc', fontFamily: 'monospace' }}>Seed: {run.seed}</span>}
                 </div>
                 {!run.won && run.causeOfDeath && (
                   <div style={{ color: '#775555', fontSize: '11px', marginTop: '4px', fontStyle: 'italic' }}>
