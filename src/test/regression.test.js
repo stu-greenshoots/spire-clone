@@ -190,7 +190,9 @@ describe('Card Effect Regression', () => {
       'ftlDraw', 'sunderEnergy', 'consume', 'seekCards', 'creativeAI', 'echoForm',
       'electrodynamics',
       // Watcher specials
-      'haltWrath', 'gainEnergy'
+      'haltWrath', 'gainEnergy', 'wallopBlock', 'addThroughViolence', 'addSafety',
+      'fearNoEvilCalm', 'mentalFortress', 'brillianceDamage', 'blasphemy', 'devaForm',
+      'scryCards'
     ];
     const specialCards = ALL_CARDS.filter(c => c.special);
     specialCards.forEach(card => {

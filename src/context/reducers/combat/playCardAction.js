@@ -279,11 +279,17 @@ export const handlePlayCard = (state, action) => {
     } else if (newPlayer.currentStance) {
       combatLog.push(`Entered ${newPlayer.currentStance.charAt(0).toUpperCase() + newPlayer.currentStance.slice(1)} stance`);
     }
+    // Mental Fortress: gain block on stance change
+    if (newPlayer.mentalFortress > 0) {
+      newPlayer.block += newPlayer.mentalFortress;
+      combatLog.push(`Mental Fortress: gained ${newPlayer.mentalFortress} Block`);
+    }
   }
 
   // Mantra accumulation (Watcher)
   if (card.mantra) {
     newPlayer.mantra = (newPlayer.mantra || 0) + card.mantra;
+    newPlayer.totalMantraGained = (newPlayer.totalMantraGained || 0) + card.mantra;
     combatLog.push(`Gained ${card.mantra} Mantra (${newPlayer.mantra}/10)`);
     // Mantra triggers Divinity at 10
     if (newPlayer.mantra >= 10) {
@@ -296,6 +302,11 @@ export const handlePlayCard = (state, action) => {
       newPlayer.currentStance = 'divinity';
       newPlayer.energy += 3;
       combatLog.push('Mantra reached 10! Entered Divinity: gained 3 Energy');
+      // Mental Fortress: gain block on stance change via Mantra
+      if (newPlayer.mentalFortress > 0) {
+        newPlayer.block += newPlayer.mentalFortress;
+        combatLog.push(`Mental Fortress: gained ${newPlayer.mentalFortress} Block`);
+      }
     }
   }
 
