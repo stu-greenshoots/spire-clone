@@ -288,8 +288,8 @@ describe('Relic Regression - All Relics', () => {
           'maxHpOption', 'playCurses', 'reduceHpLoss', 'reduceLowDamage',
           'removeDebuffsIfAllTypes', 'retainBlock', 'revive',
           'shopDiscount', 'strength', 'strengthIfLowHp', 'strengthOption',
-          'strengthPerCurse', 'thorns', 'vulnerable', 'vulnerableBonus',
-          'weak'
+          'strengthAndDexterity', 'strengthPerCurse', 'thorns', 'vulnerable', 'vulnerableBonus',
+          'blockAndDraw', 'weak'
         ];
         expect(validTypes).toContain(relic.effect.type);
       });

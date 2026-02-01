@@ -349,6 +349,26 @@ export const RELIC_FLAVOR = {
   sozu: 'A vessel that drinks all potions before they reach your lips.',
   velvet_choker: 'Elegant restraint that grants power at the cost of freedom.',
 
+  // Character-Specific — Ironclad
+  mark_of_pain: 'Branded into the flesh by the war itself. Each scar is a lesson in violence.',
+  charred_glove: 'Fingers blackened by a fire that never truly went out. Every fifth strike ignites.',
+  blood_oath: 'A pact written in your own blood. The wounded are rewarded for their suffering.',
+
+  // Character-Specific — Silent
+  envenom_ring: 'A band of tarnished silver that seeps toxin into the air around it.',
+  wrist_blade: 'Hidden in the sleeve, it rewards discipline with precision.',
+  cloak_of_shadows: 'Woven from darkness itself. The first moments of battle find you shielded.',
+
+  // Character-Specific — Defect
+  capacitor_coil: 'A secondary power loop that spins up a protective subroutine on activation.',
+  data_disk: 'Corrupted archives of a fallen construct. Its fragmented data enhances all systems.',
+  emotion_chip: 'Installed to simulate feeling. Pain triggers a defensive cascade.',
+
+  // Character-Specific — Watcher
+  damaru: 'A ritual drum whose beat opens channels of power at the start of each meditation.',
+  golden_eye: 'The third eye, gilded and ever-open. It perceives what others cannot.',
+  duality: 'Balance in all things. Aggression creates protection, protection enables aggression.',
+
   // Shop
   membership_card: 'Accepted at establishments across all known and unknown realms.',
   orange_pellets: 'Dissolve impurities from your body when the conditions align.'
