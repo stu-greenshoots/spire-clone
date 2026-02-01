@@ -255,4 +255,31 @@ describe('Flavor Text Data', () => {
       });
     });
   });
+
+  describe('Boss Phase Transition Dialogue (VARROW-07)', () => {
+    it('should have phaseTransition text for Corrupt Heart', () => {
+      const dialogue = BOSS_DIALOGUE.corruptHeart;
+      expect(dialogue.phaseTransition).toBeDefined();
+      expect(typeof dialogue.phaseTransition).toBe('string');
+      expect(dialogue.phaseTransition.length).toBeGreaterThan(0);
+    });
+
+    it('should have phaseTransition text for Awakened One', () => {
+      const dialogue = BOSS_DIALOGUE.awakened_one;
+      expect(dialogue.phaseTransition).toBeDefined();
+      expect(typeof dialogue.phaseTransition).toBe('string');
+      expect(dialogue.phaseTransition.length).toBeGreaterThan(0);
+    });
+
+    it('should return Silent-specific phaseTransition for Heart', () => {
+      const dialogue = getBossDialogue('corruptHeart', 'silent');
+      expect(dialogue.phaseTransition).toBeDefined();
+      expect(dialogue.phaseTransition).not.toBe(BOSS_DIALOGUE.corruptHeart.phaseTransition);
+    });
+
+    it('should return default phaseTransition for ironclad', () => {
+      const dialogue = getBossDialogue('corruptHeart', 'ironclad');
+      expect(dialogue.phaseTransition).toBe(BOSS_DIALOGUE.corruptHeart.phaseTransition);
+    });
+  });
 });
