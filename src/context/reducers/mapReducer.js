@@ -10,6 +10,7 @@ import {
   createWoundCard
 } from '../../systems/ascensionSystem';
 import { audioManager, SOUNDS } from '../../systems/audioSystem';
+import { channelOrb } from '../../systems/orbSystem';
 import { loadProgression, isHeartUnlocked } from '../../systems/progressionSystem';
 
 export const mapReducer = (state, action) => {
@@ -138,6 +139,16 @@ export const mapReducer = (state, action) => {
           for (let i = 0; i < effects.draw; i++) {
             if (drawPile.length > 0) {
               hand.push(drawPile.shift());
+            }
+          }
+        }
+
+        // Channel orbs from relics (Cracked Core)
+        if (effects.channelOrbs && effects.channelOrbs.length > 0) {
+          for (const orbType of effects.channelOrbs) {
+            const result = channelOrb(player, orbType, enemiesWithIntents, []);
+            if (result) {
+              enemiesWithIntents = result.enemies || enemiesWithIntents;
             }
           }
         }
@@ -275,6 +286,16 @@ export const mapReducer = (state, action) => {
           for (let i = 0; i < effects.draw; i++) {
             if (drawPile.length > 0) {
               hand.push(drawPile.shift());
+            }
+          }
+        }
+
+        // Channel orbs from relics (Cracked Core)
+        if (effects.channelOrbs && effects.channelOrbs.length > 0) {
+          for (const orbType of effects.channelOrbs) {
+            const result = channelOrb(player, orbType, enemiesWithIntents, []);
+            if (result) {
+              enemiesWithIntents = result.enemies || enemiesWithIntents;
             }
           }
         }

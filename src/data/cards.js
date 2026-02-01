@@ -2046,6 +2046,18 @@ export const getStarterDeck = (characterId = 'ironclad') => {
     deck.push({ ...ALL_CARDS.find(c => c.id === 'survivor'), instanceId: 'survivor_0' });
     return deck;
   }
+  if (characterId === 'defect') {
+    const deck = [];
+    for (let i = 0; i < 4; i++) {
+      deck.push({ ...ALL_CARDS.find(c => c.id === 'strike_defect'), instanceId: `strike_defect_${i}` });
+    }
+    for (let i = 0; i < 4; i++) {
+      deck.push({ ...ALL_CARDS.find(c => c.id === 'defend_defect'), instanceId: `defend_defect_${i}` });
+    }
+    deck.push({ ...ALL_CARDS.find(c => c.id === 'zap'), instanceId: 'zap_0' });
+    deck.push({ ...ALL_CARDS.find(c => c.id === 'dualcast'), instanceId: 'dualcast_0' });
+    return deck;
+  }
   // Fallback: return ironclad starter
   return getStarterDeck('ironclad');
 };

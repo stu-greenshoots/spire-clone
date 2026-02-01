@@ -258,6 +258,7 @@ export const RELIC_FLAVOR = {
   // Starter
   burning_blood: 'Vitae drawn from a dying phoenix. Its warmth mends wounds after every battle.',
   ring_of_snake: 'Coiled serpent silver that whispers secrets at the start of every battle.',
+  cracked_core: 'A fractured power source that still sparks with residual energy. The crack pulses with each loop.',
 
   // Common
   anchor: 'Cast from the hull of a ship that sailed between worlds. It holds fast against any tide.',

@@ -899,6 +899,67 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         ))}
       </div>
 
+      {/* Orb Slots (Defect) */}
+      {player.orbSlots > 0 && (
+        <div
+          data-testid="orb-slots"
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '6px 15px',
+            background: 'rgba(0, 0, 0, 0.3)',
+            borderTop: '1px solid rgba(68, 136, 204, 0.3)'
+          }}
+        >
+          {player.focus !== 0 && (
+            <span style={{
+              color: player.focus > 0 ? '#88ccff' : '#ff8888',
+              fontSize: '11px',
+              fontWeight: 'bold',
+              marginRight: '4px'
+            }}>
+              Focus: {player.focus > 0 ? '+' : ''}{player.focus}
+            </span>
+          )}
+          {Array.from({ length: player.orbSlots }).map((_, i) => {
+            const orb = (player.orbs || [])[i];
+            const orbColors = {
+              lightning: { bg: '#ffdd44', border: '#ccaa00', glow: 'rgba(255, 221, 68, 0.5)', icon: '⚡' },
+              frost: { bg: '#66bbff', border: '#3388cc', glow: 'rgba(102, 187, 255, 0.5)', icon: '❄️' },
+              dark: { bg: '#9944cc', border: '#6622aa', glow: 'rgba(153, 68, 204, 0.5)', icon: '🌑' },
+              plasma: { bg: '#ff6644', border: '#cc3322', glow: 'rgba(255, 102, 68, 0.5)', icon: '🔥' }
+            };
+            const colors = orb ? orbColors[orb.type] || orbColors.lightning : null;
+            return (
+              <div
+                key={i}
+                data-testid={orb ? `orb-${orb.type}-${i}` : `orb-empty-${i}`}
+                title={orb ? `${orb.type.charAt(0).toUpperCase() + orb.type.slice(1)} Orb` : 'Empty orb slot'}
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '18px',
+                  border: orb ? `2px solid ${colors.border}` : '2px dashed #555',
+                  background: orb
+                    ? `radial-gradient(circle at 30% 30%, ${colors.bg}, ${colors.border})`
+                    : 'rgba(30, 30, 40, 0.5)',
+                  boxShadow: orb ? `0 0 10px ${colors.glow}` : 'none',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                {orb ? colors.icon : ''}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       {/* Targeting Indicator */}
       {targetingMode && (
         <div
