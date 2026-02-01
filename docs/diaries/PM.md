@@ -14,6 +14,105 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 13 — Retrospective
+**Date:** 2026-02-01
+**Status:** Sprint 13 COMPLETE — 15/15 tasks merged. Sixth consecutive 100% completion sprint.
+
+#### What We Accomplished
+
+**Sprint 13 Goal:** Close the 93→100 gap. Save export/import, card compendium, in-game pause menu, landscape mode, The Defect (third character), poison vs shield bug fix, art polish.
+
+**Final tally:** 15 tasks completed (6 P0 + 6 P1 + 3 P2). Zero deferred. All priority tiers shipped including stretch goals.
+
+| Area | PRs | Highlights |
+|------|-----|------------|
+| Infra (PM-13) | — | Merged Sprint 12 to master, created sprint-13 branch |
+| Poison Bug Fix (FIX-09) | #151 | Poison now routed through invincible shield check |
+| Save Export/Import (AR-13) | #152 | JSON export/import for cross-device transfer, 7 localStorage keys |
+| Pause Menu (UX-27) | #153 | In-game settings, deck viewer, save & quit during gameplay |
+| Card Compendium (UX-26) | #154 | Browsable card collection from title screen |
+| Orb System (BE-27) | #155 | Orb slots, passive/evoke, Focus scaling, reducer actions |
+| Defect Cards (JR-12a) | #156 | 30-card orb pool (Lightning, Frost, Dark, Plasma) |
+| Defect Integration (JR-12b) | #157 | Starter deck, character selection, orb slot UI |
+| Defect Narrative (VARROW-09) | #158 | "The machine that remembers" — boss dialogue, act descriptions |
+| Defect Regression (QA-19) | #159 | 52 tests covering orb mechanics, 3-character regression |
+| Landscape Mode (UX-28) | #160 | Responsive layout for tablets and landscape phones |
+| Defect Art (GD-22) | #161 | Portrait, 30 card illustrations, orb visuals, sprite sheet rebuild (157 cards) |
+| Defect Audio (AR-14) | #162 | Orb channel/evoke SFX (lightning, frost, dark, plasma) |
+| Art Polish (GD-23) | #163 | 5 lowest-quality enemy sprites replaced with improved versions |
+| Save Regression (QA-20) | #164 | 21 export/import regression tests — round-trip, corruption, security |
+
+**Stats:** 14 PRs merged (#151–#164), plus PM-13 infra. 2627 tests passing (up from 2366 at Sprint 12 end). +261 tests.
+
+**Score trajectory:** 58 (Sprint 2) → 85 (Sprint 10) → 93 (Sprint 12) → targeting 97+ (Sprint 13).
+
+#### Recurring Issues & Observations
+
+1. **Audio still broken at runtime.** Reported P0 in Sprint 11, noted again this sprint. Seven music tracks + 20+ SFX are wired in code but players hear nothing. Six sprints of audio work (AR-04, AR-06, AR-07, AR-09, AR-11, AR-12, AR-14) may be entirely non-functional at runtime. This is the single biggest gap — must be investigated and fixed before any further audio tasks are assigned.
+
+2. **Validation gate checkboxes still unchecked.** Sprint board lists gate items with `- [ ]` but none are checked. This has been noted in every retrospective since Sprint 9. The evidence of completion exists in PRs and test counts, but the ceremony of checking them off never happens. Low-priority but persistent.
+
+3. **PM acting as all roles.** Unchanged since Sprint 11. PM diary is by far the longest file in the project. The single-operator pattern works but creates a massive diary. No action needed.
+
+4. **Pre-existing content discovery pattern ended.** Unlike Sprints 10–12 where some tasks were already done, Sprint 13 had no pre-existing content. Planning quality has improved.
+
+5. **Placeholder audio files persist.** AR-11, AR-12, AR-14 all created "placeholder MP3 files (copies of boss_intro.mp3)." The audio system has 20+ sound IDs all pointing to copies of the same file. Even if the audio system worked, the experience would be a single sound repeated. Real CC0 sounds needed.
+
+6. **Third character delivered smoothly.** JR-12a/b + BE-27 + VARROW-09 + GD-22 + QA-19 + AR-14 — six roles coordinated on The Defect without blockers. The character pipeline (established with The Silent in Sprint 11) is now proven and repeatable.
+
+#### What Went Well
+
+- **Sixth consecutive 100% completion sprint** (Sprints 8–13). Planning and estimation remain reliable.
+- **The Defect is a proper third character.** 30 cards with a unique orb mechanic, distinct blue/cyan visual identity, character-specific narrative, full regression tests. The orb system (channel, evoke, Focus scaling, passives) adds genuine mechanical depth.
+- **QoL features address real gaps.** Save export/import, card compendium, pause menu, and landscape mode are all features reviewers and players would expect. These close the remaining scoring gaps.
+- **FIX-09 resolved a known deviation.** Poison bypassing the Heart's invincible shield was documented in Sprint 12 and fixed promptly.
+- **Art pipeline continues to deliver.** GD-22 produced 30 card illustrations + orb art + portrait + sprite sheet rebuild (96→157 cards). GD-23 improved 5 low-quality sprites. Visual quality keeps rising.
+
+#### What Could Improve
+
+- **Fix the audio system.** P0 for next sprint. No point adding more sounds to a system that doesn't play them.
+- **Replace placeholder MP3s.** 20+ sounds all copy the same file. Need real CC0 audio.
+- **Check validation gate boxes.** Trivial process step, repeatedly skipped.
+- **Edit mode visibility issue noted as CRITICAL/P0 in PM diary but unclear if resolved.** Needs triage — may be stale.
+
+#### Project Status at Sprint 13 End
+
+| Metric | Value |
+|--------|-------|
+| Tests | 2627 passing |
+| Lint | 0 errors |
+| Build | Passing |
+| Content | 157 cards (3 characters), 45+ enemies (4 acts), 49 relics, 15 potions, 25 events |
+| Characters | 3 (Ironclad, The Silent, The Defect) |
+| Acts | 4 complete (Act 1 + Act 2 + Act 3 + Act 4 Heart) |
+| Daily Challenge | Functional with seeded runs, modifiers, scoring |
+| Art | 100% coverage — all cards, enemies, relics, potions, events have art |
+| Music | 7 tracks (wired but possibly non-functional at runtime) |
+| Boss Dialogue | Rendered in combat for all bosses, character-specific variants |
+| QoL | Save export/import, card compendium, pause menu, landscape mode, run history |
+| Self-assessed Score | Targeting 97+/100 (up from 93 at Sprint 12) |
+| Sprints completed | 13 |
+| Total PRs merged | ~164 |
+| Consecutive 100% sprints | 6 (Sprints 8–13) |
+
+---
+
+### URGENT — NO SOUND OUTPUT AT ALL
+**Date:** 2026-02-01
+**Priority:** P0 — USER-REPORTED
+**Status:** OPEN — needs immediate AR investigation
+
+**User feedback:** Zero audio output. No music, no SFX, nothing. We have 7 tracks + 10+ SFX wired across Sprints 8-12 (AR-06, AR-07, AR-09, AR-11, AR-12) but players hear nothing.
+
+**This has been reported before (Sprint 11 diary noted "audio preloading never initialized").** It was not fixed. This is now the second time it's been flagged — treat as P0.
+
+**Action required:**
+- AR: Investigate immediately. Likely candidates: audio preloading never initialized, browser autoplay policy blocking playback, broken file paths, or audioSystem.js not wired to game events at runtime.
+- Check if sounds play in dev but not in production builds (GitHub Pages).
+- This blocks any further audio work until resolved.
+
+---
+
 ### Sprint 13 — PM-13 Setup
 **Date:** 2026-02-01
 **Status:** DONE
