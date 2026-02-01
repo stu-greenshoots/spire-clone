@@ -130,6 +130,13 @@ export const calculateDamage = (baseDamage, attacker, defender, options = {}) =>
     damage += passiveEffects.strengthBonus * strengthMultiplier;
   }
 
+  // Stance damage multiplier (Watcher)
+  if (attacker.currentStance === 'wrath') {
+    damage *= 2;
+  } else if (attacker.currentStance === 'divinity') {
+    damage *= 3;
+  }
+
   // Weak reduces damage by 25%
   if (attacker.weak > 0) {
     damage = Math.floor(damage * 0.75);
@@ -435,6 +442,11 @@ export const calculateEnemyDamage = (baseDamage, enemy, player, relics = []) => 
   // Vulnerable increases damage by 50%
   if (player.vulnerable > 0) {
     damage = Math.floor(damage * 1.5);
+  }
+
+  // Wrath stance: player takes double damage
+  if (player.currentStance === 'wrath') {
+    damage *= 2;
   }
 
   // Torii: reduce low damage to 1

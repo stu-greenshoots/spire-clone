@@ -236,3 +236,35 @@ The Heart = the war's core algorithm. Beating it proves you're complex enough to
 **Validation:** `npm run validate` passes — doc only, no code changes
 
 ---
+
+### VARROW-11: Watcher Narrative — Boss Dialogue, Defeat/Victory, Act Descriptions
+**Date:** 2026-02-01
+**Status:** Complete, PR #185 merged
+
+**Done:**
+- Added `WATCHER_BOSS_DIALOGUE` for all 7 bosses in `bossDialogue.js`
+- Added `WATCHER_DEFEAT_NARRATIVE` — 6 context pools (early, midAct1, act2, act3, boss, heart)
+- Added `WATCHER_VICTORY_NARRATIVE` — standard and heart variants
+- Added `WATCHER_ACT_DESCRIPTIONS` — entering text for Acts 1-3 in `flavorText.js`
+- Updated `getBossDialogue()` to handle `characterId === 'watcher'`
+- Wired Watcher narratives into `GameOverScreen.jsx` and `VictoryScreen.jsx`
+- Added full test coverage (7 new test blocks matching Silent/Defect pattern)
+
+**Design decisions:**
+- Watcher's narrative identity: observation as weapon. Bosses don't fight her — they're *seen* by her, and being seen undoes them
+- Boss dialogue emphasizes confusion and alarm — the mass "does not know what to do with attention", the guardian "has never been watched before"
+- Defeat text: dissolution of an observer, not a fighter. "The war resumes unobserved, which is how it prefers to operate."
+- Victory text: persistence through sight. "The war cannot unmake what has already seen it completely."
+- Heart encounter: the algorithm vs its own observation function — "it cannot evaluate what IS the evaluation"
+- Phase transitions: Heart shield becomes transparent (not shattered/corroded) — observation doesn't break, it makes barriers irrelevant
+
+**Voice consistency check:**
+- War as system ✓ (monitoring process, observation layer, memory leak, debug log, clock cycles)
+- Identity as deck ✓ (perspectives, modes of perception, observation recorded)
+- Watcher identity ✓ (watching, perceiving, observing, being seen = being resolved)
+- No derivative StS language ✓ (no "monk", no "meditation" — reframed as system observation throughout)
+- Dry technical tone ✓ ("threat classification: UNDEFINED", "recursive error", "clock speed")
+
+**Validation:** `npm run validate` passes — 2940 tests, lint clean, build clean
+
+---

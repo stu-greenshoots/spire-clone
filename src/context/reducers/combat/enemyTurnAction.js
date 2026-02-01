@@ -42,6 +42,11 @@ export const processEnemyTurns = (ctx) => {
         if (newEnemy.weak > 0) damage = Math.floor(damage * 0.75);
         if (newPlayer.vulnerable > 0) damage = Math.floor(damage * 1.5);
 
+        // Wrath stance: player takes double damage
+        if (newPlayer.currentStance === 'wrath') {
+          damage *= 2;
+        }
+
         // Flight: reduce damage by 50%, lose 1 stack
         if (newPlayer.flight > 0) {
           damage = Math.floor(damage / 2);

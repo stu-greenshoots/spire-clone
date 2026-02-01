@@ -71,6 +71,26 @@ const CHARACTERS = [
       '<rect x="-25" y="30" width="20" height="50" rx="3" opacity="0.6" />',
       '<rect x="5" y="30" width="20" height="50" rx="3" opacity="0.6" />'
     ]
+  },
+  {
+    id: 'watcher',
+    title: 'The Watcher',
+    subtitle: 'Stances &amp; Divinity',
+    color1: '#4a2266',
+    color2: '#1a0a22',
+    accent: '#cc88ff',
+    // Monk silhouette — meditative pose, third eye, flowing robes
+    silhouetteFill: '#8844bb',
+    silhouetteParts: [
+      '<rect x="-28" y="-70" width="56" height="100" rx="10" />',
+      '<circle cx="0" cy="-100" r="30" />',
+      '<circle cx="0" cy="-115" r="5" fill="#ffdd44" opacity="0.7" />',
+      '<path d="M -28 -65 Q -50 -40 -45 10 L -28 10 Z" opacity="0.5" />',
+      '<path d="M 28 -65 Q 50 -40 45 10 L 28 10 Z" opacity="0.5" />',
+      '<path d="M -35 30 Q -55 70 -50 90 L 50 90 Q 55 70 35 30 Z" opacity="0.4" />',
+      '<circle cx="-40" cy="-10" r="8" fill="#ffdd44" opacity="0.3" />',
+      '<circle cx="40" cy="-10" r="8" fill="#ff6644" opacity="0.3" />'
+    ]
   }
 ];
 

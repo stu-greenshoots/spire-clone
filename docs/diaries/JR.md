@@ -1,3 +1,82 @@
+# JR Diary - Sprint 15
+
+## Sprint 15 Entries
+
+### JR-14b: Watcher card pool batch 2 — 15 uncommon/rare cards
+**Date:** 2026-02-01
+**Status:** MERGED (PR #184)
+
+**Done:**
+- Added 15 Watcher cards: 10 uncommon (Wallop, Tantrum, Reach Heaven, Through Violence, Worship, Third Eye, Deceive Reality, Safety, Fear No Evil, Mental Fortress) + 5 rare (Ragnarok, Brilliance, Blasphemy, Deva Form, Wish)
+- Implemented 8 new specials in cardEffects.js: wallopBlock, addThroughViolence, addSafety, fearNoEvilCalm, mentalFortress, brillianceDamage, blasphemy, devaForm
+- Wired Mental Fortress (block on stance change) into playCardAction.js
+- Wired Blasphemy (death at turn start) and Deva Form (increasing energy) into endTurnAction.js
+- Added totalMantraGained tracking for Brilliance damage scaling
+- Flavor text for all 15 cards in Endless War voice
+- 35 new tests in watcherBatch2.test.js, 2933 total passing
+
+**Design decisions:**
+- Wallop calculates unblocked damage (damage - enemy block) for block gain
+- Through Violence and Safety are generated cards (added to piles by Reach Heaven / Deceive Reality)
+- Blasphemy returns DEFEAT state at start of next turn — same pattern as other death paths
+- Deva Form uses incrementing counter (devaFormEnergy) stored on player
+- Mental Fortress stacks if played multiple times
+- Fear No Evil checks enemy intent type for 'attack' or 'attackDebuff'
+- Wish simplified from StS (no choose-one) — just grants Strength
+
+**Blockers:** None
+**Next:** All JR Sprint 15 P0 tasks complete. Watcher has full 31-card pool.
+
+---
+
+### JR-14c: Watcher starter deck, character selection, Pure Water relic
+**Date:** 2026-02-01
+**Status:** MERGED (PR #182)
+
+**Done:**
+- Added Watcher as 4th character in characters.js (72 HP, purple color, starterRelicId: pure_water)
+- Added starter deck: 4x Strike (Watcher), 4x Defend (Watcher), 1x Eruption, 1x Vigilance
+- Added Pure Water starter relic (onCombatStart: add Miracle to hand)
+- Added Miracle card: 0-cost Skill, retain, exhaust, gainEnergy special (+1 energy, +2 upgraded)
+- Added addCardToHand relic effect type in relicSystem.js and gainEnergy special in cardEffects.js
+- 32 new tests in watcherRegression.test.js, 2828 total passing
+
+**Design decisions:**
+- Followed exact patterns from Ironclad/Silent/Defect character definitions
+- Miracle is rarity: basic (generated card, not in card pool rewards)
+- Pure Water uses new addCardToHand relic effect type (extensible for future relics)
+
+**Blockers:** None
+**Next:** JR-14b (batch 2: uncommon/rare cards — depends on BE-30 Scrying)
+
+---
+
+### JR-14a: Watcher card pool batch 1 — 15 cards with stance interactions
+**Date:** 2026-02-01
+**Status:** MERGED (PR #181)
+
+**Done:**
+- Added 15 Watcher cards to cards.js with `character: 'watcher'`
+- 4 basic cards: Strike (Watcher), Defend (Watcher), Eruption (→Wrath, 2-cost upgraded to 1), Vigilance (→Calm, 8 block)
+- 5 common attacks: Bowling Bash (AoE), Crush Joints (Vulnerable), Flurry of Blows (0-cost), Follow-Up (draw), Sash Whip (Weak)
+- 6 common skills: Halt (Wrath bonus block via haltWrath special), Empty Mind (exit stance + draw), Crescendo (→Wrath exhaust), Tranquility (→Calm exhaust), Prostrate (Mantra), Protecting Light (block)
+- Added `haltWrath` special effect in cardEffects.js for conditional block
+- Flavor text for all 15 cards in Endless War voice
+- 30 new tests, 2791 total passing
+
+**Design decisions:**
+- Followed StS card designs faithfully but adapted numbers for our combat pacing
+- Used `enterStance` property for stance transitions (already wired by BE-29)
+- Used `mantra` property for Mantra accumulation (Prostrate: 2 base, 3 upgraded)
+- Halt uses special effect rather than conditional logic in card data — cleaner separation
+- Eruption upgrades by reducing cost (2→1) matching StS pattern
+- Crescendo/Tranquility both exhaust to prevent infinite stance cycling
+
+**Blockers:** None
+**Next:** JR-14b (batch 2: uncommon/rare, Worship/Mantra, Scrying cards — depends on BE-30)
+
+---
+
 # JR Diary - Sprint 14
 
 ## Sprint 14 Entries

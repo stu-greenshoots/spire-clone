@@ -20,7 +20,8 @@ const SPECIAL_TYPES = [
   'strengthEachTurn', 'drawOnStatus', 'blockOnExhaust', 'aoeOnStatus',
   'damageOnBlock', 'metallicize', 'strengthOnSelfHpLoss',
   'severSoul', 'loseHpGainEnergy',
-  'burnDamage', 'voidCard', 'painCurse', 'regretCurse', 'doubtCurse', 'decayCurse'
+  'burnDamage', 'voidCard', 'painCurse', 'regretCurse', 'doubtCurse', 'decayCurse',
+  'haltWrath', 'gainEnergy'
 ];
 
 const CardForm = ({ data, onChange }) => {

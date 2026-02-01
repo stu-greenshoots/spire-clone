@@ -80,6 +80,31 @@ function handleSelectCardFromPile(state, action) {
       break;
     }
 
+    case 'scryCards': {
+      const cardIndex = newDrawPile.findIndex(c => c.instanceId === card.instanceId);
+      if (cardIndex >= 0 && cardIndex < (selection.scryCount || 3)) {
+        const [discardedCard] = newDrawPile.splice(cardIndex, 1);
+        newDiscardPile.push(discardedCard);
+        combatLog.push(`Scry: discarded ${discardedCard.name}`);
+        // Check if there are remaining scryable cards
+        const remainingScryCount = Math.min(selection.scryCount || 3, newDrawPile.length);
+        const remainingTop = newDrawPile.slice(0, remainingScryCount);
+        if (remainingTop.length > 0) {
+          return {
+            ...state,
+            phase: GAME_PHASE.CARD_SELECT_DRAW,
+            cardSelection: { ...selection, scryCount: remainingScryCount },
+            hand: newHand,
+            discardPile: newDiscardPile,
+            drawPile: newDrawPile,
+            exhaustPile: newExhaustPile,
+            combatLog
+          };
+        }
+      }
+      break;
+    }
+
     case 'exhaustChoose': {
       const cardIndex = newHand.findIndex(c => c.instanceId === card.instanceId);
       if (cardIndex >= 0) {

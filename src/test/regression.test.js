@@ -188,7 +188,11 @@ describe('Card Effect Regression', () => {
       'evokeOrb', 'evokeAllOrbs', 'gainFocus', 'loseFocus', 'gainOrbSlot',
       'dualcast', 'drawPerOrb', 'steamBarrier', 'blockPerDiscard', 'blizzardDamage',
       'ftlDraw', 'sunderEnergy', 'consume', 'seekCards', 'creativeAI', 'echoForm',
-      'electrodynamics'
+      'electrodynamics',
+      // Watcher specials
+      'haltWrath', 'gainEnergy', 'wallopBlock', 'addThroughViolence', 'addSafety',
+      'fearNoEvilCalm', 'mentalFortress', 'brillianceDamage', 'blasphemy', 'devaForm',
+      'scryCards'
     ];
     const specialCards = ALL_CARDS.filter(c => c.special);
     specialCards.forEach(card => {
@@ -276,7 +280,7 @@ describe('Relic Regression - All Relics', () => {
     relicsWithEffects.forEach(relic => {
       it(`${relic.id}: effect type '${relic.effect.type}' is valid`, () => {
         const validTypes = [
-          'addRandomCard', 'block', 'blockIfNone', 'blockNextTurn',
+          'addCardToHand', 'addRandomCard', 'block', 'blockIfNone', 'blockNextTurn',
           'channelOrb', 'conserveEnergy', 'damage', 'damageAll', 'dexterity',
           'doubleDamage', 'doubleEliteRelics', 'draw', 'drawBonus',
           'drawSpecific', 'energy', 'energyBonus', 'heal', 'healIfLowHp',

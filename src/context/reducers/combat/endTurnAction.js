@@ -176,6 +176,12 @@ export const handleEndTurn = (state) => {
   if (newPlayer.weak > 0) newPlayer.weak--;
   if (newPlayer.frail > 0) newPlayer.frail--;
 
+  // Divinity stance exits at end of turn
+  if (newPlayer.currentStance === 'divinity') {
+    newPlayer.currentStance = null;
+    combatLog.push('Divinity stance ended');
+  }
+
   // Enemy turns
   const enemyResult = processEnemyTurns({
     newPlayer, newEnemies, newHand, newDrawPile, newDiscardPile, newRelics, combatLog
@@ -446,6 +452,35 @@ export const handleEndTurn = (state) => {
     newPlayer.energy += newPlayer.maxEnergy + passiveEffects.extraEnergy;
   } else {
     newPlayer.energy = newPlayer.maxEnergy + passiveEffects.extraEnergy;
+  }
+
+  // Blasphemy: die at the start of your turn
+  if (newPlayer.blasphemyDeath) {
+    newPlayer.currentHp = 0;
+    combatLog.push('Blasphemy: your mortal form expires');
+    audioManager.playSFX(SOUNDS.combat.death, 'combat');
+
+    // Return defeat state
+    return {
+      ...state,
+      player: newPlayer,
+      enemies: newEnemies,
+      hand: newHand,
+      discardPile: newDiscardPile,
+      drawPile: newDrawPile,
+      exhaustPile: newExhaustPile,
+      relics: newRelics,
+      combatLog,
+      phase: GAME_PHASE.DEFEAT,
+    };
+  }
+
+  // Deva Form: gain increasing energy each turn
+  if (newPlayer.devaForm) {
+    const devaEnergy = newPlayer.devaFormEnergy || 1;
+    newPlayer.energy += devaEnergy;
+    combatLog.push(`Deva Form: gained ${devaEnergy} Energy`);
+    newPlayer.devaFormEnergy = devaEnergy + 1;
   }
 
   // Apply berserk

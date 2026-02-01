@@ -3,6 +3,60 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 15 Entries
+
+### BE-30: Scrying System
+**Date:** 2026-02-01
+**Status:** MERGED (PR #183)
+
+**Done:**
+- Added `CARD_SELECT_DRAW` game phase for scry modal
+- Added `scryCards` card selection effect in cardEffects.js (follows existing pattern)
+- Added `scryCards` case in combatReducer's handleSelectCardFromPile
+- Iterative discard: each selection discards card and re-opens modal with remaining top cards
+- Cancel/Done returns to combat, keeping undiscarded cards on top of draw pile
+- Cards use `special: 'scryCards'` and `scryCount: N` properties
+- CombatScreen wired to show top N draw pile cards during scry
+- 10 new tests covering effect, reducer, phase, cancel, logging
+- 2839 tests passing, lint clean, build clean
+
+**Architecture:**
+- Scry shows `drawPile.slice(0, scryCount)` — only top N visible
+- Guard prevents selecting cards beyond scryCount index
+- After discard, remainingScryCount recalculated as `min(scryCount, drawPile.length)`
+- Empty remaining → falls through to default return (COMBAT phase)
+
+**Blockers:** None
+**Next:** JR-14b is now fully unblocked (needs BE-29 + BE-30, both done)
+
+---
+
+### BE-29: Stance System Infrastructure
+**Date:** 2026-02-01
+**Status:** MERGED (PR #180)
+
+**Done:**
+- Added `currentStance` (null/calm/wrath/divinity) and `mantra` (numeric) to player state in createInitialState
+- Wrath stance: 2× outgoing damage (in calculateDamage), 2× incoming damage (in enemyTurnAction + calculateEnemyDamage)
+- Divinity stance: 3× outgoing damage, +3 energy on entry, auto-exits at end of turn
+- Calm stance: +2 energy on exit
+- Stance transitions via `card.enterStance` property in playCardAction
+- Mantra accumulation via `card.mantra` property; auto-triggers Divinity at 10 (excess mantra preserved)
+- 19 new tests covering all multiplier combos, transitions, mantra, and auto-exit
+- 2732 tests passing, lint clean, build clean
+
+**Architecture:**
+- Stance multiplier applied in calculateDamage after strength, before weak — matches StS damage order
+- Wrath incoming damage applied in both enemyTurnAction (actual damage) and calculateEnemyDamage (intent preview)
+- Divinity exits at end of turn (before enemy turns), not start of next turn
+- Cards interact via `enterStance: 'calm'|'wrath'|'divinity'|'none'` and `mantra: N`
+- Null stance = no multiplier = zero impact on existing characters
+
+**Blockers:** None
+**Next:** BE-30 (Scrying system) is next on the dependency chain. JR-14a/b are now unblocked.
+
+---
+
 ## Sprint 14 Entries
 
 ### BE-28: Audio System Overhaul

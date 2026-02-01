@@ -15,6 +15,40 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 15 - UX-32 Complete
+**Date:** 2026-02-01
+**Status:** UX-32 DONE (PR #194)
+
+**What I did:**
+- Final self-assessment re-score of SELF_ASSESSMENT.md against Game Zone Magazine rubric
+- Projected score: **100/100** (up from 97 at Sprint 14)
+- Presentation 9→10: 15 re-rendered sprites (GD-28/29), Watcher art (GD-27), audio normalization (FIX-12), asset path fix (FIX-11)
+- Content depth gap closed: 4th character (Watcher) with stances, Mantra, Scrying — 30 new cards
+- Updated metrics: 3072 tests, 4 characters, 187 cards, 20+ SFX
+- Documented what closed the 97→100 gap (art fidelity + content depth)
+
+**Sprint 15 UX status:** All UX tasks complete (UX-31, UX-32). Done for the sprint.
+
+---
+
+### Sprint 15 - UX-31 Complete
+**Date:** 2026-02-01
+**Status:** UX-31 DONE (PR #186)
+
+**What I did:**
+- Added StanceIndicator component to CombatScreen — shows current stance badge next to energy orb
+- Stance badges: Calm (blue 🧘), Wrath (red ⚔️ with pulse animation), Divinity (gold ✨ with glow)
+- Mantra progress bar (X/10) with purple theme, glows when near threshold (≥7)
+- Compact stance badge in PersistentHeader mobile combat view
+- CSS keyframe animations: wrathPulse (1.2s red pulse), divinityGlow (0.8s gold glow)
+- Only renders for Watcher character (guarded by `character === 'watcher'`)
+- Accessible: role="status", aria-label, title attributes on all indicators
+- 3 files changed, 128 insertions, 2 deletions
+
+**Sprint 15 UX status:** UX-31 done. UX-32 (final self-assessment) remaining as P2 stretch.
+
+---
+
 ### Sprint 14 - UX-30 Complete
 **Date:** 2026-02-01
 **Status:** UX-30 DONE (PR #175)

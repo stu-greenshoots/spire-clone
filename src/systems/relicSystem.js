@@ -47,7 +47,8 @@ const createDefaultEffects = () => ({
   blockNextTurn: 0,
   reduceDamage: 0,
   thorns: 0,
-  channelOrbs: []
+  channelOrbs: [],
+  addCards: []
 });
 
 /**
@@ -213,6 +214,10 @@ export const applyRelicEffect = (effect, effects, trigger, context) => {
 
     case 'channelOrb':
       effects.channelOrbs.push(effect.orbType);
+      break;
+
+    case 'addCardToHand':
+      effects.addCards.push(effect.cardId);
       break;
 
     default:

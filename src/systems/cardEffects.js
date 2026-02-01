@@ -76,6 +76,13 @@ const handleExhaustTriggers = (ctx) => {
  * Simple effects that just modify player stats
  */
 const simplePlayerEffects = {
+  haltWrath: (card, ctx) => {
+    if (ctx.player.currentStance === 'wrath') {
+      const wrathBlock = card.upgraded ? 14 : 9;
+      ctx.player.block += wrathBlock - (card.block || 0);
+      ctx.combatLog.push(`Halt: in Wrath, gained ${wrathBlock} Block total`);
+    }
+  },
   doubleBlock: (card, ctx) => {
     ctx.player.block *= 2;
     ctx.combatLog.push(`Block doubled to ${ctx.player.block}`);
@@ -203,6 +210,58 @@ const simplePlayerEffects = {
     const amount = card.orbSlotGain || 1;
     ctx.player.orbSlots = (ctx.player.orbSlots || 3) + amount;
     ctx.combatLog.push(`Gained ${amount} Orb slot(s)`);
+  },
+  wallopBlock: (card, ctx) => {
+    const enemy = ctx.enemies[ctx.targetIndex];
+    if (enemy && enemy.currentHp > 0) {
+      const damage = card.damage || 9;
+      const enemyBlock = enemy.block || 0;
+      const unblocked = Math.max(0, damage - enemyBlock);
+      ctx.player.block += unblocked;
+      if (unblocked > 0) {
+        ctx.combatLog.push(`Wallop: gained ${unblocked} Block from unblocked damage`);
+      }
+    }
+  },
+  fearNoEvilCalm: (card, ctx) => {
+    const enemy = ctx.enemies[ctx.targetIndex];
+    if (enemy && enemy.currentHp > 0) {
+      const intent = enemy.intent || {};
+      if (intent.type === 'attack' || intent.type === 'attackDebuff') {
+        ctx.player.currentStance = 'calm';
+        ctx.combatLog.push('Fear No Evil: enemy intends to attack, entered Calm');
+      }
+    }
+  },
+  brillianceDamage: (card, ctx) => {
+    const mantraGained = ctx.player.totalMantraGained || 0;
+    if (mantraGained > 0) {
+      const enemy = ctx.enemies[ctx.targetIndex];
+      if (enemy && enemy.currentHp > 0) {
+        const blocked = Math.min(enemy.block || 0, mantraGained);
+        const remaining = mantraGained - blocked;
+        ctx.enemies[ctx.targetIndex] = {
+          ...enemy,
+          block: (enemy.block || 0) - blocked,
+          currentHp: Math.max(0, enemy.currentHp - remaining)
+        };
+        ctx.combatLog.push(`Brilliance: +${mantraGained} bonus damage from Mantra gained this combat`);
+      }
+    }
+  },
+  blasphemy: (card, ctx) => {
+    ctx.player.blasphemyDeath = true;
+    ctx.combatLog.push('Blasphemy: you will die at the start of next turn');
+  },
+  mentalFortress: (card, ctx) => {
+    const blockAmount = card.mentalFortressBlock || 4;
+    ctx.player.mentalFortress = (ctx.player.mentalFortress || 0) + blockAmount;
+    ctx.combatLog.push(`Mental Fortress: gain ${blockAmount} Block on stance change`);
+  },
+  devaForm: (card, ctx) => {
+    ctx.player.devaForm = true;
+    ctx.player.devaFormEnergy = 1;
+    ctx.combatLog.push('Deva Form: gain increasing Energy each turn');
   }
 };
 
@@ -255,6 +314,28 @@ const addCardEffects = {
       const freeAttack = { ...randomAttack, cost: 0, instanceId: `${randomAttack.id}_${Date.now()}` };
       ctx.hand.push(freeAttack);
       ctx.combatLog.push(`Added ${randomAttack.name} to hand (costs 0)`);
+    }
+  },
+  addThroughViolence: (card, ctx) => {
+    const tvCard = ALL_CARDS.find(c => c.id === 'throughViolence');
+    if (tvCard) {
+      const instance = { ...tvCard, instanceId: `throughViolence_${Date.now()}` };
+      if (card.upgraded) {
+        Object.assign(instance, tvCard.upgradedVersion, { upgraded: true });
+      }
+      ctx.drawPile.splice(Math.floor(Math.random() * (ctx.drawPile.length + 1)), 0, instance);
+      ctx.combatLog.push('Shuffled a Through Violence into draw pile');
+    }
+  },
+  addSafety: (card, ctx) => {
+    const safetyCard = ALL_CARDS.find(c => c.id === 'safety');
+    if (safetyCard) {
+      const instance = { ...safetyCard, instanceId: `safety_${Date.now()}` };
+      if (card.upgraded) {
+        Object.assign(instance, safetyCard.upgradedVersion, { upgraded: true });
+      }
+      ctx.hand.push(instance);
+      ctx.combatLog.push('Added a Safety to hand');
     }
   }
 };
@@ -479,6 +560,12 @@ const complexEffects = {
       };
       ctx.combatLog.push(`Reduced ${enemy.name}'s Strength by ${card.strengthReduction || 2}`);
     }
+  },
+
+  gainEnergy: (card, ctx) => {
+    const amount = card.energyGain || 1;
+    ctx.player.energy += amount;
+    ctx.combatLog.push(`Gained ${amount} Energy`);
   },
 
   hpForEnergy: (card, ctx) => {
@@ -849,6 +936,31 @@ const cardSelectionEffects = {
           ...ctx.state,
           phase: ctx.GAME_PHASE.CARD_SELECT_HAND,
           cardSelection: { type: 'exhaustChoose', sourceCard: card },
+          player: ctx.player,
+          enemies: ctx.enemies,
+          hand: ctx.hand,
+          discardPile: ctx.discardPile,
+          drawPile: ctx.drawPile,
+          exhaustPile: ctx.exhaustPile,
+          selectedCard: null,
+          targetingMode: false,
+          combatLog: ctx.combatLog
+        }
+      };
+    }
+    return null;
+  },
+
+  scryCards: (card, ctx) => {
+    const scryCount = card.scryCount || 3;
+    const topCards = ctx.drawPile.slice(0, Math.min(scryCount, ctx.drawPile.length));
+    if (topCards.length > 0) {
+      return {
+        earlyReturn: true,
+        earlyReturnState: {
+          ...ctx.state,
+          phase: ctx.GAME_PHASE.CARD_SELECT_DRAW,
+          cardSelection: { type: 'scryCards', sourceCard: card, scryCount },
           player: ctx.player,
           enemies: ctx.enemies,
           hand: ctx.hand,

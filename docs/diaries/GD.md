@@ -14,6 +14,75 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 15 - GD-28 Complete
+**Date:** 2026-02-01
+**Status:** GD-28 complete, PR #192 merged to sprint-15
+
+**Done today:**
+- Re-rendered 10 most inconsistent sprites for visual consistency across all 4 characters
+- Created `scripts/generate-consistency-art.js` following established SVG→sharp→WebP pipeline
+- 6 cards: neutralize, survivor, deadlyPoison (Silent), zap, dualcast (Defect), eruption (Watcher)
+- 4 enemies: cultist, jawWorm, louse_red, fungiBeast (common Act 1 encounters)
+- Rebuilt both card and enemy sprite sheets
+- Enemy sprite sheet reduced from 1789KB → 1595KB (11% smaller) due to consistent pipeline
+
+**Selection rationale:**
+- Chose cards from Silent/Defect/Watcher to ensure parity with already-upgraded Ironclad cards
+- Chose common Act 1 enemies that every player encounters early — first impression matters
+- All selected sprites were still using original placeholder art (no prior quality pass)
+
+**Validation:** `npm run validate` passes — 3072 tests, lint clean, build clean
+
+**Next:** GD-29 (key card re-render) is remaining P2 stretch task
+
+---
+
+### Sprint 15 - FIX-11 Complete
+**Date:** 2026-02-01
+**Status:** FIX-11 complete, PR #189 merged to sprint-15
+
+**Done today:**
+- Fixed hardcoded `/images/enemies/` paths in Enemy.jsx and assetLoader.js
+- Extracted `getBasePath()` helper in assetLoader.js to avoid DRY violation
+- Enemy.jsx now uses `getEnemyImagePathWebP()` utility instead of inline path construction
+- All paths now respect `import.meta.env.BASE_URL` for GitHub Pages `/spire-clone/` deployment
+
+**Investigation findings:**
+- Main art pipeline (art-config.js using `import.meta.glob`) was already correct
+- Only hardcoded paths in Enemy.jsx fallback and assetLoader.js were broken on GitHub Pages
+- Build verified: 201 WebP assets, sprite sheets hashed correctly with base path prefix
+- Sound files verified accessible on deployed site (audio base path was already fixed in BE-28)
+
+**Validation:** `npm run validate` passes — 3072 tests, lint clean, build clean
+
+**Next:** GD-28 (art consistency pass) and GD-29 (key card re-render) pending
+
+---
+
+### Sprint 15 - GD-27 Complete
+**Date:** 2026-02-01
+**Status:** GD-27 complete, PR #187 merged to sprint-15
+
+**Done today:**
+- Generated Watcher character portrait (512x512 WebP, purple/gold palette, meditating silhouette)
+- Generated 30 Watcher card art images (purple/gold dark fantasy theme with type/rarity variation)
+- Generated 3 stance visual indicators (calm water ripples, wrath flame burst, divinity halo) at 128x128
+- Rebuilt card sprite sheet: 157 → 188 cards (10-col, 19-row grid, 3157KB)
+- Added `getStanceImage()` to art-config.js following existing asset pattern
+- Wired stance images into StanceIndicator in CombatScreen with emoji fallback
+- Created `generate-watcher-card-art.js` and `generate-stance-art.js` scripts
+
+**Key decisions:**
+- Purple/gold palette for Watcher — distinguishes from Ironclad (red), Silent (green), Defect (blue)
+- Stance images are 128x128 (same as orbs) — appropriate for small badge display
+- Emoji fallback preserved in StanceIndicator — graceful degradation
+
+**Validation:** `npm run validate` passes — 2940 tests, lint clean, build clean
+
+**Next:** GD-28 (art consistency pass) and GD-29 (key card re-render) pending
+
+---
+
 ### Sprint 14 - GD-26 Complete
 **Date:** 2026-02-01
 **Status:** GD-26 complete, PR #176 merged to sprint-14
