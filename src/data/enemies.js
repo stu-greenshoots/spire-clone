@@ -1015,7 +1015,8 @@ export const createEnemyInstance = (enemy, index = 0) => {
     asleep: enemy.asleep || false,
     hasSplit: false,
     stasis: null,
-    intangible: 0
+    intangible: 0,
+    invincible: enemy.invincible || 0
   };
 };
 

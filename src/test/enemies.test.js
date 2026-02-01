@@ -256,5 +256,46 @@ describe('Enemies Data', () => {
       expect(act1Boss[0].act).toBe(1);
       expect(act2Boss[0].act).toBe(2);
     });
+
+    it('should return Corrupt Heart for Act 4', () => {
+      const encounter = getBossEncounter(4);
+      expect(encounter).toHaveLength(1);
+      expect(encounter[0].id).toBe('corruptHeart');
+      expect(encounter[0].act).toBe(4);
+      expect(encounter[0].type).toBe('boss');
+    });
+  });
+
+  describe('Corrupt Heart', () => {
+    it('has correct base stats', () => {
+      const heart = getEnemyById('corruptHeart');
+      expect(heart.hp.min).toBe(800);
+      expect(heart.hp.max).toBe(800);
+      expect(heart.invincible).toBe(300);
+      expect(heart.beatOfDeath).toBe(true);
+      expect(heart.act).toBe(4);
+    });
+
+    it('createEnemyInstance initializes invincible field', () => {
+      const heart = getEnemyById('corruptHeart');
+      const instance = createEnemyInstance(heart);
+      expect(instance.invincible).toBe(300);
+      expect(instance.currentHp).toBe(800);
+    });
+
+    it('createEnemyInstance defaults invincible to 0 for normal enemies', () => {
+      const jawWorm = getEnemyById('jawWorm');
+      const instance = createEnemyInstance(jawWorm);
+      expect(instance.invincible).toBe(0);
+    });
+
+    it('has 4-move AI rotation', () => {
+      const heart = getEnemyById('corruptHeart');
+      expect(heart.ai(heart, 0, null).id).toBe('debilitate');
+      expect(heart.ai(heart, 1, null).id).toBe('bloodShots');
+      expect(heart.ai(heart, 2, null).id).toBe('echo');
+      expect(heart.ai(heart, 3, null).id).toBe('buff');
+      expect(heart.ai(heart, 4, null).id).toBe('bloodShots');
+    });
   });
 });

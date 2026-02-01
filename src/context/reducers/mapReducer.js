@@ -338,8 +338,8 @@ export const mapReducer = (state, action) => {
     case 'PROCEED_TO_MAP': {
       // Check if we beat the boss
       if (state.currentNode?.type === 'boss') {
-        if (state.act >= 3) {
-          // Delete save on victory
+        if (state.act >= 4) {
+          // Delete save on victory (after Heart or Act 4+)
           deleteSave();
           return {
             ...state,
