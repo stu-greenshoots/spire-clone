@@ -1,3 +1,33 @@
+# JR Diary - Sprint 15
+
+## Sprint 15 Entries
+
+### JR-14a: Watcher card pool batch 1 — 15 cards with stance interactions
+**Date:** 2026-02-01
+**Status:** MERGED (PR #181)
+
+**Done:**
+- Added 15 Watcher cards to cards.js with `character: 'watcher'`
+- 4 basic cards: Strike (Watcher), Defend (Watcher), Eruption (→Wrath, 2-cost upgraded to 1), Vigilance (→Calm, 8 block)
+- 5 common attacks: Bowling Bash (AoE), Crush Joints (Vulnerable), Flurry of Blows (0-cost), Follow-Up (draw), Sash Whip (Weak)
+- 6 common skills: Halt (Wrath bonus block via haltWrath special), Empty Mind (exit stance + draw), Crescendo (→Wrath exhaust), Tranquility (→Calm exhaust), Prostrate (Mantra), Protecting Light (block)
+- Added `haltWrath` special effect in cardEffects.js for conditional block
+- Flavor text for all 15 cards in Endless War voice
+- 30 new tests, 2791 total passing
+
+**Design decisions:**
+- Followed StS card designs faithfully but adapted numbers for our combat pacing
+- Used `enterStance` property for stance transitions (already wired by BE-29)
+- Used `mantra` property for Mantra accumulation (Prostrate: 2 base, 3 upgraded)
+- Halt uses special effect rather than conditional logic in card data — cleaner separation
+- Eruption upgrades by reducing cost (2→1) matching StS pattern
+- Crescendo/Tranquility both exhaust to prevent infinite stance cycling
+
+**Blockers:** None
+**Next:** JR-14b (batch 2: uncommon/rare, Worship/Mantra, Scrying cards — depends on BE-30)
+
+---
+
 # JR Diary - Sprint 14
 
 ## Sprint 14 Entries
