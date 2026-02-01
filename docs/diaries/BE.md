@@ -3,6 +3,34 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 15 Entries
+
+### BE-29: Stance System Infrastructure
+**Date:** 2026-02-01
+**Status:** MERGED (PR #180)
+
+**Done:**
+- Added `currentStance` (null/calm/wrath/divinity) and `mantra` (numeric) to player state in createInitialState
+- Wrath stance: 2× outgoing damage (in calculateDamage), 2× incoming damage (in enemyTurnAction + calculateEnemyDamage)
+- Divinity stance: 3× outgoing damage, +3 energy on entry, auto-exits at end of turn
+- Calm stance: +2 energy on exit
+- Stance transitions via `card.enterStance` property in playCardAction
+- Mantra accumulation via `card.mantra` property; auto-triggers Divinity at 10 (excess mantra preserved)
+- 19 new tests covering all multiplier combos, transitions, mantra, and auto-exit
+- 2732 tests passing, lint clean, build clean
+
+**Architecture:**
+- Stance multiplier applied in calculateDamage after strength, before weak — matches StS damage order
+- Wrath incoming damage applied in both enemyTurnAction (actual damage) and calculateEnemyDamage (intent preview)
+- Divinity exits at end of turn (before enemy turns), not start of next turn
+- Cards interact via `enterStance: 'calm'|'wrath'|'divinity'|'none'` and `mantra: N`
+- Null stance = no multiplier = zero impact on existing characters
+
+**Blockers:** None
+**Next:** BE-30 (Scrying system) is next on the dependency chain. JR-14a/b are now unblocked.
+
+---
+
 ## Sprint 14 Entries
 
 ### BE-28: Audio System Overhaul
