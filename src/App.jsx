@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState, useCallback } from 'react';
 import { GameProvider, useGame, GAME_PHASE } from './context/GameContext';
 import DevTools from './components/DevTools';
 import { audioManager, SOUNDS } from './systems/audioSystem';
+import { getEndlessBackgroundStyle } from './assets/art/art-config';
 import './App.css';
 
 // Lazy load screens for better initial load performance
@@ -175,7 +176,7 @@ const GameContent = () => {
   const hideStatusBar = hideChrome || isVictoryPhase;
 
   return (
-    <div className="game-container">
+    <div className="game-container" style={state.endlessMode ? getEndlessBackgroundStyle(state.endlessLoop || 0) : undefined}>
       <DevTools />
       <Suspense fallback={<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888' }}>Loading...</div>}>
         {!hideChrome && <PersistentHeader onPauseClick={handlePauseToggle} />}

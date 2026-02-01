@@ -301,6 +301,39 @@ export const getStanceImage = (stanceId) => {
 };
 
 // ============================================
+// ENDLESS MODE VISUAL ESCALATION
+// ============================================
+
+/**
+ * GD-31: Background shifts every 10 floors in endless mode.
+ * Warm → cool → desaturated progression with increasing saturation/contrast.
+ * Returns an inline style object for the game container background.
+ */
+export const getEndlessBackgroundStyle = (endlessLoop) => {
+  // Each loop ≈ one pass through acts. Tier shifts every ~1 loop (every 10 floors).
+  const tier = Math.min(endlessLoop, 10); // Cap at tier 10 for max intensity
+  const t = tier / 10; // 0.0 → 1.0
+
+  // Hue rotation: warm purple (270) → cool blue (220) → desaturated grey-blue (200)
+  const hue = Math.round(270 - 70 * t);
+  // Saturation increases then plateaus
+  const sat = Math.round(25 + 35 * t);
+  // Lightness of center: slightly brighter early, darker late
+  const centerL = Math.round(18 + 8 * Math.sin(t * Math.PI));
+  const midL = Math.round(12 - 3 * t);
+  const edgeL = Math.round(8 - 4 * t);
+
+  // Contrast boost via more pronounced gradient stops
+  const center = `hsl(${hue}, ${sat}%, ${centerL}%)`;
+  const mid = `hsl(${hue - 10}, ${Math.max(sat - 10, 10)}%, ${midL}%)`;
+  const edge = `hsl(${hue - 15}, ${Math.max(sat - 15, 5)}%, ${edgeL}%)`;
+
+  return {
+    background: `radial-gradient(ellipse at center top, ${center} 0%, ${mid} 50%, ${edge} 100%)`
+  };
+};
+
+// ============================================
 // THEME SETTINGS
 // ============================================
 
