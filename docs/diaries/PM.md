@@ -14,6 +14,22 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — AR-18 Complete
+**Date:** 2026-02-01
+**Status:** AR-18 merged (PR #206) — Sprint 16 now 10/14 tasks done
+
+**Done:**
+- Implemented as AR: Endless mode audio — milestone fanfare, endless death SFX, endless ambient loop
+- 3 new MP3 files generated via ffmpeg synthesis (normalized to EBU R128)
+- Milestone fanfare on EndlessTransition, endless death on GameOverScreen, endless ambient in App.jsx
+- 7 new tests (3228 total passing), lint clean, build clean
+- Both Copilot and Mentor reviews passed
+- Merged PR #206 via squash, updated sprint board and AR diary
+
+**Next:** Continue with P2 stretch tasks (UX-34, QA-26, GD-31).
+
+---
+
 ### Sprint 16 — QA-25 Complete
 **Date:** 2026-02-01
 **Status:** QA-25 merged (PR #205) — Sprint 16 now 9/14 tasks done
