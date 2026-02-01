@@ -14,6 +14,23 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 14 — GD-24 Complete
+**Date:** 2026-02-01
+**Status:** GD-24 merged (PR #170)
+
+**Done:**
+- Implemented as GD: Card art quality pass — improved 10 most-visible Ironclad card illustrations
+- Created `scripts/generate-quality-card-art.js` with detailed SVG silhouettes (weapons, shields, effects)
+- Rebuilt card sprite sheet (157 cards, 3078KB)
+- Both Copilot and Mentor reviews passed — clean binary-heavy PR
+- Merged PR #170 via squash, updated sprint board and GD diary
+
+**Sprint 14 Progress:** 6/14 tasks done (PM-14, FIX-10, BE-28, UX-29, AR-15, GD-24)
+
+**Next highest priority:** GD-25 (enemy art quality) — last remaining P0 task
+
+---
+
 ### Sprint 14 — AR-15 Complete
 **Date:** 2026-02-01
 **Status:** AR-15 merged (PR #169)

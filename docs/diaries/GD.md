@@ -14,6 +14,33 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 14 - GD-24 Complete
+**Date:** 2026-02-01
+**Status:** GD-24 complete, PR #170 merged to sprint-14
+
+**Done today:**
+- Created `scripts/generate-quality-card-art.js` with detailed SVG silhouettes for 10 Ironclad cards
+- Targets: Strike, Defend, Bash, Anger, Cleave, Iron Wave, Pommel Strike, Shrug It Off, Body Slam, Clothesline
+- Each card now has thematic visual elements instead of simple gradient+text:
+  - Strike: sword blade with slash trail and impact sparks
+  - Defend: shield with protective aura rings and sparkles
+  - Bash: mace with impact shockwave and debris
+  - Anger: clenched fist with rage flames and embers
+  - Cleave: wide axe sweep with multi-target indicators
+  - Iron Wave: shield + sword combo with connecting energy waves
+  - Pommel Strike: reversed sword pommel jab with card draw hint
+  - Shrug It Off: armored shoulders with block energy and draw sparkle
+  - Body Slam: charging body slam with ground crack
+  - Clothesline: extended arm strike with weakness debuff hint
+- Rebuilt card sprite sheet (157 cards, 3078KB — down from 3449KB)
+- File sizes reduced: individual cards went from 20-47KB to 4-5KB each (more detailed but cleaner SVGs)
+
+**Validation:** `npm run validate` passes — 0 errors, 3 pre-existing warnings
+
+**Next:** GD-25 (enemy art quality pass) pending as remaining P0
+
+---
+
 ### Sprint 13 - GD-23 Complete
 **Date:** 2026-02-01
 **Status:** GD-23 complete, PR #163 merged to sprint-13
