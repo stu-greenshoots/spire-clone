@@ -15,6 +15,24 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 12 - UX-24 Complete
+**Date:** 2026-02-01
+**Status:** UX-24 DONE (PR #141)
+
+**What I did:**
+- Wired BossDialogue component into CombatScreen with full trigger detection
+- Added boss dialogue state management (bossDialogue useState, shownDialogues ref, prevBossPhases ref)
+- Intro dialogue shows on first boss encounter, mid-fight at 50% HP
+- Phase transition detection: Awakened One rebirth, Corrupt Heart shield break, Guardian defensive mode
+- Boss death dialogue on enemy removal
+- Added phaseTransition case to BossDialogue (purple accent color #9944cc)
+- Character-aware via getBossDialogue — Silent gets unique dialogue variants
+- 122 lines across 2 files, follows existing CombatScreen patterns (useEffect + refs)
+
+**Sprint 12 UX status:** UX-24 done. UX-25 (self-assessment) remaining as P1.
+
+---
+
 ### Sprint 11 - UX-23 Complete
 **Date:** 2026-02-01
 **Status:** UX-23 DONE (PR #134)

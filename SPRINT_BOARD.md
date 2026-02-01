@@ -512,7 +512,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Add the true final boss (The Corrupt Heart), wire boss dialogue rendering, animate key boss sprites, push past 90/100 score.
 **Plan:** See `SPRINT_12_PLAN.md`
 **Branch:** `sprint-12`
-**Status:** IN PROGRESS — PM-12, BE-25, JR-10, VARROW-07 complete
+**Status:** IN PROGRESS — PM-12, BE-25, JR-10, VARROW-07, UX-24 complete
 
 ### P0 — Must Ship
 
@@ -522,7 +522,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | BE-25 | BE | M | Heart boss infrastructure — Act 4 map node, encounter trigger, invincible phase | MERGED (PR #138) |
 | JR-10 | JR | M | Heart boss implementation — 750 HP, Beat of Death, phase transitions | MERGED (PR #139) |
 | VARROW-07 | Varrow | M | Heart narrative — "The core of the loop" dialogue, phase text, death/victory | MERGED (PR #140) |
-| UX-24 | UX | M | Boss dialogue rendering — wire BossDialogue data into combat screen | PENDING |
+| UX-24 | UX | M | Boss dialogue rendering — wire BossDialogue data into combat screen | MERGED (PR #141) |
 | GD-19 | GD | M | Animated boss sprites — CSS idle animations for 3 key bosses | PENDING |
 
 ### P1 — Should Ship
