@@ -512,7 +512,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Add the true final boss (The Corrupt Heart), wire boss dialogue rendering, animate key boss sprites, push past 90/100 score.
 **Plan:** See `SPRINT_12_PLAN.md`
 **Branch:** `sprint-12`
-**Status:** IN PROGRESS — PM-12, BE-25, JR-10, VARROW-07, UX-24, GD-19 complete
+**Status:** IN PROGRESS — PM-12, BE-25, JR-10, VARROW-07, UX-24, GD-19, BE-26 complete
 
 ### P0 — Must Ship
 
@@ -529,7 +529,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| BE-26 | BE | S | Heart unlock gate — requires wins with both Ironclad and Silent | IN REVIEW |
+| BE-26 | BE | S | Heart unlock gate — requires wins with both Ironclad and Silent | MERGED (PR #143) |
 | QA-17 | QA | M | Heart regression + endgame balance — 4-act playthrough, Heart win rates | PENDING |
 | AR-12 | AR | S | Heart audio — heartbeat loop, Beat of Death SFX, phase transition | PENDING |
 | GD-20 | GD | S | Heart art — enemy sprite + Act 4 background | PENDING |

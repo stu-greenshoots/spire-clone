@@ -7,7 +7,7 @@ Back Ender - Architecture, state management, performance
 
 ### BE-26: Heart Unlock Gate
 **Date:** 2026-02-01
-**Status:** IN REVIEW
+**Status:** MERGED (PR #143)
 
 **Done:**
 - Added `characterWins` field to `DEFAULT_PROGRESSION` — tracks wins per character as `{ ironclad: N, silent: N }`
