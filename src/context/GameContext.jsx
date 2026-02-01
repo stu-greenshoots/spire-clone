@@ -293,6 +293,10 @@ const gameReducer = (state, action) => {
       return metaReducer(state, action);
     }
 
+    case 'DISMISS_ACHIEVEMENT_TOAST': {
+      return metaReducer(state, action);
+    }
+
     default:
       return state;
   }
@@ -438,6 +442,10 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'LOAD_SCENARIO', payload: scenario });
   }, []);
 
+  const dismissAchievementToast = useCallback(() => {
+    dispatch({ type: 'DISMISS_ACHIEVEMENT_TOAST' });
+  }, []);
+
   const value = {
     state,
     startGame,
@@ -473,7 +481,8 @@ export const GameProvider = ({ children }) => {
     discardPotion,
     selectStartingBonus,
     enterEndless,
-    loadScenario
+    loadScenario,
+    dismissAchievementToast
   };
 
   return (

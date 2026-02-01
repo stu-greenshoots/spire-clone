@@ -9,7 +9,7 @@ import { generateMap } from '../../utils/mapGenerator';
 import { saveGame, loadGame, deleteSave, addRunToHistory } from '../../systems/saveSystem';
 import { getPassiveRelicEffects } from '../../systems/relicSystem';
 import { createInitialState } from '../GameContext';
-import { loadProgression, updateRunStats, saveProgression } from '../../systems/progressionSystem';
+import { loadProgression, updateRunStats, saveProgression, ACHIEVEMENTS } from '../../systems/progressionSystem';
 import { getAscensionStartGold } from '../../systems/ascensionSystem';
 import { applyDailyChallengeModifiers } from '../../systems/dailyChallengeSystem';
 import { audioManager, SOUNDS } from '../../systems/audioSystem';
@@ -582,7 +582,13 @@ export const metaReducer = (state, action) => {
       };
 
       // Update progression (this also saves to localStorage)
+      const previousAchievements = [...progression.achievements];
       const updatedProgression = updateRunStats(progression, runData);
+
+      // Detect newly unlocked achievements
+      const newAchievements = updatedProgression.achievements.filter(
+        id => !previousAchievements.includes(id)
+      );
 
       // Also save to run history (separate localStorage store with more detail)
       addRunToHistory({
@@ -603,7 +609,29 @@ export const metaReducer = (state, action) => {
         saveProgression(updatedProgression);
       }
 
+      // Surface newly unlocked achievements for toast notifications
+      if (newAchievements.length > 0) {
+        const achievementDetails = newAchievements.map(id =>
+          ACHIEVEMENTS.find(a => a.id === id)
+        ).filter(Boolean);
+        return {
+          ...state,
+          pendingAchievements: [
+            ...(state.pendingAchievements || []),
+            ...achievementDetails
+          ]
+        };
+      }
+
       return state;
+    }
+
+    case 'DISMISS_ACHIEVEMENT_TOAST': {
+      const pending = state.pendingAchievements || [];
+      return {
+        ...state,
+        pendingAchievements: pending.slice(1)
+      };
     }
 
     default:

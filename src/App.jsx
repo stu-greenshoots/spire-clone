@@ -21,6 +21,7 @@ const RestSite = lazy(() => import('./components/RestSite'));
 const DataEditor = import.meta.env.DEV ? lazy(() => import('./components/DataEditor')) : null;
 const StartingBonus = lazy(() => import('./components/StartingBonus'));
 const CharacterSelect = lazy(() => import('./components/CharacterSelect'));
+const AchievementToast = lazy(() => import('./components/AchievementToast'));
 
 // Map game phases to music track IDs
 const PHASE_MUSIC_MAP = {
@@ -181,6 +182,7 @@ const GameContent = () => {
         {renderPhase()}
         {!hideStatusBar && <PlayerStatusBar />}
         {isPaused && <PauseMenu onClose={handlePauseClose} />}
+        <AchievementToast />
       </Suspense>
     </div>
   );
