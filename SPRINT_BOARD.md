@@ -627,7 +627,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | PM-14 | PM | S | Merge Sprint 13 to master, create sprint-14 branch, draft PR | DONE |
-| FIX-10 | AR/BE | M | P0 BUG: Audio system produces zero output — investigate and fix | PENDING |
+| FIX-10 | AR/BE | M | P0 BUG: Audio system produces zero output — investigate and fix | MERGED (PR #166) |
 | AR-15 | AR | L | Replace all 20+ placeholder MP3s with real CC0 sounds (7 tracks + 15 SFX) | PENDING |
 | GD-24 | GD | M | Card art quality pass — improve 10 most-visible card illustrations | PENDING |
 | GD-25 | GD | M | Enemy art quality pass — improve 5 Act 1 boss/elite sprites | PENDING |

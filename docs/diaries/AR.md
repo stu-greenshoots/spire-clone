@@ -1,3 +1,26 @@
+# AR Diary - Sprint 14
+
+## Sprint 14 Entries
+
+### FIX-10: Audio Base Path Fix (P0)
+**Date:** 2026-02-01
+**Status:** Complete, PR #166 merged
+**Sprint:** Sprint 14 (Audio Fix + Real Sounds + Art Quality)
+**Task:** FIX-10 (Audio system zero output — M size, P0)
+
+**Root cause:** `_getAudio()` in audioSystem.js used a hardcoded absolute path `/sounds/${soundId}.mp3`. This works in dev (Vite base is `/`) but fails on GitHub Pages where base is `/spire-clone/`. All audio requests returned 404 in production.
+
+**Fix:** Use `import.meta.env.BASE_URL` (provided by Vite) as the path prefix. Resolves to `/` in dev and `/spire-clone/` in production.
+
+**Files changed:** `src/systems/audioSystem.js` — 1 line changed in `_getAudio()` method
+
+**Validation:** `npm run validate` passes (2627 tests, 0 lint errors, build clean)
+
+**Blockers:** None
+**Next:** AR-15 (replace placeholder MP3s) is now unblocked.
+
+---
+
 # AR Diary - Sprint 13
 
 ## Sprint 13 Entries
