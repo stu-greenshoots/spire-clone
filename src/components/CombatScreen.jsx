@@ -18,7 +18,7 @@ import { loadSettings, getAnimationDuration } from '../systems/settingsSystem';
 
 const CombatScreen = ({ showDefeatedEnemies = false }) => {
   const { state, selectCard, playCard, cancelTarget, endTurn, selectCardFromPile, cancelCardSelection } = useGame();
-  const { player, enemies, hand, drawPile, discardPile, exhaustPile, selectedCard, targetingMode, turn, phase, cardSelection } = state;
+  const { player, enemies, hand, drawPile, discardPile, exhaustPile, selectedCard, targetingMode, turn, phase, cardSelection, character } = state;
 
   const [showDeck, setShowDeck] = useState(null);
   const [showEnemyInfo, setShowEnemyInfo] = useState(null);
@@ -1253,6 +1253,9 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
           </span>
         </div>
 
+        {/* Stance Indicator (Watcher only) */}
+        {character === 'watcher' && <StanceIndicator stance={player.currentStance} mantra={player.mantra} />}
+
         {/* End Turn Button */}
         <button
           data-testid="btn-end-turn"
@@ -1487,6 +1490,100 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     </div>
   );
 };
+
+// Stance Indicator Component (Watcher)
+const STANCE_CONFIG = {
+  calm: { label: 'Calm', icon: '🧘', color: '#44aacc', glowColor: 'rgba(68, 170, 204, 0.5)', desc: '+2 Energy on exit' },
+  wrath: { label: 'Wrath', icon: '⚔️', color: '#cc4444', glowColor: 'rgba(204, 68, 68, 0.6)', desc: '2× damage dealt & taken' },
+  divinity: { label: 'Divinity', icon: '✨', color: '#ffcc00', glowColor: 'rgba(255, 204, 0, 0.7)', desc: '3× damage, +3 Energy' }
+};
+
+const StanceIndicator = memo(function StanceIndicator({ stance, mantra }) {
+  const config = stance ? STANCE_CONFIG[stance] : null;
+  const hasMantra = mantra > 0;
+
+  if (!config && !hasMantra) return null;
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+      {/* Current stance badge */}
+      {config && (
+        <div
+          role="status"
+          aria-label={`Stance: ${config.label} — ${config.desc}`}
+          title={`${config.label}: ${config.desc}`}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            padding: '5px 10px',
+            background: `${config.color}22`,
+            borderRadius: '12px',
+            border: `2px solid ${config.color}88`,
+            boxShadow: `0 0 12px ${config.glowColor}, inset 0 0 8px ${config.color}11`,
+            animation: stance === 'wrath' ? 'wrathPulse 1.2s ease-in-out infinite' : stance === 'divinity' ? 'divinityGlow 0.8s ease-in-out infinite' : 'none',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          <span style={{ fontSize: '16px' }}>{config.icon}</span>
+          <span style={{
+            color: config.color,
+            fontSize: '11px',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            letterSpacing: '0.5px',
+            textShadow: `0 0 6px ${config.glowColor}`
+          }}>
+            {config.label}
+          </span>
+        </div>
+      )}
+
+      {/* Mantra progress */}
+      {hasMantra && (
+        <div
+          role="status"
+          aria-label={`Mantra: ${mantra} of 10`}
+          title={`Mantra: ${mantra}/10 — Divinity at 10`}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            padding: '3px 8px',
+            background: 'rgba(180, 130, 255, 0.12)',
+            borderRadius: '8px',
+            border: '1px solid rgba(180, 130, 255, 0.3)'
+          }}
+        >
+          <span style={{ fontSize: '10px' }}>🔮</span>
+          <div style={{
+            width: '40px',
+            height: '6px',
+            background: '#1a1a2a',
+            borderRadius: '3px',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              width: `${Math.min(mantra / 10, 1) * 100}%`,
+              height: '100%',
+              background: 'linear-gradient(90deg, #9966cc, #cc88ff)',
+              borderRadius: '3px',
+              transition: 'width 0.3s ease',
+              boxShadow: mantra >= 7 ? '0 0 6px rgba(204, 136, 255, 0.6)' : 'none'
+            }} />
+          </div>
+          <span style={{
+            color: '#bb88ee',
+            fontSize: '9px',
+            fontWeight: 'bold'
+          }}>
+            {mantra}/10
+          </span>
+        </div>
+      )}
+    </div>
+  );
+});
 
 // Pile Button Component
 const PileButton = memo(function PileButton({ label, count, onClick, color }) { return (
