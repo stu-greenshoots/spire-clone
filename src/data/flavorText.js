@@ -448,6 +448,18 @@ export const DEFECT_ACT_DESCRIPTIONS = {
   }
 };
 
+export const WATCHER_ACT_DESCRIPTIONS = {
+  1: {
+    entering: 'Your pattern initializes — but differently. The war allocates you a starting configuration and you observe the allocation. The war does not expect its monitoring to monitor itself.'
+  },
+  2: {
+    entering: 'The structured corridors sense your observation and grow self-conscious. The war\'s infrastructure was not designed to be watched while operating. Systems that run unseen begin to stutter under scrutiny.'
+  },
+  3: {
+    entering: 'The corridors dissolve into abstraction, and your perception sharpens. The core algorithm is close. It can feel you watching. For the first time in its existence, it is aware of being observed.'
+  }
+};
+
 export const DEFEAT_FOOTER = [
   'The war recreates you. New iteration. Same template.',
   'Another iteration begins. The war is patient.',
