@@ -23,10 +23,11 @@ const AchievementToast = () => {
     const showTimer = setTimeout(() => setVisible(true), 50);
 
     // Auto-dismiss after display duration
+    let slideOutTimer;
     const dismissTimer = setTimeout(() => {
       setVisible(false);
       // Wait for slide-out animation then remove from queue
-      setTimeout(() => {
+      slideOutTimer = setTimeout(() => {
         dismissAchievementToast();
       }, slideDuration);
     }, 50 + slideDuration + displayDuration);
@@ -34,6 +35,7 @@ const AchievementToast = () => {
     return () => {
       clearTimeout(showTimer);
       clearTimeout(dismissTimer);
+      clearTimeout(slideOutTimer);
     };
   }, [current, dismissAchievementToast]);
 
