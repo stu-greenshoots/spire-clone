@@ -1,4 +1,4 @@
-# PM Diary - Sprint 12
+# PM Diary - Sprint 13
 
 ## Role
 Project Manager - Sprint coordination, process, CI/CD, PR management
@@ -7,12 +7,29 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 `*.md` docs, `package.json` scripts, `.github/`
 
 ## Current Sprint Tasks
-- PM-12: Sprint 12 setup (merge Sprint 11, create branch, archive SL diary)
+- PM-13: Sprint 13 setup (merge Sprint 12, create branch, draft PR)
 - Sprint coordination, board maintenance, diary enforcement
 
 ---
 
 ## Entries
+
+### Sprint 13 — PM-13 Setup
+**Date:** 2026-02-01
+**Status:** DONE
+
+**Done:**
+- Merged sprint-12 to master, pushed
+- Created sprint-13 branch from master
+- Wrote SPRINT_13_PLAN.md (15 tasks: 6 P0, 6 P1, 3 P2)
+- Updated SPRINT_BOARD.md — Sprint 12 marked COMPLETE with validation gate checked, Sprint 13 added
+- Created draft PR sprint-13 → master
+
+**Sprint 13 Focus:** Close 93→100 gap. Save export/import, card compendium, in-game pause menu, landscape mode, The Defect (third character), poison vs shield bug fix, art polish.
+
+**Known Bug Carried Forward:** FIX-09 — poison bypasses Heart invincible shield.
+
+---
 
 ### Sprint 12 — Retrospective
 **Date:** 2026-02-01
