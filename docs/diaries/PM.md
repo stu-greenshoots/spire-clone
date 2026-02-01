@@ -14,6 +14,23 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 12 — GD-19 Complete
+**Date:** 2026-02-01
+**Status:** GD-19 merged (PR #142)
+
+**Done:**
+- Implemented as GD: CSS idle animations for 3 key bosses (Hexaghost pulse, Awakened One shimmer, Corrupt Heart heartbeat)
+- 2 files changed, 38 insertions, 1 deletion
+- Both Copilot and Mentor reviews passed — clean implementation
+- Merged PR #142 via squash, updated sprint board and GD diary
+
+**Sprint 12 Progress:** 6/15 tasks done (PM-12, BE-25, JR-10, VARROW-07, UX-24, GD-19)
+**All P0 tasks now COMPLETE.**
+
+**Next highest priority:** BE-26 (Heart unlock gate) — first P1 task
+
+---
+
 ### Sprint 12 — PM-12 Complete (Sprint Setup)
 **Date:** 2026-02-01
 

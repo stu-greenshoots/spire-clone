@@ -14,6 +14,31 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 12 - GD-19 Complete
+**Date:** 2026-02-01
+**Status:** GD-19 complete, PR #142 merged to sprint-12
+
+**Done today:**
+- Added unique CSS idle animations for 3 key bosses:
+  - **Hexaghost**: Fiery pulse glow (2.5s) — brightness and orange drop-shadow intensify at peak
+  - **Awakened One**: Eerie phase shimmer (4s) — subtle rotation and hue-rotate shift
+  - **Corrupt Heart**: Rhythmic heartbeat (1.5s) — quick double-pump with magenta glow, 68% rest period
+- Updated Enemy.jsx `getAnimation()` to dispatch boss-specific animations by enemy ID
+- Other bosses (Slime Boss, Guardian, Champ, Time Eater, Automaton) retain default `breathe` animation
+- 2 files changed, 38 insertions, 1 deletion
+
+**Key decisions:**
+- Heart animation uses asymmetric timing (8%/16%/24%/32% keyframes) to mimic real heartbeat rhythm
+- Awakened One uses hue-rotate for an otherworldly shimmer without changing the sprite itself
+- Kept animations subtle — enhance atmosphere without distracting from gameplay
+
+**Validation:** `npm run validate` passes — 2248 tests, lint clean, build clean
+
+**Next:**
+- GD-20 (Heart art) and GD-21 (Act backgrounds) pending as P1/P2
+
+---
+
 ### Sprint 11 - GD-18 Complete
 **Date:** 2026-02-01
 **Status:** GD-18 complete, PR #136 merged to sprint-11
