@@ -15,6 +15,22 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 16 - UX-12 Complete
+**Date:** 2026-02-01
+**Status:** UX-12 DONE (PR #201)
+
+**What I did:**
+- Smart card targeting — non-targeting cards (skills, powers, target-all attacks, single-enemy attacks) now play immediately on single tap (mobile) or click (desktop)
+- Only multi-enemy attack cards enter targeting mode (double-tap on mobile)
+- Desktop cursor updated: pointer for non-targeting cards, grab for targeting cards
+- Mobile tap hint updated to "Tap again to target with" for clarity
+- 10 new tests for selectCardAction smart targeting behavior
+- 2 files changed, +114/-11 lines
+
+**Sprint 16 UX status:** UX-12 done, UX-33 done. UX-34 (achievement toasts) is P2 stretch.
+
+---
+
 ### Sprint 16 - UX-33 Complete
 **Date:** 2026-02-01
 **Status:** UX-33 DONE (PR #198)

@@ -14,6 +14,22 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — UX-12 Complete
+**Date:** 2026-02-01
+**Status:** UX-12 merged (PR #201) — Sprint 16 now 5/14 tasks done (all P0s complete)
+
+**Done:**
+- Implemented as UX: Smart card targeting — single tap/click plays non-targeting cards
+- Mobile: skills/powers/target-all play on single tap; multi-enemy attacks require double-tap
+- Desktop: cursor shows pointer vs grab based on targeting needs
+- 10 new tests (3155 total passing), lint clean, build passes
+- Both Copilot and Mentor reviews passed
+- Merged PR #201 via squash, updated sprint board and UX diary
+
+**Next:** All P0 tasks complete. Continue with P1 tasks (BE-33, GD-30, VARROW-12, QA-25, AR-18).
+
+---
+
 ### Sprint 16 — JR-15 Complete
 **Date:** 2026-02-01
 **Status:** JR-15 merged (PR #200) — Sprint 16 now 4/14 tasks done

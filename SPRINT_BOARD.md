@@ -733,7 +733,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Player retention — endless mode, custom seeded runs, performance optimization, quality-of-life features.
 **Plan:** See `SPRINT_16_PLAN.md`
 **Branch:** `sprint-16`
-**Status:** IN PROGRESS — 4/14 tasks done
+**Status:** IN PROGRESS — 5/14 tasks done
 
 ### P0 — Must Ship
 
@@ -744,7 +744,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | UX-33 | UX | M | Endless mode UI — floor counter, difficulty indicator, death stats | MERGED (PR #198) |
 | BE-32 | BE | S | Custom seeded runs — player-entered seed, shareable seed codes | MERGED (PR #199) |
 | JR-15 | JR | M | Character-specific relics — 3 per character (12 total) | MERGED (PR #200) |
-| UX-12 | UX | S | Smart card targeting — non-enemy cards playable without drag (deferred since Sprint 6) | PENDING |
+| UX-12 | UX | S | Smart card targeting — non-enemy cards playable without drag (deferred since Sprint 6) | MERGED (PR #201) |
 
 ### P1 — Should Ship
 
