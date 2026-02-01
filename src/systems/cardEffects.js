@@ -12,6 +12,7 @@ import { ALL_CARDS, CARD_TYPES, getRandomCard } from '../data/cards';
 import { INTENT } from '../data/enemies';
 import { shuffleArray } from '../utils/mapGenerator';
 import { calculateDamage, calculateBlock, applyDamageToTarget } from './combatSystem';
+import { channelOrb, evokeOrbs } from './orbSystem';
 
 /**
  * Helper to handle exhaust triggers (Dark Embrace, Feel No Pain, Dead Branch)
@@ -186,6 +187,21 @@ const simplePlayerEffects = {
     ctx.player.bulletTime = true;
     ctx.player.noDrawThisTurn = true;
     ctx.combatLog.push('All cards cost 0 this turn. Cannot draw additional cards.');
+  },
+  gainFocus: (card, ctx) => {
+    const amount = card.focusAmount || card.focus || 2;
+    ctx.player.focus = (ctx.player.focus || 0) + amount;
+    ctx.combatLog.push(`Gained ${amount} Focus`);
+  },
+  loseFocus: (card, ctx) => {
+    const amount = card.focusLoss || 1;
+    ctx.player.focus = (ctx.player.focus || 0) - amount;
+    ctx.combatLog.push(`Lost ${amount} Focus`);
+  },
+  gainOrbSlot: (card, ctx) => {
+    const amount = card.orbSlotGain || 1;
+    ctx.player.orbSlots = (ctx.player.orbSlots || 3) + amount;
+    ctx.combatLog.push(`Gained ${amount} Orb slot(s)`);
   }
 };
 
@@ -520,6 +536,45 @@ const complexEffects = {
       ctx.player.strength += strengthGain;
       ctx.combatLog.push(`Gained ${strengthGain} Strength from kill`);
     }
+  },
+
+  // Orb effects (Defect)
+  channelLightning: (card, ctx) => {
+    const count = card.orbCount || 1;
+    for (let i = 0; i < count; i++) {
+      const result = channelOrb(ctx.player, 'lightning', ctx.enemies, ctx.combatLog);
+      ctx.enemies = result.enemies;
+    }
+  },
+  channelFrost: (card, ctx) => {
+    const count = card.orbCount || 1;
+    for (let i = 0; i < count; i++) {
+      const result = channelOrb(ctx.player, 'frost', ctx.enemies, ctx.combatLog);
+      ctx.enemies = result.enemies;
+    }
+  },
+  channelDark: (card, ctx) => {
+    const count = card.orbCount || 1;
+    for (let i = 0; i < count; i++) {
+      const result = channelOrb(ctx.player, 'dark', ctx.enemies, ctx.combatLog);
+      ctx.enemies = result.enemies;
+    }
+  },
+  channelPlasma: (card, ctx) => {
+    const count = card.orbCount || 1;
+    for (let i = 0; i < count; i++) {
+      const result = channelOrb(ctx.player, 'plasma', ctx.enemies, ctx.combatLog);
+      ctx.enemies = result.enemies;
+    }
+  },
+  evokeOrb: (card, ctx) => {
+    const count = card.evokeCount || 1;
+    const result = evokeOrbs(ctx.player, ctx.enemies, ctx.combatLog, { count });
+    ctx.enemies = result.enemies;
+  },
+  evokeAllOrbs: (card, ctx) => {
+    const result = evokeOrbs(ctx.player, ctx.enemies, ctx.combatLog, { all: true });
+    ctx.enemies = result.enemies;
   }
 };
 

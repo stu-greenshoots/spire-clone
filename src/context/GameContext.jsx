@@ -86,7 +86,11 @@ export const createInitialState = () => ({
     attacksPlayedThisTurn: 0,
     skillsPlayedThisTurn: 0,
     powersPlayedThisTurn: 0,
-    flexStrengthLoss: 0
+    flexStrengthLoss: 0,
+    // Orb system (Defect)
+    orbs: [],
+    orbSlots: 0,
+    focus: 0
   },
   deck: [],
   drawPile: [],
