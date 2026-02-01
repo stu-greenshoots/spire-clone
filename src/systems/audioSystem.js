@@ -171,7 +171,8 @@ class AudioManager {
       return this._audioCache[soundId];
     }
     try {
-      const audio = new Audio(`/sounds/${soundId}.mp3`);
+      const base = (typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL) || '/';
+      const audio = new Audio(`${base}sounds/${soundId}.mp3`);
       audio.preload = 'auto';
       this._audioCache[soundId] = audio;
       return audio;
