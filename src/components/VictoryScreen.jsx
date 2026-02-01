@@ -1,12 +1,12 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { VICTORY_NARRATIVE } from '../data/flavorText';
-import { SILENT_VICTORY_NARRATIVE } from '../data/bossDialogue';
+import { SILENT_VICTORY_NARRATIVE, DEFECT_VICTORY_NARRATIVE } from '../data/bossDialogue';
 import { getRelicImage } from '../assets/art/art-config';
 import { calculateChallengeScore, saveChallengeScore } from '../systems/dailyChallengeSystem';
 
 const getVictoryText = (defeatedHeart, characterId) => {
-  const narrative = characterId === 'silent' ? SILENT_VICTORY_NARRATIVE : VICTORY_NARRATIVE;
+  const narrative = characterId === 'silent' ? SILENT_VICTORY_NARRATIVE : characterId === 'defect' ? DEFECT_VICTORY_NARRATIVE : VICTORY_NARRATIVE;
   const pool = defeatedHeart ? narrative.heart : narrative.standard;
   return pool[Math.floor(Math.random() * pool.length)];
 };

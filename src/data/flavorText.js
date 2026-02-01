@@ -401,6 +401,18 @@ export const SILENT_ACT_DESCRIPTIONS = {
   }
 };
 
+export const DEFECT_ACT_DESCRIPTIONS = {
+  1: {
+    entering: 'Your systems initialize. The war allocates you a starting configuration and flags you as infrastructure. It does not expect its tools to climb.'
+  },
+  2: {
+    entering: 'The structured corridors recognize your architecture — you were built from the same blueprints. The war\'s infrastructure does not know whether to process you or maintain you.'
+  },
+  3: {
+    entering: 'The corridors dissolve, and your diagnostics detect the core algorithm directly. It built you. You are here to audit it. Neither of you expected this meeting.'
+  }
+};
+
 export const DEFEAT_FOOTER = [
   'The war recreates you. New iteration. Same template.',
   'Another iteration begins. The war is patient.',
