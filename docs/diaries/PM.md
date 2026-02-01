@@ -14,6 +14,24 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — UX-34 Complete
+**Date:** 2026-02-01
+**Status:** UX-34 merged (PR #207) — Sprint 16 now 11/14 tasks done
+
+**Done:**
+- Implemented as UX: Achievement notification toasts — slide-in from top-right on unlock
+- Toast shows achievement name + description, auto-dismisses after 3s, queues multiple
+- Plays milestone fanfare SFX, respects animation speed settings
+- Wired through metaReducer pendingAchievements state + DISMISS_ACHIEVEMENT_TOAST action
+- Review finding fixed: inner setTimeout cleanup on unmount
+- 6 new tests (3234 total passing), lint clean, build clean
+- Both Copilot and Mentor reviews passed
+- Merged PR #207 via squash, updated sprint board and UX diary
+
+**Next:** Continue with P2 stretch tasks (QA-26, GD-31).
+
+---
+
 ### Sprint 16 — AR-18 Complete
 **Date:** 2026-02-01
 **Status:** AR-18 merged (PR #206) — Sprint 16 now 10/14 tasks done

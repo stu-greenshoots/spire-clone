@@ -15,6 +15,23 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 16 - UX-34 Complete
+**Date:** 2026-02-01
+**Status:** UX-34 DONE (PR #207)
+
+**What I did:**
+- Achievement notification toasts — slide-in from top-right on achievement unlock
+- Shows "Achievement Unlocked" header, achievement name (gold), and description
+- Auto-dismisses after 3s (1.5s on instant speed), queues multiple achievements
+- Plays milestone fanfare SFX on unlock
+- Wired through metaReducer: detects new achievements, stores in pendingAchievements
+- Fixed setTimeout cleanup in review
+- 6 new tests (3234 total passing), lint clean, build clean
+
+**Sprint 16 UX status:** UX-12, UX-33, UX-34 all done. No remaining UX tasks.
+
+---
+
 ### Sprint 16 - UX-12 Complete
 **Date:** 2026-02-01
 **Status:** UX-12 DONE (PR #201)
