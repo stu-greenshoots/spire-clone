@@ -1,24 +1,26 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { DEFEAT_NARRATIVE, DEFEAT_FOOTER } from '../data/flavorText';
+import { SILENT_DEFEAT_NARRATIVE } from '../data/bossDialogue';
 import { getRelicImage } from '../assets/art/art-config';
 import { calculateChallengeScore, saveChallengeScore } from '../systems/dailyChallengeSystem';
 
-const getDefeatText = (act, currentFloor, currentNode) => {
+const getDefeatText = (act, currentFloor, currentNode, characterId) => {
   const isBoss = currentNode?.type === 'boss';
+  const narrative = characterId === 'silent' ? SILENT_DEFEAT_NARRATIVE : DEFEAT_NARRATIVE;
   let pool;
   if (isBoss && act >= 3) {
-    pool = DEFEAT_NARRATIVE.heart;
+    pool = narrative.heart;
   } else if (isBoss) {
-    pool = DEFEAT_NARRATIVE.boss;
+    pool = narrative.boss;
   } else if (act >= 3) {
-    pool = DEFEAT_NARRATIVE.act3;
+    pool = narrative.act3;
   } else if (act >= 2) {
-    pool = DEFEAT_NARRATIVE.act2;
+    pool = narrative.act2;
   } else if (currentFloor <= 5) {
-    pool = DEFEAT_NARRATIVE.early;
+    pool = narrative.early;
   } else {
-    pool = DEFEAT_NARRATIVE.midAct1;
+    pool = narrative.midAct1;
   }
   return pool[Math.floor(Math.random() * pool.length)];
 };
@@ -27,7 +29,7 @@ const GameOverScreen = () => {
   const { state, returnToMenu, updateProgression } = useGame();
   const { player, deck, relics, currentFloor, act, dailyChallenge, runStats } = state;
   const [showContent, setShowContent] = useState(false);
-  const defeatText = useMemo(() => getDefeatText(act, currentFloor, state.currentNode), [act, currentFloor, state.currentNode]);
+  const defeatText = useMemo(() => getDefeatText(act, currentFloor, state.currentNode, state.character), [act, currentFloor, state.currentNode, state.character]);
   const footerText = useMemo(() => DEFEAT_FOOTER[Math.floor(Math.random() * DEFEAT_FOOTER.length)], []);
 
   // Calculate and save daily challenge score

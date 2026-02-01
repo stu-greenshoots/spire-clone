@@ -356,6 +356,19 @@ export const VICTORY_NARRATIVE = {
   ],
 };
 
+// Silent-specific entering text for acts
+export const SILENT_ACT_DESCRIPTIONS = {
+  1: {
+    entering: 'Your pattern initializes — quieter than the last. The war allocates you a starting configuration and does not notice the difference. That is your advantage.'
+  },
+  2: {
+    entering: 'The structured corridors read your pattern and find it ambiguous. The war\'s infrastructure was built to process force, not subtlety. You pass between its classifications.'
+  },
+  3: {
+    entering: 'The corridors dissolve, and in the abstraction your silence becomes a shape. The algorithm at the center can hear everything. The question is whether it can hear nothing.'
+  }
+};
+
 export const DEFEAT_FOOTER = [
   'The war recreates you. New iteration. Same template.',
   'Another iteration begins. The war is patient.',

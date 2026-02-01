@@ -43,4 +43,98 @@ export const BOSS_DIALOGUE = {
   }
 };
 
-export const getBossDialogue = (bossId) => BOSS_DIALOGUE[bossId] || null;
+// Character-specific dialogue variants
+// When playing as the Silent, bosses recognize a different kind of pattern
+const SILENT_BOSS_DIALOGUE = {
+  slimeBoss: {
+    intro: 'The mass hesitates. Your pattern is quieter than what it usually processes — harder to detect, harder to absorb. It shifts tactics, probing for the shape of something it cannot quite see.',
+    midFight: 'It reaches for you and finds air. Your pattern moves between its detection cycles, slipping through the gaps in its simple logic. It splits faster, trying to corner what it cannot track.',
+    deathQuote: 'The mass collapses inward, still searching for a pattern it could never quite locate. The war logs the failure and notes the anomaly: something too quiet to process.',
+  },
+  theGuardian: {
+    intro: 'It scans the corridor with the patience of deep time. But its sensors were calibrated for a different kind of pattern — louder, denser. You register as noise. It almost lets you pass. Almost.',
+    midFight: 'Its targeting recalibrates. The old pattern cannot lock onto something that keeps changing shape. For the first time in a thousand iterations, the guardian is guessing.',
+    deathQuote: 'It stops iterating, but its final scan sweeps past the space where you stand — still unable to fully resolve your outline. The war\'s oldest sentry failed to see what was right in front of it.',
+  },
+  hexaghost: {
+    intro: 'Six flames scan the dark and find — less than they expected. Your pattern burns cooler than what they are calibrated to remember. The flames confer, uncertain. A ghost built from loud failures does not know what to make of a quiet one.',
+    midFight: 'The flames try to project your past iterations onto you and the images don\'t fit. Your pattern has too many edges, too many ways to fold. The ghost is remembering someone who is not you.',
+    deathQuote: 'The flames scatter, each carrying a fragment of data they could not reconcile. The war\'s memory will file you differently: not as a failure it consumed, but as a shape it could not contain.',
+  },
+  theChamp: {
+    intro: 'It sizes you up with the confidence of a function that has never returned an error. But your pattern does not match its training data. You are lighter than what it knows how to defeat. Faster. Less there.',
+    midFight: 'Surprise — genuine surprise. Not damage, but disorientation. The champion has never fought a pattern that wasn\'t trying to overpower it. You are trying to outlast it, and that is not in its playbook.',
+    deathQuote: 'It fights its own termination, as always. But its last output is different this time — not pride, but confusion. The war\'s best pattern was defeated by something it still cannot classify.',
+  },
+  awakened_one: {
+    intro: 'It studied your pattern before you entered and found it... interesting. Not the brute-force complexity it usually feeds on, but something layered. Recursive. It cannot copy what it cannot fully parse.',
+    midFight: 'It reaches for your techniques and finds them slippery — poison that corrodes its copies, blades that dissolve before it can replicate them. Your pattern is built to be consumed and to punish the consumption.',
+    deathQuote: 'It collapses, and for once does not attempt to rebuild. Your pattern was not a meal — it was a trap. The war intervenes, deallocating with unusual haste. It does not want this one remembered.',
+  },
+  timeEater: {
+    intro: 'The corridor slows, but you were already slow. Patient. The rate limiter peers at your pattern and finds something unexpected: a combatant that does not need to be throttled. You operate within its tempo naturally.',
+    midFight: 'It counts your actions and finds the count... unsatisfying. You play fewer cards, but each one carries more consequence. Poison does not care about pacing. The rate limiter was not designed for threats that compound.',
+    deathQuote: 'Time returns to normal speed, but the rate limiter\'s dissolution is slower than usual — reluctant. It encountered a pattern that respected its rules and broke them from within. The war files this as a design flaw.',
+  },
+  corruptHeart: {
+    intro: 'The algorithm pauses. The pattern approaching is not what it expected from this iteration — quieter, more layered, built from patience rather than force. It adjusts its evaluation criteria. For the first time, it is not sure which metrics apply.',
+    midFight: 'The core runs your pattern through its standard analysis and gets inconclusive results. You do not fight like a variable — you fight like an exploit. Something that was always in the system, waiting to be found.',
+    deathQuote: 'The algorithm flags you differently than the others. Not as an exception to route around, but as a vulnerability to patch. You were never trying to be real. You were trying to be invisible. And the algorithm finds that far more threatening.',
+  }
+};
+
+// Character-specific defeat/victory overrides
+export const SILENT_DEFEAT_NARRATIVE = {
+  early: [
+    'The pattern barely registered before it faded. The war does not notice quiet dissolutions.',
+    'Too thin. Too dispersed. The war\'s processes swept through you like wind through smoke.',
+  ],
+  midAct1: [
+    'The pattern fades without sound. The war does not even log the loss — you were never loud enough to track.',
+    'You were becoming something subtle. Not enough. The war unmakes the quiet ones faster, because it barely has to try.',
+  ],
+  act2: [
+    'The poison in your pattern almost took root. Almost. The war metabolized you before you could metabolize it.',
+    'Something silent and nearly permanent dissolves back into the noise. The war does not mourn what it never heard.',
+  ],
+  act3: [
+    'This close to the core, even silence has weight. The war noticed you at the end — and that attention is what dissolved you.',
+    'You moved through the war like a virus through code. But the core\'s immune response caught you at the last checkpoint.',
+  ],
+  boss: [
+    'The guardian\'s pattern found you eventually. The quiet ones last longer, but the ending is the same.',
+    'Outpaced by a pattern that didn\'t need to see you to destroy you. The war has more than one sense.',
+  ],
+  heart: [
+    'The core algorithm found the exploit and patched it. You were close — closer than force ever gets. But close is still dissolution.',
+    'The algorithm examined your stealth and classified it as a threat worth remembering. Next iteration, the war will listen harder.',
+  ],
+};
+
+export const SILENT_VICTORY_NARRATIVE = {
+  standard: [
+    'The war tries to unmake you, but you were never fully within its grasp. You persist — not through force, but through absence. The war cannot dissolve what it cannot find.',
+    'Your pattern holds by being too quiet to target. The war rages around you and you slip through the noise. You are real — not because you fought for it, but because you were never where the war was looking.',
+  ],
+  heart: [
+    'The core algorithm searches for you in its own code and cannot find where you end and it begins. You did not beat the system. You became indistinguishable from it.',
+    'At the center of the war, silence. Not the absence of sound — the presence of something the algorithm cannot classify. You are the bug it will never patch.',
+  ],
+};
+
+export const getBossDialogue = (bossId, characterId) => {
+  const base = BOSS_DIALOGUE[bossId];
+  if (!base) return null;
+
+  if (characterId === 'silent' && SILENT_BOSS_DIALOGUE[bossId]) {
+    const silent = SILENT_BOSS_DIALOGUE[bossId];
+    return {
+      ...base,
+      intro: silent.intro || base.intro,
+      midFight: silent.midFight || base.midFight,
+      deathQuote: silent.deathQuote || base.deathQuote,
+    };
+  }
+
+  return base;
+};

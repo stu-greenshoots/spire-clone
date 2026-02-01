@@ -1,11 +1,13 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { VICTORY_NARRATIVE } from '../data/flavorText';
+import { SILENT_VICTORY_NARRATIVE } from '../data/bossDialogue';
 import { getRelicImage } from '../assets/art/art-config';
 import { calculateChallengeScore, saveChallengeScore } from '../systems/dailyChallengeSystem';
 
-const getVictoryText = (defeatedHeart) => {
-  const pool = defeatedHeart ? VICTORY_NARRATIVE.heart : VICTORY_NARRATIVE.standard;
+const getVictoryText = (defeatedHeart, characterId) => {
+  const narrative = characterId === 'silent' ? SILENT_VICTORY_NARRATIVE : VICTORY_NARRATIVE;
+  const pool = defeatedHeart ? narrative.heart : narrative.standard;
   return pool[Math.floor(Math.random() * pool.length)];
 };
 
@@ -13,7 +15,7 @@ const VictoryScreen = () => {
   const { state, returnToMenu, updateProgression } = useGame();
   const { player, deck, relics, currentFloor, dailyChallenge, runStats } = state;
   const [showContent, setShowContent] = useState(false);
-  const victoryText = useMemo(() => getVictoryText(state.defeatedHeart), [state.defeatedHeart]);
+  const victoryText = useMemo(() => getVictoryText(state.defeatedHeart, state.character), [state.defeatedHeart, state.character]);
 
   // Calculate and save daily challenge score
   const challengeScore = useMemo(() => {
