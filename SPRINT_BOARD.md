@@ -673,7 +673,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Implement The Watcher (fourth character with stances), improve art fidelity, close remaining 3-point gap from 97 to 100/100.
 **Plan:** See `SPRINT_15_PLAN.md`
 **Branch:** `sprint-15`
-**Status:** IN PROGRESS — 6/15 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30)
+**Status:** IN PROGRESS — 7/15 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30, VARROW-11)
 
 ### P0 — Must Ship
 
@@ -684,7 +684,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | JR-14a | JR | L | The Watcher — 30 card pool batch 1 (15 cards: starters, commons, stance interactions) | MERGED (PR #181) |
 | JR-14b | JR | L | The Watcher — 30 card pool batch 2 (15 cards: uncommon/rare, Worship/Mantra, Scrying) | MERGED (PR #184) |
 | JR-14c | JR | M | The Watcher — starter deck, character selection, starter relic (Pure Water) | MERGED (PR #182) |
-| VARROW-11 | Varrow | M | Watcher narrative — boss dialogue variants, defeat/victory text, flavor text | PENDING |
+| VARROW-11 | Varrow | M | Watcher narrative — boss dialogue variants, defeat/victory text, flavor text | MERGED (PR #185) |
 
 ### P1 — Should Ship
 
