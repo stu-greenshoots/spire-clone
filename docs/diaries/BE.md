@@ -5,6 +5,30 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 11 Entries
 
+### BE-24: Act 3 Balance Tuning
+**Date:** 2026-02-01
+**Status:** MERGED (PR #133)
+
+**Done:**
+- Reduced overtuned Act 3 enemy HP values:
+  - Giant Head (elite): 520-560 → 480-520 (~8% reduction)
+  - Maw (normal): 300 → 240-260 (~17% reduction, was outlier for normal enemy)
+  - Spire Growth (normal): 170-180 → 150-165 (~9% reduction)
+- Added 7 new balance tests for full 3-act simulator runs
+- Tests cover: 3-act completion, encounter functionality, win rate ordering (Act 3 < Act 2), ascension scaling, deadliest enemies, performance (2000 runs < 60s)
+- Updated 3 existing test assertions for new HP values
+- 2248 tests passing, lint clean, build clean
+
+**Rationale:**
+- Maw at 300 HP as a normal enemy was disproportionate (next highest normal is ~96 HP for Writhing Mass/Orb Walker)
+- Giant Head at 520-560 combined with 45 dmg Dark Echo after 4 turns was overtuned
+- Spire Growth with constrict (6/turn) + strength gain (+3/turn) already scales dangerously without high HP
+
+**Blockers:** None
+**Next:** All BE Sprint 11 tasks complete
+
+---
+
 ### BE-23: Character System
 **Date:** 2026-01-31
 **Status:** MERGED (PR #121)
