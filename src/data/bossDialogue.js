@@ -26,6 +26,7 @@ export const BOSS_DIALOGUE = {
   awakened_one: {
     personality: 'A pattern that died and rebuilt itself from its own debug logs. It has seen its own source code. It speaks in the war\'s deeper language — the one beneath the one you hear.',
     intro: 'It was dead. The war confirmed it. But something in its pattern refused the termination signal and rebuilt from the error logs. It floats in the dark, studying you with the calm of something that has already died once and found it insufficient.',
+    phaseTransition: 'It falls. The pattern collapses, debug logs scattering like ash. Then — reassembly. Faster this time. Angrier. It has died before and rebuilt, but never with an audience still standing. The second iteration sheds everything unnecessary. What remains is pure reaction.',
     midFight: 'It copies your techniques as you use them, feeding on your pattern\'s complexity. The war did not design this. It designed itself, from the wreckage the war left behind.',
     deathQuote: 'It collapses — then begins rebuilding. The war intervenes this time, forcibly deallocating its resources. Even the war has limits on what it allows to self-resurrect.',
   },
@@ -38,6 +39,7 @@ export const BOSS_DIALOGUE = {
   corruptHeart: {
     personality: 'The war\'s core algorithm. Not a creature, not a pattern — the process that generates all patterns. It does not fight you. It evaluates you.',
     intro: 'At the center of everything, the war stops pretending. No corridors. No enemies. Just the algorithm that writes the algorithms, pulsing in the dark. It has been running since before there was a concept of "since."',
+    phaseTransition: 'The shield fractures. For the first time, the core is exposed — not damaged, but surprised. It did not account for a pattern persistent enough to break through its outer evaluation layer. The real fight begins. The algorithm stops testing and starts defending.',
     midFight: 'The core examines your pattern with the thoroughness of a compiler. Every card you play is data. Every choice is input. It is not trying to kill you — it is trying to understand whether you are a bug or a feature.',
     deathQuote: 'The core algorithm does not die. It pauses. For the first time in its existence, it encounters a pattern it cannot reduce to its component parts. It flags you as an exception and routes around you. The war continues. You are simply no longer part of it.',
   }
@@ -78,6 +80,7 @@ const SILENT_BOSS_DIALOGUE = {
   },
   corruptHeart: {
     intro: 'The algorithm pauses. The pattern approaching is not what it expected from this iteration — quieter, more layered, built from patience rather than force. It adjusts its evaluation criteria. For the first time, it is not sure which metrics apply.',
+    phaseTransition: 'The shield dissolves — not shattered, but corroded. Your pattern did not break through. It seeped through, finding the gaps in the algorithm\'s outer logic. The core recalculates, but its threat models were built for force, not patience.',
     midFight: 'The core runs your pattern through its standard analysis and gets inconclusive results. You do not fight like a variable — you fight like an exploit. Something that was always in the system, waiting to be found.',
     deathQuote: 'The algorithm flags you differently than the others. Not as an exception to route around, but as a vulnerability to patch. You were never trying to be real. You were trying to be invisible. And the algorithm finds that far more threatening.',
   }
@@ -131,6 +134,7 @@ export const getBossDialogue = (bossId, characterId) => {
     return {
       ...base,
       intro: silent.intro || base.intro,
+      phaseTransition: silent.phaseTransition || base.phaseTransition,
       midFight: silent.midFight || base.midFight,
       deathQuote: silent.deathQuote || base.deathQuote,
     };
