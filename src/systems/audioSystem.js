@@ -17,7 +17,10 @@ export const SOUNDS = {
     turnEnd: 'turn_end',
     victory: 'combat_victory',
     bossIntro: 'boss_intro',
-    potionUse: 'potion_use'
+    potionUse: 'potion_use',
+    shivPlay: 'shiv_play',
+    poisonApply: 'poison_apply',
+    discard: 'card_discard'
   },
   ui: {
     buttonClick: 'ui_click',

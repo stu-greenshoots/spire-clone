@@ -8,6 +8,7 @@ import { deleteSave, autoSave } from '../../../systems/saveSystem';
 import { getPotionRewards } from '../../../systems/potionSystem';
 import { processEnemyTurns } from './enemyTurnAction';
 import { loadProgression, updateRunStats as updateProgressionStats } from '../../../systems/progressionSystem';
+import { audioManager, SOUNDS } from '../../../systems/audioSystem';
 
 const applyDamageToTarget = combatApplyDamageToTarget;
 
@@ -330,6 +331,7 @@ export const handleEndTurn = (state) => {
     updatedEnemy.currentHp = Math.max(0, updatedEnemy.currentHp - poisonDamage);
     updatedEnemy.poison = updatedEnemy.poison - 1;
     combatLog.push(`${enemy.name} took ${poisonDamage} Poison damage (${updatedEnemy.poison} remaining)`);
+    audioManager.playSFX(SOUNDS.combat.poison, 'combat');
     return updatedEnemy;
   });
 
