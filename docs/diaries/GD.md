@@ -14,6 +14,33 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 13 - GD-22 Complete
+**Date:** 2026-02-01
+**Status:** GD-22 complete, PR #161 merged to sprint-13
+
+**Done today:**
+- Generated Defect character portrait (512x512 WebP, blue/cyan palette, automaton silhouette with orbiting orbs)
+- Generated 30 Defect card art images (blue/cyan dark fantasy theme, type/rarity color variation)
+- Generated 4 orb type art images (lightning yellow, frost blue, dark purple, plasma orange)
+- Rebuilt card sprite sheet: 127 → 157 cards (10-col, 16-row grid, 3449KB)
+- Added `getOrbImage()` to art-config.js following existing asset loading pattern
+- Wired orb images into CombatScreen with emoji fallback
+- Created `generate-defect-card-art.js` and `generate-orb-art.js` scripts
+
+**Key decisions:**
+- Blue/cyan palette for Defect cards — distinguishes from Ironclad red and Silent green at a glance
+- Orb images are 128x128 (smaller than card/enemy 512x512) — appropriate for 40px display size
+- Emoji fallback preserved in orb rendering — graceful degradation if images fail to load
+- Extended existing generate-character-art.js rather than duplicating (single script for all characters)
+
+**Validation:** `npm run validate` passes — 2606 tests, lint clean, build clean
+
+**Next:**
+- All GD Sprint 13 P1 tasks complete (GD-22)
+- GD-23 (P2 stretch): Art polish pass — replace 5 lowest-quality AI sprites
+
+---
+
 ### Sprint 12 - GD-21 Complete
 **Date:** 2026-02-01
 **Status:** GD-21 complete, PR #149 merged to sprint-12

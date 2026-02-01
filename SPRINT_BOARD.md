@@ -573,22 +573,22 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | PM-13 | PM | S | Merge Sprint 12 to master, create sprint-13 branch, draft PR | DONE |
-| FIX-09 | BE | S | P1 BUG: Poison bypasses invincible shield — route poison through damage pipeline | PENDING |
-| AR-13 | AR | M | Save export/import — JSON export/import for cross-device transfer | PENDING |
-| UX-26 | UX | M | Card compendium — browsable collection of all discovered cards | PENDING |
-| UX-27 | UX | M | In-game pause menu — settings, save & quit, deck viewer during gameplay | PENDING |
-| JR-12a | JR | L | The Defect — 30 card pool (Orbs: Lightning, Frost, Dark, Plasma, Focus/Evoke) | PENDING |
+| FIX-09 | BE | S | P1 BUG: Poison bypasses invincible shield — route poison through damage pipeline | MERGED (PR #151) |
+| AR-13 | AR | M | Save export/import — JSON export/import for cross-device transfer | MERGED (PR #152) |
+| UX-26 | UX | M | Card compendium — browsable collection of all discovered cards | MERGED (PR #154) |
+| UX-27 | UX | M | In-game pause menu — settings, save & quit, deck viewer during gameplay | MERGED (PR #153) |
+| JR-12a | JR | L | The Defect — 30 card pool (Orbs: Lightning, Frost, Dark, Plasma, Focus/Evoke) | MERGED (PR #156) |
 
 ### P1 — Should Ship
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| JR-12b | JR | M | The Defect — starter deck, character selection, orb slot UI | PENDING |
-| BE-27 | BE | M | Orb system infrastructure — orb slots, passive/evoke, Focus scaling, reducer actions | PENDING |
-| VARROW-09 | Varrow | M | Defect narrative — "The machine that remembers." Character flavor, boss dialogue | PENDING |
-| GD-22 | GD | M | Defect art — portrait, silhouette, 30 card illustrations, orb visuals, sprite sheet | PENDING |
-| QA-19 | QA | M | Defect regression + balance — 30 cards, orb mechanics, 3-character regression | PENDING |
-| UX-28 | UX | S | Landscape mode — responsive layout for tablets and phones in landscape | PENDING |
+| JR-12b | JR | M | The Defect — starter deck, character selection, orb slot UI | MERGED (PR #157) |
+| BE-27 | BE | M | Orb system infrastructure — orb slots, passive/evoke, Focus scaling, reducer actions | MERGED (PR #155) |
+| VARROW-09 | Varrow | M | Defect narrative — "The machine that remembers." Character flavor, boss dialogue | MERGED (PR #158) |
+| GD-22 | GD | M | Defect art — portrait, silhouette, 30 card illustrations, orb visuals, sprite sheet | MERGED (PR #161) |
+| QA-19 | QA | M | Defect regression + balance — 30 cards, orb mechanics, 3-character regression | MERGED (PR #159) |
+| UX-28 | UX | S | Landscape mode — responsive layout for tablets and phones in landscape | MERGED (PR #160) |
 
 ### P2 — Stretch
 
