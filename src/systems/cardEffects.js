@@ -76,6 +76,13 @@ const handleExhaustTriggers = (ctx) => {
  * Simple effects that just modify player stats
  */
 const simplePlayerEffects = {
+  haltWrath: (card, ctx) => {
+    if (ctx.player.currentStance === 'wrath') {
+      const wrathBlock = card.upgraded ? 14 : 9;
+      ctx.player.block += wrathBlock - (card.block || 0);
+      ctx.combatLog.push(`Halt: in Wrath, gained ${wrathBlock} Block total`);
+    }
+  },
   doubleBlock: (card, ctx) => {
     ctx.player.block *= 2;
     ctx.combatLog.push(`Block doubled to ${ctx.player.block}`);

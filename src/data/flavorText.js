@@ -179,7 +179,24 @@ export const CARD_FLAVOR = {
   seek: 'Scan the deck. Find what you need. Exactly what you need.',
   creativeAI: 'The machine learns. Each turn, a new power manifests.',
   echoForm: 'Echoes of actions past, replayed in the present.',
-  electrodynamics: 'Lightning arcs between all targets. None are spared.'
+  electrodynamics: 'Lightning arcs between all targets. None are spared.',
+
+  // Watcher Cards
+  strike_watcher: 'A measured strike. Every motion is a meditation.',
+  defend_watcher: 'The body becomes a wall. The mind becomes still.',
+  eruption: 'Fury erupts from stillness. The transition is the weapon.',
+  vigilance: 'In calm, the world slows. Threats reveal themselves.',
+  bowlingBash: 'Momentum carries through all obstacles. Nothing stands alone.',
+  crushJoints: 'Precision follows discipline. The body remembers what the mind commands.',
+  flurryOfBlows: 'Each stance shift ripples outward. Fists follow like echoes.',
+  followUp: 'One motion flows into the next. Awareness sharpens with each strike.',
+  halt: 'Even in Wrath, the body can be commanded to stillness.',
+  emptyMind: 'Release all form. In the void between stances, there is clarity.',
+  crescendo: 'The slow build of fury, released in a single breath.',
+  tranquility: 'The waters of the mind grow still. Energy pools beneath the surface.',
+  prostrate: 'Devotion accumulates. Each prayer brings divinity closer.',
+  protectingLight: 'The light does not judge. It simply shields.',
+  sashWhip: 'Silk and steel intertwined. Grace that cuts.'
 };
 
 // ========== ENEMY LORE ==========
