@@ -877,6 +877,31 @@ const cardSelectionEffects = {
     return null;
   },
 
+  scryCards: (card, ctx) => {
+    const scryCount = card.scryCount || 3;
+    const topCards = ctx.drawPile.slice(0, Math.min(scryCount, ctx.drawPile.length));
+    if (topCards.length > 0) {
+      return {
+        earlyReturn: true,
+        earlyReturnState: {
+          ...ctx.state,
+          phase: ctx.GAME_PHASE.CARD_SELECT_DRAW,
+          cardSelection: { type: 'scryCards', sourceCard: card, scryCount },
+          player: ctx.player,
+          enemies: ctx.enemies,
+          hand: ctx.hand,
+          discardPile: ctx.discardPile,
+          drawPile: ctx.drawPile,
+          exhaustPile: ctx.exhaustPile,
+          selectedCard: null,
+          targetingMode: false,
+          combatLog: ctx.combatLog
+        }
+      };
+    }
+    return null;
+  },
+
   exhaustForDraw: (card, ctx) => {
     if (ctx.hand.length > 0) {
       return {

@@ -34,7 +34,8 @@ export const GAME_PHASE = {
   // Card selection sub-phases
   CARD_SELECT_HAND: 'card_select_hand',
   CARD_SELECT_DISCARD: 'card_select_discard',
-  CARD_SELECT_EXHAUST: 'card_select_exhaust'
+  CARD_SELECT_EXHAUST: 'card_select_exhaust',
+  CARD_SELECT_DRAW: 'card_select_draw'
 };
 
 // Initial game state
