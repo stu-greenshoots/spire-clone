@@ -1,19 +1,19 @@
 import { lazy, Suspense, useEffect, useState, useCallback } from 'react';
 import { GameProvider, useGame, GAME_PHASE } from './context/GameContext';
-import MainMenu from './components/MainMenu';
-import CombatScreen from './components/CombatScreen';
-import RewardScreen from './components/RewardScreen';
-import GameOverScreen from './components/GameOverScreen';
-import VictoryScreen from './components/VictoryScreen';
-import EndlessTransition from './components/EndlessTransition';
-import PersistentHeader from './components/PersistentHeader';
-import PlayerStatusBar from './components/PlayerStatusBar';
 import DevTools from './components/DevTools';
-import PauseMenu from './components/PauseMenu';
 import { audioManager, SOUNDS } from './systems/audioSystem';
 import './App.css';
 
-// Lazy load heavy screens for better initial load performance
+// Lazy load screens for better initial load performance
+const MainMenu = lazy(() => import('./components/MainMenu'));
+const PersistentHeader = lazy(() => import('./components/PersistentHeader'));
+const PlayerStatusBar = lazy(() => import('./components/PlayerStatusBar'));
+const PauseMenu = lazy(() => import('./components/PauseMenu'));
+const CombatScreen = lazy(() => import('./components/CombatScreen'));
+const RewardScreen = lazy(() => import('./components/RewardScreen'));
+const GameOverScreen = lazy(() => import('./components/GameOverScreen'));
+const VictoryScreen = lazy(() => import('./components/VictoryScreen'));
+const EndlessTransition = lazy(() => import('./components/EndlessTransition'));
 const MapScreen = lazy(() => import('./components/MapScreen'));
 const ShopScreen = lazy(() => import('./components/ShopScreen'));
 const EventScreen = lazy(() => import('./components/EventScreen'));
@@ -173,12 +173,12 @@ const GameContent = () => {
   return (
     <div className="game-container">
       <DevTools />
-      {!hideChrome && <PersistentHeader onPauseClick={handlePauseToggle} />}
       <Suspense fallback={<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888' }}>Loading...</div>}>
+        {!hideChrome && <PersistentHeader onPauseClick={handlePauseToggle} />}
         {renderPhase()}
+        {!hideStatusBar && <PlayerStatusBar />}
+        {isPaused && <PauseMenu onClose={handlePauseClose} />}
       </Suspense>
-      {!hideStatusBar && <PlayerStatusBar />}
-      {isPaused && <PauseMenu onClose={handlePauseClose} />}
     </div>
   );
 };
