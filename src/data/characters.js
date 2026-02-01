@@ -3,7 +3,8 @@
 
 export const CHARACTER_IDS = {
   IRONCLAD: 'ironclad',
-  SILENT: 'silent'
+  SILENT: 'silent',
+  DEFECT: 'defect'
 };
 
 export const CHARACTERS = [
@@ -33,6 +34,21 @@ export const CHARACTERS = [
       { id: 'survivor', count: 1 }
     ],
     color: '#2d8a4e'
+  },
+  {
+    id: CHARACTER_IDS.DEFECT,
+    name: 'The Defect',
+    description: 'An ancient automaton that channels Orbs of elemental energy. Specializes in Lightning, Frost, Dark, and Plasma orbs.',
+    starterRelicId: 'cracked_core',
+    maxHp: 75,
+    orbSlots: 3,
+    starterDeck: [
+      { id: 'strike_defect', count: 4 },
+      { id: 'defend_defect', count: 4 },
+      { id: 'zap', count: 1 },
+      { id: 'dualcast', count: 1 }
+    ],
+    color: '#4488cc'
   }
 ];
 

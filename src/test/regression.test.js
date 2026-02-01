@@ -277,7 +277,7 @@ describe('Relic Regression - All Relics', () => {
       it(`${relic.id}: effect type '${relic.effect.type}' is valid`, () => {
         const validTypes = [
           'addRandomCard', 'block', 'blockIfNone', 'blockNextTurn',
-          'conserveEnergy', 'damage', 'damageAll', 'dexterity',
+          'channelOrb', 'conserveEnergy', 'damage', 'damageAll', 'dexterity',
           'doubleDamage', 'doubleEliteRelics', 'draw', 'drawBonus',
           'drawSpecific', 'energy', 'energyBonus', 'heal', 'healIfLowHp',
           'healPerCards', 'healingBonus', 'intangible', 'maxHp',
