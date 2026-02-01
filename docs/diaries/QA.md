@@ -2,6 +2,34 @@
 
 ## Sprint 12 Entries
 
+### QA-18: Diary Hygiene Automation
+**Date:** 2026-02-01
+**Status:** Complete, PR #148 merged
+**Sprint:** Sprint 12 (The Heart + Endgame + Score 90+)
+**Task:** QA-18 (Diary hygiene automation — S size, P2)
+
+**Done:**
+1. Created `scripts/check-diary-freshness.js` — checks all active role diaries for current sprint entries
+2. Added `npm run check:diaries` (warning mode) and `npm run check:diaries:strict` (fail mode)
+3. Added non-blocking CI step in `.github/workflows/ci.yml` (Node 22 only, `continue-on-error: true`)
+4. Script detects sprint number from branch name, checks for `Sprint N` content in each diary
+5. Reports fresh/stale/archived roles with clear output
+
+**How it works:**
+- Detects current sprint from git branch name (e.g., `sprint-12` → Sprint 12)
+- For each active role, checks if diary file mentions `Sprint N`
+- Archived roles (SL) reported separately
+- Warning mode (default): always exits 0. Strict mode: exits 1 on stale diaries.
+
+**Test results:**
+- 7 fresh (PM, BE, JR, AR, UX, GD, QA), 1 archived (SL), 1 stale (VARROW — diary header predates Sprint 12)
+- `npm run validate` passes — all tests green, lint clean, build clean
+
+**Blockers:** None
+**Next:** All QA Sprint 12 tasks complete (QA-17, QA-18).
+
+---
+
 ### QA-17: Heart Regression + Endgame Balance
 **Date:** 2026-02-01
 **Status:** Complete, PR #144 merged
