@@ -479,10 +479,10 @@ describe('Time Eater Mechanics', () => {
 // ============================================================
 
 describe('Corrupt Heart Mechanics', () => {
-  it('has 800 HP and invincible: 300', () => {
+  it('has 750 HP and invincible: 200', () => {
     const ch = getEnemyById('corruptHeart');
-    expect(ch.hp.min).toBe(800);
-    expect(ch.invincible).toBe(300);
+    expect(ch.hp.min).toBe(750);
+    expect(ch.invincible).toBe(200);
   });
 
   it('opens with debilitate, then cycles blood/echo/buff', () => {

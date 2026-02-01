@@ -955,24 +955,27 @@ export const ALL_ENEMIES = [
   {
     id: 'corruptHeart',
     name: 'Corrupt Heart',
-    hp: { min: 800, max: 800 },
+    hp: { min: 750, max: 750 },
     type: 'boss',
     act: 4,
     emoji: '💀❤️',
-    invincible: 300,
+    invincible: 200,
     beat: 0,
     moveset: [
       { id: 'debilitate', intent: INTENT.STRONG_DEBUFF, effects: [{ type: 'vulnerable', amount: 2, target: 'player' }, { type: 'weak', amount: 2, target: 'player' }, { type: 'frail', amount: 2, target: 'player' }], message: 'Debilitate' },
-      { id: 'bloodShots', intent: INTENT.ATTACK, damage: 2, times: 15, special: 'bloodShots', message: 'Blood Shots' },
+      { id: 'bloodShots', intent: INTENT.ATTACK, damage: 2, times: 15, special: 'bloodShotsEscalate', message: 'Blood Shots' },
       { id: 'echo', intent: INTENT.ATTACK_DEBUFF, damage: 40, special: 'addStatus', message: 'Echo' },
       { id: 'buff', intent: INTENT.BUFF, effects: [{ type: 'strength', amount: 2 }, { type: 'artifact', amount: 2 }], special: 'beatOfDeath', message: 'Buff' }
     ],
     ai: (enemy, turn, _lastMove) => {
+      // Turn 0: Always Debilitate (apply all debuffs)
       if (turn === 0) return enemy.moveset[0];
+      // Phase 1 (invincible shield up): cycle Blood Shots → Echo → Buff
+      // Phase 2 (shield broken): same cycle but Blood Shots hits scale each cycle
       const phase = (turn - 1) % 3;
-      if (phase === 0) return enemy.moveset[1];
-      if (phase === 1) return enemy.moveset[2];
-      return enemy.moveset[3];
+      if (phase === 0) return enemy.moveset[1]; // Blood Shots (escalating)
+      if (phase === 1) return enemy.moveset[2]; // Echo (40 dmg + status card)
+      return enemy.moveset[3];                  // Buff (str+2, artifact+2, enables Beat of Death)
     },
     beatOfDeath: true
   }

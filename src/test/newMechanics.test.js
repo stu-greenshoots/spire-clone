@@ -589,7 +589,7 @@ describe('Corrupt Heart Boss', () => {
 
   it('should have invincible threshold', () => {
     const heart = getEnemyById('corruptHeart');
-    expect(heart.invincible).toBe(300);
+    expect(heart.invincible).toBe(200);
   });
 
   it('buff move should grant strength and artifact', () => {

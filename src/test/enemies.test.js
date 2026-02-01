@@ -269,9 +269,9 @@ describe('Enemies Data', () => {
   describe('Corrupt Heart', () => {
     it('has correct base stats', () => {
       const heart = getEnemyById('corruptHeart');
-      expect(heart.hp.min).toBe(800);
-      expect(heart.hp.max).toBe(800);
-      expect(heart.invincible).toBe(300);
+      expect(heart.hp.min).toBe(750);
+      expect(heart.hp.max).toBe(750);
+      expect(heart.invincible).toBe(200);
       expect(heart.beatOfDeath).toBe(true);
       expect(heart.act).toBe(4);
     });
@@ -279,8 +279,8 @@ describe('Enemies Data', () => {
     it('createEnemyInstance initializes invincible field', () => {
       const heart = getEnemyById('corruptHeart');
       const instance = createEnemyInstance(heart);
-      expect(instance.invincible).toBe(300);
-      expect(instance.currentHp).toBe(800);
+      expect(instance.invincible).toBe(200);
+      expect(instance.currentHp).toBe(750);
     });
 
     it('createEnemyInstance defaults invincible to 0 for normal enemies', () => {
