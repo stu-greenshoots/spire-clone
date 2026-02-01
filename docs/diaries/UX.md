@@ -15,6 +15,21 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 11 - UX-23 Complete
+**Date:** 2026-02-01
+**Status:** UX-23 DONE (PR #134)
+
+**What I did:**
+- Added visited-node checkmark indicator to map — small checkmark badge (top-right) on completed nodes
+- Uses existing `node.visited` flag, excludes currently accessible nodes
+- Scales with node radius (works for boss nodes too)
+- 1 file changed (MapScreen.jsx), 8 insertions
+- Both Copilot and Mentor reviews passed, merged via squash
+
+**Sprint 11 UX status:** UX-21 done, UX-22 done, UX-23 done. All UX tasks complete.
+
+---
+
 ### Sprint 11 - UX-22 Complete
 **Date:** 2026-02-01
 **Status:** UX-22 DONE (PR #127)

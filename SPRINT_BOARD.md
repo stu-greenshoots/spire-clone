@@ -1,6 +1,6 @@
 # Sprint Board - Spire Ascent
 
-**Last Updated:** 2026-01-31
+**Last Updated:** 2026-02-01
 **Current Sprint:** 11 (Second Character + QoL + Score Push) - IN PROGRESS
 **Integration Branch:** `sprint-11`
 **Sprint Plan:** See `SPRINT_11_PLAN.md`
@@ -458,7 +458,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Introduce The Silent (second character class), resolve all remaining Game Zone complaints, push toward 90+ score.
 **Plan:** See `SPRINT_11_PLAN.md`
 **Branch:** `sprint-11`
-**Status:** IN PROGRESS — PM-11 + BE-23 + JR-09a + JR-09b + FIX-08 + GD-16 + UX-21 + UX-22 + VARROW-06 + GD-17 + QA-15 + AR-11 + BE-24 complete
+**Status:** IN PROGRESS — PM-11 + BE-23 + JR-09a + JR-09b + FIX-08 + GD-16 + UX-21 + UX-22 + VARROW-06 + GD-17 + QA-15 + AR-11 + BE-24 + UX-23 complete
 
 ### P0 — Must Ship
 
@@ -487,7 +487,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| UX-23 | UX | S | Map visited-node indicator — grey out visited nodes | PENDING |
+| UX-23 | UX | S | Map visited-node indicator — grey out visited nodes | MERGED (PR #134) |
 | QA-16 | QA | S | Diary enforcement audit — verify all diaries updated | PENDING |
 | GD-18 | GD | S | Silent card art — 30 illustrations, sprite sheet rebuild | PENDING |
 

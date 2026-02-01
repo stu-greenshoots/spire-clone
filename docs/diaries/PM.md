@@ -15,6 +15,22 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 11 — UX-23 Complete
+**Date:** 2026-02-01
+**Status:** UX-23 merged (PR #134)
+
+**Done:**
+- Implemented as UX: Map visited-node checkmark badge on completed nodes
+- Small checkmark icon (top-right corner) on visited nodes, excludes accessible nodes
+- 1 file changed, 8 insertions
+- Both Copilot and Mentor reviews passed
+- Merged PR #134 via squash, updated sprint board and UX diary
+
+**Sprint 11 Progress:** 14/16 tasks done (PM-11, BE-23, JR-09a, JR-09b, FIX-08, GD-16, UX-21, UX-22, VARROW-06, GD-17, QA-15, AR-11, BE-24, UX-23)
+**All P0 and P1 tasks complete.** 2 P2 stretch tasks remaining: QA-16, GD-18.
+
+---
+
 ### Sprint 11 — BE-24 Complete
 **Date:** 2026-02-01
 **Status:** BE-24 merged (PR #133)
