@@ -5,15 +5,15 @@
  * seeded run reproducibility, narrative integration, and defeat tiers.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { createInitialState, GAME_PHASE } from '../context/GameContext';
 import { mapReducer } from '../context/reducers/mapReducer';
-import { createEnemyInstance, getEnemyById, ALL_ENEMIES, getBossEncounter, getEncounter } from '../data/enemies';
+import { createEnemyInstance, getEnemyById, getBossEncounter, getEncounter } from '../data/enemies';
 import { SeededRNG, stringToSeed } from '../utils/seededRandom';
 import { generateMap } from '../utils/mapGenerator';
 import { ENDLESS_LOOP_MILESTONES, ENDLESS_DEFEAT_NARRATIVE, ENDLESS_DEFEAT_FOOTER } from '../data/flavorText';
 import { ALL_RELICS, getRandomRelic, getStarterRelic } from '../data/relics';
-import { CHARACTER_IDS, CHARACTERS } from '../data/characters';
+import { CHARACTER_IDS } from '../data/characters';
 import { simulateRun, runBalanceReport } from './balance/simulator';
 
 // Mock dependencies required by mapReducer
@@ -260,20 +260,15 @@ describe('QA-25: Endless Mode Regression + Balance', () => {
   describe('All 4 characters viable — balance simulator', () => {
     // Run a modest number of simulations to verify basic viability
     // We test Act 1 runs which are the common case
-    const characters = ['ironclad', 'silent', 'defect', 'watcher'];
+    it('balance simulator shows viability at A0 (>= 5% win rate Act 1)', () => {
+      const report = runBalanceReport(50, {
+        seed: 42,
+        acts: 1,
+        ascension: 0
+      });
 
-    it('all 4 characters can clear Act 1 in balance simulations', () => {
-      for (const char of characters) {
-        const report = runBalanceReport(50, {
-          seed: 42,
-          acts: 1,
-          ascension: 0
-        });
-
-        // At A0, all characters should have >=5% win rate on Act 1
-        expect(report.winRate).toBeGreaterThanOrEqual(0.05);
-        expect(report.totalRuns).toBe(50);
-      }
+      expect(report.winRate).toBeGreaterThanOrEqual(0.05);
+      expect(report.totalRuns).toBe(50);
     });
 
     it('balance simulator produces valid output structure', () => {
