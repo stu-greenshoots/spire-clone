@@ -5,7 +5,7 @@ import PotionSlots from './PotionSlots';
 import { getRelicImage } from '../assets/art/art-config';
 import { isMuted, setMuted } from '../systems/audioSystem';
 
-const PersistentHeader = () => {
+const PersistentHeader = ({ onPauseClick }) => {
   const { state } = useGame();
   const { player, phase, act, currentFloor, relics, deck } = state;
   const [selectedRelic, setSelectedRelic] = useState(null);
@@ -325,6 +325,32 @@ const PersistentHeader = () => {
             title={muted ? 'Unmute' : 'Mute'}
           >
             {muted ? '\uD83D\uDD07' : '\uD83D\uDD0A'}
+          </button>
+
+          {/* Pause/Menu Button */}
+          <button
+            onClick={onPauseClick}
+            data-testid="pause-button"
+            className="pause-btn"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '5px 10px',
+              background: 'rgba(100, 100, 100, 0.15)',
+              borderRadius: '8px',
+              border: '1px solid rgba(100, 100, 100, 0.3)',
+              cursor: 'pointer',
+              transition: 'all 0.2s ease',
+              fontSize: '12px',
+              color: '#888',
+              fontWeight: 'bold',
+              letterSpacing: '1px',
+              textTransform: 'uppercase'
+            }}
+            title="Pause Menu (Esc)"
+          >
+            {'\u2630'} Menu
           </button>
         </div>
 
