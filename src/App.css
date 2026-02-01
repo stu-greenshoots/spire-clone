@@ -614,11 +614,16 @@ button:active {
   }
 }
 
-/* Landscape adjustments */
-@media (orientation: landscape) and (max-height: 500px) {
-  .game-container {
-    flex-direction: row;
-    flex-wrap: wrap;
+/* Landscape adjustments — tablet (max-height: 700px) */
+@media (orientation: landscape) and (max-height: 700px) {
+  .persistent-header {
+    padding: 2px 8px;
+    gap: 2px;
+    font-size: 11px;
+  }
+
+  .persistent-header .header-stats-row {
+    gap: 6px;
   }
 }
 
@@ -1532,25 +1537,158 @@ button:active {
   }
 }
 
-/* Landscape mobile */
+/* Landscape phone (max-height: 500px) */
 @media (max-height: 500px) and (orientation: landscape) {
-  .combat-screen {
-    flex-direction: row;
-    gap: 4px;
+  /* Header: single-line compact */
+  .persistent-header {
+    padding: 1px 6px;
+    gap: 1px;
+    font-size: 10px;
+    min-height: 0;
+  }
+
+  .persistent-header .header-relics-row,
+  .persistent-header .header-potions-row {
+    display: none;
+  }
+
+  /* Combat: tighter vertical spacing */
+  .combat-screen-container {
+    padding-top: 28px;
+  }
+
+  .enemy-area {
+    min-height: 60px;
+    gap: 8px;
   }
 
   .hand-area {
-    min-height: 100px;
-    max-height: 130px;
+    min-height: 90px;
+    max-height: 120px;
   }
 
   .card {
-    min-height: 100px;
-    font-size: 9px;
+    min-height: 90px;
+    min-width: 65px;
+    max-width: 80px;
+    font-size: 8px;
+  }
+
+  .card .card-name {
+    font-size: 8px;
+  }
+
+  .card .card-cost {
+    font-size: 10px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .bottom-controls {
+    padding: 2px 8px;
+    gap: 4px;
+  }
+
+  .energy-orb {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .end-turn-btn {
+    padding: 4px 12px;
+    font-size: 11px;
+  }
+
+  /* Map: reduce padding, shrink header */
+  .map-container {
+    max-height: none;
+  }
+
+  .map-header {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+
+  .map-legend {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  /* Rewards: compact layout */
+  .reward-options {
+    gap: 6px;
+  }
+
+  .reward-button {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: 36px;
+  }
+
+  /* Shop: tighter grid */
+  .shop-items {
+    gap: 4px;
+  }
+
+  .shop-item {
+    min-height: 36px;
+    padding: 4px;
+    font-size: 11px;
+  }
+
+  /* Victory overlay: smaller */
+  .victory-overlay-content {
+    max-height: 90vh;
+    padding: 8px 16px;
+  }
+
+  .victory-overlay-content h2 {
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+
+  /* Player status bar compact */
+  .player-status-bar {
+    padding: 2px 8px;
+    font-size: 10px;
+  }
+
+  /* Orb slots compact */
+  .orb-slots-container {
+    gap: 4px;
+    padding: 2px;
+  }
+
+  .orb-slot {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+  }
+}
+
+/* Landscape tablet (501-700px height) */
+@media (min-height: 501px) and (max-height: 700px) and (orientation: landscape) {
+  .combat-screen-container {
+    padding-top: 36px;
   }
 
   .enemy-area {
     min-height: 80px;
+  }
+
+  .hand-area {
+    min-height: 110px;
+    max-height: 140px;
+  }
+
+  .card {
+    min-height: 110px;
+    font-size: 9px;
+  }
+
+  .map-container {
+    max-height: none;
   }
 }
 
