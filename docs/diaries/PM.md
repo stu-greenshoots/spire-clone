@@ -1,4 +1,4 @@
-# PM Diary - Sprint 13
+# PM Diary - Sprint 14
 
 ## Role
 Project Manager - Sprint coordination, process, CI/CD, PR management
@@ -7,12 +7,34 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 `*.md` docs, `package.json` scripts, `.github/`
 
 ## Current Sprint Tasks
-- PM-13: Sprint 13 setup (merge Sprint 12, create branch, draft PR)
-- Sprint coordination, board maintenance, diary enforcement
+- PM-14: Sprint 14 setup (merge Sprint 13, create branch, draft PR)
+- Sprint coordination, board maintenance, audio fix prioritization
 
 ---
 
 ## Entries
+
+### Sprint 14 — PM-14 Setup
+**Date:** 2026-02-01
+**Status:** DONE
+
+**Done:**
+- Merged sprint-13 to master, pushed
+- Created sprint-14 branch from master
+- Wrote SPRINT_14_PLAN.md (14 tasks: 5 P0, 6 P1, 3 P2)
+- Updated SPRINT_BOARD.md — Sprint 13 marked COMPLETE, Sprint 14 added
+- Created draft PR sprint-14 → master
+
+**Sprint 14 Focus:** Fix broken audio system (P0 — zero output for 7 sprints), replace all placeholder MP3s with real CC0 sounds, improve art fidelity, begin fourth character design.
+
+**Honest assessment:** The self-assessed score of 93/100 included "Audio working" in Presentation, but audio has NEVER worked at runtime. Real score is likely 88-90. This sprint's audio fix is the single highest-impact improvement available.
+
+**Key risks:**
+1. Audio may have deep architectural issues (not just config). BE-28 overhaul may be larger than estimated.
+2. Sourcing real CC0 audio requires human curation — AI can find candidates but someone needs to listen and approve.
+3. Art improvement is subjective — GD-24/25 need clear before/after comparison.
+
+---
 
 ### Sprint 13 — Retrospective
 **Date:** 2026-02-01

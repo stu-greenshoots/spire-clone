@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-02-01
-**Current Sprint:** 13 (Score 100 — Cloud Save, Compendium, The Defect) - IN PROGRESS
-**Integration Branch:** `sprint-13`
-**Sprint Plan:** See `SPRINT_13_PLAN.md`
+**Current Sprint:** 14 (Audio Fix + Real Sounds + Art Quality) - IN PROGRESS
+**Integration Branch:** `sprint-14`
+**Sprint Plan:** See `SPRINT_14_PLAN.md`
 **Roadmap:** See `ROADMAP.md` (original 4-sprint plan to 1.0, now post-1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 12 COMPLETE (15 tasks, 2366 tests, Heart boss + boss dialogue + animated sprites + 93/100 score)
+**Previous:** Sprint 13 COMPLETE (15 tasks, 2627 tests, Cloud Save + Compendium + The Defect + 100 target)
 
 ---
 
@@ -561,12 +561,12 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 13: Score 100 — Cloud Save, Compendium, The Defect - IN PROGRESS
+## Sprint 13: Score 100 — Cloud Save, Compendium, The Defect - COMPLETE
 
 **Goal:** Close the remaining 7-point gap from 93 to 100. Save export/import, card compendium, in-game pause menu, landscape support, The Defect (third character), fix poison vs shield bug.
 **Plan:** See `SPRINT_13_PLAN.md`
-**Branch:** `sprint-13`
-**Status:** IN PROGRESS
+**Branch:** `sprint-13` (merged to master)
+**Status:** COMPLETE — All 15 tasks merged (6 P0 + 6 P1 + 3 P2). 2627 tests. Seventh consecutive 100% sprint.
 
 ### P0 — Must Ship
 
@@ -610,5 +610,58 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [ ] Character selection shows 3 characters
 - [ ] Defect win rate: 20-30% at A0
 - [ ] 2600+ tests passing
+- [ ] `npm run validate` passes
+- [ ] Self-assessment score: targeting 97+
+
+---
+
+## Sprint 14: Audio Fix + Real Sounds + Art Quality - IN PROGRESS
+
+**Goal:** Fix the broken audio system (P0 — zero sound output for 7 sprints), replace all placeholder MP3s with real CC0 sounds, improve art fidelity, begin fourth character design.
+**Plan:** See `SPRINT_14_PLAN.md`
+**Branch:** `sprint-14`
+**Status:** IN PROGRESS
+
+### P0 — Must Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| PM-14 | PM | S | Merge Sprint 13 to master, create sprint-14 branch, draft PR | DONE |
+| FIX-10 | AR/BE | M | P0 BUG: Audio system produces zero output — investigate and fix | PENDING |
+| AR-15 | AR | L | Replace all 20+ placeholder MP3s with real CC0 sounds (7 tracks + 15 SFX) | PENDING |
+| GD-24 | GD | M | Card art quality pass — improve 10 most-visible card illustrations | PENDING |
+| GD-25 | GD | M | Enemy art quality pass — improve 5 Act 1 boss/elite sprites | PENDING |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| BE-28 | BE | M | Audio system overhaul — proper init lifecycle, autoplay policy, error recovery | PENDING |
+| UX-29 | UX | M | Audio settings UX — working volume sliders, mute toggle, visual feedback | PENDING |
+| QA-21 | QA | M | Audio regression tests — all tracks load/play, SFX trigger correctly, volume works | PENDING |
+| JR-13 | JR | M | Card balance pass — review 157 cards, fix outliers, focus on Defect orb cards | PENDING |
+| VARROW-10 | Varrow | S | Fourth character concept — design doc with theme, mechanic, sample cards, narrative hook | PENDING |
+| UX-30 | UX | S | Updated self-assessment — honest re-score post-audio fix and art improvements | PENDING |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| GD-26 | GD | S | Background art differentiation — unique illustrations per act | PENDING |
+| AR-16 | AR | S | Audio ambient layer — subtle ambient loops per act under music | PENDING |
+| QA-22 | QA | S | Validation gate ceremony — check off all unchecked gates from Sprints 9-13 | PENDING |
+
+### Sprint 14 Validation Gate
+
+- [ ] Audio plays in both dev server and production (GitHub Pages)
+- [ ] All 7 music tracks are distinct, real audio files (not copies)
+- [ ] All 15+ SFX are distinct, real audio files (not copies)
+- [ ] Music transitions between game phases (menu → map → combat → boss)
+- [ ] Volume controls actually change volume
+- [ ] Mute button silences all audio
+- [ ] 10 card illustrations visually improved
+- [ ] 5 enemy sprites visually improved
+- [ ] Fourth character concept document exists
+- [ ] 2700+ tests passing
 - [ ] `npm run validate` passes
 - [ ] Self-assessment score: targeting 97+
