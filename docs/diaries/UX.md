@@ -15,6 +15,24 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 15 - UX-31 Complete
+**Date:** 2026-02-01
+**Status:** UX-31 DONE (PR #186)
+
+**What I did:**
+- Added StanceIndicator component to CombatScreen — shows current stance badge next to energy orb
+- Stance badges: Calm (blue 🧘), Wrath (red ⚔️ with pulse animation), Divinity (gold ✨ with glow)
+- Mantra progress bar (X/10) with purple theme, glows when near threshold (≥7)
+- Compact stance badge in PersistentHeader mobile combat view
+- CSS keyframe animations: wrathPulse (1.2s red pulse), divinityGlow (0.8s gold glow)
+- Only renders for Watcher character (guarded by `character === 'watcher'`)
+- Accessible: role="status", aria-label, title attributes on all indicators
+- 3 files changed, 128 insertions, 2 deletions
+
+**Sprint 15 UX status:** UX-31 done. UX-32 (final self-assessment) remaining as P2 stretch.
+
+---
+
 ### Sprint 14 - UX-30 Complete
 **Date:** 2026-02-01
 **Status:** UX-30 DONE (PR #175)
