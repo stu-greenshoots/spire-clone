@@ -14,6 +14,27 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 14 - GD-25 Complete
+**Date:** 2026-02-01
+**Status:** GD-25 complete, PR pending targeting sprint-14
+
+**Done today:**
+- Created `scripts/generate-quality-enemy-art.js` with detailed SVG silhouettes for 5 Act 1 boss/elite enemies
+- Targets: slimeBoss, theGuardian, hexaghost, gremlinNob, lagavulin
+- Each enemy has unique thematic silhouette and color palette:
+  - Slime Boss: massive amorphous blob with multiple eyes, dripping slime tendrils, split-line hint
+  - The Guardian: towering stone/metal construct with glowing gem core, shield arms, rune markings
+  - Hexaghost: six ghostly flames in hexagonal orbit around spectral skull core, connecting arcs
+  - Gremlin Nob: hulking muscular gremlin with massive spiked club, aggressive stance, rage aura
+  - Lagavulin: armored sleeping warrior with heavy helmet, glowing visor eyes, greatsword across lap
+- Rebuilt enemy sprite sheet (45 enemies, 1747KB -- down from previous build)
+
+**Validation:** `npm run validate` passes
+
+**Next:** Sprint 14 GD tasks complete
+
+---
+
 ### Sprint 14 - GD-24 Complete
 **Date:** 2026-02-01
 **Status:** GD-24 complete, PR #170 merged to sprint-14
