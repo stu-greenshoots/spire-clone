@@ -16,7 +16,7 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ### Sprint 14 - GD-25 Complete
 **Date:** 2026-02-01
-**Status:** GD-25 complete, PR pending targeting sprint-14
+**Status:** GD-25 complete, PR #171 merged to sprint-14
 
 **Done today:**
 - Created `scripts/generate-quality-enemy-art.js` with detailed SVG silhouettes for 5 Act 1 boss/elite enemies
