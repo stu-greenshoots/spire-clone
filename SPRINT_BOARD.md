@@ -615,12 +615,12 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 14: Audio Fix + Real Sounds + Art Quality - IN PROGRESS
+## Sprint 14: Audio Fix + Real Sounds + Art Quality - COMPLETE
 
 **Goal:** Fix the broken audio system (P0 — zero sound output for 7 sprints), replace all placeholder MP3s with real CC0 sounds, improve art fidelity, begin fourth character design.
 **Plan:** See `SPRINT_14_PLAN.md`
 **Branch:** `sprint-14`
-**Status:** IN PROGRESS
+**Status:** COMPLETE — All 14 tasks done (5 P0 + 6 P1 + 3 P2). 2713 tests. Eighth consecutive 100% sprint.
 
 ### P0 — Must Ship
 
