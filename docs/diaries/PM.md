@@ -1,4 +1,4 @@
-# PM Diary - Sprint 4
+# PM Diary - Sprint 12
 
 ## Role
 Project Manager - Sprint coordination, process, CI/CD, PR management
@@ -6,14 +6,34 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 ## Owned Files
 `*.md` docs, `package.json` scripts, `.github/`
 
-## Sprint 3 Tasks
-- PM-03: Hide Data Editor button in production
-- Sprint coordination, board maintenance
-- Resolve open decisions, manage PRs
+## Current Sprint Tasks
+- PM-12: Sprint 12 setup (merge Sprint 11, create branch, archive SL diary)
+- Sprint coordination, board maintenance, diary enforcement
 
 ---
 
 ## Entries
+
+### Sprint 12 — PM-12 Complete (Sprint Setup)
+**Date:** 2026-02-01
+
+**Done:**
+- Merged sprint-11 to master (16 PRs, 2248 tests)
+- Created sprint-12 branch from master
+- Wrote SPRINT_12_PLAN.md — 15 tasks (6 P0, 6 P1, 3 P2)
+- Updated SPRINT_BOARD.md — Sprint 11 marked COMPLETE, Sprint 12 added
+- Created draft PR sprint-12 → master
+
+**Sprint 12 Theme:** The Heart + Endgame + Score 90+
+- True final boss (The Corrupt Heart) with Act 4
+- Boss dialogue rendering (existing data not wired to UI)
+- Animated boss sprites (CSS idle animations)
+- Heart unlock gate (both characters must win)
+- Process: diary enforcement mandatory, SL archived
+
+**Key Decision:** Focused sprint on endgame depth rather than breadth (no third character yet). The Heart is the single highest-impact feature remaining for review score and player retention.
+
+---
 
 ### Sprint 11 — Retrospective
 **Date:** 2026-02-01

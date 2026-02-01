@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-02-01
-**Current Sprint:** 11 (Second Character + QoL + Score Push) - IN PROGRESS
-**Integration Branch:** `sprint-11`
-**Sprint Plan:** See `SPRINT_11_PLAN.md`
+**Current Sprint:** 12 (The Heart + Endgame + Score 90+) - IN PROGRESS
+**Integration Branch:** `sprint-12`
+**Sprint Plan:** See `SPRINT_12_PLAN.md`
 **Roadmap:** See `ROADMAP.md` (original 4-sprint plan to 1.0, now post-1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 10 COMPLETE (15 PRs merged, 1973 tests, Act 3 + Daily Challenge + 100% completion rate)
+**Previous:** Sprint 11 COMPLETE (16 PRs merged, 2248 tests, The Silent + QoL + all Game Zone complaints resolved)
 
 ---
 
@@ -453,12 +453,12 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 11: Second Character + QoL + Score Push - IN PROGRESS
+## Sprint 11: Second Character + QoL + Score Push - COMPLETE
 
 **Goal:** Introduce The Silent (second character class), resolve all remaining Game Zone complaints, push toward 90+ score.
 **Plan:** See `SPRINT_11_PLAN.md`
-**Branch:** `sprint-11`
-**Status:** IN PROGRESS — PM-11 + BE-23 + JR-09a + JR-09b + FIX-08 + GD-16 + UX-21 + UX-22 + VARROW-06 + GD-17 + QA-15 + AR-11 + BE-24 + UX-23 + QA-16 + GD-18 complete
+**Branch:** `sprint-11` (merged to master)
+**Status:** COMPLETE — 16/16 tasks merged (7 P0 + 6 P1 + 3 P2). 2248 tests. 100% completion rate (4th consecutive).
 
 ### P0 — Must Ship
 
@@ -491,16 +491,70 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | QA-16 | QA | S | Diary enforcement audit — verify all diaries updated | MERGED (PR #135) |
 | GD-18 | GD | S | Silent card art — 30 illustrations, sprite sheet rebuild | MERGED (PR #136) |
 
-### Sprint 11 Validation Gate
+### Sprint 11 Validation Gate - COMPLETE
 
-- [ ] Character selection screen functional
-- [ ] Silent playable with 30-card pool through all 3 acts
-- [ ] Ironclad completely unaffected by character system
-- [ ] Card rarity visually distinct in reward selection
-- [ ] Run history screen shows past runs with statistics
-- [ ] Skip-reward confirmation works
-- [ ] Silent narrative text in Endless War voice
-- [ ] 2100+ tests passing
+- [x] Character selection screen functional
+- [x] Silent playable with 30-card pool through all 3 acts
+- [x] Ironclad completely unaffected by character system
+- [x] Card rarity visually distinct in reward selection
+- [x] Run history screen shows past runs with statistics
+- [x] Skip-reward confirmation works
+- [x] Silent narrative text in Endless War voice
+- [x] 2100+ tests passing (2248)
+- [x] `npm run validate` passes
+- [x] Win rate: Silent 20-30% A0, Ironclad unchanged
+- [x] All 3 original unresolved Game Zone complaints addressed
+
+---
+
+## Sprint 12: The Heart + Endgame + Score 90+ - IN PROGRESS
+
+**Goal:** Add the true final boss (The Corrupt Heart), wire boss dialogue rendering, animate key boss sprites, push past 90/100 score.
+**Plan:** See `SPRINT_12_PLAN.md`
+**Branch:** `sprint-12`
+**Status:** IN PROGRESS — PM-12 complete
+
+### P0 — Must Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| PM-12 | PM | S | Merge Sprint 11 to master, create sprint-12 branch, archive SL diary | DONE |
+| BE-25 | BE | M | Heart boss infrastructure — Act 4 map node, encounter trigger, invincible phase | PENDING |
+| JR-10 | JR | M | Heart boss implementation — 750 HP, Beat of Death, phase transitions | PENDING |
+| VARROW-07 | Varrow | M | Heart narrative — "The core of the loop" dialogue, phase text, death/victory | PENDING |
+| UX-24 | UX | M | Boss dialogue rendering — wire BossDialogue data into combat screen | PENDING |
+| GD-19 | GD | M | Animated boss sprites — CSS idle animations for 3 key bosses | PENDING |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| BE-26 | BE | S | Heart unlock gate — requires wins with both Ironclad and Silent | PENDING |
+| QA-17 | QA | M | Heart regression + endgame balance — 4-act playthrough, Heart win rates | PENDING |
+| AR-12 | AR | S | Heart audio — heartbeat loop, Beat of Death SFX, phase transition | PENDING |
+| GD-20 | GD | S | Heart art — enemy sprite + Act 4 background | PENDING |
+| JR-11 | JR | S | Heart card interactions — 60+ card edge case audit vs Heart mechanics | PENDING |
+| UX-25 | UX | S | Updated self-assessment — re-score for 90+ target | PENDING |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| VARROW-08 | Varrow | S | Heart character-specific dialogue — different text for Ironclad vs Silent | PENDING |
+| QA-18 | QA | S | Diary hygiene automation — CI/pre-commit warning for stale diaries | PENDING |
+| GD-21 | GD | S | Act differentiation backgrounds — subtle visual shift between Acts 1-4 | PENDING |
+
+### Sprint 12 Validation Gate
+
+- [ ] Heart boss encounter functional (750 HP, Beat of Death, phase transitions)
+- [ ] Act 4 accessible after Act 3 boss defeated
+- [ ] Heart locked behind both-character-wins requirement
+- [ ] Boss dialogue renders in combat for all boss encounters
+- [ ] At least 3 bosses have idle sprite animations
+- [ ] Heart has unique audio (heartbeat loop, Beat of Death SFX)
+- [ ] Full 4-act playthrough at A0 and A5 without crashes
+- [ ] Heart win rate: 5-15% at A0
+- [ ] All 60+ cards tested against Heart mechanics
+- [ ] 2400+ tests passing
 - [ ] `npm run validate` passes
-- [ ] Win rate: Silent 20-30% A0, Ironclad unchanged
-- [ ] All 3 original unresolved Game Zone complaints addressed
+- [ ] Self-assessment score: 90+/100
