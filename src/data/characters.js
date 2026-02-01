@@ -4,7 +4,8 @@
 export const CHARACTER_IDS = {
   IRONCLAD: 'ironclad',
   SILENT: 'silent',
-  DEFECT: 'defect'
+  DEFECT: 'defect',
+  WATCHER: 'watcher'
 };
 
 export const CHARACTERS = [
@@ -49,6 +50,20 @@ export const CHARACTERS = [
       { id: 'dualcast', count: 1 }
     ],
     color: '#4488cc'
+  },
+  {
+    id: CHARACTER_IDS.WATCHER,
+    name: 'The Watcher',
+    description: 'A blind ascetic who has come to evaluate the Spire. Specializes in Stance shifting between Calm and Wrath.',
+    starterRelicId: 'pure_water',
+    maxHp: 72,
+    starterDeck: [
+      { id: 'strike_watcher', count: 4 },
+      { id: 'defend_watcher', count: 4 },
+      { id: 'eruption', count: 1 },
+      { id: 'vigilance', count: 1 }
+    ],
+    color: '#9b59b6'
   }
 ];
 

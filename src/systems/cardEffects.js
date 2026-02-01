@@ -488,6 +488,12 @@ const complexEffects = {
     }
   },
 
+  gainEnergy: (card, ctx) => {
+    const amount = card.energyGain || 1;
+    ctx.player.energy += amount;
+    ctx.combatLog.push(`Gained ${amount} Energy`);
+  },
+
   hpForEnergy: (card, ctx) => {
     const hpLoss = card.hpLoss || 3;
     ctx.player.currentHp = Math.max(1, ctx.player.currentHp - hpLoss);

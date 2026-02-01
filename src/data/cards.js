@@ -2214,6 +2214,23 @@ export const ALL_CARDS = [
     description: 'Deal 8 damage. If the last card played was an Attack, apply 1 Weak.',
     upgraded: false,
     upgradedVersion: { damage: 10, effects: [{ type: 'weak', amount: 2 }], description: 'Deal 10 damage. If the last card played was an Attack, apply 2 Weak.' }
+  },
+
+  // ========== WATCHER GENERATED CARDS ==========
+  {
+    id: 'miracle',
+    name: 'Miracle',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.BASIC,
+    character: 'watcher',
+    cost: 0,
+    special: 'gainEnergy',
+    energyGain: 1,
+    exhaust: true,
+    retain: true,
+    description: 'Retain. Gain 1 Energy. Exhaust.',
+    upgraded: false,
+    upgradedVersion: { energyGain: 2, description: 'Retain. Gain 2 Energy. Exhaust.' }
   }
 ];
 
@@ -2253,6 +2270,18 @@ export const getStarterDeck = (characterId = 'ironclad') => {
     }
     deck.push({ ...ALL_CARDS.find(c => c.id === 'zap'), instanceId: 'zap_0' });
     deck.push({ ...ALL_CARDS.find(c => c.id === 'dualcast'), instanceId: 'dualcast_0' });
+    return deck;
+  }
+  if (characterId === 'watcher') {
+    const deck = [];
+    for (let i = 0; i < 4; i++) {
+      deck.push({ ...ALL_CARDS.find(c => c.id === 'strike_watcher'), instanceId: `strike_watcher_${i}` });
+    }
+    for (let i = 0; i < 4; i++) {
+      deck.push({ ...ALL_CARDS.find(c => c.id === 'defend_watcher'), instanceId: `defend_watcher_${i}` });
+    }
+    deck.push({ ...ALL_CARDS.find(c => c.id === 'eruption'), instanceId: 'eruption_0' });
+    deck.push({ ...ALL_CARDS.find(c => c.id === 'vigilance'), instanceId: 'vigilance_0' });
     return deck;
   }
   // Fallback: return ironclad starter

@@ -450,12 +450,13 @@ describe('Character Selection — Defect', () => {
     expect(state.player.orbSlots).toBe(3);
   });
 
-  it('3 characters available in character list', () => {
-    expect(CHARACTERS.length).toBe(3);
+  it('4 characters available in character list', () => {
+    expect(CHARACTERS.length).toBe(4);
     const ids = CHARACTERS.map(c => c.id);
     expect(ids).toContain('ironclad');
     expect(ids).toContain('silent');
     expect(ids).toContain('defect');
+    expect(ids).toContain('watcher');
   });
 });
 
