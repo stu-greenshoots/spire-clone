@@ -1452,6 +1452,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
             phase === GAME_PHASE.CARD_SELECT_HAND ? hand :
             phase === GAME_PHASE.CARD_SELECT_DISCARD ? discardPile :
             phase === GAME_PHASE.CARD_SELECT_EXHAUST ? exhaustPile.filter(c => c.id !== 'exhume' && c.id !== 'exhumeUp') :
+            phase === GAME_PHASE.CARD_SELECT_DRAW ? drawPile.slice(0, cardSelection.scryCount || 3) :
             []
           }
           title={
@@ -1461,11 +1462,13 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
             cardSelection.type === 'copyCardInHand' ? 'Select an Attack or Power to copy' :
             cardSelection.type === 'retrieveExhausted' ? 'Select a card to return to hand' :
             cardSelection.type === 'exhaustChoose' ? 'Select a card to exhaust' :
+            cardSelection.type === 'scryCards' ? 'Scry — select cards to discard' :
             'Select a card'
           }
           subtitle={
             cardSelection.type === 'upgradeInHand' ? 'Upgrade permanently improves the card' :
             cardSelection.type === 'copyCardInHand' ? `Add ${cardSelection.copies || 1} cop${(cardSelection.copies || 1) > 1 ? 'ies' : 'y'} to your hand` :
+            cardSelection.type === 'scryCards' ? 'Click cards to discard them, or Done to keep the rest' :
             null
           }
           onSelect={selectCardFromPile}
