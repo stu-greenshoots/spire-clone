@@ -1,3 +1,37 @@
+# AR Diary - Sprint 12
+
+## Sprint 12 Entries
+
+### AR-12: Heart Audio — Heartbeat Loop, Beat of Death SFX, Phase Transition
+**Date:** 2026-02-01
+**Status:** Complete, PR #145 merged
+**Sprint:** Sprint 12 (The Heart + Endgame + Score 90+)
+**Task:** AR-12 (Heart audio — S size, P1)
+
+**Done:**
+1. Added 3 new sound IDs to SOUNDS.combat: `heartbeat`, `beatOfDeath`, `heartPhaseTransition`
+2. Wired Beat of Death SFX in playCardAction.js — triggers per card played against Heart
+3. Wired phase transition SFX in enemyTurnAction.js — triggers when Heart activates Beat of Death
+4. Wired heartbeat SFX on Blood Shots escalation — triggers when Heart attacks intensify
+5. Created 3 placeholder MP3 files (copies of boss_intro.mp3, to be replaced with real CC0 sounds)
+
+**Architecture:**
+- Follows existing playSFX pattern (same as AR-07, AR-11)
+- Beat of Death SFX fires per card — debounce (80ms) prevents audio spam on rapid plays
+- Phase transition fires once when Heart enters deadly mode
+- Heartbeat fires on escalation moves for rhythmic tension
+
+**Acceptance criteria:**
+- [x] Beat of Death triggers unique SFX per card played
+- [x] Phase transition triggers SFX on Heart mode activation
+- [x] Heartbeat SFX on Blood Shots escalation
+- [x] npm run validate passes (2335 tests, 0 errors)
+
+**Blockers:** None
+**Summary:** All AR Sprint 12 tasks complete.
+
+---
+
 # AR Diary - Sprint 11
 
 ## Sprint 11 Entries

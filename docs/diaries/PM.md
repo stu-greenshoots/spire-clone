@@ -14,6 +14,22 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 12 — AR-12 Complete
+**Date:** 2026-02-01
+**Status:** AR-12 merged (PR #145)
+
+**Done:**
+- Implemented as AR: Heart audio — 3 new SFX (heartbeat, beatOfDeath, heartPhaseTransition)
+- 6 files changed, 7 insertions, 1 deletion
+- Both Copilot and Mentor reviews passed — clean implementation
+- Merged PR #145 via squash, updated sprint board and AR diary
+
+**Sprint 12 Progress:** 9/15 tasks done (PM-12, BE-25, JR-10, VARROW-07, UX-24, GD-19, BE-26, QA-17, AR-12)
+
+**Next highest priority:** GD-20 (Heart art) or JR-11 (card interaction audit) or UX-25 (self-assessment) — remaining P1 tasks
+
+---
+
 ### Sprint 12 — GD-19 Complete
 **Date:** 2026-02-01
 **Status:** GD-19 merged (PR #142)
