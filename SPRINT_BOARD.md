@@ -673,7 +673,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Implement The Watcher (fourth character with stances), improve art fidelity, close remaining 3-point gap from 97 to 100/100.
 **Plan:** See `SPRINT_15_PLAN.md`
 **Branch:** `sprint-15`
-**Status:** IN PROGRESS — 9/15 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30, VARROW-11, UX-31, GD-27)
+**Status:** IN PROGRESS — 13/17 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30, VARROW-11, UX-31, GD-27, QA-23, FIX-11, FIX-12, AR-17)
 
 ### P0 — Must Ship
 
@@ -685,6 +685,8 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | JR-14b | JR | L | The Watcher — 30 card pool batch 2 (15 cards: uncommon/rare, Worship/Mantra, Scrying) | MERGED (PR #184) |
 | JR-14c | JR | M | The Watcher — starter deck, character selection, starter relic (Pure Water) | MERGED (PR #182) |
 | VARROW-11 | Varrow | M | Watcher narrative — boss dialogue variants, defeat/victory text, flavor text | MERGED (PR #185) |
+| FIX-11 | GD | S | Fix hardcoded asset paths for GitHub Pages — Enemy.jsx + assetLoader.js | MERGED (PR #189) |
+| FIX-12 | AR | S | Normalize all audio files to audible levels — fix inaudible ffmpeg synthesis output | MERGED (PR #190) |
 
 ### P1 — Should Ship
 
@@ -693,8 +695,8 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | GD-27 | GD | M | Watcher art — portrait, silhouette, 30 card illustrations, stance visuals, sprite sheet | MERGED (PR #187) |
 | GD-28 | GD | M | Art consistency pass — re-render 10 most inconsistent sprites to match style guide | PENDING |
 | UX-31 | UX | M | Stance UI — stance indicator, entry/exit feedback, Mantra progress, Wrath glow | MERGED (PR #186) |
-| QA-23 | QA | M | Watcher regression + balance — 30 cards, stances, Mantra, 4-character regression | PENDING |
-| AR-17 | AR | S | Watcher audio — stance transition SFX, Mantra accumulation tick | PENDING |
+| QA-23 | QA | M | Watcher regression + balance — 30 cards, stances, Mantra, 4-character regression | MERGED (PR #188) |
+| AR-17 | AR | S | Watcher audio — stance transition SFX, Mantra accumulation tick | MERGED (PR #191) |
 | BE-30 | BE | S | Scrying system — view top N draw pile cards, choose which to discard | MERGED (PR #183) |
 
 ### P2 — Stretch

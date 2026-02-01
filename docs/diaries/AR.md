@@ -1,3 +1,62 @@
+# AR Diary - Sprint 15
+
+## Sprint 15 Entries
+
+### AR-17: Watcher Audio — Stance Transition SFX, Mantra Accumulation Tick
+**Date:** 2026-02-01
+**Status:** Complete, PR #191 merged
+**Sprint:** Sprint 15 (The Watcher + Art Quality)
+**Task:** AR-17 (Watcher audio — S size, P1)
+
+**Done:**
+1. Added 2 new SOUNDS.combat entries: `stanceTransition` ('stance_transition'), `mantraTick` ('mantra_tick')
+2. Generated 2 new SFX via ffmpeg synthesis, normalized to EBU R128 (-14 LUFS, -1 dB TP)
+3. Wired `stanceTransition` SFX into stance change code (card-based entry at line 287, Mantra→Divinity at line 312)
+4. Wired `mantraTick` SFX into Mantra accumulation (line 294)
+
+**Sound design:**
+- stance_transition.mp3: 600 Hz sine, 0.3s, fade in/out — clean tonal shift
+- mantra_tick.mp3: 880 Hz sine, 0.15s, short bright tick
+
+**Acceptance criteria:**
+- [x] Stance transition SFX plays on card-based stance changes
+- [x] Stance transition SFX plays on Mantra-triggered Divinity
+- [x] Mantra tick SFX plays on Mantra gain
+- [x] npm run validate passes (3072 tests, 0 errors)
+
+**Blockers:** None
+**Next:** All AR Sprint 15 tasks complete (FIX-12, AR-17).
+
+---
+
+### FIX-12: Normalize All Audio Files to Audible Levels (P0)
+**Date:** 2026-02-01
+**Status:** Complete, PR #190 merged
+**Sprint:** Sprint 15 (The Watcher + Art Quality)
+**Task:** FIX-12 (Audio inaudible — S size, P0)
+
+**Root cause:** All 47 MP3 files had peak levels of -20 to -46 dB (30-45 dB below normal commercial levels). Files were technically valid MP3s but the synthesized audio content was near-silent. This was NOT a code bug — the audioSystem.js code and base path fix (FIX-10) were correct.
+
+**Fix:**
+1. Applied EBU R128 loudness normalization (I=-14 LUFS, TP=-1 dB) to all 47 MP3 files
+2. Regenerated music_combat.mp3 which was truncated to 0.29s (now proper 12s combat loop)
+
+**Peak levels before/after:**
+- music_map.mp3: -46 dB → -6 dB
+- music_menu.mp3: -34 dB → -1 dB
+- attack_hit.mp3: -21 dB → -1 dB
+- music_combat.mp3: 0.29s duration → 12s at -1 dB
+
+**Acceptance criteria:**
+- [x] All 47 MP3 files normalized to ~-1 dB true peak
+- [x] music_combat.mp3 regenerated as proper 12s loop
+- [x] npm run validate passes (3072 tests, 0 errors)
+
+**Blockers:** None
+**Next:** AR-17 (Watcher audio — stance transition SFX) now unblocked.
+
+---
+
 # AR Diary - Sprint 14
 
 ## Sprint 14 Entries
