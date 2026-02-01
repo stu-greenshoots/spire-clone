@@ -1,7 +1,7 @@
 import { useState, useEffect, memo } from 'react';
 import { INTENT } from '../data/enemies';
 import { getEnemyArtInfo } from '../assets/art/art-config';
-import { hasImage, preloadEnemyImage } from '../utils/assetLoader';
+import { hasImage, preloadEnemyImage, getEnemyImagePathWebP } from '../utils/assetLoader';
 
 // ASCII art representations for enemies
 const getEnemyArt = (enemyId, type) => {
@@ -385,7 +385,7 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
             boxShadow: `0 0 15px ${enemyArt.color}44`
           }}>
             <img
-              src={`/images/enemies/${enemy.id}.webp`}
+              src={getEnemyImagePathWebP(enemy.id)}
               alt={displayName}
               loading="lazy"
               style={{
