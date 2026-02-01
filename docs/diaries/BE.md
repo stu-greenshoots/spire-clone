@@ -5,6 +5,28 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 16 Entries
 
+### BE-33: Bundle Code-Splitting
+**Date:** 2026-02-01
+**Status:** MERGED (PR #202)
+
+**Done:**
+- Added manualChunks function to vite.config.js splitting: vendor-react, vendor, game-data, game-systems, game-reducers, game-context, art-assets, audio, game-hooks, game-utils
+- Converted 9 more components to React.lazy(): MainMenu, CombatScreen, RewardScreen, GameOverScreen, VictoryScreen, EndlessTransition, PersistentHeader, PlayerStatusBar, PauseMenu
+- Set assetsInlineLimit to 0 to prevent base64-inlining hundreds of small images into JS chunks
+- Moved all lazy components inside single Suspense boundary
+- Index chunk reduced from 1.2MB to 9.4KB; largest chunk is vendor-react at 189KB
+- 3155 tests passing, lint clean, build clean
+
+**Architecture:**
+- manualChunks uses path-based matching (id.includes) with specific-before-general ordering
+- assetsInlineLimit: 0 trades slightly more HTTP requests for dramatically smaller JS chunks; PWA service worker caches everything anyway
+- All screens are now lazy-loaded; only DevTools remains eager (78 lines, dev-only)
+
+**Blockers:** None
+**Next:** QA-26 (performance regression) is now unblocked
+
+---
+
 ### BE-32: Custom Seeded Runs
 **Date:** 2026-02-01
 **Status:** MERGED (PR #199)

@@ -14,6 +14,23 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — BE-33 Complete
+**Date:** 2026-02-01
+**Status:** BE-33 merged (PR #202) — Sprint 16 now 6/14 tasks done
+
+**Done:**
+- Implemented as BE: Bundle code-splitting — 1.2MB index chunk split into 15+ chunks
+- manualChunks for vendor, data, systems, reducers, context, art, audio, hooks, utils
+- 9 more components converted to React.lazy (MainMenu, CombatScreen, etc.)
+- assetsInlineLimit: 0 prevents base64-inlining images (key optimization: art chunk 607KB → 72KB)
+- Largest chunk: vendor-react at 189KB (target: no chunk >500KB — achieved)
+- Both Copilot and Mentor reviews passed
+- Merged PR #202 via squash, updated sprint board and BE diary
+
+**Next:** Continue with P1 tasks (GD-30, VARROW-12, QA-25, AR-18).
+
+---
+
 ### Sprint 16 — UX-12 Complete
 **Date:** 2026-02-01
 **Status:** UX-12 merged (PR #201) — Sprint 16 now 5/14 tasks done (all P0s complete)
