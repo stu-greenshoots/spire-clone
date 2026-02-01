@@ -558,6 +558,14 @@ const MapScreen = () => {
                     />
                   </g>
 
+                  {/* Visited checkmark overlay */}
+                  {node.visited && !accessible && (
+                    <g transform={`translate(${pos.x + radius * 0.35}, ${pos.y - radius * 0.35})`}>
+                      <circle cx="0" cy="0" r="7" fill="#1a1a22" stroke="#333340" strokeWidth="1.5" />
+                      <path d="M-3 0.5L-1 3L3.5-2" fill="none" stroke="#4a4a6a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </g>
+                  )}
+
                   {/* Node type label */}
                   <text
                     x={pos.x}
