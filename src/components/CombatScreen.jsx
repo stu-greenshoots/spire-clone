@@ -8,7 +8,7 @@ import { useAnimations } from '../hooks/useAnimations';
 import { ANIMATION_TYPE } from '../constants/animationTypes';
 import CardSelectionModal from './CardSelectionModal';
 import { CARD_TYPES } from '../data/cards';
-import { getOrbImage, getBackgroundImage } from '../assets/art/art-config';
+import { getOrbImage, getBackgroundImage, getStanceImage } from '../assets/art/art-config';
 import CardTooltip from './CardTooltip';
 import TutorialOverlay from './TutorialOverlay';
 import BossDialogue from './BossDialogue';
@@ -1525,7 +1525,11 @@ const StanceIndicator = memo(function StanceIndicator({ stance, mantra }) {
             transition: 'all 0.3s ease'
           }}
         >
-          <span style={{ fontSize: '16px' }}>{config.icon}</span>
+          {getStanceImage(stance) ? (
+            <img src={getStanceImage(stance)} alt={config.label} style={{ width: '20px', height: '20px', objectFit: 'contain' }} />
+          ) : (
+            <span style={{ fontSize: '16px' }}>{config.icon}</span>
+          )}
           <span style={{
             color: config.color,
             fontSize: '11px',

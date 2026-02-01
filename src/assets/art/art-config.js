@@ -282,6 +282,25 @@ export const getBackgroundImage = (actId) => {
 };
 
 // ============================================
+// STANCE ART CONFIGURATION (Watcher)
+// ============================================
+
+export const getStanceImage = (stanceId) => {
+  try {
+    const images = import.meta.glob('./stances/*.{webp,png,jpg,jpeg}', { eager: true });
+    const imagePath = Object.keys(images).find(path => {
+      const filename = path.split('/').pop().split('.')[0];
+      return filename.toLowerCase() === stanceId.toLowerCase();
+    });
+    if (!imagePath) return null;
+    const imageModule = images[imagePath];
+    return typeof imageModule === 'string' ? imageModule : imageModule.default;
+  } catch {
+    return null;
+  }
+};
+
+// ============================================
 // THEME SETTINGS
 // ============================================
 
@@ -330,6 +349,7 @@ export default {
   getRelicImage,
   getRelicArtInfo,
   getPotionImage,
+  getStanceImage,
   THEME_CONFIG,
   POTION_COLORS
 };
