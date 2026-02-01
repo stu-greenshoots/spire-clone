@@ -2,6 +2,33 @@
 
 ## Sprint 15 Entries
 
+### JR-14b: Watcher card pool batch 2 — 15 uncommon/rare cards
+**Date:** 2026-02-01
+**Status:** MERGED (PR #184)
+
+**Done:**
+- Added 15 Watcher cards: 10 uncommon (Wallop, Tantrum, Reach Heaven, Through Violence, Worship, Third Eye, Deceive Reality, Safety, Fear No Evil, Mental Fortress) + 5 rare (Ragnarok, Brilliance, Blasphemy, Deva Form, Wish)
+- Implemented 8 new specials in cardEffects.js: wallopBlock, addThroughViolence, addSafety, fearNoEvilCalm, mentalFortress, brillianceDamage, blasphemy, devaForm
+- Wired Mental Fortress (block on stance change) into playCardAction.js
+- Wired Blasphemy (death at turn start) and Deva Form (increasing energy) into endTurnAction.js
+- Added totalMantraGained tracking for Brilliance damage scaling
+- Flavor text for all 15 cards in Endless War voice
+- 35 new tests in watcherBatch2.test.js, 2933 total passing
+
+**Design decisions:**
+- Wallop calculates unblocked damage (damage - enemy block) for block gain
+- Through Violence and Safety are generated cards (added to piles by Reach Heaven / Deceive Reality)
+- Blasphemy returns DEFEAT state at start of next turn — same pattern as other death paths
+- Deva Form uses incrementing counter (devaFormEnergy) stored on player
+- Mental Fortress stacks if played multiple times
+- Fear No Evil checks enemy intent type for 'attack' or 'attackDebuff'
+- Wish simplified from StS (no choose-one) — just grants Strength
+
+**Blockers:** None
+**Next:** All JR Sprint 15 P0 tasks complete. Watcher has full 31-card pool.
+
+---
+
 ### JR-14c: Watcher starter deck, character selection, Pure Water relic
 **Date:** 2026-02-01
 **Status:** MERGED (PR #182)
