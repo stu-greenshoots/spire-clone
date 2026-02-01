@@ -363,6 +363,10 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'SKIP_EVENT' });
   }, []);
 
+  const updateProgression = useCallback((won, causeOfDeath = null) => {
+    dispatch({ type: 'UPDATE_PROGRESSION', payload: { won, causeOfDeath } });
+  }, []);
+
   const returnToMenu = useCallback(() => {
     dispatch({ type: 'RETURN_TO_MENU' });
   }, []);
@@ -436,6 +440,7 @@ export const GameProvider = ({ children }) => {
     rest,
     upgradeCard,
     skipEvent,
+    updateProgression,
     returnToMenu,
     openDataEditor,
     selectCardFromPile,

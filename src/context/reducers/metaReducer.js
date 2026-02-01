@@ -6,7 +6,7 @@ import { getPotionById } from '../../data/potions';
 import { getEnemyById, createEnemyInstance } from '../../data/enemies';
 import { getEnemyIntent } from '../../systems/enemySystem';
 import { generateMap } from '../../utils/mapGenerator';
-import { saveGame, loadGame, deleteSave } from '../../systems/saveSystem';
+import { saveGame, loadGame, deleteSave, addRunToHistory } from '../../systems/saveSystem';
 import { getPassiveRelicEffects } from '../../systems/relicSystem';
 import { createInitialState } from '../GameContext';
 import { loadProgression, updateRunStats, saveProgression } from '../../systems/progressionSystem';
@@ -565,6 +565,16 @@ export const metaReducer = (state, action) => {
 
       // Update progression (this also saves to localStorage)
       const updatedProgression = updateRunStats(progression, runData);
+
+      // Also save to run history (separate localStorage store with more detail)
+      addRunToHistory({
+        ...runData,
+        act: state.act || 1,
+        relicCount: state.relics?.length || 0,
+        potionCount: state.potions?.filter(Boolean)?.length || 0,
+        gold: state.player?.gold || 0,
+        character: state.character || 'ironclad'
+      });
 
       // Unlock next ascension level on win
       // - First win unlocks Ascension 1

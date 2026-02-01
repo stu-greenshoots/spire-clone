@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useGame } from '../context/GameContext';
-import { hasSave } from '../systems/saveSystem';
+import { hasSave, getRunHistory } from '../systems/saveSystem';
 import { loadProgression } from '../systems/progressionSystem';
 import { getAscensionDescription, getMaxAscension } from '../systems/ascensionSystem';
 import { audioManager } from '../systems/audioSystem';
@@ -14,9 +14,11 @@ const MainMenu = () => {
   const [hoveringContinue, setHoveringContinue] = useState(false);
   const [hoveringSettings, setHoveringSettings] = useState(false);
   const [hoveringChallenge, setHoveringChallenge] = useState(false);
+  const [hoveringHistory, setHoveringHistory] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showStateBuilder, setShowStateBuilder] = useState(false);
   const [showDailyChallenge, setShowDailyChallenge] = useState(false);
+  const [showRunHistory, setShowRunHistory] = useState(false);
   const [saveExists, setSaveExists] = useState(false);
   const [selectedAscension, setSelectedAscension] = useState(0);
   const [unlockedAscension, setUnlockedAscension] = useState(0);
@@ -371,6 +373,33 @@ const MainMenu = () => {
           Daily Challenge
         </button>
 
+        {/* Run History Button */}
+        <button
+          data-testid="btn-run-history"
+          onClick={() => setShowRunHistory(true)}
+          onMouseEnter={() => setHoveringHistory(true)}
+          onMouseLeave={() => setHoveringHistory(false)}
+          style={{
+            background: hoveringHistory
+              ? 'rgba(255, 255, 255, 0.12)'
+              : 'rgba(255, 255, 255, 0.06)',
+            color: '#9988aa',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            padding: '12px 40px',
+            fontSize: '14px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            touchAction: 'manipulation',
+            transition: 'all 0.3s ease',
+            transform: hoveringHistory ? 'scale(1.03) translateY(-2px)' : 'scale(1)'
+          }}
+        >
+          Run History
+        </button>
+
         {/* Settings Button */}
         <button
           data-testid="btn-settings"
@@ -529,6 +558,11 @@ const MainMenu = () => {
           }}
         />
       )}
+
+      {/* Run History Modal */}
+      {showRunHistory && (
+        <RunHistoryPanel onClose={() => setShowRunHistory(false)} />
+      )}
     </div>
   );
 };
@@ -682,6 +716,181 @@ const DailyChallengePanel = ({ onClose, onStart }) => {
         >
           Begin Challenge
         </button>
+      </div>
+    </div>
+  );
+};
+
+// Run History Panel — shows past runs with statistics
+const RunHistoryPanel = ({ onClose }) => {
+  const history = getRunHistory();
+  const progression = loadProgression();
+
+  const formatDate = (iso) => {
+    const d = new Date(iso);
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  };
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0, bottom: 0,
+        background: 'rgba(0, 0, 0, 0.85)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 10
+      }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div style={{
+        background: 'linear-gradient(180deg, #1e1e30 0%, #141425 100%)',
+        border: '2px solid rgba(136, 120, 160, 0.4)',
+        borderRadius: '12px',
+        padding: '24px',
+        maxWidth: '440px',
+        width: '90%',
+        maxHeight: '80vh',
+        overflow: 'auto',
+        position: 'relative',
+        boxShadow: '0 0 40px rgba(100, 80, 150, 0.2), 0 8px 32px rgba(0, 0, 0, 0.6)'
+      }}>
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute', top: '12px', right: '12px',
+            background: 'rgba(255, 255, 255, 0.1)', color: '#aaa',
+            border: 'none', borderRadius: '4px',
+            width: '44px', height: '44px', fontSize: '18px',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}
+        >
+          ✕
+        </button>
+
+        {/* Title */}
+        <h2 style={{
+          color: '#aa99cc',
+          fontSize: '20px',
+          letterSpacing: '3px',
+          textTransform: 'uppercase',
+          marginBottom: '6px',
+          textShadow: '0 0 15px rgba(136, 120, 160, 0.4)'
+        }}>
+          Run History
+        </h2>
+
+        {/* Overall Stats */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr 1fr',
+          gap: '12px',
+          marginBottom: '20px',
+          padding: '14px',
+          background: 'rgba(255, 255, 255, 0.03)',
+          borderRadius: '8px',
+          border: '1px solid rgba(255, 255, 255, 0.06)'
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ color: '#666', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>Runs</div>
+            <div style={{ color: '#ddd', fontSize: '20px', fontWeight: 'bold' }}>{progression.totalRuns}</div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ color: '#666', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>Wins</div>
+            <div style={{ color: '#88ff88', fontSize: '20px', fontWeight: 'bold' }}>{progression.wins}</div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ color: '#666', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>Win Rate</div>
+            <div style={{ color: '#ddd', fontSize: '20px', fontWeight: 'bold' }}>
+              {progression.totalRuns > 0 ? Math.round((progression.wins / progression.totalRuns) * 100) : 0}%
+            </div>
+          </div>
+        </div>
+
+        {/* Lifetime Stats */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '8px',
+          marginBottom: '20px',
+          padding: '12px',
+          background: 'rgba(255, 255, 255, 0.02)',
+          borderRadius: '8px',
+          border: '1px solid rgba(255, 255, 255, 0.04)'
+        }}>
+          <div style={{ color: '#888', fontSize: '12px' }}>
+            Highest Floor: <span style={{ color: '#ccc', fontWeight: 'bold' }}>{progression.highestFloor}</span>
+          </div>
+          <div style={{ color: '#888', fontSize: '12px' }}>
+            Highest Ascension: <span style={{ color: '#FFD700', fontWeight: 'bold' }}>{progression.highestAscension}</span>
+          </div>
+          <div style={{ color: '#888', fontSize: '12px' }}>
+            Enemies Killed: <span style={{ color: '#ccc', fontWeight: 'bold' }}>{progression.totalEnemiesKilled}</span>
+          </div>
+          <div style={{ color: '#888', fontSize: '12px' }}>
+            Cards Played: <span style={{ color: '#ccc', fontWeight: 'bold' }}>{progression.totalCardsPlayed}</span>
+          </div>
+        </div>
+
+        {/* Run List */}
+        <div style={{
+          color: '#776688',
+          fontSize: '11px',
+          textTransform: 'uppercase',
+          letterSpacing: '2px',
+          marginBottom: '10px'
+        }}>
+          Recent Runs
+        </div>
+
+        {history.length === 0 ? (
+          <div style={{ color: '#555', fontSize: '14px', textAlign: 'center', padding: '30px 0', fontStyle: 'italic' }}>
+            No runs recorded yet. Start a game to begin tracking!
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {history.map((run, idx) => (
+              <div key={idx} style={{
+                background: run.won
+                  ? 'rgba(68, 170, 68, 0.08)'
+                  : 'rgba(170, 68, 68, 0.08)',
+                border: `1px solid ${run.won ? 'rgba(68, 170, 68, 0.2)' : 'rgba(170, 68, 68, 0.2)'}`,
+                borderRadius: '8px',
+                padding: '10px 14px'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                  <span style={{
+                    color: run.won ? '#88ff88' : '#ff8888',
+                    fontSize: '13px',
+                    fontWeight: 'bold'
+                  }}>
+                    {run.won ? 'Victory' : 'Defeat'}
+                    {run.character && run.character !== 'ironclad' && (
+                      <span style={{ color: '#888', fontWeight: 'normal', marginLeft: '6px', fontSize: '11px' }}>
+                        ({run.character})
+                      </span>
+                    )}
+                  </span>
+                  <span style={{ color: '#555', fontSize: '11px' }}>{formatDate(run.date)}</span>
+                </div>
+                <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: '#888' }}>
+                  <span>Floor {run.floor}</span>
+                  <span>Act {run.act}</span>
+                  {run.ascension > 0 && <span style={{ color: '#FFD700' }}>A{run.ascension}</span>}
+                  <span>{run.deckSize} cards</span>
+                  <span>{run.relicCount} relics</span>
+                </div>
+                {!run.won && run.causeOfDeath && (
+                  <div style={{ color: '#775555', fontSize: '11px', marginTop: '4px', fontStyle: 'italic' }}>
+                    {run.causeOfDeath}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
