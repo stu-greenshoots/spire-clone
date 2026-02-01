@@ -641,7 +641,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | QA-21 | QA | M | Audio regression tests — all tracks load/play, SFX trigger correctly, volume works | MERGED (PR #172) |
 | JR-13 | JR | M | Card balance pass — review 157 cards, fix outliers, focus on Defect orb cards | MERGED (PR #173) |
 | VARROW-10 | Varrow | S | Fourth character concept — design doc with theme, mechanic, sample cards, narrative hook | MERGED (PR #174) |
-| UX-30 | UX | S | Updated self-assessment — honest re-score post-audio fix and art improvements | PENDING |
+| UX-30 | UX | S | Updated self-assessment — honest re-score post-audio fix and art improvements | MERGED (PR #175) |
 
 ### P2 — Stretch
 
