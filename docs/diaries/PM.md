@@ -14,6 +14,23 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 14 — GD-26 Complete
+**Date:** 2026-02-01
+**Status:** GD-26 merged (PR #176)
+
+**Done:**
+- Implemented as GD: Per-act background illustrations — 4 atmospheric WebP images layered beneath existing CSS gradients
+- CombatScreen gets 30% opacity background, MapScreen gets 20% opacity
+- Small images (7-9KB each), graceful fallback if missing
+- Both Copilot and Mentor reviews passed — clean additive change
+- Merged PR #176 via squash, updated sprint board and GD diary
+
+**Sprint 14 Progress:** 12/14 tasks done (PM-14, FIX-10, BE-28, UX-29, AR-15, GD-24, GD-25, QA-21, JR-13, VARROW-10, UX-30, GD-26)
+
+**Remaining P2:** AR-16 (audio ambient layer), QA-22 (validation gate ceremony)
+
+---
+
 ### Sprint 14 — QA-21 Complete
 **Date:** 2026-02-01
 **Status:** QA-21 merged (PR #172)

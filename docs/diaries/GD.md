@@ -14,6 +14,28 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 14 - GD-26 Complete
+**Date:** 2026-02-01
+**Status:** GD-26 complete, PR #176 merged to sprint-14
+
+**Done today:**
+- Generated 4 atmospheric background images (act1-act4) via SVG→sharp→WebP pipeline
+- Act 1: Cool blue-purple dungeon with stalactites, stone pillars, ground fog
+- Act 2: Green-teal ancient ruins with crumbling archways, broken columns, overgrown vines
+- Act 3: Warm amber otherworldly plane with floating crystals, reality fracture lines, void hints
+- Act 4: Deep crimson organic cave with vein-like structures, capillaries, blood-like droplets
+- Added `getBackgroundImage()` to art-config.js following existing asset pattern
+- CombatScreen: background image layered at 30% opacity beneath existing gradient system
+- MapScreen: background image at 20% opacity beneath map content
+- Created `scripts/generate-background-art.js` for reproducible generation
+- Images are small (7-9KB each) — minimal bundle impact
+
+**Validation:** `npm run validate` passes — 2713 tests, lint clean, build clean
+
+**Next:** All GD Sprint 14 tasks complete (GD-24, GD-25, GD-26)
+
+---
+
 ### Sprint 14 - GD-25 Complete
 **Date:** 2026-02-01
 **Status:** GD-25 complete, PR #171 merged to sprint-14

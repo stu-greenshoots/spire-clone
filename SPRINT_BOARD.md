@@ -647,7 +647,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| GD-26 | GD | S | Background art differentiation — unique illustrations per act | PENDING |
+| GD-26 | GD | S | Background art differentiation — unique illustrations per act | MERGED (PR #176) |
 | AR-16 | AR | S | Audio ambient layer — subtle ambient loops per act under music | PENDING |
 | QA-22 | QA | S | Validation gate ceremony — check off all unchecked gates from Sprints 9-13 | PENDING |
 
