@@ -14,6 +14,25 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 14 — BE-28 Complete
+**Date:** 2026-02-01
+**Status:** BE-28 merged (PR #167)
+
+**Done:**
+- Implemented as BE: Audio system overhaul — AudioContext lifecycle, SFX cloning, preload automation
+- AudioContext created on first user gesture, resumed before playback
+- SFX now use cloneNode() for overlapping sounds
+- Preloading auto-triggered on first interaction
+- 10 new tests, 2637 total passing
+- Both Copilot and Mentor reviews passed — one LOW note (unused _sfxPoolSize field)
+- Merged PR #167 via squash, updated sprint board and BE diary
+
+**Sprint 14 Progress:** 3/14 tasks done (PM-14, FIX-10, BE-28)
+
+**Next highest priority:** AR-15 (replace placeholder MP3s) or GD-24/GD-25 (art quality passes) — all P0
+
+---
+
 ### Sprint 14 — PM-14 Setup
 **Date:** 2026-02-01
 **Status:** DONE

@@ -636,7 +636,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| BE-28 | BE | M | Audio system overhaul — proper init lifecycle, autoplay policy, error recovery | PENDING |
+| BE-28 | BE | M | Audio system overhaul — proper init lifecycle, autoplay policy, error recovery | MERGED (PR #167) |
 | UX-29 | UX | M | Audio settings UX — working volume sliders, mute toggle, visual feedback | PENDING |
 | QA-21 | QA | M | Audio regression tests — all tracks load/play, SFX trigger correctly, volume works | PENDING |
 | JR-13 | JR | M | Card balance pass — review 157 cards, fix outliers, focus on Defect orb cards | PENDING |

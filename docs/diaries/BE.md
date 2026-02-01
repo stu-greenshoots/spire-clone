@@ -3,6 +3,34 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 14 Entries
+
+### BE-28: Audio System Overhaul
+**Date:** 2026-02-01
+**Status:** MERGED (PR #167)
+
+**Done:**
+- Created AudioContext on first user gesture for browser autoplay policy compliance
+- Added AudioContext resume before SFX and music playback (handles tab backgrounding)
+- Implemented SFX audio cloning via `cloneNode()` — overlapping plays no longer cut each other off
+- Auto-called `initPreloadQueue()` on first user gesture (was never called at runtime)
+- Scheduled lazy sound loading via `requestIdleCallback` with `setTimeout` fallback
+- Added retry-once on SFX play failure (50ms delay, common after tab regains focus)
+- Added `destroy()` method for resource cleanup and `isInitialized()` for state checking
+- 10 new tests covering AudioContext resume, SFX cloning, destroy, initialization state
+- 2637 tests passing, 0 lint errors, build clean
+
+**Architecture:**
+- AudioContext created lazily on first user gesture — not at module load time
+- `_playSFXInternal` now clones the cached Audio element instead of reusing it (fire-and-forget pattern)
+- `_scheduleLazyLoading` uses `requestIdleCallback` to preload UI/ambient/music sounds without blocking
+- Retry mechanism is simple one-shot setTimeout — not a queue or exponential backoff (appropriate for audio)
+
+**Blockers:** None
+**Next:** UX-29 (audio settings UX) is now unblocked by this overhaul
+
+---
+
 ## Sprint 12 Entries
 
 ### BE-26: Heart Unlock Gate
