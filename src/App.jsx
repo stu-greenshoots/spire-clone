@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react';
+import { lazy, Suspense, useEffect, useState, useCallback } from 'react';
 import { GameProvider, useGame, GAME_PHASE } from './context/GameContext';
 import MainMenu from './components/MainMenu';
 import CombatScreen from './components/CombatScreen';
@@ -8,6 +8,7 @@ import VictoryScreen from './components/VictoryScreen';
 import PersistentHeader from './components/PersistentHeader';
 import PlayerStatusBar from './components/PlayerStatusBar';
 import DevTools from './components/DevTools';
+import PauseMenu from './components/PauseMenu';
 import { audioManager, SOUNDS } from './systems/audioSystem';
 import './App.css';
 
@@ -57,6 +58,40 @@ function getMusicPhase(gamePhase, currentNode, act) {
 
 const GameContent = () => {
   const { state } = useGame();
+  const [isPaused, setIsPaused] = useState(false);
+
+  const handlePauseToggle = useCallback(() => {
+    setIsPaused(prev => !prev);
+  }, []);
+
+  const handlePauseClose = useCallback(() => {
+    setIsPaused(false);
+  }, []);
+
+  // Escape key toggles pause menu (only during gameplay)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        const inGame = state.phase !== GAME_PHASE.MAIN_MENU &&
+          state.phase !== GAME_PHASE.CHARACTER_SELECT &&
+          state.phase !== GAME_PHASE.STARTING_BONUS &&
+          state.phase !== GAME_PHASE.GAME_OVER &&
+          state.phase !== GAME_PHASE.VICTORY;
+        if (inGame) {
+          setIsPaused(prev => !prev);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [state.phase]);
+
+  // Close pause menu when returning to main menu
+  useEffect(() => {
+    if (state.phase === GAME_PHASE.MAIN_MENU) {
+      setIsPaused(false);
+    }
+  }, [state.phase]);
 
   // AR-06: Wire music to game phase transitions
   useEffect(() => {
@@ -118,11 +153,12 @@ const GameContent = () => {
   return (
     <div className="game-container">
       <DevTools />
-      {!hideChrome && <PersistentHeader />}
+      {!hideChrome && <PersistentHeader onPauseClick={handlePauseToggle} />}
       <Suspense fallback={<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888' }}>Loading...</div>}>
         {renderPhase()}
       </Suspense>
       {!hideStatusBar && <PlayerStatusBar />}
+      {isPaused && <PauseMenu onClose={handlePauseClose} />}
     </div>
   );
 };
