@@ -2,6 +2,28 @@
 
 ## Sprint 15 Entries
 
+### JR-14c: Watcher starter deck, character selection, Pure Water relic
+**Date:** 2026-02-01
+**Status:** MERGED (PR #182)
+
+**Done:**
+- Added Watcher as 4th character in characters.js (72 HP, purple color, starterRelicId: pure_water)
+- Added starter deck: 4x Strike (Watcher), 4x Defend (Watcher), 1x Eruption, 1x Vigilance
+- Added Pure Water starter relic (onCombatStart: add Miracle to hand)
+- Added Miracle card: 0-cost Skill, retain, exhaust, gainEnergy special (+1 energy, +2 upgraded)
+- Added addCardToHand relic effect type in relicSystem.js and gainEnergy special in cardEffects.js
+- 32 new tests in watcherRegression.test.js, 2828 total passing
+
+**Design decisions:**
+- Followed exact patterns from Ironclad/Silent/Defect character definitions
+- Miracle is rarity: basic (generated card, not in card pool rewards)
+- Pure Water uses new addCardToHand relic effect type (extensible for future relics)
+
+**Blockers:** None
+**Next:** JR-14b (batch 2: uncommon/rare cards — depends on BE-30 Scrying)
+
+---
+
 ### JR-14a: Watcher card pool batch 1 — 15 cards with stance interactions
 **Date:** 2026-02-01
 **Status:** MERGED (PR #181)
