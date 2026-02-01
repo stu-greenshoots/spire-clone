@@ -14,6 +14,20 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — JR-15 Complete
+**Date:** 2026-02-01
+**Status:** JR-15 merged (PR #200) — Sprint 16 now 4/14 tasks done
+
+**Done:**
+- Implemented as JR: Character-specific relics — 12 new relics (3 per character), character filtering in reward generation
+- 2 new effect types (strengthAndDexterity, blockAndDraw), flavor text, 17 new tests
+- Both Copilot and Mentor reviews passed
+- Merged PR #200 via squash, updated sprint board and JR diary
+
+**Next:** Continue with next P0 task (UX-12: Smart card targeting)
+
+---
+
 ### Sprint 16 — BE-32 Complete
 **Date:** 2026-02-01
 **Status:** BE-32 merged (PR #199) — Sprint 16 now 3/14 tasks done

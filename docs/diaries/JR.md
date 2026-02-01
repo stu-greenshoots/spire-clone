@@ -1,4 +1,33 @@
-# JR Diary - Sprint 15
+# JR Diary - Sprint 16
+
+## Sprint 16 Entries
+
+### JR-15: Character-specific relics — 3 per character (12 total)
+**Date:** 2026-02-01
+**Status:** MERGED (PR #200)
+
+**Done:**
+- Added 12 character-specific relics (3 per character: 2 uncommon, 1 rare)
+- Ironclad: Mark of Pain (+2 Str on combat start), Charred Glove (8 AoE every 5 attacks), Blood Oath (heal 10 if below 50% HP)
+- Silent: Envenom Ring (2 Weak to all on start), Wrist Blade (+1 Dex every 2 skills), Cloak of Shadows (+12 Block on start)
+- Defect: Capacitor Coil (channel Frost on start), Data Disk (+1 Str/Dex on start), Emotion Chip (3 Block + 2 Draw on first HP loss)
+- Watcher: Damaru (+1 Energy on start), Golden Eye (+1 Draw on start), Duality (+8 Block every 4 attacks)
+- Updated `getRandomRelic()` with optional `characterId` param — character-specific relics only appear for their character
+- Updated all 4 callers: elite rewards (playCardAction.js), shop (ShopScreen.jsx), events (EventScreen.jsx), starting bonus (metaReducer.js)
+- Added 2 new effect types in relicSystem.js: `strengthAndDexterity`, `blockAndDraw`
+- Flavor text for all 12 relics in Endless War voice
+- 17 new tests: effect triggers, counter mechanics, character filtering
+- 3146 total tests passing, lint clean, build passes
+
+**Design decisions:**
+- Character filtering uses `(!r.character || r.character === characterId)` — relics without `character` field appear for everyone, character-specific relics only for their character
+- Backward-compatible: `getRandomRelic()` without `characterId` excludes all character-specific relics (same as before since none existed in reward pool)
+- Chose effects that use existing trigger/effect types where possible (only 2 new effect types needed)
+
+**Blockers:** None
+**Next:** All JR Sprint 16 tasks complete.
+
+---
 
 ## Sprint 15 Entries
 
