@@ -24,9 +24,13 @@ export const processEnemyTurns = (ctx) => {
     // Execute enemy action
     if (move.damage) {
       // Book of Stabbing: use escalating multiStabCount instead of static move.times
-      const hits = (move.special === 'addStab' && newEnemy.multiStabCount)
+      // Blood Shots: add bloodShotsBonus extra hits each cycle
+      let hits = (move.special === 'addStab' && newEnemy.multiStabCount)
         ? newEnemy.multiStabCount
         : (move.times || 1);
+      if (move.special === 'bloodShotsEscalate' && newEnemy.bloodShotsBonus) {
+        hits += newEnemy.bloodShotsBonus;
+      }
       for (let h = 0; h < hits; h++) {
         let baseDamage = move.damage;
         // Handle damage ranges (e.g., {min: 5, max: 7})
@@ -373,6 +377,12 @@ function processEnemySpecial(move, newEnemy, enemy, newPlayer, newDrawPile, newD
   if (move.special === 'beatOfDeath') {
     newEnemy.beatOfDeath = true;
     combatLog.push(`${enemy.name}'s heart beats with deadly power!`);
+  }
+
+  // Blood Shots escalation (Corrupt Heart) — each cycle adds 1 hit
+  if (move.special === 'bloodShotsEscalate') {
+    newEnemy.bloodShotsBonus = (newEnemy.bloodShotsBonus || 0) + 1;
+    combatLog.push(`${enemy.name}'s Blood Shots intensify!`);
   }
 
   // Add Stab (Book of Stabbing escalation)
