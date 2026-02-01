@@ -9,7 +9,9 @@ vi.mock('../../systems/audioSystem', () => {
     setMasterVolume: vi.fn(),
     setSFXVolume: vi.fn(),
     setMusicVolume: vi.fn(),
-    toggleMute: vi.fn()
+    toggleMute: vi.fn(() => false),
+    setMuted: vi.fn(),
+    muted: false
   };
   return { audioManager: mockAudioManager };
 });

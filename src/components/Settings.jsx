@@ -3,14 +3,23 @@ import { audioManager } from '../systems/audioSystem';
 import { loadSettings, saveSettings, DEFAULT_SETTINGS } from '../systems/settingsSystem';
 import { downloadExport, importAllData } from '../systems/saveSystem';
 
+function getVolumeIcon(level, muted) {
+  if (muted || level === 0) return '\u{1F507}';  // muted speaker
+  if (level < 0.33) return '\u{1F508}';           // low volume
+  if (level < 0.66) return '\u{1F509}';           // medium volume
+  return '\u{1F50A}';                              // high volume
+}
+
 function Settings() {
   const [settings, setSettings] = useState(() => loadSettings());
+  const [isMuted, setIsMuted] = useState(() => audioManager.muted);
 
   // Sync audio manager with loaded settings on mount
   useEffect(() => {
     audioManager.setMasterVolume(settings.masterVolume);
     audioManager.setSFXVolume(settings.sfxVolume);
     audioManager.setMusicVolume(settings.musicVolume);
+    setIsMuted(audioManager.muted);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -41,7 +50,8 @@ function Settings() {
   }, [updateSetting]);
 
   const handleMuteToggle = useCallback(() => {
-    audioManager.toggleMute();
+    const nowMuted = audioManager.toggleMute();
+    setIsMuted(nowMuted);
   }, []);
 
   const handleResetDefaults = useCallback(() => {
@@ -50,6 +60,8 @@ function Settings() {
     audioManager.setMasterVolume(DEFAULT_SETTINGS.masterVolume);
     audioManager.setSFXVolume(DEFAULT_SETTINGS.sfxVolume);
     audioManager.setMusicVolume(DEFAULT_SETTINGS.musicVolume);
+    audioManager.setMuted(false);
+    setIsMuted(false);
   }, []);
 
   const fileInputRef = useRef(null);
@@ -98,57 +110,72 @@ function Settings() {
         <label style={styles.label}>
           Master Volume: {Math.round(settings.masterVolume * 100)}%
         </label>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={settings.masterVolume}
-          onChange={handleMasterChange}
-          style={styles.slider}
-          aria-label="Master Volume"
-        />
+        <div style={styles.sliderRow}>
+          <span style={styles.volumeIcon}>{getVolumeIcon(settings.masterVolume, isMuted)}</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={settings.masterVolume}
+            onChange={handleMasterChange}
+            style={styles.sliderFlex}
+            aria-label="Master Volume"
+            disabled={isMuted}
+          />
+        </div>
       </div>
 
       <div style={styles.setting}>
         <label style={styles.label}>
           SFX Volume: {Math.round(settings.sfxVolume * 100)}%
         </label>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={settings.sfxVolume}
-          onChange={handleSfxChange}
-          style={styles.slider}
-          aria-label="SFX Volume"
-        />
+        <div style={styles.sliderRow}>
+          <span style={styles.volumeIcon}>{getVolumeIcon(settings.sfxVolume, isMuted)}</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={settings.sfxVolume}
+            onChange={handleSfxChange}
+            style={styles.sliderFlex}
+            aria-label="SFX Volume"
+            disabled={isMuted}
+          />
+        </div>
       </div>
 
       <div style={styles.setting}>
         <label style={styles.label}>
           Music Volume: {Math.round(settings.musicVolume * 100)}%
         </label>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={settings.musicVolume}
-          onChange={handleMusicChange}
-          style={styles.slider}
-          aria-label="Music Volume"
-        />
+        <div style={styles.sliderRow}>
+          <span style={styles.volumeIcon}>{getVolumeIcon(settings.musicVolume, isMuted)}</span>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={settings.musicVolume}
+            onChange={handleMusicChange}
+            style={styles.sliderFlex}
+            aria-label="Music Volume"
+            disabled={isMuted}
+          />
+        </div>
       </div>
 
       <div style={styles.setting}>
         <button
           onClick={handleMuteToggle}
-          style={styles.muteButton}
+          style={{
+            ...styles.muteButton,
+            backgroundColor: isMuted ? '#cc4444' : '#555'
+          }}
           aria-label="Toggle Mute"
         >
-          Mute / Unmute All
+          {isMuted ? 'Unmute All' : 'Mute All'}
         </button>
       </div>
 
@@ -337,6 +364,20 @@ const styles = {
   slider: {
     width: '100%',
     cursor: 'pointer'
+  },
+  sliderRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px'
+  },
+  sliderFlex: {
+    flex: 1,
+    cursor: 'pointer'
+  },
+  volumeIcon: {
+    fontSize: '1.2rem',
+    minWidth: '24px',
+    textAlign: 'center'
   },
   select: {
     width: '100%',
