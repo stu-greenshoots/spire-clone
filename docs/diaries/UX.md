@@ -15,6 +15,21 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 11 - UX-22 Complete
+**Date:** 2026-02-01
+**Status:** UX-22 DONE (PR #127)
+
+**What I did:**
+- Added skip-reward confirmation to card reward screen — two-step "Are you sure?" flow
+- First click shows "Skip this reward?" with "Yes, Skip" and "Go Back" buttons
+- Prevents accidental reward skipping — last unresolved Game Zone complaint
+- 1 file changed (RewardScreen.jsx), 63 insertions, 18 deletions
+- Both Copilot and Mentor reviews passed, merged via squash
+
+**Sprint 11 UX status:** UX-21 done, UX-22 done. UX-23 (map visited-node) remaining as P2 stretch.
+
+---
+
 ### Sprint 11 - UX-21 Complete
 **Date:** 2026-02-01
 **Status:** UX-21 DONE (PR #126)

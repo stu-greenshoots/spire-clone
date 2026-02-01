@@ -15,6 +15,25 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 11 — UX-22 Complete
+**Date:** 2026-02-01
+**Status:** UX-22 merged (PR #127)
+
+**Done:**
+- Implemented as UX: Skip-reward confirmation dialog on card reward screen
+- Two-step flow: "Skip Reward" → "Skip this reward? Yes, Skip / Go Back"
+- Last unresolved Game Zone complaint now addressed — all 3 original complaints resolved
+- 1 file changed, 63 insertions, 18 deletions
+- Both Copilot and Mentor reviews passed
+- Merged PR #127 via squash, updated sprint board and UX diary
+
+**Sprint 11 Progress:** 8/16 tasks done (PM-11, BE-23, JR-09a, JR-09b, FIX-08, GD-16, UX-21, UX-22)
+**All P0 tasks complete. 1/6 P1 tasks complete.**
+
+**Next highest priority:** VARROW-06 (Silent narrative), GD-17 (Silent art), QA-15 (Silent regression), AR-11 (Silent audio), BE-24 (Act 3 balance)
+
+---
+
 ### Sprint 11 — UX-21 Complete
 **Date:** 2026-02-01
 **Status:** UX-21 merged (PR #126)
