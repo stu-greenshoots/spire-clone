@@ -336,6 +336,7 @@ export const handlePlayCard = (state, action) => {
       newPlayer.block = 0;
       newPlayer.currentHp = Math.max(0, newPlayer.currentHp - remaining);
     }
+    audioManager.playSFX(SOUNDS.combat.beatOfDeath, 'combat');
     combatLog.push('Beat of Death dealt 1 damage');
   }
 

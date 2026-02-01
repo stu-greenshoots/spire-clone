@@ -20,7 +20,10 @@ export const SOUNDS = {
     potionUse: 'potion_use',
     shivPlay: 'shiv_play',
     poisonApply: 'poison_apply',
-    discard: 'card_discard'
+    discard: 'card_discard',
+    heartbeat: 'heartbeat',
+    beatOfDeath: 'beat_of_death',
+    heartPhaseTransition: 'heart_phase_transition'
   },
   ui: {
     buttonClick: 'ui_click',

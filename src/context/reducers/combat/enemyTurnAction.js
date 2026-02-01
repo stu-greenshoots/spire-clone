@@ -376,12 +376,14 @@ function processEnemySpecial(move, newEnemy, enemy, newPlayer, newDrawPile, newD
   // Beat of Death (Corrupt Heart)
   if (move.special === 'beatOfDeath') {
     newEnemy.beatOfDeath = true;
+    audioManager.playSFX(SOUNDS.combat.heartPhaseTransition, 'combat');
     combatLog.push(`${enemy.name}'s heart beats with deadly power!`);
   }
 
   // Blood Shots escalation (Corrupt Heart) — each cycle adds 1 hit
   if (move.special === 'bloodShotsEscalate') {
     newEnemy.bloodShotsBonus = (newEnemy.bloodShotsBonus || 0) + 1;
+    audioManager.playSFX(SOUNDS.combat.heartbeat, 'combat');
     combatLog.push(`${enemy.name}'s Blood Shots intensify!`);
   }
 
