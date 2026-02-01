@@ -24,7 +24,7 @@ const getDefeatText = (act, currentFloor, currentNode) => {
 };
 
 const GameOverScreen = () => {
-  const { state, returnToMenu } = useGame();
+  const { state, returnToMenu, updateProgression } = useGame();
   const { player, deck, relics, currentFloor, act, dailyChallenge, runStats } = state;
   const [showContent, setShowContent] = useState(false);
   const defeatText = useMemo(() => getDefeatText(act, currentFloor, state.currentNode), [act, currentFloor, state.currentNode]);
@@ -41,6 +41,12 @@ const GameOverScreen = () => {
     saveChallengeScore(dailyChallenge.date, score);
     return score;
   }, [dailyChallenge, runStats, currentFloor, player]);
+
+  // Record run in history and update progression on mount
+  useEffect(() => {
+    const enemyName = state.enemies?.[0]?.name || 'Unknown';
+    updateProgression(false, `Slain by ${enemyName} on floor ${currentFloor + 1}`);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 500);

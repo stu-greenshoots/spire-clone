@@ -10,7 +10,7 @@ const getVictoryText = (defeatedHeart) => {
 };
 
 const VictoryScreen = () => {
-  const { state, returnToMenu } = useGame();
+  const { state, returnToMenu, updateProgression } = useGame();
   const { player, deck, relics, currentFloor, dailyChallenge, runStats } = state;
   const [showContent, setShowContent] = useState(false);
   const victoryText = useMemo(() => getVictoryText(state.defeatedHeart), [state.defeatedHeart]);
@@ -26,6 +26,11 @@ const VictoryScreen = () => {
     saveChallengeScore(dailyChallenge.date, score);
     return score;
   }, [dailyChallenge, runStats, currentFloor, player]);
+
+  // Record run in history and update progression on mount
+  useEffect(() => {
+    updateProgression(true);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const timer = setTimeout(() => setShowContent(true), 500);
