@@ -142,3 +142,37 @@ The Heart = the war's core algorithm. Beating it proves you're complex enough to
 **Validation:** `npm run validate` passes — 1837 tests, lint clean, build clean
 
 ---
+
+### VARROW-06: Silent Character Narrative
+**Date:** 2026-02-01
+**Status:** Complete, PR #129 merged
+
+**Done:**
+- Added Silent-specific boss dialogue for all 7 bosses in `bossDialogue.js`
+- Updated `getBossDialogue(bossId, characterId)` to return character-specific text (backwards compatible)
+- Added `SILENT_DEFEAT_NARRATIVE` — 6 context pools (early, midAct1, act2, act3, boss, heart)
+- Added `SILENT_VICTORY_NARRATIVE` — standard and heart variants
+- Added `SILENT_ACT_DESCRIPTIONS` — entering text for all 3 acts in `flavorText.js`
+- Updated `GameOverScreen.jsx` — selects Silent defeat text when `state.character === 'silent'`
+- Updated `VictoryScreen.jsx` — selects Silent victory text when `state.character === 'silent'`
+- Added 90 new test cases covering all Silent narrative content
+
+**Design decisions:**
+- Silent's narrative identity: absence, stealth, quiet, poison-as-patience. Bosses react to what they cannot see or process, rather than to brute force
+- Boss dialogue rewrites focus on how each boss's detection systems fail against the Silent — the mass can't track her, the guardian can't lock on, the time eater finds her pacing already optimal
+- Defeat text emphasizes dissolution of something too thin/quiet rather than something too weak
+- Victory text frames persistence through absence rather than through resistance: "The war cannot dissolve what it cannot find"
+- Heart victory frames Silent as an exploit in the system rather than an exception to route around
+
+**Voice consistency check:**
+- War as system ✓ (algorithm, pattern, detection cycles, cleanup process)
+- Identity as deck ✓ (quiet pattern, thin pattern, too dispersed)
+- Silent identity ✓ (absence, stealth, poison, patience, invisibility)
+- No derivative StS language ✓ (no "sneaky assassin" tropes)
+- Dry technical tone ✓ (the war "does not notice", bosses "cannot quite see")
+
+**Known gap:** BossDialogue component is not currently rendered anywhere in the app — boss dialogue from `bossDialogue.js` is not displayed to players. This predates VARROW-06. The narrative data is complete and ready for integration when the component is wired up.
+
+**Validation:** `npm run validate` passes — 2120 tests, lint clean, build clean
+
+---

@@ -458,7 +458,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Introduce The Silent (second character class), resolve all remaining Game Zone complaints, push toward 90+ score.
 **Plan:** See `SPRINT_11_PLAN.md`
 **Branch:** `sprint-11`
-**Status:** IN PROGRESS — PM-11 + BE-23 + JR-09a + JR-09b + FIX-08 + GD-16 + UX-21 + UX-22 complete
+**Status:** IN PROGRESS — PM-11 + BE-23 + JR-09a + JR-09b + FIX-08 + GD-16 + UX-21 + UX-22 + VARROW-06 complete
 
 ### P0 — Must Ship
 
@@ -476,7 +476,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| VARROW-06 | Varrow | M | Silent narrative — character-specific flavor, boss dialogue variants | PENDING |
+| VARROW-06 | Varrow | M | Silent narrative — character-specific flavor, boss dialogue variants | MERGED (PR #129) |
 | UX-22 | UX | S | Skip-reward confirmation — last unresolved Game Zone complaint | MERGED (PR #127) |
 | GD-17 | GD | S | Silent character art — portrait + combat silhouette | PENDING |
 | QA-15 | QA | M | Silent regression + balance — 30 cards, character selection, win rates | PENDING |
