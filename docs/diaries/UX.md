@@ -15,6 +15,24 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 14 - UX-29 Complete
+**Date:** 2026-02-01
+**Status:** UX-29 DONE (PR #168)
+
+**What I did:**
+- Added mute state tracking to Settings component (`isMuted` state synced with audioManager)
+- Mute button now shows "Mute All" / "Unmute All" with red highlight when muted
+- Volume sliders display speaker emoji icons that change based on level (muted/low/medium/high)
+- Sliders are disabled when muted to communicate adjustments won't take effect
+- Reset to Defaults now properly clears mute state via `audioManager.setMuted(false)`
+- Fixed mute toggle not syncing with React state (was fire-and-forget, now captures return value)
+- Updated test mock to include `setMuted` and `muted` properties
+- 2 files changed, 77 insertions, 34 deletions
+
+**Sprint 14 UX status:** UX-29 done. UX-30 (self-assessment) remaining as P1.
+
+---
+
 ### Sprint 12 - UX-25 Complete
 **Date:** 2026-02-01
 **Status:** UX-25 DONE (PR #147)
