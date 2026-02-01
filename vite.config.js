@@ -4,6 +4,48 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  build: {
+    assetsInlineLimit: 0,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/react-dom')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/react/')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules')) {
+            return 'vendor';
+          }
+          if (id.includes('/src/data/')) {
+            return 'game-data';
+          }
+          if (id.includes('/src/systems/audioSystem')) {
+            return 'audio';
+          }
+          if (id.includes('/src/systems/')) {
+            return 'game-systems';
+          }
+          if (id.includes('/src/context/reducers/')) {
+            return 'game-reducers';
+          }
+          if (id.includes('/src/context/')) {
+            return 'game-context';
+          }
+          if (id.includes('/src/assets/art/')) {
+            return 'art-assets';
+          }
+          if (id.includes('/src/hooks/')) {
+            return 'game-hooks';
+          }
+          if (id.includes('/src/utils/')) {
+            return 'game-utils';
+          }
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     VitePWA({
