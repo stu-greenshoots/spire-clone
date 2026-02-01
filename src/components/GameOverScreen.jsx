@@ -27,7 +27,7 @@ const getDefeatText = (act, currentFloor, currentNode, characterId) => {
 
 const GameOverScreen = () => {
   const { state, returnToMenu, updateProgression } = useGame();
-  const { player, deck, relics, currentFloor, act, dailyChallenge, runStats } = state;
+  const { player, deck, relics, currentFloor, act, dailyChallenge, runStats, endlessMode, endlessLoop } = state;
   const [showContent, setShowContent] = useState(false);
   const defeatText = useMemo(() => getDefeatText(act, currentFloor, state.currentNode, state.character), [act, currentFloor, state.currentNode, state.character]);
   const footerText = useMemo(() => DEFEAT_FOOTER[Math.floor(Math.random() * DEFEAT_FOOTER.length)], []);
@@ -65,7 +65,9 @@ const GameOverScreen = () => {
       justifyContent: 'center',
       padding: '20px',
       textAlign: 'center',
-      background: 'radial-gradient(ellipse at center bottom, #1a0a0a 0%, #0a0505 50%, #050202 100%)',
+      background: endlessMode
+        ? 'radial-gradient(ellipse at center bottom, #1a0a1a 0%, #0a050a 50%, #050205 100%)'
+        : 'radial-gradient(ellipse at center bottom, #1a0a0a 0%, #0a0505 50%, #050202 100%)',
       position: 'relative',
       overflow: 'auto'
     }}>
@@ -113,16 +115,18 @@ const GameOverScreen = () => {
 
       {/* Title */}
       <h1 style={{
-        color: '#AA4444',
+        color: endlessMode ? '#bb88ff' : '#AA4444',
         fontSize: 'clamp(26px, 7vw, 38px)',
         marginBottom: '10px',
-        textShadow: '0 0 20px rgba(170, 68, 68, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.8)',
+        textShadow: endlessMode
+          ? '0 0 20px rgba(150, 100, 255, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.8)'
+          : '0 0 20px rgba(170, 68, 68, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.8)',
         letterSpacing: '4px',
         fontWeight: 'bold',
         animation: showContent ? 'fadeIn 0.5s ease' : 'none',
         opacity: showContent ? 1 : 0
       }}>
-        DEFEAT
+        {endlessMode ? 'THE ENDLESS CLAIMS YOU' : 'DEFEAT'}
       </h1>
 
       {/* Narrative text */}
@@ -164,12 +168,16 @@ const GameOverScreen = () => {
           gap: '15px',
           textAlign: 'left'
         }}>
+          {endlessMode && <StatItem label="Loop" value={endlessLoop} icon={'\u267E\uFE0F'} />}
+          {endlessMode && <StatItem label="Scaling" value={`+${endlessLoop * 10}%`} icon={'\uD83D\uDCC8'} />}
           <StatItem label="Act" value={act} icon={'\uD83C\uDFDB\uFE0F'} />
           <StatItem label="Floor" value={currentFloor + 1} icon={'\uD83D\uDDFC'} />
           <StatItem label="Cards" value={deck.length} icon={'\uD83C\uDCCF'} />
           <StatItem label="Relics" value={relics.length} icon={'\uD83D\uDC8E'} />
           <StatItem label="Gold" value={player.gold} icon={'\uD83D\uDCB0'} />
           <StatItem label="Max HP" value={player.maxHp} icon={'\u2764\uFE0F'} />
+          {endlessMode && runStats && <StatItem label="Enemies" value={runStats.enemiesKilled || 0} icon={'\u2694\uFE0F'} />}
+          {endlessMode && runStats && <StatItem label="Damage" value={runStats.damageDealt || 0} icon={'\uD83D\uDCA5'} />}
         </div>
       </div>
 
@@ -250,12 +258,14 @@ const GameOverScreen = () => {
       {/* Footer narrative */}
       <p style={{
         marginTop: '25px',
-        color: '#555',
+        color: endlessMode ? '#776699' : '#555',
         fontSize: '13px',
         fontStyle: 'italic',
         animation: showContent ? 'fadeIn 0.5s ease 1s both' : 'none'
       }}>
-        {footerText}
+        {endlessMode
+          ? `You held on for ${endlessLoop} loop${endlessLoop !== 1 ? 's' : ''}. The war forgets your name.`
+          : footerText}
       </p>
     </div>
   );

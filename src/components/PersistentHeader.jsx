@@ -7,7 +7,7 @@ import { isMuted, setMuted } from '../systems/audioSystem';
 
 const PersistentHeader = ({ onPauseClick }) => {
   const { state } = useGame();
-  const { player, phase, act, currentFloor, relics, deck, character } = state;
+  const { player, phase, act, currentFloor, relics, deck, character, endlessMode, endlessLoop } = state;
   const [selectedRelic, setSelectedRelic] = useState(null);
   const [showDeckView, setShowDeckView] = useState(false);
   const [muted, setMutedState] = useState(isMuted());
@@ -166,8 +166,23 @@ const PersistentHeader = ({ onPauseClick }) => {
               background: 'rgba(255, 215, 0, 0.1)',
               borderRadius: '6px'
             }}>
-              {act}-{currentFloor + 2}
+              {endlessMode ? `L${endlessLoop} ` : ''}{act}-{currentFloor + 2}
             </div>
+
+            {/* Endless scaling indicator - compact */}
+            {endlessMode && (
+              <div style={{
+                color: '#bb88ff',
+                fontSize: '9px',
+                fontWeight: 'bold',
+                padding: '3px 5px',
+                background: 'rgba(150, 100, 255, 0.15)',
+                borderRadius: '6px',
+                border: '1px solid rgba(150, 100, 255, 0.3)'
+              }}>
+                +{endlessLoop * 10}%
+              </div>
+            )}
 
             {/* Expand chevron */}
             <button
@@ -226,6 +241,29 @@ const PersistentHeader = ({ onPauseClick }) => {
               Act {act} - Floor {currentFloor + 2}
             </span>
           </div>
+
+          {/* Endless mode indicator */}
+          {endlessMode && (
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '5px 12px',
+              background: 'rgba(150, 100, 255, 0.15)',
+              borderRadius: '8px',
+              border: '1px solid rgba(150, 100, 255, 0.3)'
+            }}>
+              <span style={{ fontSize: '14px' }}>{'\u267E\uFE0F'}</span>
+              <span style={{
+                color: '#bb88ff',
+                fontSize: '12px',
+                fontWeight: 'bold',
+                textShadow: '0 0 5px rgba(150, 100, 255, 0.5)'
+              }}>
+                Loop {endlessLoop} (+{endlessLoop * 10}%)
+              </span>
+            </div>
+          )}
 
           {/* HP Display */}
           <div style={{

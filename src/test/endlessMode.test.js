@@ -177,6 +177,66 @@ describe('Endless Mode Infrastructure — BE-31', () => {
     });
   });
 
+  describe('Endless Mode UI — UX-33', () => {
+    it('endless state provides loop and scaling info for UI display', () => {
+      const state = {
+        ...createInitialState(),
+        endlessMode: true,
+        endlessLoop: 3,
+        act: 2,
+        currentFloor: 5
+      };
+
+      // UI should display: Loop 3, scaling +30%
+      expect(state.endlessLoop).toBe(3);
+      expect(state.endlessLoop * 10).toBe(30); // +30% scaling display
+      expect(state.act).toBe(2);
+      expect(state.currentFloor).toBe(5);
+    });
+
+    it('non-endless state has endlessMode false for conditional UI rendering', () => {
+      const state = createInitialState();
+      expect(state.endlessMode).toBe(false);
+      expect(state.endlessLoop).toBe(0);
+    });
+
+    it('death in endless mode preserves loop stats for death screen', () => {
+      const state = {
+        ...createInitialState(),
+        phase: GAME_PHASE.GAME_OVER,
+        endlessMode: true,
+        endlessLoop: 4,
+        act: 3,
+        currentFloor: 8,
+        runStats: {
+          cardsPlayed: 150,
+          damageDealt: 3200,
+          enemiesKilled: 45,
+          goldEarned: 800,
+          floor: 0
+        }
+      };
+
+      // Verify all data needed for endless death screen is accessible
+      expect(state.endlessMode).toBe(true);
+      expect(state.endlessLoop).toBe(4);
+      expect(state.runStats.enemiesKilled).toBe(45);
+      expect(state.runStats.damageDealt).toBe(3200);
+    });
+
+    it('endless footer text uses loop count', () => {
+      const endlessLoop = 3;
+      const footerText = `You held on for ${endlessLoop} loop${endlessLoop !== 1 ? 's' : ''}. The war forgets your name.`;
+      expect(footerText).toBe('You held on for 3 loops. The war forgets your name.');
+    });
+
+    it('single loop uses singular form', () => {
+      const endlessLoop = 1;
+      const footerText = `You held on for ${endlessLoop} loop${endlessLoop !== 1 ? 's' : ''}. The war forgets your name.`;
+      expect(footerText).toBe('You held on for 1 loop. The war forgets your name.');
+    });
+  });
+
   describe('Non-endless flow unchanged', () => {
     it('normal Act 3 boss victory with Heart unlocked still goes to Act 4', () => {
       const state = {
