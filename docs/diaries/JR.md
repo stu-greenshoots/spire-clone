@@ -1,3 +1,34 @@
+# JR Diary - Sprint 12
+
+## Sprint 12 Entries
+
+### JR-10: Heart boss implementation — 750 HP, phase transitions, scaling Blood Shots
+**Date:** 2026-02-01
+**Status:** MERGED (PR #139)
+
+**Done:**
+- Adjusted Corrupt Heart HP from 800 → 750 (StS-aligned) and invincible shield from 300 → 200 for better pacing
+- Added Blood Shots escalation mechanic: `bloodShotsEscalate` special increments `bloodShotsBonus` each cycle, adding +1 hit to the 15-hit multi-attack
+- Wired escalation into enemyTurnAction.js hit calculation loop alongside existing Book of Stabbing pattern
+- AI pattern: Turn 0 Debilitate (all debuffs), then repeating Blood Shots → Echo → Buff cycle
+- Beat of Death passive (1 damage per card played) was already wired by BE-25
+- 17 new tests in heartBoss.test.js covering base stats, moveset, AI cycle, escalation
+- Updated 4 existing test files for new HP/invincible values
+- 2278 tests passing, lint clean, build clean
+
+**Files changed:** enemies.js, enemyTurnAction.js, heartBoss.test.js (new), enemies.test.js, act3Regression.test.js, newMechanics.test.js (6 files, +161/-16)
+
+**Design decisions:**
+- HP 750 (not 800) to match StS Heart and make the fight achievable given our card pool
+- Invincible 200 (not 300) — 300 was too forgiving (gives Heart too many turns before players can damage HP)
+- Blood Shots escalation (+1 hit per cycle) creates increasing urgency without changing base damage
+- Phase transition is implicit: same AI cycle regardless of shield status. The escalation IS the phase progression.
+
+**Blockers:** None
+**Next:** JR-11 (card interaction audit vs Heart mechanics) when scheduled
+
+---
+
 # JR Diary - Sprint 11
 
 ## Sprint 11 Entries
