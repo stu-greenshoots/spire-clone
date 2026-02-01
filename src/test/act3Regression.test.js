@@ -303,8 +303,8 @@ describe('Act 3 Enemy-Specific Mechanics', () => {
   });
 
   describe('Maw - drool/slam/roar/nom cycle', () => {
-    it('has 300 HP', () => {
-      expect(getEnemyById('maw').hp.min).toBe(300);
+    it('has correct HP range', () => {
+      expect(getEnemyById('maw').hp.min).toBe(240);
     });
 
     it('follows drool -> slam -> roar -> nomNom -> drool cycle', () => {

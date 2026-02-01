@@ -70,8 +70,8 @@ describe('Spire Growth Enemy Definition', () => {
   });
 
   it('has correct HP range', () => {
-    expect(spireGrowth.hp.min).toBe(170);
-    expect(spireGrowth.hp.max).toBe(180);
+    expect(spireGrowth.hp.min).toBe(150);
+    expect(spireGrowth.hp.max).toBe(165);
   });
 
   it('has constrict property', () => {
@@ -140,9 +140,9 @@ describe('Maw Enemy Definition', () => {
     expect(maw.act).toBe(3);
   });
 
-  it('has 300 HP', () => {
-    expect(maw.hp.min).toBe(300);
-    expect(maw.hp.max).toBe(300);
+  it('has correct HP range', () => {
+    expect(maw.hp.min).toBe(240);
+    expect(maw.hp.max).toBe(260);
   });
 
   it('has 4 moves: drool, slam, nomNom, roar', () => {

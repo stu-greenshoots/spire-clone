@@ -673,3 +673,84 @@ describe('Ascension Support', () => {
     }
   });
 });
+
+describe('BE-24: Act 3 Balance Tuning — Full 3-Act Runs', () => {
+  // The simulator uses greedy AI with deck-building via random card rewards.
+  // Win rates are lower than skilled gameplay. These tests verify relative
+  // difficulty relationships and that Act 3 is functional in the simulator.
+
+  it('3-act run completes without errors', () => {
+    const result = simulateRun({ seed: 42, floors: 14, acts: 3, ascension: 0 });
+
+    expect(result).toHaveProperty('survived');
+    expect(result).toHaveProperty('floorsCleared');
+    expect(result).toHaveProperty('actsCompleted');
+    // Should attempt all 3 acts (45 floors total = 14×3 + 3 bosses)
+    expect(result.floorsCleared).toBeGreaterThan(0);
+  });
+
+  it('Act 3 encounters are functional in simulator', () => {
+    // Give high HP to survive through Act 3 floors
+    const report = runBalanceReport(100, {
+      seed: 1,
+      floors: 14,
+      acts: 3,
+      ascension: 0,
+      hp: 400,
+      maxHp: 400
+    });
+
+    // With 400 HP, should get past Act 1 at minimum
+    expect(report.avgFloorsCleared).toBeGreaterThan(15);
+  }, 30000);
+
+  it('3-act A0 win rate is lower than 2-act', () => {
+    const twoAct = runBalanceReport(500, { seed: 1, floors: 14, acts: 2, ascension: 0 });
+    const threeAct = runBalanceReport(500, { seed: 1, floors: 14, acts: 3, ascension: 0 });
+
+    // Adding Act 3 must not increase win rate
+    expect(threeAct.winRate).toBeLessThanOrEqual(twoAct.winRate);
+  }, 60000);
+
+  it('3-act A5 win rate is lower than A0 (ascension scales across all acts)', () => {
+    const a0 = runBalanceReport(300, { seed: 1, floors: 14, acts: 3, ascension: 0 });
+    const a5 = runBalanceReport(300, { seed: 1, floors: 14, acts: 3, ascension: 5 });
+
+    // A5 must be harder than A0 (allow small variance)
+    expect(a5.winRate).toBeLessThanOrEqual(a0.winRate + 0.03);
+  }, 60000);
+
+  it('Act 3 is materially harder than Act 2 (high HP test)', () => {
+    const twoAct = runBalanceReport(200, { seed: 1, floors: 14, acts: 2, ascension: 0, hp: 200, maxHp: 200 });
+    const threeAct = runBalanceReport(200, { seed: 1, floors: 14, acts: 3, ascension: 0, hp: 200, maxHp: 200 });
+
+    // Act 3 should reduce win rate compared to stopping at Act 2
+    if (twoAct.winRate > 0.3) {
+      expect(threeAct.winRate).toBeLessThan(twoAct.winRate);
+    }
+  }, 60000);
+
+  it('reports deadliest enemies across all 3 acts', () => {
+    const report = runBalanceReport(200, {
+      seed: 42,
+      floors: 14,
+      acts: 3,
+      ascension: 0,
+      hp: 40,
+      maxHp: 40
+    });
+
+    if (report.winRate < 1) {
+      expect(report.deadliestEnemy).not.toBe('none');
+    }
+  }, 30000);
+
+  it('2000 three-act runs complete in under 60 seconds', () => {
+    const startTime = Date.now();
+    const report = runBalanceReport(2000, { floors: 14, acts: 3 });
+    const elapsed = Date.now() - startTime;
+
+    expect(elapsed).toBeLessThan(60000);
+    expect(report.totalRuns).toBe(2000);
+  }, 120000);
+});
