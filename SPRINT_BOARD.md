@@ -673,7 +673,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Implement The Watcher (fourth character with stances), improve art fidelity, close remaining 3-point gap from 97 to 100/100.
 **Plan:** See `SPRINT_15_PLAN.md`
 **Branch:** `sprint-15`
-**Status:** IN PROGRESS — 8/15 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30, VARROW-11, UX-31)
+**Status:** IN PROGRESS — 9/15 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30, VARROW-11, UX-31, GD-27)
 
 ### P0 — Must Ship
 
@@ -690,7 +690,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| GD-27 | GD | M | Watcher art — portrait, silhouette, 30 card illustrations, stance visuals, sprite sheet | PENDING |
+| GD-27 | GD | M | Watcher art — portrait, silhouette, 30 card illustrations, stance visuals, sprite sheet | MERGED (PR #187) |
 | GD-28 | GD | M | Art consistency pass — re-render 10 most inconsistent sprites to match style guide | PENDING |
 | UX-31 | UX | M | Stance UI — stance indicator, entry/exit feedback, Mantra progress, Wrath glow | MERGED (PR #186) |
 | QA-23 | QA | M | Watcher regression + balance — 30 cards, stances, Mantra, 4-character regression | PENDING |

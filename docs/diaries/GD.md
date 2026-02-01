@@ -14,6 +14,30 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 15 - GD-27 Complete
+**Date:** 2026-02-01
+**Status:** GD-27 complete, PR #187 merged to sprint-15
+
+**Done today:**
+- Generated Watcher character portrait (512x512 WebP, purple/gold palette, meditating silhouette)
+- Generated 30 Watcher card art images (purple/gold dark fantasy theme with type/rarity variation)
+- Generated 3 stance visual indicators (calm water ripples, wrath flame burst, divinity halo) at 128x128
+- Rebuilt card sprite sheet: 157 → 188 cards (10-col, 19-row grid, 3157KB)
+- Added `getStanceImage()` to art-config.js following existing asset pattern
+- Wired stance images into StanceIndicator in CombatScreen with emoji fallback
+- Created `generate-watcher-card-art.js` and `generate-stance-art.js` scripts
+
+**Key decisions:**
+- Purple/gold palette for Watcher — distinguishes from Ironclad (red), Silent (green), Defect (blue)
+- Stance images are 128x128 (same as orbs) — appropriate for small badge display
+- Emoji fallback preserved in StanceIndicator — graceful degradation
+
+**Validation:** `npm run validate` passes — 2940 tests, lint clean, build clean
+
+**Next:** GD-28 (art consistency pass) and GD-29 (key card re-render) pending
+
+---
+
 ### Sprint 14 - GD-26 Complete
 **Date:** 2026-02-01
 **Status:** GD-26 complete, PR #176 merged to sprint-14
