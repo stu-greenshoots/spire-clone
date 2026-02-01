@@ -1,3 +1,33 @@
+# QA Diary - Sprint 12
+
+## Sprint 12 Entries
+
+### QA-17: Heart Regression + Endgame Balance
+**Date:** 2026-02-01
+**Status:** Complete, PR #144 merged
+**Sprint:** Sprint 12 (The Heart + Endgame + Score 90+)
+**Task:** QA-17 (Heart regression + endgame balance — M size, P1)
+
+**Done:**
+1. Created `src/test/heartRegression.test.js` — 43 regression tests covering the Corrupt Heart and Act 4 endgame
+2. **Heart Enemy Definition:** HP (750), invincible shield (200), beatOfDeath flag, 4-move moveset validated
+3. **Heart AI Pattern:** Turn 0 debilitate, then 3-move cycle (bloodShots → echo → buff) verified for turns 0-10
+4. **Instance Fields:** HP, invincible, beatOfDeath, standard combat fields all propagated correctly
+5. **Act 4 Map:** Single-floor boss node, deterministic generation, getBossEncounter(4) returns Heart
+6. **Heart Unlock Gate:** isHeartUnlocked tested — requires both ironclad and silent wins, handles null/undefined
+7. **Invincible Shield:** applyDamageToTarget tested — absorbs before block/HP, overflow works, no negatives
+8. **4-Act Playthrough:** A0 and A5 reducer-dispatch playthroughs without crashes
+9. **Balance Simulator:** acts=4 support verified, actsCompleted tracking, act 4 combatStats, win rate analysis, A5 harder than A0
+
+**Test count:** 2248 → 2335 (+87 tests). 51 test files.
+
+**Validation:** `npm run validate` passes — all tests green, lint clean, build succeeds
+
+**Blockers:** None
+**Next:** All QA Sprint 12 P1 tasks complete. QA-18 (diary hygiene automation) is P2 stretch.
+
+---
+
 # QA Diary - Sprint 11
 
 ## Sprint 11 Entries
