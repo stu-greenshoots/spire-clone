@@ -8,13 +8,16 @@ import {
   ACT_DESCRIPTIONS,
   RELIC_FLAVOR,
   WORLD_LORE,
-  SILENT_ACT_DESCRIPTIONS
+  SILENT_ACT_DESCRIPTIONS,
+  DEFECT_ACT_DESCRIPTIONS
 } from '../data/flavorText';
 import {
   BOSS_DIALOGUE,
   getBossDialogue,
   SILENT_DEFEAT_NARRATIVE,
-  SILENT_VICTORY_NARRATIVE
+  SILENT_VICTORY_NARRATIVE,
+  DEFECT_DEFEAT_NARRATIVE,
+  DEFECT_VICTORY_NARRATIVE
 } from '../data/bossDialogue';
 
 describe('Flavor Text Data', () => {
@@ -251,6 +254,74 @@ describe('Flavor Text Data', () => {
           expect(SILENT_ACT_DESCRIPTIONS[act]).toBeDefined();
           expect(typeof SILENT_ACT_DESCRIPTIONS[act].entering).toBe('string');
           expect(SILENT_ACT_DESCRIPTIONS[act].entering.length).toBeGreaterThan(0);
+        });
+      });
+    });
+  });
+
+  describe('Defect Character Narrative (VARROW-09)', () => {
+    const bossIds = Object.keys(BOSS_DIALOGUE);
+
+    describe('getBossDialogue with defect character', () => {
+      it('should return Defect-specific dialogue for defect character', () => {
+        bossIds.forEach(bossId => {
+          const dialogue = getBossDialogue(bossId, 'defect');
+          expect(dialogue.intro).toBeDefined();
+          expect(typeof dialogue.intro).toBe('string');
+          expect(dialogue.intro.length).toBeGreaterThan(0);
+          expect(dialogue.intro).not.toBe(BOSS_DIALOGUE[bossId].intro);
+        });
+      });
+
+      it('should preserve personality field from base dialogue', () => {
+        bossIds.forEach(bossId => {
+          const dialogue = getBossDialogue(bossId, 'defect');
+          expect(dialogue.personality).toBe(BOSS_DIALOGUE[bossId].personality);
+        });
+      });
+
+      it('should have Defect-specific phaseTransition for Heart', () => {
+        const dialogue = getBossDialogue('corruptHeart', 'defect');
+        expect(dialogue.phaseTransition).toBeDefined();
+        expect(dialogue.phaseTransition).not.toBe(BOSS_DIALOGUE.corruptHeart.phaseTransition);
+      });
+    });
+
+    describe('DEFECT_DEFEAT_NARRATIVE', () => {
+      it('should have all defeat pools', () => {
+        ['early', 'midAct1', 'act2', 'act3', 'boss', 'heart'].forEach(pool => {
+          expect(DEFECT_DEFEAT_NARRATIVE[pool]).toBeDefined();
+          expect(Array.isArray(DEFECT_DEFEAT_NARRATIVE[pool])).toBe(true);
+          expect(DEFECT_DEFEAT_NARRATIVE[pool].length).toBeGreaterThan(0);
+        });
+      });
+
+      it('should contain only non-empty strings', () => {
+        Object.values(DEFECT_DEFEAT_NARRATIVE).forEach(pool => {
+          pool.forEach(text => {
+            expect(typeof text).toBe('string');
+            expect(text.length).toBeGreaterThan(0);
+          });
+        });
+      });
+    });
+
+    describe('DEFECT_VICTORY_NARRATIVE', () => {
+      it('should have standard and heart pools', () => {
+        ['standard', 'heart'].forEach(pool => {
+          expect(DEFECT_VICTORY_NARRATIVE[pool]).toBeDefined();
+          expect(Array.isArray(DEFECT_VICTORY_NARRATIVE[pool])).toBe(true);
+          expect(DEFECT_VICTORY_NARRATIVE[pool].length).toBeGreaterThan(0);
+        });
+      });
+    });
+
+    describe('DEFECT_ACT_DESCRIPTIONS', () => {
+      it('should have entering text for all 3 acts', () => {
+        [1, 2, 3].forEach(act => {
+          expect(DEFECT_ACT_DESCRIPTIONS[act]).toBeDefined();
+          expect(typeof DEFECT_ACT_DESCRIPTIONS[act].entering).toBe('string');
+          expect(DEFECT_ACT_DESCRIPTIONS[act].entering.length).toBeGreaterThan(0);
         });
       });
     });

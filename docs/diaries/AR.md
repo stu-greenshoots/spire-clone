@@ -1,3 +1,71 @@
+# AR Diary - Sprint 13
+
+## Sprint 13 Entries
+
+### AR-14: Defect Orb Channel/Evoke SFX
+**Date:** 2026-02-01
+**Status:** Complete, PR #162 merged
+**Sprint:** Sprint 13 (Score 100 — Cloud Save, Compendium, The Defect)
+**Task:** AR-14 (Defect orb audio — S size, P1)
+
+**Done:**
+1. Added 5 new sound IDs to SOUNDS.combat: `orbLightning`, `orbFrost`, `orbDark`, `orbPlasma`, `orbEvoke`
+2. Wired per-type channel SFX in cardEffects.js (lightning zap, frost crackle, dark pulse, plasma hum)
+3. Wired evoke SFX for evokeOrb, evokeAllOrbs, and dualcast effects
+4. Wired orb passive SFX in endTurnAction.js (triggers first orb type SFX on end-of-turn passives)
+5. Created 5 placeholder MP3 files (copies of boss_intro.mp3, to be replaced with real CC0 sounds)
+
+**Architecture:**
+- Follows existing playSFX pattern (same as AR-07, AR-11, AR-12)
+- Channel SFX fires once per card play (after all orbs channeled) — prevents spam on multi-channel
+- Evoke SFX fires once per evoke action
+- Passive SFX fires once per end-of-turn based on first orb type; debounce (80ms) handles rapid triggers
+- Import of audioManager added to cardEffects.js (new dependency, same pattern as playCardAction.js)
+
+**Acceptance criteria:**
+- [x] Each orb type has distinct channel SFX
+- [x] Evoke actions trigger evoke SFX
+- [x] End-of-turn orb passives trigger type-appropriate SFX
+- [x] npm run validate passes (2606 tests, 0 errors)
+
+**Blockers:** None
+**Summary:** AR-14 complete. Defect orb system now has full audio feedback.
+
+---
+
+### AR-13: Save Export/Import — JSON Export/Import for Cross-Device Transfer
+**Date:** 2026-02-01
+**Status:** Complete, PR #152 merged
+**Sprint:** Sprint 13 (Score 100 — Cloud Save, Compendium, The Defect)
+**Task:** AR-13 (Save export/import — M size, P0)
+
+**Done:**
+1. Added `exportAllData()` — captures all 7 localStorage keys into versioned JSON
+2. Added `downloadExport()` — triggers browser file download with date-stamped filename
+3. Added `importAllData()` — validates export version, restores only known keys, returns success/error
+4. Added "Data" section to Settings.jsx with Export and Import buttons
+5. Import uses hidden file input with `.json` accept filter
+6. 7 new tests covering export, import, round-trip, error handling, unknown key rejection
+
+**Architecture:**
+- ALL_KEYS centralized list of 7 localStorage keys to export/import
+- Export stores raw localStorage strings (not parsed) — preserves exact data
+- Import validates `exportVersion` field before restoring — rejects non-backup files
+- Only known keys are written to localStorage — unknown keys from export are ignored (security)
+- UI shows success/error status message after import
+
+**Acceptance criteria:**
+- [x] Export produces valid JSON with all game data
+- [x] Import restores full game state from exported file
+- [x] Invalid/corrupt files rejected with error message
+- [x] Unknown keys ignored (no arbitrary localStorage injection)
+- [x] npm run validate passes (2374 tests, 0 errors)
+
+**Blockers:** None
+**Summary:** AR-13 complete. Save export/import closes the -2 cloud save gap.
+
+---
+
 # AR Diary - Sprint 12
 
 ## Sprint 12 Entries

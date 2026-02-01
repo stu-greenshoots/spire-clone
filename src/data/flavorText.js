@@ -148,7 +148,38 @@ export const CARD_FLAVOR = {
   envenom: 'Each strike carries a gift that keeps on giving.',
   glassKnife: 'Beautiful and deadly, but fragile with each swing.',
   adrenaline: 'A surge of clarity that costs nothing and gives everything.',
-  shiv: 'A tiny blade with a singular purpose.'
+  shiv: 'A tiny blade with a singular purpose.',
+  // Defect Cards
+  strike_defect: 'A mechanical strike. Efficient. Emotionless.',
+  defend_defect: 'Energy barriers shimmer into existence, cold and precise.',
+  zap: 'A spark of lightning, captured and contained.',
+  dualcast: 'Channel the same energy twice — redundancy is reliability.',
+  ballLightning: 'A crackling sphere that strikes before the thunder.',
+  coldSnap: 'Temperature drops. Circuits harden. Frost lingers.',
+  beamCell: 'A focused beam that finds weaknesses in any armor.',
+  compileDrive: 'Each orb in orbit feeds another line of code.',
+  sweepingBeam: 'A wide arc of light that misses nothing.',
+  coolheaded: 'Cool logic. Cool frost. Cool under pressure.',
+  chargeUp: 'Store power now. Release it later. Always later.',
+  leapDefect: 'Magnetic repulsion creates distance and safety.',
+  steamBarrier: 'Steam vents harden into temporary plating. Each burst costs pressure.',
+  stackDefect: 'Every discarded subroutine reinforces the firewall.',
+  doom: 'Where light fails, dark orbs remember.',
+  blizzard: 'Every frost channeled returns as an avalanche.',
+  ftl: 'Faster than light. Faster than thought.',
+  sunder: 'Overwhelming force. If it kills, the energy returns.',
+  rip: 'Tear the code apart. Twice.',
+  glacier: 'Walls of ice, layered and impenetrable.',
+  consume: 'Sacrifice capacity for intensity. Fewer slots, sharper focus.',
+  defragment: 'Reorganize. Optimize. Focus.',
+  capacitor: 'Expand the array. More orbs. More possibilities.',
+  equilibrium: 'Perfect balance between offense and defense.',
+  hyperbeam: 'Everything, all at once. The cost is clarity.',
+  meteorStrike: 'Plasma rains from above. Expensive but devastating.',
+  seek: 'Scan the deck. Find what you need. Exactly what you need.',
+  creativeAI: 'The machine learns. Each turn, a new power manifests.',
+  echoForm: 'Echoes of actions past, replayed in the present.',
+  electrodynamics: 'Lightning arcs between all targets. None are spared.'
 };
 
 // ========== ENEMY LORE ==========
@@ -227,6 +258,7 @@ export const RELIC_FLAVOR = {
   // Starter
   burning_blood: 'Vitae drawn from a dying phoenix. Its warmth mends wounds after every battle.',
   ring_of_snake: 'Coiled serpent silver that whispers secrets at the start of every battle.',
+  cracked_core: 'A fractured power source that still sparks with residual energy. The crack pulses with each loop.',
 
   // Common
   anchor: 'Cast from the hull of a ship that sailed between worlds. It holds fast against any tide.',
@@ -366,6 +398,18 @@ export const SILENT_ACT_DESCRIPTIONS = {
   },
   3: {
     entering: 'The corridors dissolve, and in the abstraction your silence becomes a shape. The algorithm at the center can hear everything. The question is whether it can hear nothing.'
+  }
+};
+
+export const DEFECT_ACT_DESCRIPTIONS = {
+  1: {
+    entering: 'Your systems initialize. The war allocates you a starting configuration and flags you as infrastructure. It does not expect its tools to climb.'
+  },
+  2: {
+    entering: 'The structured corridors recognize your architecture — you were built from the same blueprints. The war\'s infrastructure does not know whether to process you or maintain you.'
+  },
+  3: {
+    entering: 'The corridors dissolve, and your diagnostics detect the core algorithm directly. It built you. You are here to audit it. Neither of you expected this meeting.'
   }
 };
 

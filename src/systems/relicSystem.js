@@ -46,7 +46,8 @@ const createDefaultEffects = () => ({
   doubleDamage: false,
   blockNextTurn: 0,
   reduceDamage: 0,
-  thorns: 0
+  thorns: 0,
+  channelOrbs: []
 });
 
 /**
@@ -208,6 +209,10 @@ export const applyRelicEffect = (effect, effects, trigger, context) => {
       // Du-Vu Doll: gain strength per curse in deck
       const curseCount = context.deck?.filter(c => c.type === CARD_TYPES.CURSE).length || 0;
       effects.strength += curseCount * effect.amount;
+      break;
+
+    case 'channelOrb':
+      effects.channelOrbs.push(effect.orbType);
       break;
 
     default:

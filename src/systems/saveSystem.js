@@ -188,6 +188,72 @@ const validateSave = (saveData) => {
   return true;
 };
 
+// --- Export / Import ---
+
+const ALL_KEYS = [
+  'spireAscent_save',
+  'spireAscent_runHistory',
+  'spireAscent_progression',
+  'spireAscent_settings',
+  'spireAscent_tutorialDone',
+  'spireAscent_hasSeenTutorial',
+  'spireAscent_customData'
+];
+
+/**
+ * Export all game data as a JSON string.
+ * Returns the JSON string for download or clipboard.
+ */
+export const exportAllData = () => {
+  const data = { exportVersion: 1, exportDate: new Date().toISOString() };
+  for (const key of ALL_KEYS) {
+    const raw = localStorage.getItem(key);
+    if (raw !== null) {
+      data[key] = raw;
+    }
+  }
+  return JSON.stringify(data, null, 2);
+};
+
+/**
+ * Download all game data as a JSON file.
+ */
+export const downloadExport = () => {
+  const json = exportAllData();
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `spire-ascent-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+/**
+ * Import game data from a JSON string.
+ * Returns { success: boolean, error?: string, keysRestored?: number }
+ */
+export const importAllData = (jsonString) => {
+  try {
+    const data = JSON.parse(jsonString);
+    if (!data.exportVersion) {
+      return { success: false, error: 'Invalid backup file: missing export version' };
+    }
+    let keysRestored = 0;
+    for (const key of ALL_KEYS) {
+      if (key in data) {
+        localStorage.setItem(key, data[key]);
+        keysRestored++;
+      }
+    }
+    return { success: true, keysRestored };
+  } catch (e) {
+    return { success: false, error: `Failed to parse backup: ${e.message}` };
+  }
+};
+
 // Run History
 export const addRunToHistory = (runData) => {
   try {

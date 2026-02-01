@@ -33,6 +33,17 @@ export const ALL_RELICS = [
     character: 'silent'
   },
 
+  {
+    id: 'cracked_core',
+    name: 'Cracked Core',
+    rarity: RELIC_RARITY.STARTER,
+    description: 'At the start of each combat, Channel 1 Lightning orb.',
+    emoji: '⚡',
+    trigger: 'onCombatStart',
+    effect: { type: 'channelOrb', orbType: 'lightning' },
+    character: 'defect'
+  },
+
   // ========== COMMON ==========
   {
     id: 'anchor',
@@ -524,7 +535,8 @@ export const getBossRelic = (excludeIds = []) => {
 export const getStarterRelic = (characterId = 'ironclad') => {
   const STARTER_RELICS = {
     ironclad: 'burning_blood',
-    silent: 'ring_of_snake'
+    silent: 'ring_of_snake',
+    defect: 'cracked_core'
   };
   const relicId = STARTER_RELICS[characterId] || STARTER_RELICS.ironclad;
   return ALL_RELICS.find(r => r.id === relicId);

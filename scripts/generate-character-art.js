@@ -50,6 +50,27 @@ const CHARACTERS = [
       '<rect x="55" y="-100" width="5" height="80" rx="1" transform="rotate(15, 55, -60)" fill="#88ddaa" opacity="0.6" />',
       '<path d="M -30 35 Q -50 60 -40 90 L 40 90 Q 50 60 30 35 Z" opacity="0.4" />'
     ]
+  },
+  {
+    id: 'defect',
+    title: 'The Defect',
+    subtitle: 'Orbs &amp; Energy',
+    color1: '#224488',
+    color2: '#0a1533',
+    accent: '#66bbff',
+    // Automaton silhouette — angular body, orbiting orbs, crystalline
+    silhouetteFill: '#3377bb',
+    silhouetteParts: [
+      '<rect x="-35" y="-70" width="70" height="100" rx="4" />',
+      '<rect x="-30" y="-110" width="60" height="45" rx="3" />',
+      '<rect x="-20" y="-120" width="40" height="15" rx="2" opacity="0.8" />',
+      '<rect x="-50" y="-65" width="100" height="20" rx="6" />',
+      '<circle cx="-55" cy="-20" r="12" fill="#66bbff" opacity="0.5" />',
+      '<circle cx="55" cy="-20" r="12" fill="#ffdd44" opacity="0.5" />',
+      '<circle cx="0" cy="-140" r="10" fill="#9944cc" opacity="0.5" />',
+      '<rect x="-25" y="30" width="20" height="50" rx="3" opacity="0.6" />',
+      '<rect x="5" y="30" width="20" height="50" rx="3" opacity="0.6" />'
+    ]
   }
 ];
 

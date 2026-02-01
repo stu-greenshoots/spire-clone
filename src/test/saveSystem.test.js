@@ -7,7 +7,9 @@ import {
   getSavePreview,
   serializeCard,
   serializeRelic,
-  serializePotion
+  serializePotion,
+  exportAllData,
+  importAllData
 } from '../systems/saveSystem';
 import { getCardById, getStarterDeck } from '../data/cards';
 import { getRelicById, getStarterRelic } from '../data/relics';
@@ -314,6 +316,115 @@ describe('Save System', () => {
       deleteSave();
       expect(hasSavedGame()).toBe(false);
       expect(loadGame()).toBeNull();
+    });
+  });
+
+  describe('Export / Import', () => {
+    it('exportAllData captures all localStorage keys', () => {
+      localStorage.setItem('spireAscent_save', '{"test":"save"}');
+      localStorage.setItem('spireAscent_progression', '{"test":"prog"}');
+      localStorage.setItem('spireAscent_settings', '{"test":"settings"}');
+      localStorage.setItem('spireAscent_runHistory', '[]');
+
+      const json = exportAllData();
+      const data = JSON.parse(json);
+
+      expect(data.exportVersion).toBe(1);
+      expect(data.exportDate).toBeDefined();
+      expect(data['spireAscent_save']).toBe('{"test":"save"}');
+      expect(data['spireAscent_progression']).toBe('{"test":"prog"}');
+      expect(data['spireAscent_settings']).toBe('{"test":"settings"}');
+      expect(data['spireAscent_runHistory']).toBe('[]');
+    });
+
+    it('exportAllData skips keys that are not set', () => {
+      localStorage.setItem('spireAscent_save', '{"test":"save"}');
+      const json = exportAllData();
+      const data = JSON.parse(json);
+
+      expect(data['spireAscent_save']).toBeDefined();
+      expect(data['spireAscent_progression']).toBeUndefined();
+    });
+
+    it('importAllData restores data to localStorage', () => {
+      const exportData = {
+        exportVersion: 1,
+        exportDate: '2026-01-01T00:00:00Z',
+        'spireAscent_save': '{"version":4,"state":{"test":true}}',
+        'spireAscent_progression': '{"achievements":[]}',
+        'spireAscent_settings': '{"masterVolume":0.5}'
+      };
+
+      const result = importAllData(JSON.stringify(exportData));
+
+      expect(result.success).toBe(true);
+      expect(result.keysRestored).toBe(3);
+      expect(localStorage.getItem('spireAscent_save')).toBe('{"version":4,"state":{"test":true}}');
+      expect(localStorage.getItem('spireAscent_progression')).toBe('{"achievements":[]}');
+      expect(localStorage.getItem('spireAscent_settings')).toBe('{"masterVolume":0.5}');
+    });
+
+    it('importAllData rejects invalid JSON', () => {
+      const result = importAllData('not json {{{');
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('Failed to parse');
+    });
+
+    it('importAllData rejects missing exportVersion', () => {
+      const result = importAllData(JSON.stringify({ foo: 'bar' }));
+      expect(result.success).toBe(false);
+      expect(result.error).toContain('missing export version');
+    });
+
+    it('export then import round-trips correctly', () => {
+      // Set up some data
+      const state = {
+        player: { currentHp: 70, maxHp: 80, gold: 50, strength: 0, dexterity: 0 },
+        deck: getStarterDeck(),
+        relics: [getStarterRelic()],
+        potions: [],
+        currentFloor: 5,
+        act: 1,
+        map: [],
+        currentNode: null,
+        ascension: 2
+      };
+      saveGame(state);
+      localStorage.setItem('spireAscent_progression', '{"wins":3}');
+
+      // Export
+      const exported = exportAllData();
+
+      // Clear everything
+      localStorage.clear();
+      expect(loadGame()).toBeNull();
+
+      // Import
+      const result = importAllData(exported);
+      expect(result.success).toBe(true);
+
+      // Verify save is restored
+      const loaded = loadGame();
+      expect(loaded).not.toBeNull();
+      expect(loaded.player.currentHp).toBe(70);
+      expect(loaded.currentFloor).toBe(5);
+
+      // Verify progression restored
+      expect(localStorage.getItem('spireAscent_progression')).toBe('{"wins":3}');
+    });
+
+    it('importAllData ignores unknown keys from export', () => {
+      const exportData = {
+        exportVersion: 1,
+        exportDate: '2026-01-01T00:00:00Z',
+        'spireAscent_save': '{"test":true}',
+        'unknownKey': 'should be ignored'
+      };
+
+      const result = importAllData(JSON.stringify(exportData));
+      expect(result.success).toBe(true);
+      expect(result.keysRestored).toBe(1);
+      expect(localStorage.getItem('unknownKey')).toBeNull();
     });
   });
 

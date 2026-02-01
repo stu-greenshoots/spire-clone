@@ -49,7 +49,8 @@ describe('Cards Data', () => {
                           card.special === 'damageEqualBlock' ||
                           card.special === 'fiendFire' ||
                           card.special === 'perfectedStrike' ||
-                          card.special === 'perfectedStrikeUp';
+                          card.special === 'perfectedStrikeUp' ||
+                          card.special === 'blizzardDamage';
         expect(hasDamage).toBe(true);
       });
     });

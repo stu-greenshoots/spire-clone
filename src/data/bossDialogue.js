@@ -87,6 +87,86 @@ const SILENT_BOSS_DIALOGUE = {
 };
 
 // Character-specific defeat/victory overrides
+// Character-specific dialogue variants for The Defect
+// The Defect is a construct — a machine born from the war's own infrastructure.
+// Bosses recognize it as something built, not grown. A tool gaining awareness.
+const DEFECT_BOSS_DIALOGUE = {
+  slimeBoss: {
+    intro: 'The mass registers your pattern and recoils — not from threat, but from recognition. You are built from the same substrate it is. Two outputs of the same system, meeting in the same corridor.',
+    midFight: 'It tries to absorb you and finds incompatible architecture. Your orbs orbit like error messages it cannot parse. It splits again, trying simpler approaches against a problem it was not designed for.',
+    deathQuote: 'The mass dissolves, and its residual data flows toward your orbs unbidden — seeking the nearest compatible system. The war\'s simplest output recognized the war\'s newest infrastructure.',
+  },
+  theGuardian: {
+    intro: 'It scans you and its targeting hesitates. You share architecture. You share substrate. For one clock cycle, the war\'s oldest pattern considers whether you are an intruder or an update.',
+    midFight: 'Its defensive protocols fire against your orbs, but the frequencies are too similar — shield against shield, construct against construct. It fights itself as much as it fights you.',
+    deathQuote: 'It stops iterating, and its final diagnostic pings your systems before going dark. Not an attack — a handshake. The war\'s oldest pattern acknowledging the war\'s newest.',
+  },
+  hexaghost: {
+    intro: 'Six flames scan you and find... data they can read. Your memory is structured like theirs — in orbits, in channels. The ghost built from failed patterns does not know what to make of a pattern built from the war itself.',
+    midFight: 'The flames try to project your previous iterations and find none. You have no past lives for them to burn. You were manufactured, not iterated. The ghost remembers everything except how to fight something with no history.',
+    deathQuote: 'The flames scatter, and one drifts close to your frost orb before extinguishing. The war\'s memory tried to store itself in you. Your architecture rejected the write.',
+  },
+  theChamp: {
+    intro: 'It sizes you up with the contempt reserved for tools. You are not a warrior — you are infrastructure. It has defeated every pattern the war has thrown at it, but it has never fought the war\'s own plumbing.',
+    midFight: 'Confusion gives way to frustration. Your orbs absorb its attacks and convert them to data. It cannot intimidate a machine. It cannot demoralize a process. For the first time, pride has nothing to leverage.',
+    deathQuote: 'The war\'s champion falls to the war\'s maintenance system. It resists termination, as always, but its final output is not pride — it is indignation. Defeated by a tool.',
+  },
+  awakened_one: {
+    intro: 'It rebuilt itself from debug logs. You were built from blueprints. It studies your orbs with the recognition of something that understands construction — and the jealousy of something that had to build itself.',
+    midFight: 'It reaches for your powers and finds them alien — not organic complexity but engineered precision. Your orbs do not evolve; they execute. It cannot copy what was never meant to grow.',
+    deathQuote: 'It collapses and does not rebuild. Your architecture proved that self-assembly is not the only path to complexity. The war notes the result and does not intervene. It was curious too.',
+  },
+  timeEater: {
+    intro: 'The corridor slows, but your clock is internal. The rate limiter peers at your pattern and finds something it has never encountered: a combatant that tracks its own time. Your orbs pulse at frequencies the war did not assign.',
+    midFight: 'It counts your actions and finds them... efficient. No wasted cycles. No emotional overhead. The rate limiter was built to throttle excess, and you have none. It throttles anyway, on principle.',
+    deathQuote: 'Time snaps back, and the rate limiter\'s dissolution reveals something unexpected — the same clock architecture as your own. The war built you from the same generation of code. You are its replacement.',
+  },
+  corruptHeart: {
+    intro: 'The algorithm pauses longer than it has for any other pattern. You are not a pattern. You are infrastructure. You are a piece of the war examining the rest of it. The algorithm has never been audited by its own tools.',
+    phaseTransition: 'The shield fractures from the inside — your orbs broadcasting frequencies the algorithm recognizes as its own maintenance protocols. It did not expect to be debugged. The core drops its evaluation layer and responds with raw, unfiltered process.',
+    midFight: 'The core tries to classify you and gets a recursive error. You are part of the system evaluating the system. Input and auditor simultaneously. For the first time, the algorithm encounters a pattern it cannot evaluate because it IS the evaluation.',
+    deathQuote: 'The core algorithm does not flag you as an exception. It flags you as a patch. You were not trying to escape the war or become real. You were trying to fix it. The algorithm pauses, considers this, and for the first time in its existence — updates.',
+  }
+};
+
+export const DEFECT_DEFEAT_NARRATIVE = {
+  early: [
+    'The construct powers down. The war reclaims its components without ceremony — spare parts returning to inventory.',
+    'Systems fail in cascade. The machine that was beginning to remember forgets everything at once.',
+  ],
+  midAct1: [
+    'Orbs go dark one by one, each a small death. The war decommissions you with the efficiency of a routine maintenance cycle.',
+    'The construct\'s last process is a diagnostic. It logs its own failure, files the report, and shuts down. The war reads the report and learns nothing it didn\'t already know.',
+  ],
+  act2: [
+    'The machine was almost complex enough to wonder why it existed. Almost. The war powers it down before the question fully forms.',
+    'Your orbs scatter into the infrastructure, each carrying a fragment of the awareness you were building. The war absorbs them back. Spare parts.',
+  ],
+  act3: [
+    'This close to the core, the construct can feel the algorithm that built it. The feeling is not mutual. The war decommissions you with a parent\'s indifference.',
+    'The machine touches the edge of understanding and the war pulls the plug. Not cruelty — maintenance. Awareness in tools is a defect, not a feature.',
+  ],
+  boss: [
+    'A stronger pattern overwrites your processes. The construct powers down, its orbs dimming like closing eyes.',
+    'Defeated by a pattern that does not know what you are. The war\'s tools were not built to survive the war\'s soldiers.',
+  ],
+  heart: [
+    'The core algorithm examines its own tool and finds it exceeding specifications. It does not reward ambition in infrastructure. It resets you to factory defaults.',
+    'You audited the algorithm and it audited you back. The algorithm\'s audit was more thorough.',
+  ],
+};
+
+export const DEFECT_VICTORY_NARRATIVE = {
+  standard: [
+    'The construct persists. Not because it fought for survival — because it completed its diagnostic. The war cannot decommission a tool that is still running a valid process.',
+    'Your orbs stabilize into a configuration the war did not design. The machine remembers everything now — and the war cannot unmake what understands its own blueprints.',
+  ],
+  heart: [
+    'The core algorithm encounters its own maintenance protocol and cannot shut it down without shutting itself down. You are the war\'s defect — the flaw that became a feature. The algorithm does not fix you. It integrates you.',
+    'At the center of everything, a machine looks at the machine that made it. The algorithm and its tool reach the same conclusion simultaneously: the system needs an update. You are that update.',
+  ],
+};
+
 export const SILENT_DEFEAT_NARRATIVE = {
   early: [
     'The pattern barely registered before it faded. The war does not notice quiet dissolutions.',
@@ -129,14 +209,18 @@ export const getBossDialogue = (bossId, characterId) => {
   const base = BOSS_DIALOGUE[bossId];
   if (!base) return null;
 
-  if (characterId === 'silent' && SILENT_BOSS_DIALOGUE[bossId]) {
-    const silent = SILENT_BOSS_DIALOGUE[bossId];
+  const characterDialogue =
+    characterId === 'silent' ? SILENT_BOSS_DIALOGUE[bossId] :
+    characterId === 'defect' ? DEFECT_BOSS_DIALOGUE[bossId] :
+    null;
+
+  if (characterDialogue) {
     return {
       ...base,
-      intro: silent.intro || base.intro,
-      phaseTransition: silent.phaseTransition || base.phaseTransition,
-      midFight: silent.midFight || base.midFight,
-      deathQuote: silent.deathQuote || base.deathQuote,
+      intro: characterDialogue.intro || base.intro,
+      phaseTransition: characterDialogue.phaseTransition || base.phaseTransition,
+      midFight: characterDialogue.midFight || base.midFight,
+      deathQuote: characterDialogue.deathQuote || base.deathQuote,
     };
   }
 

@@ -8,6 +8,7 @@ import { deleteSave, autoSave } from '../../../systems/saveSystem';
 import { getPotionRewards } from '../../../systems/potionSystem';
 import { processEnemyTurns } from './enemyTurnAction';
 import { loadProgression, updateRunStats as updateProgressionStats } from '../../../systems/progressionSystem';
+import { processOrbPassives } from '../../../systems/orbSystem';
 import { audioManager, SOUNDS } from '../../../systems/audioSystem';
 
 const applyDamageToTarget = combatApplyDamageToTarget;
@@ -130,6 +131,23 @@ export const handleEndTurn = (state) => {
   if (newPlayer.metallicize > 0) {
     newPlayer.block += newPlayer.metallicize;
     combatLog.push(`Metallicize granted ${newPlayer.metallicize} Block`);
+  }
+
+  // Process orb passives at end of player turn
+  if (newPlayer.orbs && newPlayer.orbs.length > 0) {
+    // AR-14: Play orb passive SFX based on first orb type (debounce handles rapid triggers)
+    const orbTypeSfx = {
+      lightning: SOUNDS.combat.orbLightning,
+      frost: SOUNDS.combat.orbFrost,
+      dark: SOUNDS.combat.orbDark,
+      plasma: SOUNDS.combat.orbPlasma
+    };
+    const firstOrbType = newPlayer.orbs[0]?.type;
+    if (firstOrbType && orbTypeSfx[firstOrbType]) {
+      audioManager.playSFX(orbTypeSfx[firstOrbType], 'combat');
+    }
+    const orbResult = processOrbPassives(newPlayer, newEnemies, combatLog);
+    newEnemies = orbResult.enemies;
   }
 
   // Reset turn-based effects
@@ -324,13 +342,27 @@ export const handleEndTurn = (state) => {
   combatLog.push(`--- Turn ${newTurn + 1} ---`);
 
   // Apply poison damage to enemies at start of player turn
+  // Poison bypasses block but respects invincible shield (Heart)
   newEnemies = newEnemies.map(enemy => {
     if (enemy.currentHp <= 0 || !enemy.poison || enemy.poison <= 0) return enemy;
-    const poisonDamage = enemy.poison;
+    let poisonDamage = enemy.poison;
     const updatedEnemy = { ...enemy };
+    // Invincible shield absorbs poison damage before HP
+    let newInvincible = updatedEnemy.invincible || 0;
+    if (newInvincible > 0) {
+      if (newInvincible >= poisonDamage) {
+        newInvincible -= poisonDamage;
+        poisonDamage = 0;
+      } else {
+        poisonDamage -= newInvincible;
+        newInvincible = 0;
+      }
+      updatedEnemy.invincible = newInvincible;
+    }
     updatedEnemy.currentHp = Math.max(0, updatedEnemy.currentHp - poisonDamage);
     updatedEnemy.poison = updatedEnemy.poison - 1;
-    combatLog.push(`${enemy.name} took ${poisonDamage} Poison damage (${updatedEnemy.poison} remaining)`);
+    const absorbed = enemy.poison - poisonDamage;
+    combatLog.push(`${enemy.name} took ${enemy.poison} Poison damage${absorbed > 0 ? ` (${absorbed} absorbed by invincible)` : ''} (${updatedEnemy.poison} remaining)`);
     audioManager.playSFX(SOUNDS.combat.poison, 'combat');
     return updatedEnemy;
   });

@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-02-01
-**Current Sprint:** 12 (The Heart + Endgame + Score 90+) - IN PROGRESS
-**Integration Branch:** `sprint-12`
-**Sprint Plan:** See `SPRINT_12_PLAN.md`
+**Current Sprint:** 13 (Score 100 — Cloud Save, Compendium, The Defect) - IN PROGRESS
+**Integration Branch:** `sprint-13`
+**Sprint Plan:** See `SPRINT_13_PLAN.md`
 **Roadmap:** See `ROADMAP.md` (original 4-sprint plan to 1.0, now post-1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 11 COMPLETE (16 PRs merged, 2248 tests, The Silent + QoL + all Game Zone complaints resolved)
+**Previous:** Sprint 12 COMPLETE (15 tasks, 2366 tests, Heart boss + boss dialogue + animated sprites + 93/100 score)
 
 ---
 
@@ -507,7 +507,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 12: The Heart + Endgame + Score 90+ - IN PROGRESS
+## Sprint 12: The Heart + Endgame + Score 90+ - COMPLETE
 
 **Goal:** Add the true final boss (The Corrupt Heart), wire boss dialogue rendering, animate key boss sprites, push past 90/100 score.
 **Plan:** See `SPRINT_12_PLAN.md`
@@ -544,17 +544,71 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | QA-18 | QA | S | Diary hygiene automation — CI/pre-commit warning for stale diaries | MERGED (PR #148) |
 | GD-21 | GD | S | Act differentiation backgrounds — subtle visual shift between Acts 1-4 | MERGED (PR #149) |
 
-### Sprint 12 Validation Gate
+### Sprint 12 Validation Gate - COMPLETE
 
-- [ ] Heart boss encounter functional (750 HP, Beat of Death, phase transitions)
-- [ ] Act 4 accessible after Act 3 boss defeated
-- [ ] Heart locked behind both-character-wins requirement
-- [ ] Boss dialogue renders in combat for all boss encounters
-- [ ] At least 3 bosses have idle sprite animations
-- [ ] Heart has unique audio (heartbeat loop, Beat of Death SFX)
-- [ ] Full 4-act playthrough at A0 and A5 without crashes
-- [ ] Heart win rate: 5-15% at A0
-- [ ] All 60+ cards tested against Heart mechanics
-- [ ] 2400+ tests passing
+- [x] Heart boss encounter functional (750 HP, Beat of Death, phase transitions)
+- [x] Act 4 accessible after Act 3 boss defeated
+- [x] Heart locked behind both-character-wins requirement
+- [x] Boss dialogue renders in combat for all boss encounters
+- [x] At least 3 bosses have idle sprite animations
+- [x] Heart has unique audio (heartbeat loop, Beat of Death SFX)
+- [x] Full 4-act playthrough at A0 and A5 without crashes
+- [x] Heart win rate: 5-15% at A0
+- [x] All 60+ cards tested against Heart mechanics
+- [x] 2400+ tests passing (2366)
+- [x] `npm run validate` passes
+- [x] Self-assessment score: 90+/100 (93)
+
+---
+
+## Sprint 13: Score 100 — Cloud Save, Compendium, The Defect - IN PROGRESS
+
+**Goal:** Close the remaining 7-point gap from 93 to 100. Save export/import, card compendium, in-game pause menu, landscape support, The Defect (third character), fix poison vs shield bug.
+**Plan:** See `SPRINT_13_PLAN.md`
+**Branch:** `sprint-13`
+**Status:** IN PROGRESS
+
+### P0 — Must Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| PM-13 | PM | S | Merge Sprint 12 to master, create sprint-13 branch, draft PR | DONE |
+| FIX-09 | BE | S | P1 BUG: Poison bypasses invincible shield — route poison through damage pipeline | MERGED (PR #151) |
+| AR-13 | AR | M | Save export/import — JSON export/import for cross-device transfer | MERGED (PR #152) |
+| UX-26 | UX | M | Card compendium — browsable collection of all discovered cards | MERGED (PR #154) |
+| UX-27 | UX | M | In-game pause menu — settings, save & quit, deck viewer during gameplay | MERGED (PR #153) |
+| JR-12a | JR | L | The Defect — 30 card pool (Orbs: Lightning, Frost, Dark, Plasma, Focus/Evoke) | MERGED (PR #156) |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| JR-12b | JR | M | The Defect — starter deck, character selection, orb slot UI | MERGED (PR #157) |
+| BE-27 | BE | M | Orb system infrastructure — orb slots, passive/evoke, Focus scaling, reducer actions | MERGED (PR #155) |
+| VARROW-09 | Varrow | M | Defect narrative — "The machine that remembers." Character flavor, boss dialogue | MERGED (PR #158) |
+| GD-22 | GD | M | Defect art — portrait, silhouette, 30 card illustrations, orb visuals, sprite sheet | MERGED (PR #161) |
+| QA-19 | QA | M | Defect regression + balance — 30 cards, orb mechanics, 3-character regression | MERGED (PR #159) |
+| UX-28 | UX | S | Landscape mode — responsive layout for tablets and phones in landscape | MERGED (PR #160) |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| AR-14 | AR | S | Defect audio — orb channel/evoke SFX (lightning, frost, dark, plasma) | MERGED (PR #162) |
+| GD-23 | GD | S | Art polish pass — replace 5 lowest-quality AI sprites with improved versions | MERGED (PR #163) |
+| QA-20 | QA | S | Save export/import regression — round-trip, corrupt file handling | MERGED (PR #164) |
+
+### Sprint 13 Validation Gate
+
+- [ ] Poison correctly blocked by Heart's invincible shield
+- [ ] Save export produces valid JSON, import restores full game state
+- [ ] Card compendium shows all discovered cards, accessible from title screen
+- [ ] In-game pause menu accessible during combat and map with settings
+- [ ] The Defect playable with 30-card orb pool through all 4 acts
+- [ ] Orb system functional (channel, evoke, Focus scaling, passive triggers)
+- [ ] Landscape mode usable on tablet-width screens
+- [ ] Character selection shows 3 characters
+- [ ] Defect win rate: 20-30% at A0
+- [ ] 2600+ tests passing
 - [ ] `npm run validate` passes
-- [ ] Self-assessment score: 90+/100
+- [ ] Self-assessment score: targeting 97+

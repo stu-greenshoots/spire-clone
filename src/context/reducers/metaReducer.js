@@ -98,6 +98,7 @@ export const metaReducer = (state, action) => {
 
       // Apply character-specific max HP (Silent: 70, Ironclad: 80)
       const maxHp = character?.maxHp || 80;
+      const orbSlots = character?.orbSlots || 0;
 
       return {
         ...createInitialState(),
@@ -112,7 +113,8 @@ export const metaReducer = (state, action) => {
           ...createInitialState().player,
           maxHp,
           currentHp: maxHp,
-          gold: startingGold
+          gold: startingGold,
+          orbSlots
         }
       };
     }
@@ -126,6 +128,7 @@ export const metaReducer = (state, action) => {
       const map = generateMap(1);
       const dailyCharacter = getCharacterById(characterId);
       const dailyMaxHp = dailyCharacter?.maxHp || 80;
+      const dailyOrbSlots = dailyCharacter?.orbSlots || 0;
 
       let newState = {
         ...createInitialState(),
@@ -140,7 +143,8 @@ export const metaReducer = (state, action) => {
           ...createInitialState().player,
           maxHp: dailyMaxHp,
           currentHp: dailyMaxHp,
-          gold: 99
+          gold: 99,
+          orbSlots: dailyOrbSlots
         },
         dailyChallenge: {
           seed,
@@ -368,6 +372,9 @@ export const metaReducer = (state, action) => {
           gold: saveData.player.gold,
           strength: saveData.player.strength || 0,
           dexterity: saveData.player.dexterity || 0,
+          orbs: saveData.player.orbs || [],
+          orbSlots: saveData.player.orbSlots || 0,
+          focus: saveData.player.focus || 0,
         },
         deck,
         relics,

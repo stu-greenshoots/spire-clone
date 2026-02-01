@@ -12,6 +12,8 @@ import { ALL_CARDS, CARD_TYPES, getRandomCard } from '../data/cards';
 import { INTENT } from '../data/enemies';
 import { shuffleArray } from '../utils/mapGenerator';
 import { calculateDamage, calculateBlock, applyDamageToTarget } from './combatSystem';
+import { channelOrb, evokeOrbs, applyOrbEvoke } from './orbSystem';
+import { audioManager, SOUNDS } from './audioSystem';
 
 /**
  * Helper to handle exhaust triggers (Dark Embrace, Feel No Pain, Dead Branch)
@@ -186,6 +188,21 @@ const simplePlayerEffects = {
     ctx.player.bulletTime = true;
     ctx.player.noDrawThisTurn = true;
     ctx.combatLog.push('All cards cost 0 this turn. Cannot draw additional cards.');
+  },
+  gainFocus: (card, ctx) => {
+    const amount = card.focusAmount || card.focus || 2;
+    ctx.player.focus = (ctx.player.focus || 0) + amount;
+    ctx.combatLog.push(`Gained ${amount} Focus`);
+  },
+  loseFocus: (card, ctx) => {
+    const amount = card.focusLoss || 1;
+    ctx.player.focus = (ctx.player.focus || 0) - amount;
+    ctx.combatLog.push(`Lost ${amount} Focus`);
+  },
+  gainOrbSlot: (card, ctx) => {
+    const amount = card.orbSlotGain || 1;
+    ctx.player.orbSlots = (ctx.player.orbSlots || 3) + amount;
+    ctx.combatLog.push(`Gained ${amount} Orb slot(s)`);
   }
 };
 
@@ -520,6 +537,176 @@ const complexEffects = {
       ctx.player.strength += strengthGain;
       ctx.combatLog.push(`Gained ${strengthGain} Strength from kill`);
     }
+  },
+
+  // Orb effects (Defect)
+  channelLightning: (card, ctx) => {
+    const count = card.orbCount || 1;
+    for (let i = 0; i < count; i++) {
+      const result = channelOrb(ctx.player, 'lightning', ctx.enemies, ctx.combatLog);
+      ctx.enemies = result.enemies;
+    }
+    audioManager.playSFX(SOUNDS.combat.orbLightning, 'combat');
+  },
+  channelFrost: (card, ctx) => {
+    const count = card.orbCount || 1;
+    for (let i = 0; i < count; i++) {
+      const result = channelOrb(ctx.player, 'frost', ctx.enemies, ctx.combatLog);
+      ctx.enemies = result.enemies;
+    }
+    // Track for Blizzard damage calculation
+    ctx.player.frostChanneled = (ctx.player.frostChanneled || 0) + count;
+    audioManager.playSFX(SOUNDS.combat.orbFrost, 'combat');
+  },
+  channelDark: (card, ctx) => {
+    const count = card.orbCount || 1;
+    for (let i = 0; i < count; i++) {
+      const result = channelOrb(ctx.player, 'dark', ctx.enemies, ctx.combatLog);
+      ctx.enemies = result.enemies;
+    }
+    audioManager.playSFX(SOUNDS.combat.orbDark, 'combat');
+  },
+  channelPlasma: (card, ctx) => {
+    const count = card.orbCount || 1;
+    for (let i = 0; i < count; i++) {
+      const result = channelOrb(ctx.player, 'plasma', ctx.enemies, ctx.combatLog);
+      ctx.enemies = result.enemies;
+    }
+    audioManager.playSFX(SOUNDS.combat.orbPlasma, 'combat');
+  },
+  evokeOrb: (card, ctx) => {
+    const count = card.evokeCount || 1;
+    const result = evokeOrbs(ctx.player, ctx.enemies, ctx.combatLog, { count });
+    ctx.enemies = result.enemies;
+    audioManager.playSFX(SOUNDS.combat.orbEvoke, 'combat');
+  },
+  evokeAllOrbs: (card, ctx) => {
+    const result = evokeOrbs(ctx.player, ctx.enemies, ctx.combatLog, { all: true });
+    ctx.enemies = result.enemies;
+    audioManager.playSFX(SOUNDS.combat.orbEvoke, 'combat');
+  },
+
+  // Defect specials
+  dualcast: (card, ctx) => {
+    // Evoke the leftmost orb twice
+    const orbs = ctx.player.orbs || [];
+    if (orbs.length > 0) {
+      const orb = orbs[0];
+      const focus = ctx.player.focus || 0;
+      // Evoke once (without removing)
+      let result = applyOrbEvoke(orb, ctx.player, ctx.enemies, focus, ctx.combatLog);
+      ctx.enemies = result.enemies;
+      // Evoke again and remove
+      result = applyOrbEvoke(orb, ctx.player, ctx.enemies, focus, ctx.combatLog);
+      ctx.enemies = result.enemies;
+      ctx.player.orbs = orbs.slice(1);
+      audioManager.playSFX(SOUNDS.combat.orbEvoke, 'combat');
+    }
+  },
+  drawPerOrb: (card, ctx) => {
+    const orbs = ctx.player.orbs || [];
+    const uniqueTypes = new Set(orbs.map(o => o.type));
+    const drawCount = uniqueTypes.size;
+    if (drawCount > 0) {
+      for (let i = 0; i < drawCount; i++) {
+        if (ctx.drawPile.length > 0) {
+          const drawn = ctx.drawPile.pop();
+          ctx.hand.push(drawn);
+        }
+      }
+      ctx.combatLog.push(`Drew ${drawCount} card(s) from ${uniqueTypes.size} unique Orb type(s)`);
+    }
+  },
+  steamBarrier: (card, ctx) => {
+    // Reduce block already applied by the amount of previous plays this combat
+    const reduction = ctx.player.steamBarrierReduction || 0;
+    if (reduction > 0) {
+      const actualReduction = Math.min(reduction, ctx.player.block);
+      ctx.player.block -= actualReduction;
+    }
+    ctx.player.steamBarrierReduction = reduction + 1;
+    ctx.combatLog.push('Steam Barrier block decreases by 1 each play');
+  },
+  blockPerDiscard: (card, ctx) => {
+    const discardCount = ctx.discardPile.length;
+    const bonus = card.blockBonus || 0;
+    const blockGain = discardCount + bonus;
+    if (blockGain > 0) {
+      ctx.player.block += blockGain;
+      ctx.combatLog.push(`Gained ${blockGain} Block from ${discardCount} discarded cards`);
+    }
+  },
+  blizzardDamage: (card, ctx) => {
+    const frostCount = ctx.player.frostChanneled || 0;
+    const multiplier = card.blizzardMultiplier || 2;
+    const damage = frostCount * multiplier;
+    if (damage > 0) {
+      ctx.enemies = ctx.enemies.map(e => {
+        if (e.currentHp <= 0) return e;
+        return applyDamageToTarget(e, calculateDamage(damage, ctx.player));
+      });
+      ctx.combatLog.push(`Blizzard dealt ${damage} damage to all enemies (${frostCount} Frost × ${multiplier})`);
+    }
+  },
+  ftlDraw: (card, ctx) => {
+    const threshold = card.ftlThreshold || 3;
+    const cardsPlayed = ctx.player.cardsPlayedThisTurn || 0;
+    if (cardsPlayed < threshold && ctx.drawPile.length > 0) {
+      const drawn = ctx.drawPile.pop();
+      ctx.hand.push(drawn);
+      ctx.combatLog.push('FTL: Drew 1 card');
+    }
+  },
+  sunderEnergy: (card, ctx) => {
+    // Check if target enemy was killed by the damage (already applied)
+    const target = ctx.enemies.find(e => e.instanceId === ctx.targetId);
+    if (target && target.currentHp <= 0) {
+      ctx.player.energy += 3;
+      ctx.combatLog.push('Sunder killed enemy — gained 3 Energy');
+    }
+  },
+  consume: (card, ctx) => {
+    const focusGain = card.focusAmount || 2;
+    ctx.player.focus = (ctx.player.focus || 0) + focusGain;
+    ctx.player.orbSlots = Math.max(0, (ctx.player.orbSlots || 3) - 1);
+    // If we have more orbs than slots, evoke overflow
+    while ((ctx.player.orbs || []).length > ctx.player.orbSlots && ctx.player.orbs.length > 0) {
+      const orb = ctx.player.orbs[0];
+      const result = applyOrbEvoke(orb, ctx.player, ctx.enemies, ctx.player.focus, ctx.combatLog);
+      ctx.enemies = result.enemies;
+      ctx.player.orbs = ctx.player.orbs.slice(1);
+    }
+    ctx.combatLog.push(`Consumed: Gained ${focusGain} Focus, lost 1 Orb slot`);
+  },
+  seekCards: (card, ctx) => {
+    const count = card.seekCount || 1;
+    for (let i = 0; i < count; i++) {
+      if (ctx.drawPile.length > 0) {
+        // Take a random card from draw pile
+        const idx = Math.floor(Math.random() * ctx.drawPile.length);
+        const sought = ctx.drawPile.splice(idx, 1)[0];
+        ctx.hand.push(sought);
+      }
+    }
+    ctx.combatLog.push(`Sought ${count} card(s) from draw pile`);
+  },
+  creativeAI: (card, ctx) => {
+    ctx.player.creativeAI = true;
+    ctx.combatLog.push('Creative AI activated — a random Power card will be added each turn');
+  },
+  echoForm: (card, ctx) => {
+    ctx.player.echoForm = (ctx.player.echoForm || 0) + 1;
+    ctx.combatLog.push('Echo Form activated — first card each turn is played twice');
+  },
+  electrodynamics: (card, ctx) => {
+    ctx.player.electrodynamics = true;
+    // Channel Lightning orbs
+    const count = card.orbCount || 2;
+    for (let i = 0; i < count; i++) {
+      const result = channelOrb(ctx.player, 'lightning', ctx.enemies, ctx.combatLog);
+      ctx.enemies = result.enemies;
+    }
+    ctx.combatLog.push('Electrodynamics: Lightning now hits ALL enemies');
   }
 };
 
