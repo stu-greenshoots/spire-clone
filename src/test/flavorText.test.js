@@ -7,8 +7,15 @@ import {
   ENEMY_LORE,
   ACT_DESCRIPTIONS,
   RELIC_FLAVOR,
-  WORLD_LORE
+  WORLD_LORE,
+  SILENT_ACT_DESCRIPTIONS
 } from '../data/flavorText';
+import {
+  BOSS_DIALOGUE,
+  getBossDialogue,
+  SILENT_DEFEAT_NARRATIVE,
+  SILENT_VICTORY_NARRATIVE
+} from '../data/bossDialogue';
 
 describe('Flavor Text Data', () => {
   describe('CARD_FLAVOR', () => {
@@ -164,6 +171,87 @@ describe('Flavor Text Data', () => {
     it('should not have any snippet exceeding 200 characters', () => {
       WORLD_LORE.forEach(snippet => {
         expect(snippet.length).toBeLessThanOrEqual(200);
+      });
+    });
+  });
+
+  describe('Silent Character Narrative (VARROW-06)', () => {
+    const bossIds = Object.keys(BOSS_DIALOGUE);
+
+    describe('getBossDialogue with character parameter', () => {
+      it('should return default dialogue for ironclad', () => {
+        bossIds.forEach(bossId => {
+          const dialogue = getBossDialogue(bossId, 'ironclad');
+          expect(dialogue.intro).toBe(BOSS_DIALOGUE[bossId].intro);
+        });
+      });
+
+      it('should return Silent-specific dialogue for silent character', () => {
+        bossIds.forEach(bossId => {
+          const dialogue = getBossDialogue(bossId, 'silent');
+          expect(dialogue.intro).toBeDefined();
+          expect(typeof dialogue.intro).toBe('string');
+          expect(dialogue.intro.length).toBeGreaterThan(0);
+          // Silent dialogue should differ from default
+          expect(dialogue.intro).not.toBe(BOSS_DIALOGUE[bossId].intro);
+        });
+      });
+
+      it('should preserve personality field from base dialogue', () => {
+        bossIds.forEach(bossId => {
+          const dialogue = getBossDialogue(bossId, 'silent');
+          expect(dialogue.personality).toBe(BOSS_DIALOGUE[bossId].personality);
+        });
+      });
+
+      it('should return null for unknown boss', () => {
+        expect(getBossDialogue('nonexistent', 'silent')).toBeNull();
+      });
+
+      it('should work without character parameter (backwards compatible)', () => {
+        bossIds.forEach(bossId => {
+          const dialogue = getBossDialogue(bossId);
+          expect(dialogue.intro).toBe(BOSS_DIALOGUE[bossId].intro);
+        });
+      });
+    });
+
+    describe('SILENT_DEFEAT_NARRATIVE', () => {
+      it('should have all defeat pools', () => {
+        ['early', 'midAct1', 'act2', 'act3', 'boss', 'heart'].forEach(pool => {
+          expect(SILENT_DEFEAT_NARRATIVE[pool]).toBeDefined();
+          expect(Array.isArray(SILENT_DEFEAT_NARRATIVE[pool])).toBe(true);
+          expect(SILENT_DEFEAT_NARRATIVE[pool].length).toBeGreaterThan(0);
+        });
+      });
+
+      it('should contain only non-empty strings', () => {
+        Object.values(SILENT_DEFEAT_NARRATIVE).forEach(pool => {
+          pool.forEach(text => {
+            expect(typeof text).toBe('string');
+            expect(text.length).toBeGreaterThan(0);
+          });
+        });
+      });
+    });
+
+    describe('SILENT_VICTORY_NARRATIVE', () => {
+      it('should have standard and heart pools', () => {
+        ['standard', 'heart'].forEach(pool => {
+          expect(SILENT_VICTORY_NARRATIVE[pool]).toBeDefined();
+          expect(Array.isArray(SILENT_VICTORY_NARRATIVE[pool])).toBe(true);
+          expect(SILENT_VICTORY_NARRATIVE[pool].length).toBeGreaterThan(0);
+        });
+      });
+    });
+
+    describe('SILENT_ACT_DESCRIPTIONS', () => {
+      it('should have entering text for all 3 acts', () => {
+        [1, 2, 3].forEach(act => {
+          expect(SILENT_ACT_DESCRIPTIONS[act]).toBeDefined();
+          expect(typeof SILENT_ACT_DESCRIPTIONS[act].entering).toBe('string');
+          expect(SILENT_ACT_DESCRIPTIONS[act].entering.length).toBeGreaterThan(0);
+        });
       });
     });
   });
