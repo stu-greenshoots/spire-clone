@@ -3,6 +3,34 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 16 Entries
+
+### BE-31: Endless Mode Infrastructure
+**Date:** 2026-02-01
+**Status:** MERGED (PR #197)
+
+**Done:**
+- Added ENDLESS_TRANSITION game phase for post-Heart decision screen
+- Added endlessMode (boolean) and endlessLoop (number) to game state
+- Modified PROCEED_TO_MAP: after Heart defeat, shows Endless Transition instead of Victory
+- Added ENTER_ENDLESS action: resets to Act 1 with incremented loop counter
+- Added applyEndlessScaling(): scales enemy HP, maxHp, and invincible by +10% per loop
+- Endless encounters use effective act (capped at 3) for enemy pools
+- Created EndlessTransition component with "Enter the Endless" and "Claim Victory" buttons
+- Save/load persists endlessMode and endlessLoop
+- 13 new tests, 3085 total passing, lint clean, build clean
+
+**Architecture:**
+- Scaling applied at encounter creation time in mapReducer (same pattern as ascension)
+- Combat system unaware of endless mode — scaling pre-applied to enemy instances
+- Each loop cycles Acts 1→2→3→Heart, then offers another loop
+- Effective act for encounter pools: Math.min(state.act, 3)
+
+**Blockers:** None
+**Next:** UX-33, VARROW-12, AR-18, GD-31 now unblocked
+
+---
+
 ## Sprint 15 Entries
 
 ### BE-30: Scrying System

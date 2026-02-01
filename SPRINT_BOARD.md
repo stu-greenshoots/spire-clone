@@ -733,14 +733,14 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Player retention — endless mode, custom seeded runs, performance optimization, quality-of-life features.
 **Plan:** See `SPRINT_16_PLAN.md`
 **Branch:** `sprint-16`
-**Status:** IN PROGRESS — 0/14 tasks done
+**Status:** IN PROGRESS — 1/14 tasks done
 
 ### P0 — Must Ship
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | PM-16 | PM | S | Merge Sprint 15 to master, create sprint-16 branch, draft PR | DONE |
-| BE-31 | BE | M | Endless mode infrastructure — post-Heart looping with scaling HP/damage | PENDING |
+| BE-31 | BE | M | Endless mode infrastructure — post-Heart looping with scaling HP/damage | MERGED (PR #197) |
 | UX-33 | UX | M | Endless mode UI — floor counter, difficulty indicator, death stats | PENDING |
 | BE-32 | BE | S | Custom seeded runs — player-entered seed, shareable seed codes | PENDING |
 | JR-15 | JR | M | Character-specific relics — 3 per character (12 total) | PENDING |
