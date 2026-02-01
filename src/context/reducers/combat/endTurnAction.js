@@ -135,6 +135,17 @@ export const handleEndTurn = (state) => {
 
   // Process orb passives at end of player turn
   if (newPlayer.orbs && newPlayer.orbs.length > 0) {
+    // AR-14: Play orb passive SFX based on first orb type (debounce handles rapid triggers)
+    const orbTypeSfx = {
+      lightning: SOUNDS.combat.orbLightning,
+      frost: SOUNDS.combat.orbFrost,
+      dark: SOUNDS.combat.orbDark,
+      plasma: SOUNDS.combat.orbPlasma
+    };
+    const firstOrbType = newPlayer.orbs[0]?.type;
+    if (firstOrbType && orbTypeSfx[firstOrbType]) {
+      audioManager.playSFX(orbTypeSfx[firstOrbType], 'combat');
+    }
     const orbResult = processOrbPassives(newPlayer, newEnemies, combatLog);
     newEnemies = orbResult.enemies;
   }

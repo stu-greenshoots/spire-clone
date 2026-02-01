@@ -23,7 +23,12 @@ export const SOUNDS = {
     discard: 'card_discard',
     heartbeat: 'heartbeat',
     beatOfDeath: 'beat_of_death',
-    heartPhaseTransition: 'heart_phase_transition'
+    heartPhaseTransition: 'heart_phase_transition',
+    orbLightning: 'orb_lightning',
+    orbFrost: 'orb_frost',
+    orbDark: 'orb_dark',
+    orbPlasma: 'orb_plasma',
+    orbEvoke: 'orb_evoke'
   },
   ui: {
     buttonClick: 'ui_click',
