@@ -5,6 +5,7 @@ import CombatScreen from './components/CombatScreen';
 import RewardScreen from './components/RewardScreen';
 import GameOverScreen from './components/GameOverScreen';
 import VictoryScreen from './components/VictoryScreen';
+import EndlessTransition from './components/EndlessTransition';
 import PersistentHeader from './components/PersistentHeader';
 import PlayerStatusBar from './components/PlayerStatusBar';
 import DevTools from './components/DevTools';
@@ -48,6 +49,7 @@ function getMusicPhase(gamePhase, currentNode, act) {
     case GAME_PHASE.CARD_REWARD:
       return currentNode?.type === 'boss' ? 'boss' : 'combat';
     case GAME_PHASE.VICTORY:
+    case GAME_PHASE.ENDLESS_TRANSITION:
       return 'victory';
     case GAME_PHASE.GAME_OVER:
       return 'defeat';
@@ -155,6 +157,8 @@ const GameContent = () => {
         return <GameOverScreen />;
       case GAME_PHASE.VICTORY:
         return <VictoryScreen />;
+      case GAME_PHASE.ENDLESS_TRANSITION:
+        return <EndlessTransition />;
       case GAME_PHASE.DATA_EDITOR:
         return DataEditor ? <DataEditor /> : <MainMenu />;
       default:

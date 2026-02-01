@@ -63,7 +63,9 @@ export const saveGame = (state) => {
         currentNode: state.currentNode,
         ascension: state.ascension || 0,
         phase: state.phase || null,
-        character: state.character || 'ironclad'
+        character: state.character || 'ironclad',
+        endlessMode: state.endlessMode || false,
+        endlessLoop: state.endlessLoop || 0
       }
     };
     // Simple checksum for corruption detection
