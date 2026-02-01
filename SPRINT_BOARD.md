@@ -458,7 +458,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Introduce The Silent (second character class), resolve all remaining Game Zone complaints, push toward 90+ score.
 **Plan:** See `SPRINT_11_PLAN.md`
 **Branch:** `sprint-11`
-**Status:** IN PROGRESS — PM-11 + BE-23 + JR-09a + JR-09b + FIX-08 + GD-16 complete
+**Status:** IN PROGRESS — PM-11 + BE-23 + JR-09a + JR-09b + FIX-08 + GD-16 + UX-21 complete
 
 ### P0 — Must Ship
 
@@ -470,7 +470,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | BE-23 | BE | M | Character system — selection screen, character-specific card pools, starter decks | MERGED (PR #121) |
 | FIX-08 | JR | S | P0 BUG: Potions not available at shop — shop inventory missing potions | MERGED (PR #124) |
 | GD-16 | GD | M | Card rarity visuals — distinct borders/glow for common, uncommon, rare | MERGED (PR #125) |
-| UX-21 | UX | M | Run history & statistics — past runs, win/loss, per-character stats | PENDING |
+| UX-21 | UX | M | Run history & statistics — past runs, win/loss, per-character stats | MERGED (PR #126) |
 
 ### P1 — Should Ship
 

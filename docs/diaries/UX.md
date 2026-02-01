@@ -15,6 +15,22 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 11 - UX-21 Complete
+**Date:** 2026-02-01
+**Status:** UX-21 DONE (PR #126)
+
+**What I did:**
+- Added RunHistoryPanel to MainMenu — modal showing overall stats (total runs, wins, win rate), lifetime stats (highest floor, highest ascension, enemies killed, cards played), and last 20 runs
+- Each run entry shows outcome (Victory/Defeat), floor, act, ascension, deck size, relics, and cause of death for defeats
+- Wired UPDATE_PROGRESSION dispatch on VictoryScreen and GameOverScreen mount to actually record runs
+- Added addRunToHistory call in metaReducer for detailed run history persistence to localStorage
+- Added updateProgression action to GameContext hook
+- 239 lines changed across 5 files, follows DailyChallengePanel pattern
+
+**Sprint 11 UX status:** UX-21 done. UX-22 (skip-reward confirmation) and UX-23 (map visited-node) remaining.
+
+---
+
 ### Magazine Review Notes (58/100)
 **Date:** 2026-01-24
 **Context:** Game Zone preview review — UX/Polish scored 5/10 (lowest category)

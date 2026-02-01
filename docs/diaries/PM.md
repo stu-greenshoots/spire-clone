@@ -15,6 +15,26 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 11 — UX-21 Complete
+**Date:** 2026-02-01
+**Status:** UX-21 merged (PR #126)
+
+**Done:**
+- Implemented as UX: Run history & statistics screen
+- RunHistoryPanel in MainMenu with overall stats, lifetime stats, and last 20 runs
+- Wired UPDATE_PROGRESSION on Victory/GameOver mount — runs now actually recorded
+- Added addRunToHistory call in metaReducer for detailed localStorage persistence
+- 5 files changed, 239 insertions, 4 deletions
+- Both Copilot and Mentor reviews passed
+- Merged PR #126 via squash, updated sprint board and UX diary
+
+**Sprint 11 Progress:** 7/16 tasks done (PM-11, BE-23, JR-09a, JR-09b, FIX-08, GD-16, UX-21)
+**All P0 tasks now COMPLETE.**
+
+**Next highest priority:** VARROW-06 (Silent narrative) or UX-22 (skip-reward confirmation) — P1 tasks
+
+---
+
 ### Sprint 11 — GD-16 Complete
 **Date:** 2026-01-31
 **Status:** GD-16 merged (PR #125)
