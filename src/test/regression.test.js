@@ -188,7 +188,9 @@ describe('Card Effect Regression', () => {
       'evokeOrb', 'evokeAllOrbs', 'gainFocus', 'loseFocus', 'gainOrbSlot',
       'dualcast', 'drawPerOrb', 'steamBarrier', 'blockPerDiscard', 'blizzardDamage',
       'ftlDraw', 'sunderEnergy', 'consume', 'seekCards', 'creativeAI', 'echoForm',
-      'electrodynamics'
+      'electrodynamics',
+      // Watcher specials
+      'haltWrath'
     ];
     const specialCards = ALL_CARDS.filter(c => c.special);
     specialCards.forEach(card => {

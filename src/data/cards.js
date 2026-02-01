@@ -2017,6 +2017,203 @@ export const ALL_CARDS = [
     description: 'Lightning now hits ALL enemies. Channel 2 Lightning.',
     upgraded: false,
     upgradedVersion: { description: 'Lightning now hits ALL enemies. Channel 3 Lightning.', orbCount: 3 }
+  },
+
+  // ========== WATCHER BASIC CARDS ==========
+  {
+    id: 'strike_watcher',
+    name: 'Strike',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.BASIC,
+    character: 'watcher',
+    cost: 1,
+    damage: 6,
+    description: 'Deal 6 damage.',
+    upgraded: false,
+    upgradedVersion: { damage: 9, description: 'Deal 9 damage.' }
+  },
+  {
+    id: 'defend_watcher',
+    name: 'Defend',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.BASIC,
+    character: 'watcher',
+    cost: 1,
+    block: 5,
+    description: 'Gain 5 Block.',
+    upgraded: false,
+    upgradedVersion: { block: 8, description: 'Gain 8 Block.' }
+  },
+  {
+    id: 'eruption',
+    name: 'Eruption',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.BASIC,
+    character: 'watcher',
+    cost: 2,
+    damage: 9,
+    enterStance: 'wrath',
+    description: 'Deal 9 damage. Enter Wrath.',
+    upgraded: false,
+    upgradedVersion: { cost: 1, description: 'Deal 9 damage. Enter Wrath.' }
+  },
+  {
+    id: 'vigilance',
+    name: 'Vigilance',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.BASIC,
+    character: 'watcher',
+    cost: 2,
+    block: 8,
+    enterStance: 'calm',
+    description: 'Gain 8 Block. Enter Calm.',
+    upgraded: false,
+    upgradedVersion: { block: 12, description: 'Gain 12 Block. Enter Calm.' }
+  },
+
+  // ========== WATCHER COMMON ATTACKS ==========
+  {
+    id: 'bowlingBash',
+    name: 'Bowling Bash',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 1,
+    damage: 7,
+    targetAll: true,
+    description: 'Deal 7 damage to ALL enemies.',
+    upgraded: false,
+    upgradedVersion: { damage: 10, description: 'Deal 10 damage to ALL enemies.' }
+  },
+  {
+    id: 'crushJoints',
+    name: 'Crush Joints',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 1,
+    damage: 8,
+    effects: [{ type: 'vulnerable', amount: 1 }],
+    description: 'Deal 8 damage. If the last card played was a Skill, apply 1 Vulnerable.',
+    upgraded: false,
+    upgradedVersion: { damage: 10, effects: [{ type: 'vulnerable', amount: 2 }], description: 'Deal 10 damage. If the last card played was a Skill, apply 2 Vulnerable.' }
+  },
+  {
+    id: 'flurryOfBlows',
+    name: 'Flurry of Blows',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 0,
+    damage: 4,
+    description: 'Deal 4 damage.',
+    upgraded: false,
+    upgradedVersion: { damage: 6, description: 'Deal 6 damage.' }
+  },
+  {
+    id: 'followUp',
+    name: 'Follow-Up',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 1,
+    damage: 7,
+    draw: 1,
+    description: 'Deal 7 damage. Draw 1 card.',
+    upgraded: false,
+    upgradedVersion: { damage: 11, description: 'Deal 11 damage. Draw 1 card.' }
+  },
+
+  // ========== WATCHER COMMON SKILLS ==========
+  {
+    id: 'halt',
+    name: 'Halt',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 0,
+    block: 3,
+    special: 'haltWrath',
+    description: 'Gain 3 Block. If in Wrath, gain 9 Block instead.',
+    upgraded: false,
+    upgradedVersion: { block: 4, description: 'Gain 4 Block. If in Wrath, gain 14 Block instead.' }
+  },
+  {
+    id: 'emptyMind',
+    name: 'Empty Mind',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 1,
+    draw: 2,
+    enterStance: 'none',
+    description: 'Draw 2 cards. Exit your stance.',
+    upgraded: false,
+    upgradedVersion: { draw: 3, description: 'Draw 3 cards. Exit your stance.' }
+  },
+  {
+    id: 'crescendo',
+    name: 'Crescendo',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 1,
+    enterStance: 'wrath',
+    exhaust: true,
+    description: 'Enter Wrath. Exhaust.',
+    upgraded: false,
+    upgradedVersion: { cost: 0, description: 'Enter Wrath. Exhaust.' }
+  },
+  {
+    id: 'tranquility',
+    name: 'Tranquility',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 1,
+    enterStance: 'calm',
+    exhaust: true,
+    description: 'Enter Calm. Exhaust.',
+    upgraded: false,
+    upgradedVersion: { cost: 0, description: 'Enter Calm. Exhaust.' }
+  },
+  {
+    id: 'prostrate',
+    name: 'Prostrate',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 0,
+    block: 4,
+    mantra: 2,
+    description: 'Gain 4 Block. Gain 2 Mantra.',
+    upgraded: false,
+    upgradedVersion: { block: 4, mantra: 3, description: 'Gain 4 Block. Gain 3 Mantra.' }
+  },
+  {
+    id: 'protectingLight',
+    name: 'Protecting Light',
+    type: CARD_TYPES.SKILL,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 1,
+    block: 10,
+    description: 'Gain 10 Block.',
+    upgraded: false,
+    upgradedVersion: { block: 14, description: 'Gain 14 Block.' }
+  },
+  {
+    id: 'sashWhip',
+    name: 'Sash Whip',
+    type: CARD_TYPES.ATTACK,
+    rarity: RARITY.COMMON,
+    character: 'watcher',
+    cost: 1,
+    damage: 8,
+    effects: [{ type: 'weak', amount: 1 }],
+    description: 'Deal 8 damage. If the last card played was an Attack, apply 1 Weak.',
+    upgraded: false,
+    upgradedVersion: { damage: 10, effects: [{ type: 'weak', amount: 2 }], description: 'Deal 10 damage. If the last card played was an Attack, apply 2 Weak.' }
   }
 ];
 
