@@ -182,7 +182,13 @@ describe('Card Effect Regression', () => {
       'addShivs', 'blockNextTurn', 'noxiousFumes', 'gainDexterity', 'drawNextTurn',
       'damagePerSkillInHand', 'damagePerAttackPlayed', 'retainCards', 'thousandCuts',
       'bulletTime', 'corpseExplosion', 'envenom', 'glassKnife',
-      'escalatingDamage8', 'bonusPerStrike3', 'doubleNextAttacks3', 'exhaustChoose'
+      'escalatingDamage8', 'bonusPerStrike3', 'doubleNextAttacks3', 'exhaustChoose',
+      // Defect specials
+      'channelLightning', 'channelFrost', 'channelDark', 'channelPlasma',
+      'evokeOrb', 'evokeAllOrbs', 'gainFocus', 'loseFocus', 'gainOrbSlot',
+      'dualcast', 'drawPerOrb', 'steamBarrier', 'blockPerDiscard', 'blizzardDamage',
+      'ftlDraw', 'sunderEnergy', 'consume', 'seekCards', 'creativeAI', 'echoForm',
+      'electrodynamics'
     ];
     const specialCards = ALL_CARDS.filter(c => c.special);
     specialCards.forEach(card => {
