@@ -708,4 +708,47 @@ describe('AudioManager', () => {
       expect(AudioManagerModule.isMuted()).toBe(true);
     });
   });
+
+  // AR-18: Endless mode audio constants
+  describe('Endless mode audio (AR-18)', () => {
+    it('should define milestone fanfare sound ID', () => {
+      expect(SOUNDS.combat.milestoneFanfare).toBe('milestone_fanfare');
+    });
+
+    it('should define endless death sound ID', () => {
+      expect(SOUNDS.combat.endlessDeath).toBe('endless_death');
+    });
+
+    it('should define endless ambient sound ID', () => {
+      expect(SOUNDS.ambient.endless).toBe('ambient_endless');
+    });
+
+    it('should play milestone fanfare as SFX', () => {
+      audioManager.playSFX(SOUNDS.combat.milestoneFanfare, 'combat');
+      // Verify audio was created for the fanfare sound
+      const calls = global.Audio.mock.calls;
+      const fanfareCall = calls.find(c => c[0]?.includes('milestone_fanfare'));
+      expect(fanfareCall).toBeDefined();
+    });
+
+    it('should play endless death as SFX', () => {
+      audioManager.playSFX(SOUNDS.combat.endlessDeath, 'combat');
+      const calls = global.Audio.mock.calls;
+      const deathCall = calls.find(c => c[0]?.includes('endless_death'));
+      expect(deathCall).toBeDefined();
+    });
+
+    it('should play endless ambient as ambient layer', () => {
+      audioManager.playAmbient(SOUNDS.ambient.endless);
+      expect(audioManager._currentAmbient).not.toBeNull();
+      expect(audioManager._currentAmbient.trackId).toBe('ambient_endless');
+    });
+
+    it('should switch from act ambient to endless ambient', () => {
+      audioManager.playAmbient(SOUNDS.ambient.act1);
+      expect(audioManager._currentAmbient.trackId).toBe('ambient_act1');
+      audioManager.playAmbient(SOUNDS.ambient.endless);
+      expect(audioManager._currentAmbient.trackId).toBe('ambient_endless');
+    });
+  });
 });
