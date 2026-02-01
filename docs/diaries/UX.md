@@ -15,6 +15,22 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 15 - UX-32 Complete
+**Date:** 2026-02-01
+**Status:** UX-32 DONE (PR #194)
+
+**What I did:**
+- Final self-assessment re-score of SELF_ASSESSMENT.md against Game Zone Magazine rubric
+- Projected score: **100/100** (up from 97 at Sprint 14)
+- Presentation 9→10: 15 re-rendered sprites (GD-28/29), Watcher art (GD-27), audio normalization (FIX-12), asset path fix (FIX-11)
+- Content depth gap closed: 4th character (Watcher) with stances, Mantra, Scrying — 30 new cards
+- Updated metrics: 3072 tests, 4 characters, 187 cards, 20+ SFX
+- Documented what closed the 97→100 gap (art fidelity + content depth)
+
+**Sprint 15 UX status:** All UX tasks complete (UX-31, UX-32). Done for the sprint.
+
+---
+
 ### Sprint 15 - UX-31 Complete
 **Date:** 2026-02-01
 **Status:** UX-31 DONE (PR #186)

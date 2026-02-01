@@ -673,7 +673,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Implement The Watcher (fourth character with stances), improve art fidelity, close remaining 3-point gap from 97 to 100/100.
 **Plan:** See `SPRINT_15_PLAN.md`
 **Branch:** `sprint-15`
-**Status:** IN PROGRESS — 14/17 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30, VARROW-11, UX-31, GD-27, GD-28, QA-23, FIX-11, FIX-12, AR-17)
+**Status:** IN PROGRESS — 16/17 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30, VARROW-11, UX-31, GD-27, GD-28, GD-29, QA-23, FIX-11, FIX-12, AR-17, UX-32)
 
 ### P0 — Must Ship
 
@@ -703,8 +703,8 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| GD-29 | GD | S | Key card art re-render — 5 highest-visibility cards improved | PENDING |
-| UX-32 | UX | S | Final self-assessment — re-score targeting 100/100 | PENDING |
+| GD-29 | GD | S | Key card art re-render — 5 highest-visibility cards improved | MERGED (PR #193) |
+| UX-32 | UX | S | Final self-assessment — re-score targeting 100/100 | MERGED (PR #194) |
 | QA-24 | QA | S | Deploy smoke test — automated audio/asset/boot check on GitHub Pages | PENDING |
 
 ### Sprint 15 Validation Gate
