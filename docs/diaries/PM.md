@@ -14,6 +14,25 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 12 — JR-11 Complete
+**Date:** 2026-02-01
+**Status:** JR-11 merged (PR #146), GD-20 marked DONE (pre-existing)
+
+**Done:**
+- GD-20 (Heart art): Verified Heart enemy sprite already exists at src/assets/art/enemies/corruptHeart.webp, included in sprite sheet. No Act 4 background system exists (no per-act backgrounds in codebase). Marked DONE (pre-existing).
+- Implemented as JR: 31 new tests in heartCardInteractions.test.js covering Beat of Death, invincible shield, poison, card type audit, phase transitions
+- Key finding: poison bypasses invincible shield (endTurnAction.js line 331 reduces HP directly without applyDamageToTarget) — documented, needs future BE fix
+- 2366 tests total, lint clean, build clean
+- Both Copilot and Mentor reviews passed — clean implementation
+- Merged PR #146 via squash, updated sprint board
+
+**Sprint 12 Progress:** 11/15 tasks done (PM-12, BE-25, JR-10, VARROW-07, UX-24, GD-19, BE-26, QA-17, AR-12, GD-20, JR-11)
+
+**Remaining P1:** UX-25 (self-assessment)
+**Remaining P2:** VARROW-08, QA-18, GD-21
+
+---
+
 ### Sprint 12 — AR-12 Complete
 **Date:** 2026-02-01
 **Status:** AR-12 merged (PR #145)
