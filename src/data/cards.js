@@ -1833,11 +1833,11 @@ export const ALL_CARDS = [
     rarity: RARITY.UNCOMMON,
     character: 'defect',
     cost: 0,
-    damage: 5,
+    damage: 6,
     special: 'ftlDraw',
-    description: 'Deal 5 damage. If you have played less than 3 cards this turn, draw 1.',
+    description: 'Deal 6 damage. If you have played less than 3 cards this turn, draw 1.',
     upgraded: false,
-    upgradedVersion: { damage: 7, description: 'Deal 7 damage. If you have played less than 4 cards this turn, draw 1.', ftlThreshold: 4 }
+    upgradedVersion: { damage: 9, description: 'Deal 9 damage. If you have played less than 4 cards this turn, draw 1.', ftlThreshold: 4 }
   },
   {
     id: 'sunder',
@@ -1846,11 +1846,11 @@ export const ALL_CARDS = [
     rarity: RARITY.UNCOMMON,
     character: 'defect',
     cost: 3,
-    damage: 24,
+    damage: 28,
     special: 'sunderEnergy',
-    description: 'Deal 24 damage. If this kills the enemy, gain 3 Energy.',
+    description: 'Deal 28 damage. If this kills the enemy, gain 3 Energy.',
     upgraded: false,
-    upgradedVersion: { damage: 32, description: 'Deal 32 damage. If this kills the enemy, gain 3 Energy.' }
+    upgradedVersion: { damage: 36, description: 'Deal 36 damage. If this kills the enemy, gain 3 Energy.' }
   },
   {
     id: 'rip',
@@ -1926,11 +1926,11 @@ export const ALL_CARDS = [
     rarity: RARITY.UNCOMMON,
     character: 'defect',
     cost: 2,
-    block: 13,
+    block: 15,
     special: 'retainCards',
-    description: 'Gain 13 Block. Retain your hand this turn.',
+    description: 'Gain 15 Block. Retain your hand this turn.',
     upgraded: false,
-    upgradedVersion: { block: 16, description: 'Gain 16 Block. Retain your hand this turn.' }
+    upgradedVersion: { block: 19, description: 'Gain 19 Block. Retain your hand this turn.' }
   },
 
   // ========== DEFECT RARE ATTACKS ==========
@@ -1956,12 +1956,12 @@ export const ALL_CARDS = [
     rarity: RARITY.RARE,
     character: 'defect',
     cost: 5,
-    damage: 24,
+    damage: 27,
     special: 'channelPlasma',
     orbCount: 3,
-    description: 'Deal 24 damage. Channel 3 Plasma.',
+    description: 'Deal 27 damage. Channel 3 Plasma.',
     upgraded: false,
-    upgradedVersion: { damage: 30, description: 'Deal 30 damage. Channel 3 Plasma.' }
+    upgradedVersion: { damage: 35, description: 'Deal 35 damage. Channel 3 Plasma.' }
   },
 
   // ========== DEFECT RARE SKILLS ==========
