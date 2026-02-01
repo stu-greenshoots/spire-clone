@@ -28,7 +28,9 @@ export const SOUNDS = {
     orbFrost: 'orb_frost',
     orbDark: 'orb_dark',
     orbPlasma: 'orb_plasma',
-    orbEvoke: 'orb_evoke'
+    orbEvoke: 'orb_evoke',
+    stanceTransition: 'stance_transition',
+    mantraTick: 'mantra_tick'
   },
   ui: {
     buttonClick: 'ui_click',
