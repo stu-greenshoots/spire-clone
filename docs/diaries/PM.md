@@ -15,6 +15,48 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 11 — Retrospective
+**Date:** 2026-02-01
+
+#### What We Accomplished
+Sprint 11 delivered 16/16 tasks (100% completion) — our third consecutive perfect sprint. The headline feature is **The Silent**, our second playable character with a full 30-card pool (Shiv, poison, discard synergies), character selection screen, starter deck, and narrative integration. Every priority tier shipped including all three P2 stretch goals.
+
+**Key deliverables:**
+- **Character system** (BE-23): Selection screen, character-specific card pools, starter decks
+- **The Silent** (JR-09a/b): 30 cards + starter deck + integration tests
+- **P0 bug fix** (FIX-08): Potions missing from shop inventory
+- **Card rarity visuals** (GD-16): Distinct borders/glow for common, uncommon, rare
+- **Run history** (UX-21): Past runs with per-character statistics
+- **Skip-reward confirmation** (UX-22): Last unresolved Game Zone complaint addressed
+- **Silent narrative** (VARROW-06): Character-specific boss dialogue and defeat/victory text
+- **Silent art** (GD-17, GD-18): Character portrait + 31 card illustrations + sprite sheet rebuild
+- **Silent audio** (AR-11): Shiv swoosh, poison sizzle, poison tick SFX
+- **Act 3 balance tuning** (BE-24): Enemy HP adjustments based on QA-13 data
+- **Map visited-node indicator** (UX-23): Checkmark badge on completed nodes
+- **Diary enforcement audit** (QA-16): Process health check across all roles
+
+**Stats:** 16 PRs merged (#121–#136), 2248+ tests passing, lint clean, build clean.
+
+#### Recurring Issues & Observations
+1. **Diary hygiene remains uneven.** QA-16 audit found 4/8 roles only partially current (BE, JR, UX, GD). Stale headers (still saying "Sprint 3") in UX and GD diaries. Missing Sprint 10 entries for 4 roles. Recommendation: make diary update a merge prerequisite for Sprint 12.
+2. **SL role fully archived.** Varrow replaced SL in Sprint 6 and has delivered consistently since. SL.md should get an "ARCHIVED" header.
+3. **PM acting as all roles.** The PM continues to implement most tasks by wearing each engineer hat. This works but means the PM diary is 1132 lines while others are much shorter. No action needed — just noting the pattern.
+4. **100% completion rate streak.** Sprints 8, 9, 10, and 11 all hit 100%. The planning process (right-sizing tasks, realistic P2 stretch goals) is working well.
+5. **All three original Game Zone complaints now addressed.** Skip-reward confirmation (UX-22) was the last one. Self-assessment targeting 90+ score is realistic with two characters, full narrative, and all polish work.
+
+#### What Worked
+- Breaking The Silent into JR-09a (card pool) and JR-09b (integration) kept PRs under 300 lines
+- Character system (BE-23) cleanly isolated from Ironclad — no regressions
+- QA-16 diary audit was a good process health check, should repeat each sprint
+- Varrow's narrative work continues to be the project's differentiator
+
+#### What to Improve
+- Enforce diary updates before sprint close (not just audit after the fact)
+- Consider archiving SL.md formally
+- Sprint 12 planning should address: third character? More acts? Multiplayer? Need roadmap discussion.
+
+---
+
 ### Sprint 11 — QA-16 Complete
 **Date:** 2026-02-01
 **Status:** QA-16 merged (PR #135)
