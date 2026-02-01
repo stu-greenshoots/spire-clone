@@ -10,6 +10,7 @@ import {
   createWoundCard
 } from '../../systems/ascensionSystem';
 import { audioManager, SOUNDS } from '../../systems/audioSystem';
+import { loadProgression, isHeartUnlocked } from '../../systems/progressionSystem';
 
 export const mapReducer = (state, action) => {
   switch (action.type) {
@@ -346,6 +347,17 @@ export const mapReducer = (state, action) => {
             phase: GAME_PHASE.VICTORY
           };
         }
+
+        // Gate Act 4 (Heart): requires wins with both Ironclad and Silent
+        if (state.act === 3 && !isHeartUnlocked(loadProgression())) {
+          // Act 3 boss beaten but Heart not unlocked — regular victory
+          deleteSave();
+          return {
+            ...state,
+            phase: GAME_PHASE.VICTORY
+          };
+        }
+
         // Move to next act
         const newActState = {
           ...state,

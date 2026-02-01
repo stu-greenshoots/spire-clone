@@ -18,6 +18,7 @@ const DEFAULT_PROGRESSION = {
   cardsPlayedById: {},
   relicsCollected: {},
   enemiesDefeated: {},
+  characterWins: {}, // { ironclad: 2, silent: 1 } — tracks wins per character
   achievements: [],
   unlockedCards: [],
   unlockedRelics: [],
@@ -67,8 +68,16 @@ export const saveProgression = (progression) => {
 export const updateRunStats = (progression, runData) => {
   const updated = { ...progression };
   updated.totalRuns++;
-  if (runData.won) updated.wins++;
-  else updated.losses++;
+  if (runData.won) {
+    updated.wins++;
+    // Track per-character wins for Heart unlock gate
+    if (runData.character) {
+      updated.characterWins = { ...updated.characterWins };
+      updated.characterWins[runData.character] = (updated.characterWins[runData.character] || 0) + 1;
+    }
+  } else {
+    updated.losses++;
+  }
   updated.highestFloor = Math.max(updated.highestFloor, runData.floor);
   updated.totalEnemiesKilled += runData.enemiesKilled || 0;
   updated.totalGoldEarned += runData.goldEarned || 0;
@@ -127,6 +136,15 @@ export const updateRunStats = (progression, runData) => {
 
   saveProgression(updated);
   return updated;
+};
+
+/**
+ * Check if the Heart (Act 4) is unlocked.
+ * Requires at least one win with both Ironclad and Silent.
+ */
+export const isHeartUnlocked = (progression) => {
+  const cw = progression?.characterWins || {};
+  return (cw.ironclad || 0) >= 1 && (cw.silent || 0) >= 1;
 };
 
 export const getAchievements = () => ACHIEVEMENTS;

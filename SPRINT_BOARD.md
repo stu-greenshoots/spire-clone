@@ -529,7 +529,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| BE-26 | BE | S | Heart unlock gate — requires wins with both Ironclad and Silent | PENDING |
+| BE-26 | BE | S | Heart unlock gate — requires wins with both Ironclad and Silent | IN REVIEW |
 | QA-17 | QA | M | Heart regression + endgame balance — 4-act playthrough, Heart win rates | PENDING |
 | AR-12 | AR | S | Heart audio — heartbeat loop, Beat of Death SFX, phase transition | PENDING |
 | GD-20 | GD | S | Heart art — enemy sprite + Act 4 background | PENDING |

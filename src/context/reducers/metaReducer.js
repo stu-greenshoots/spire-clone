@@ -560,7 +560,8 @@ export const metaReducer = (state, action) => {
         relics: state.relics,
         deckSize: state.deck?.length || 0,
         ascension: currentAscension,
-        causeOfDeath: won ? null : causeOfDeath
+        causeOfDeath: won ? null : causeOfDeath,
+        character: state.character || 'ironclad'
       };
 
       // Update progression (this also saves to localStorage)
