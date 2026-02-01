@@ -327,19 +327,24 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
       return;
     }
 
-    // Mobile: tap-to-select, tap-again-to-play
+    // Mobile: smart targeting — single tap plays non-targeting cards, double-tap for targeted attacks
     if (isMobile) {
-      if (mobileSelectedCard?.instanceId === card.instanceId) {
-        // Second tap -- play the card
-        if (card.type !== 'attack' || enemies.length === 1) {
-          setCardPlaying(card.instanceId);
-          setTimeout(() => setCardPlaying(null), 300);
+      const needsTargeting = card.type === CARD_TYPES.ATTACK && !card.targetAll && enemies.length > 1;
+
+      if (needsTargeting) {
+        // Attack card with multiple enemies: tap-to-select, tap-again enters targeting
+        if (mobileSelectedCard?.instanceId === card.instanceId) {
+          selectCard(card); // enters targeting mode
+          setMobileSelectedCard(null);
+        } else {
+          setMobileSelectedCard(card);
         }
+      } else {
+        // Non-targeting cards (skills, powers, target-all, single-enemy): play immediately
+        setCardPlaying(card.instanceId);
+        setTimeout(() => setCardPlaying(null), 300);
         selectCard(card);
         setMobileSelectedCard(null);
-      } else {
-        // First tap -- select/preview
-        setMobileSelectedCard(card);
       }
       return;
     }
@@ -1076,7 +1081,11 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
                     ? `cardDraw 0.4s ease-out ${index * 0.05}s both`
                     : 'none',
                 opacity: isBeingDragged ? 0.4 : 1,
-                cursor: canPlayCard(card) ? (isMobile ? 'pointer' : 'grab') : 'not-allowed',
+                cursor: canPlayCard(card)
+                  ? (isMobile
+                    ? 'pointer'
+                    : (card.type === CARD_TYPES.ATTACK && !card.targetAll && enemies.length > 1 ? 'grab' : 'pointer'))
+                  : 'not-allowed',
                 touchAction: isMobile ? 'manipulation' : 'pan-x',
                 flexShrink: 0,
                 zIndex: isMobileSelected ? 20 : (isMobile ? cardCount - Math.abs(Math.round(offset)) : 'auto'),
@@ -1112,7 +1121,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         {/* Mobile tap hint */}
         {isMobile && mobileSelectedCard && (
           <div className="mobile-tap-hint">
-            Tap again to play {mobileSelectedCard.name}
+            Tap again to target with {mobileSelectedCard.name}
           </div>
         )}
 
