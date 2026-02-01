@@ -14,6 +14,29 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### URGENT: Edit Mode Visibility Requirement
+**Date:** 2026-02-01
+**Status:** CRITICAL — P0
+**Priority:** HIGHEST
+
+**Issue:**
+Edit mode needs to be visible on ALL builds immediately. Current state is blocking development workflows.
+
+**Action Required:**
+- Make edit mode visible and accessible in all build configurations (dev, staging, production)
+- Review any code that hides or conditionally renders edit mode
+- Ensure consistent visibility across all environments
+
+**Impact:**
+- Team unable to properly test/validate edit functionality
+- Development velocity impacted
+- Critical for ongoing sprint work
+
+**Owner:** PM to coordinate implementation
+**Timeline:** Address ASAP - highest priority
+
+---
+
 ### Sprint 12 — UX-25 Complete
 **Date:** 2026-02-01
 **Status:** UX-25 merged (PR #147)
