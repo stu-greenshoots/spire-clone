@@ -14,6 +14,30 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 11 - GD-17 Complete
+**Date:** 2026-02-01
+**Status:** GD-17 complete, PR #130 merged to sprint-11
+
+**Done today:**
+- Generated character portrait art for Ironclad (warrior silhouette, red palette) and Silent (hooded assassin, green palette)
+- Both images are 512x512 WebP with dark fantasy radial gradients, vignette, and character silhouettes
+- Added `getCharacterImage()` to art-config.js following existing asset loading pattern
+- Updated CharacterSelect.jsx to display portraits as 100px circular thumbnails with color-matched borders/glow
+- Created `scripts/generate-character-art.js` for reproducible generation via SVG→sharp→WebP
+- Graceful fallback: if images missing, buttons render text-only (same as before)
+
+**Key decisions:**
+- Circular crop for portraits — fits the button layout, adds visual weight without crowding
+- Both characters get portraits (not just Silent) — consistent selection screen
+- Silhouettes use geometric shapes (not detailed art) — matches placeholder style used across the project
+
+**Validation:** `npm run validate` passes — 2120 tests, lint clean, build clean
+
+**Next:**
+- GD-18 (Silent card art — 30 illustrations, sprite sheet rebuild) pending as P2 stretch
+
+---
+
 ### Sprint 11 - GD-16 Complete
 **Date:** 2026-01-31
 **Status:** GD-16 complete, PR #125 merged to sprint-11

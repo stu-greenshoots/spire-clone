@@ -15,6 +15,25 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 11 — GD-17 Complete
+**Date:** 2026-02-01
+**Status:** GD-17 merged (PR #130)
+
+**Done:**
+- Implemented as GD: Character portrait art for both Ironclad and Silent
+- 512x512 WebP images with dark fantasy silhouettes, displayed as circular thumbnails on CharacterSelect
+- Added `getCharacterImage()` to art-config.js, `scripts/generate-character-art.js` for generation
+- 5 files changed, 152 insertions, 1 deletion
+- Both Copilot and Mentor reviews passed
+- Merged PR #130 via squash, updated sprint board and GD diary
+
+**Sprint 11 Progress:** 10/16 tasks done (PM-11, BE-23, JR-09a, JR-09b, FIX-08, GD-16, UX-21, UX-22, VARROW-06, GD-17)
+**All P0 tasks complete. 3/6 P1 tasks complete.**
+
+**Next highest priority:** QA-15 (Silent regression), AR-11 (Silent audio), BE-24 (Act 3 balance)
+
+---
+
 ### Sprint 11 — UX-22 Complete
 **Date:** 2026-02-01
 **Status:** UX-22 merged (PR #127)
