@@ -596,7 +596,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 |------|-------|------|-------------|--------|
 | AR-14 | AR | S | Defect audio — orb channel/evoke SFX (lightning, frost, dark, plasma) | MERGED (PR #162) |
 | GD-23 | GD | S | Art polish pass — replace 5 lowest-quality AI sprites with improved versions | MERGED (PR #163) |
-| QA-20 | QA | S | Save export/import regression — round-trip, corrupt file handling | PENDING |
+| QA-20 | QA | S | Save export/import regression — round-trip, corrupt file handling | MERGED (PR #164) |
 
 ### Sprint 13 Validation Gate
 

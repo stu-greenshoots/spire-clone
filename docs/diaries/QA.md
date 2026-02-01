@@ -1,3 +1,32 @@
+# QA Diary - Sprint 13
+
+## Sprint 13 Entries
+
+### QA-20: Save Export/Import Regression
+**Date:** 2026-02-01
+**Status:** Complete, PR #164 merged
+**Sprint:** Sprint 13 (Score 100 — Cloud Save, Compendium, The Defect)
+**Task:** QA-20 (Save export/import regression — S size, P2)
+
+**Done:**
+1. Created `src/test/saveExportRegression.test.js` — 21 regression tests for export/import pipeline
+2. **Full round-trip:** All 7 localStorage keys (save, progression, settings, run history, tutorial flags, custom data) exported and imported correctly
+3. **3-character coverage:** Ironclad, Silent, Defect character state round-trips verified
+4. **Corrupt file handling:** Invalid JSON, missing version, truncated data, arrays, null, empty strings — all rejected with appropriate errors
+5. **Security:** Unknown keys in import file ignored (no arbitrary localStorage injection)
+6. **Partial data:** Subset imports work; existing keys not in import preserved
+7. **Large data:** 20 run history entries, 30 achievements, 80 card entries — all round-trip correctly
+8. **Export format:** Valid JSON, raw string storage, exportVersion/exportDate fields verified
+
+**Test count:** 2606 → 2627 (+21 tests). 59 test files.
+
+**Validation:** `npm run validate` passes — all tests green, lint clean, build clean
+
+**Blockers:** None
+**Next:** All QA Sprint 13 tasks complete (QA-19, QA-20). Sprint 13 is fully done from QA perspective.
+
+---
+
 # QA Diary - Sprint 12
 
 ## Sprint 12 Entries
