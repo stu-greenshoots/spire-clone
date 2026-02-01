@@ -43,7 +43,11 @@ export const SOUNDS = {
   ambient: {
     mapAmbience: 'map_ambience',
     shopAmbience: 'shop_ambience',
-    restAmbience: 'rest_ambience'
+    restAmbience: 'rest_ambience',
+    act1: 'ambient_act1',
+    act2: 'ambient_act2',
+    act3: 'ambient_act3',
+    act4: 'ambient_act4'
   },
   music: {
     menu: 'music_menu',
@@ -83,6 +87,9 @@ class AudioManager {
 
     // AR-09: Music ducking (temporary volume reduction for settings/pause)
     this._ducked = false;
+
+    // AR-16: Ambient layer (loops under music, per-act)
+    this._currentAmbient = null; // { trackId, audio }
 
     // Audio cache
     this._audioCache = {};
@@ -158,6 +165,8 @@ class AudioManager {
           this._playSFXInternal(...args);
         } else if (type === 'music') {
           this._playMusicInternal(...args);
+        } else if (type === 'ambient') {
+          this._playAmbientInternal(...args);
         }
       });
       this._pendingAudioQueue = [];
@@ -515,6 +524,73 @@ class AudioManager {
         // Silent fallback
       }
     }
+    // AR-16: Update ambient volume (40% of music volume)
+    if (this._currentAmbient && this._currentAmbient.audio) {
+      const ambientVol = this._getEffectiveVolume('music') * 0.4;
+      try {
+        this._currentAmbient.audio.volume = ambientVol;
+      } catch {
+        // Silent fallback
+      }
+    }
+  }
+
+  /**
+   * AR-16: Play an ambient loop layered under music.
+   * Ambient plays at 40% of music volume for subtle background texture.
+   */
+  playAmbient(trackId) {
+    if (!this._userGestureReceived) {
+      this._pendingAudioQueue.push({ type: 'ambient', args: [trackId] });
+      return;
+    }
+    this._playAmbientInternal(trackId);
+  }
+
+  /**
+   * AR-16: Internal ambient playback.
+   */
+  _playAmbientInternal(trackId) {
+    // Same track already playing — skip
+    if (this._currentAmbient && this._currentAmbient.trackId === trackId) return;
+
+    // Fade out old ambient
+    if (this._currentAmbient) {
+      const { audio: oldAudio } = this._currentAmbient;
+      this._fadeAudio(oldAudio, oldAudio.volume, 0, 2000, () => {
+        oldAudio.pause();
+        oldAudio.currentTime = 0;
+      });
+      this._currentAmbient = null;
+    }
+
+    const audio = this._getAudio(trackId);
+    if (!audio) return;
+
+    audio.loop = true;
+    this._currentAmbient = { trackId, audio };
+
+    const targetVolume = this._getEffectiveVolume('music') * 0.4;
+    audio.volume = 0;
+    try {
+      audio.play().catch(() => {});
+    } catch {
+      return;
+    }
+    this._fadeAudio(audio, 0, targetVolume, 2000);
+  }
+
+  /**
+   * AR-16: Stop ambient loop with fade out.
+   */
+  stopAmbient() {
+    if (!this._currentAmbient) return;
+    const { audio } = this._currentAmbient;
+    this._currentAmbient = null;
+    this._fadeAudio(audio, audio.volume, 0, 2000, () => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
   }
 
   /**
@@ -686,6 +762,13 @@ class AudioManager {
         this.currentMusic.audio.pause();
       } catch { /* ignore */ }
       this.currentMusic = null;
+    }
+    // AR-16: Clean up ambient
+    if (this._currentAmbient) {
+      try {
+        this._currentAmbient.audio.pause();
+      } catch { /* ignore */ }
+      this._currentAmbient = null;
     }
     this._audioCache = {};
     this._pendingAudioQueue = [];

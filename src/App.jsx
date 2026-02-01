@@ -105,6 +105,22 @@ const GameContent = () => {
     }
   }, [state.phase, state.currentNode, state.act]);
 
+  // AR-16: Play per-act ambient layer under music during gameplay
+  useEffect(() => {
+    const inGame = state.phase !== GAME_PHASE.MAIN_MENU &&
+      state.phase !== GAME_PHASE.CHARACTER_SELECT &&
+      state.phase !== GAME_PHASE.STARTING_BONUS &&
+      state.phase !== GAME_PHASE.GAME_OVER &&
+      state.phase !== GAME_PHASE.VICTORY;
+
+    if (inGame && state.act >= 1 && state.act <= 4) {
+      const ambientKey = `act${state.act}`;
+      audioManager.playAmbient(SOUNDS.ambient[ambientKey]);
+    } else {
+      audioManager.stopAmbient();
+    }
+  }, [state.phase, state.act]);
+
   // Check if we're in victory/reward phase (show overlay on combat screen)
   const isVictoryPhase = state.phase === GAME_PHASE.COMBAT_REWARD || state.phase === GAME_PHASE.CARD_REWARD;
 
