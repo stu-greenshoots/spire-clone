@@ -20,23 +20,24 @@ test.describe('Deploy Smoke Tests', () => {
     // Start a new game to trigger asset loading
     await page.click('[data-testid="btn-new-game"]');
 
-    // Wait for character selection or map to appear
-    await page.waitForTimeout(2000);
+    // Wait for character selection or map nodes to appear
+    const charSelect = page.locator('[data-testid^="character-"]');
+    const mapNodes = page.locator('[data-testid^="map-node-"]');
+    await charSelect.first().or(mapNodes.first()).waitFor({ timeout: 15000 });
 
-    // Check that at least some images loaded with non-zero natural dimensions
+    // Check that images loaded with non-zero natural dimensions
     const images = page.locator('img');
     const count = await images.count();
-
-    // There should be images on screen
     expect(count).toBeGreaterThan(0);
 
-    // At least one image should have loaded successfully (naturalWidth > 0)
+    // At least half the checked images should load successfully
     let loadedCount = 0;
-    for (let i = 0; i < Math.min(count, 10); i++) {
+    const checkCount = Math.min(count, 10);
+    for (let i = 0; i < checkCount; i++) {
       const naturalWidth = await images.nth(i).evaluate(el => el.naturalWidth);
       if (naturalWidth > 0) loadedCount++;
     }
-    expect(loadedCount).toBeGreaterThan(0);
+    expect(loadedCount).toBeGreaterThan(checkCount / 2);
   });
 
   test('audio files are accessible at deployed URL', async ({ page, baseURL }) => {
@@ -53,6 +54,9 @@ test.describe('Deploy Smoke Tests', () => {
       const response = await page.request.get(url);
       expect(response.status(), `${file} should be accessible`).toBe(200);
       expect(response.headers()['content-type']).toContain('audio');
+
+      const body = await response.body();
+      expect(body.length, `${file} should be non-empty`).toBeGreaterThan(0);
     }
   });
 
