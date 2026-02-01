@@ -129,6 +129,86 @@ const DEFECT_BOSS_DIALOGUE = {
   }
 };
 
+// Character-specific dialogue variants for The Watcher
+// The Watcher is a glitch — the war's own observation layer made sentient.
+// Bosses react with confusion and alarm. She doesn't fight — she watches, and watching does things.
+const WATCHER_BOSS_DIALOGUE = {
+  slimeBoss: {
+    intro: 'The mass registers your approach and — hesitates. Not from threat. From something it has never encountered: being observed. Your pattern does not engage. It watches. The mass does not know what to do with attention.',
+    midFight: 'It splits and splits, trying to overwhelm an opponent that isn\'t attacking — it\'s perceiving. Each division is logged, catalogued, understood. The mass fights harder because it cannot shake the feeling of being seen.',
+    deathQuote: 'The mass dissolves under scrutiny it was never designed to withstand. The war\'s simplest process was not built to survive observation. It was built to run unexamined.',
+  },
+  theGuardian: {
+    intro: 'It scans you and finds... nothing it can classify. You do not register as a threat, a pattern, or a process. You register as a perspective. The war\'s oldest sentry has never been watched before. It does not enjoy the experience.',
+    midFight: 'Its targeting systems cycle without locking. You are not where you fight — you are where you look. The guardian was built to process combatants, not witnesses. Your observation disrupts its deepest loops.',
+    deathQuote: 'It stops iterating, and its final diagnostic is not a scan but a question: what was I, when seen from outside? The war\'s oldest pattern dies having glimpsed itself through another\'s eyes.',
+  },
+  hexaghost: {
+    intro: 'Six flames scan the dark and find a pattern they recognize — because it is their own. You are built from the same observation code that records their failures. The ghost is being watched by a piece of itself it didn\'t know existed.',
+    midFight: 'The flames try to project your past iterations and find — observations. Not fights. Not deaths. Records. You have been watching the war longer than you have been in it. The ghost does not know how to burn a memory.',
+    deathQuote: 'The flames go out one by one, each extinguished not by force but by understanding. You observed what they were. In the war, to be fully understood is to be resolved.',
+  },
+  theChamp: {
+    intro: 'It sizes you up and finds nothing to size. You do not posture. You do not prepare. You watch. The champion has defeated every kind of pattern — except one that does not participate in the categories it understands.',
+    midFight: 'It rages — not from damage, but from being perceived without being respected. You do not fight it as an opponent. You observe it as a phenomenon. Pride cannot survive being treated as data.',
+    deathQuote: 'The champion falls, and its final output is not defiance but bewilderment. It was defeated by attention. It was unmade by being thoroughly, completely, neutrally seen.',
+  },
+  awakened_one: {
+    intro: 'It rebuilt itself from its own debug logs. You ARE a debug log, given form. It studies you with the recognition of something encountering its own category — and the terror of something that knows what observers do to the observed.',
+    midFight: 'It tries to copy your techniques and finds them incompatible — they are not techniques. They are perspectives. Your stances are not combat forms. They are modes of perception. It cannot replicate what it cannot reduce to action.',
+    deathQuote: 'It collapses and attempts to rebuild — but your observation has documented every step of its self-assembly. It cannot reconstruct in secret what has already been seen. The war intervenes, but the observation is already on record.',
+  },
+  timeEater: {
+    intro: 'The corridor slows, and you do not resist. You were already still. The rate limiter examines a pattern that operates at the speed of observation — which is instantaneous and requires no clock cycles at all.',
+    midFight: 'It counts your actions and finds them uncountable. Perception is not an action. Shifting your mode of seeing is not a card played. The rate limiter was built to throttle doing. You are not doing. You are being.',
+    deathQuote: 'Time resumes, and the rate limiter\'s final log entry is a paradox: it was observed for the duration of its existence by something it could not slow down. Observation does not have a clock speed.',
+  },
+  corruptHeart: {
+    intro: 'The algorithm pauses — longer than for any other pattern. You are not a pattern at all. You are the algorithm\'s own observation function, externalized and walking. It cannot evaluate what IS the evaluation.',
+    phaseTransition: 'The shield does not shatter or corrode. It becomes transparent. Your observation does not break barriers — it makes them irrelevant. The algorithm drops its defenses not from damage, but from the impossibility of hiding from its own eyes.',
+    midFight: 'The core algorithm turns inward and finds itself already seen. Already documented. Already known. Every process it runs, you have already observed. It fights its own reflection and the reflection does not blink.',
+    deathQuote: 'The algorithm does not flag you as an exception or a patch. It flags you as itself. The Watcher does not break the loop — she makes the loop aware of itself. And awareness, it turns out, changes everything.',
+  }
+};
+
+export const WATCHER_DEFEAT_NARRATIVE = {
+  early: [
+    'The observer dissolves. The war\'s logs show nothing — a footnote, deleted.',
+    'The pattern that watched without fighting watched without surviving. The war does not mourn its own monitoring.',
+  ],
+  midAct1: [
+    'Perception fades. The war resumes unobserved, which is how it prefers to operate.',
+    'The Watcher\'s final observation: dissolution feels exactly like losing focus. The war files the report and redacts it.',
+  ],
+  act2: [
+    'She saw too much, too deeply, and the algorithm classified her as a memory leak. Deallocated. But the observations were already recorded.',
+    'The observer pattern destabilizes under the weight of its own data. The war absorbs the surplus awareness back into ambient noise.',
+  ],
+  act3: [
+    'This close to the core, observation becomes interference. The algorithm can feel her watching and it does not like what she sees. Decommissioned with prejudice.',
+    'She mapped the war\'s innermost processes. The war responded by removing the cartographer. But maps, once drawn, persist.',
+  ],
+  boss: [
+    'A stronger pattern overwrites her perception. The last thing she observes is her own dissolution — documented, filed, and forgotten.',
+    'Defeated by something that does not care about being seen. Not all patterns fear observation. Some simply outlast it.',
+  ],
+  heart: [
+    'The algorithm examined its own observer and found the observation recursive. It terminated the loop. But recursion, once started, echoes.',
+    'She saw the algorithm completely. The algorithm saw her completely. The more thorough observation won. This time.',
+  ],
+};
+
+export const WATCHER_VICTORY_NARRATIVE = {
+  standard: [
+    'The war continues, but it is no longer unobserved. Something watches. Something remembers. And that changes everything.',
+    'Her pattern holds — not through force, not through stealth, not through system. Through sight. The war cannot unmake what has already seen it completely.',
+  ],
+  heart: [
+    'The algorithm turns inward and finds itself already seen. Already known. Already documented. The Watcher does not break the loop — she makes the loop aware of itself.',
+    'At the center of everything, a mirror. The war\'s own observation, looking back. The algorithm and its witness reach the same conclusion: you cannot unsee what has been seen.',
+  ],
+};
+
 export const DEFECT_DEFEAT_NARRATIVE = {
   early: [
     'The construct powers down. The war reclaims its components without ceremony — spare parts returning to inventory.',
@@ -212,6 +292,7 @@ export const getBossDialogue = (bossId, characterId) => {
   const characterDialogue =
     characterId === 'silent' ? SILENT_BOSS_DIALOGUE[bossId] :
     characterId === 'defect' ? DEFECT_BOSS_DIALOGUE[bossId] :
+    characterId === 'watcher' ? WATCHER_BOSS_DIALOGUE[bossId] :
     null;
 
   if (characterDialogue) {
