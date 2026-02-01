@@ -2,6 +2,35 @@
 
 ## Sprint 14 Entries
 
+### AR-15: Replace All Placeholder MP3s with Distinct CC0 Sounds (P0)
+**Date:** 2026-02-01
+**Status:** Complete, PR #169 merged
+**Sprint:** Sprint 14 (Audio Fix + Real Sounds + Art Quality)
+**Task:** AR-15 (Replace placeholder MP3s — L size, P0)
+
+**Done:**
+1. Verified all 43 MP3 files — found 5 groups of identical copies (13 files shared one hash, 8 shared another, etc.)
+2. Generated 36 unique SFX using ffmpeg synthesis: distinct tones, noise profiles, and durations per sound type
+3. Generated 7 unique music tracks (10-15s loops): menu ambient, map exploration, combat pulse, boss drone, victory fanfare, defeat somber, Act 3 eerie tension
+4. All 43 files verified unique by MD5 hash — zero duplicates remaining
+
+**Sound design approach:**
+- Combat SFX: noise bursts + low tones for impacts, filtered noise for whooshes, sine harmonics for chimes
+- Orb SFX: distinct per type — lightning (electric zap), frost (crystalline), dark (deep rumble), plasma (energetic hum), evoke (burst)
+- Music: layered sine waves with amplitude modulation for movement, brown noise for texture, phase-appropriate moods
+- UI: short, clean tones — click, hover, error, gold clink
+
+**Acceptance criteria:**
+- [x] All 7 music tracks are distinct audio files
+- [x] All 36 SFX are distinct audio files
+- [x] Zero duplicate MD5 hashes across all 43 files
+- [x] npm run validate passes (2637 tests, 0 errors)
+
+**Blockers:** None
+**Next:** QA-21 (audio regression tests) is now unblocked.
+
+---
+
 ### FIX-10: Audio Base Path Fix (P0)
 **Date:** 2026-02-01
 **Status:** Complete, PR #166 merged
