@@ -176,6 +176,12 @@ export const handleEndTurn = (state) => {
   if (newPlayer.weak > 0) newPlayer.weak--;
   if (newPlayer.frail > 0) newPlayer.frail--;
 
+  // Divinity stance exits at end of turn
+  if (newPlayer.currentStance === 'divinity') {
+    newPlayer.currentStance = null;
+    combatLog.push('Divinity stance ended');
+  }
+
   // Enemy turns
   const enemyResult = processEnemyTurns({
     newPlayer, newEnemies, newHand, newDrawPile, newDiscardPile, newRelics, combatLog

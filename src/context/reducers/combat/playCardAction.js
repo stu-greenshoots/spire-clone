@@ -263,6 +263,42 @@ export const handlePlayCard = (state, action) => {
     });
   }
 
+  // Stance transitions (Watcher)
+  if (card.enterStance && card.enterStance !== newPlayer.currentStance) {
+    const oldStance = newPlayer.currentStance;
+    // Exit current stance
+    if (oldStance === 'calm') {
+      newPlayer.energy += 2;
+      combatLog.push('Exited Calm: gained 2 Energy');
+    }
+    // Enter new stance
+    newPlayer.currentStance = card.enterStance === 'none' ? null : card.enterStance;
+    if (newPlayer.currentStance === 'divinity') {
+      newPlayer.energy += 3;
+      combatLog.push('Entered Divinity: gained 3 Energy');
+    } else if (newPlayer.currentStance) {
+      combatLog.push(`Entered ${newPlayer.currentStance.charAt(0).toUpperCase() + newPlayer.currentStance.slice(1)} stance`);
+    }
+  }
+
+  // Mantra accumulation (Watcher)
+  if (card.mantra) {
+    newPlayer.mantra = (newPlayer.mantra || 0) + card.mantra;
+    combatLog.push(`Gained ${card.mantra} Mantra (${newPlayer.mantra}/10)`);
+    // Mantra triggers Divinity at 10
+    if (newPlayer.mantra >= 10) {
+      newPlayer.mantra -= 10;
+      const oldStance = newPlayer.currentStance;
+      if (oldStance === 'calm') {
+        newPlayer.energy += 2;
+        combatLog.push('Exited Calm: gained 2 Energy');
+      }
+      newPlayer.currentStance = 'divinity';
+      newPlayer.energy += 3;
+      combatLog.push('Mantra reached 10! Entered Divinity: gained 3 Energy');
+    }
+  }
+
   if (card.draw && !newPlayer.noDrawThisTurn) {
     for (let i = 0; i < card.draw; i++) {
       if (newDrawPile.length === 0 && newDiscardPile.length > 0) {

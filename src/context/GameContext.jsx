@@ -90,7 +90,10 @@ export const createInitialState = () => ({
     // Orb system (Defect)
     orbs: [],
     orbSlots: 0,
-    focus: 0
+    focus: 0,
+    // Stance system (Watcher)
+    currentStance: null, // null | 'calm' | 'wrath' | 'divinity'
+    mantra: 0
   },
   deck: [],
   drawPile: [],
