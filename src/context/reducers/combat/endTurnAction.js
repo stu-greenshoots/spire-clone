@@ -8,6 +8,7 @@ import { deleteSave, autoSave } from '../../../systems/saveSystem';
 import { getPotionRewards } from '../../../systems/potionSystem';
 import { processEnemyTurns } from './enemyTurnAction';
 import { loadProgression, updateRunStats as updateProgressionStats } from '../../../systems/progressionSystem';
+import { processOrbPassives } from '../../../systems/orbSystem';
 import { audioManager, SOUNDS } from '../../../systems/audioSystem';
 
 const applyDamageToTarget = combatApplyDamageToTarget;
@@ -130,6 +131,12 @@ export const handleEndTurn = (state) => {
   if (newPlayer.metallicize > 0) {
     newPlayer.block += newPlayer.metallicize;
     combatLog.push(`Metallicize granted ${newPlayer.metallicize} Block`);
+  }
+
+  // Process orb passives at end of player turn
+  if (newPlayer.orbs && newPlayer.orbs.length > 0) {
+    const orbResult = processOrbPassives(newPlayer, newEnemies, combatLog);
+    newEnemies = orbResult.enemies;
   }
 
   // Reset turn-based effects
