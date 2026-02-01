@@ -14,6 +14,22 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 14 — QA-21 Complete
+**Date:** 2026-02-01
+**Status:** QA-21 merged (PR #172)
+
+**Done:**
+- Implemented as QA: 59 audio regression tests covering file existence, uniqueness, SOUNDS constants, volume controls, persistence, phase music, preloading, SFX playback, and reducer integration wiring
+- 2696 tests total (up from 2637)
+- Both Copilot and Mentor reviews passed — clean test-only PR
+- Merged PR #172 via squash, updated sprint board and QA diary
+
+**Sprint 14 Progress:** 8/14 tasks done (PM-14, FIX-10, BE-28, UX-29, AR-15, GD-24, GD-25, QA-21)
+
+**Next highest priority:** JR-13 (card balance pass) or VARROW-10 (fourth character concept) or UX-30 (self-assessment) — remaining P1 tasks
+
+---
+
 ### Sprint 14 — GD-24 Complete
 **Date:** 2026-02-01
 **Status:** GD-24 merged (PR #170)

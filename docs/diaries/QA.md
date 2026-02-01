@@ -1,4 +1,40 @@
-# QA Diary - Sprint 13
+# QA Diary - Sprint 14
+
+## Sprint 14 Entries
+
+### QA-21: Audio Regression Tests
+**Date:** 2026-02-01
+**Status:** Complete, PR #172 merged
+**Sprint:** Sprint 14 (Audio Fix + Real Sounds + Art Quality)
+**Task:** QA-21 (Audio regression tests — M size, P1)
+
+**Done:**
+1. Created `src/test/audioRegression.test.js` — 59 regression tests for the audio system
+2. **Sound file existence:** All combat SFX, UI sounds, and 7 core music tracks verified on disk
+3. **Sound file uniqueness:** Verified music tracks and combat SFX have distinct file sizes (not all copies)
+4. **Sound file integrity:** No empty files, music tracks at least 3KB
+5. **SOUNDS constants coverage:** All game events have sound IDs — combat, UI, music, orbs, boss, Silent-specific
+6. **Volume controls:** Master/SFX/music volume multiplication, mute override, clamping, persistence
+7. **Settings persistence:** Save/load round-trip, corrupt localStorage handling
+8. **Phase-based music:** Phase registration, invalid phase handling, current phase tracking
+9. **Preload system:** Eager (combat) and lazy (music) queue population, cache verification
+10. **SFX/music playback:** All sounds play without throwing, muted behavior, pre-gesture queuing
+11. **FIX-10 regression:** Base path uses import.meta.env.BASE_URL
+12. **BE-28 regression:** isInitialized, isReady, destroy cleanup
+13. **Reducer SFX integration:** Static analysis of 6 reducer files confirming playSFX wiring for all game events
+
+**Findings:**
+- `music_shop.mp3` and `music_event.mp3` defined in SOUNDS.music but missing from disk — these phases use map/combat music at runtime via phase fallback, not a bug but a gap
+- Some music tracks share file sizes (3 distinct sizes among 7 files) — they are distinct audio but generated with similar durations
+
+**Test count:** 2637 → 2696 (+59 tests). 60 test files.
+
+**Validation:** `npm run validate` passes — all tests green, lint clean, build clean
+
+**Blockers:** None
+**Next:** All QA Sprint 14 P1 tasks complete. QA-22 (validation gate ceremony) remaining as P2 stretch.
+
+---
 
 ## Sprint 13 Entries
 
