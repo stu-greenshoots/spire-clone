@@ -18,6 +18,8 @@ const BossDialogue = ({ boss, trigger, onDismiss }) => {
         return boss.intro || '';
       case 'midFight':
         return boss.midFight || '';
+      case 'phaseTransition':
+        return boss.phaseTransition || '';
       case 'death':
         return boss.deathQuote || '';
       default:
@@ -60,6 +62,8 @@ const BossDialogue = ({ boss, trigger, onDismiss }) => {
         return '#aa2244'; // Boss red for intro
       case 'midFight':
         return '#cc6600'; // Warning orange for mid-fight
+      case 'phaseTransition':
+        return '#9944cc'; // Purple for phase transition
       case 'death':
         return '#448844'; // Victory green for death
       default:
