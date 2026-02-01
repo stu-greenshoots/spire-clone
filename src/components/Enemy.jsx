@@ -526,6 +526,34 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
         </span>
       </div>
 
+      {/* Invincible Shield Display */}
+      {enemy.invincible > 0 && (
+        <div
+          data-testid="enemy-invincible"
+          style={{
+            marginTop: '6px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            background: 'linear-gradient(180deg, #ff880044 0%, #ff880022 100%)',
+            border: '1px solid #ff8800',
+            padding: '3px 10px',
+            borderRadius: '12px',
+            boxShadow: '0 0 8px rgba(255, 136, 0, 0.4)',
+            transition: 'opacity 0.3s ease'
+          }}>
+          <span style={{ fontSize: '14px' }}>🔶</span>
+          <span style={{
+            color: '#ffcc88',
+            fontSize: '12px',
+            fontWeight: 'bold',
+            textShadow: '0 0 5px rgba(255, 136, 0, 0.8)'
+          }}>
+            {enemy.invincible}
+          </span>
+        </div>
+      )}
+
       {/* Status Effects */}
       <div style={{
         display: 'flex',

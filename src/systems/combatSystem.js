@@ -202,6 +202,7 @@ export const applyDamageToTarget = (target, damage) => {
   let newBlock = target.block;
   let newHp = target.currentHp;
   let newFlight = target.flight;
+  let newInvincible = target.invincible || 0;
 
   // Enemy intangible: reduce all damage to 1
   if (target.intangible > 0 && remainingDamage > 0) {
@@ -212,6 +213,17 @@ export const applyDamageToTarget = (target, damage) => {
   if (newFlight > 0) {
     remainingDamage = Math.floor(remainingDamage * 0.5);
     newFlight--;
+  }
+
+  // Invincible shield: absorb damage before block and HP
+  if (newInvincible > 0 && remainingDamage > 0) {
+    if (newInvincible >= remainingDamage) {
+      newInvincible -= remainingDamage;
+      remainingDamage = 0;
+    } else {
+      remainingDamage -= newInvincible;
+      newInvincible = 0;
+    }
   }
 
   if (newBlock > 0) {
@@ -228,7 +240,7 @@ export const applyDamageToTarget = (target, damage) => {
     newHp = Math.max(0, newHp - remainingDamage);
   }
 
-  const result = { ...target, block: newBlock, currentHp: newHp };
+  const result = { ...target, block: newBlock, currentHp: newHp, invincible: newInvincible };
   // Plated Armor: reduce by 1 when taking unblocked damage (HP loss)
   if (remainingDamage > 0 && target.platedArmor > 0) {
     result.platedArmor = Math.max(0, target.platedArmor - 1);

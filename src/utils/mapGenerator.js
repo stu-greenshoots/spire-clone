@@ -47,6 +47,18 @@ const ACT_DISTRIBUTIONS = {
  * @returns {Array} - 2D array of map nodes
  */
 export const generateMap = (act) => {
+  // Act 4: single boss node (The Heart)
+  if (act === 4) {
+    return [[{
+      id: '0-0',
+      floor: 0,
+      index: 0,
+      type: 'boss',
+      visited: false,
+      connections: []
+    }]];
+  }
+
   const floors = 15;
   const map = [];
   const dist = ACT_DISTRIBUTIONS[act] || ACT_DISTRIBUTIONS[1];

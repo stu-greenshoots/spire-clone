@@ -132,6 +132,45 @@ describe('Combat Mechanics', () => {
       expect(result.currentHp).toBe(50);
       expect(result.block).toBe(0);
     });
+
+    it('should absorb damage with invincible shield before block', () => {
+      const target = { currentHp: 800, block: 0, invincible: 300 };
+      const result = applyDamageToTarget(target, 50);
+      expect(result.invincible).toBe(250);
+      expect(result.currentHp).toBe(800);
+      expect(result.block).toBe(0);
+    });
+
+    it('should overflow invincible damage to block then HP', () => {
+      const target = { currentHp: 800, block: 10, invincible: 5 };
+      const result = applyDamageToTarget(target, 20);
+      // 20 damage: 5 absorbed by invincible, 10 absorbed by block, 5 to HP
+      expect(result.invincible).toBe(0);
+      expect(result.block).toBe(0);
+      expect(result.currentHp).toBe(795);
+    });
+
+    it('should handle exact invincible depletion', () => {
+      const target = { currentHp: 800, block: 0, invincible: 100 };
+      const result = applyDamageToTarget(target, 100);
+      expect(result.invincible).toBe(0);
+      expect(result.currentHp).toBe(800);
+    });
+
+    it('should not regenerate invincible shield', () => {
+      const target = { currentHp: 800, block: 0, invincible: 0 };
+      const result = applyDamageToTarget(target, 50);
+      expect(result.invincible).toBe(0);
+      expect(result.currentHp).toBe(750);
+    });
+
+    it('invincible shield applies after intangible reduction', () => {
+      const target = { currentHp: 800, block: 0, invincible: 300, intangible: 1 };
+      const result = applyDamageToTarget(target, 999);
+      // Intangible reduces to 1, then invincible absorbs 1
+      expect(result.invincible).toBe(299);
+      expect(result.currentHp).toBe(800);
+    });
   });
 
   describe('Status Effects Duration', () => {

@@ -154,4 +154,31 @@ describe('generateMap', () => {
       }
     });
   });
+
+  describe('Act 4 (Heart)', () => {
+    it('generates a single-floor map with one boss node', () => {
+      const map = generateMap(4);
+      expect(map).toHaveLength(1);
+      expect(map[0]).toHaveLength(1);
+      expect(map[0][0].type).toBe('boss');
+    });
+
+    it('Act 4 boss node has correct structure', () => {
+      const map = generateMap(4);
+      const node = map[0][0];
+      expect(node.id).toBe('0-0');
+      expect(node.floor).toBe(0);
+      expect(node.index).toBe(0);
+      expect(node.visited).toBe(false);
+      expect(node.connections).toEqual([]);
+    });
+
+    it('Act 4 map is deterministic in structure', () => {
+      for (let i = 0; i < 10; i++) {
+        const map = generateMap(4);
+        expect(map).toHaveLength(1);
+        expect(map[0][0].type).toBe('boss');
+      }
+    });
+  });
 });
