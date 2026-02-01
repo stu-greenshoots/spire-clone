@@ -512,7 +512,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Add the true final boss (The Corrupt Heart), wire boss dialogue rendering, animate key boss sprites, push past 90/100 score.
 **Plan:** See `SPRINT_12_PLAN.md`
 **Branch:** `sprint-12`
-**Status:** IN PROGRESS — PM-12, BE-25, JR-10, VARROW-07, UX-24, GD-19, BE-26, QA-17, AR-12, GD-20, JR-11, UX-25, VARROW-08, QA-18 complete
+**Status:** COMPLETE — All 15 tasks done (PM-12, BE-25, JR-10, VARROW-07, UX-24, GD-19, BE-26, QA-17, AR-12, GD-20, JR-11, UX-25, VARROW-08, QA-18, GD-21)
 
 ### P0 — Must Ship
 
@@ -542,7 +542,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 |------|-------|------|-------------|--------|
 | VARROW-08 | Varrow | S | Heart character-specific dialogue — different text for Ironclad vs Silent | DONE (pre-existing from VARROW-06) |
 | QA-18 | QA | S | Diary hygiene automation — CI/pre-commit warning for stale diaries | MERGED (PR #148) |
-| GD-21 | GD | S | Act differentiation backgrounds — subtle visual shift between Acts 1-4 | PENDING |
+| GD-21 | GD | S | Act differentiation backgrounds — subtle visual shift between Acts 1-4 | MERGED (PR #149) |
 
 ### Sprint 12 Validation Gate
 

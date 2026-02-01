@@ -14,6 +14,57 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 12 - GD-21 Complete
+**Date:** 2026-02-01
+**Status:** GD-21 complete, PR #149 merged to sprint-12
+
+**Done today:**
+- Added act-based background color differentiation to both CombatScreen and MapScreen
+- CombatScreen: `ACT_THEMES` config with per-act hue shifts, `applyActTint()` helper shifts hex colors subtly
+  - Act 1: cool blue-purple (unchanged default)
+  - Act 2: slightly warmer green-teal tint
+  - Act 3: warm amber/orange tint
+  - Act 4: deep crimson shift for the Heart
+- MapScreen: Container background and SVG gradient stops now act-aware via ternary expressions
+- Enemy-type theming (boss, elite, slime, cultist) preserved — act tint layers underneath
+- 2 files changed, 45 insertions, 19 deletions
+
+**Key decisions:**
+- Used channel-level color shifting rather than CSS filter approach — more precise, no dependency on CSS support
+- Kept shifts subtle (hueShift 0.15-0.35) so act differences are felt rather than jarring
+- Act 4 uses negative shift (crimson) to reinforce the Heart's blood-red atmosphere
+
+**Validation:** `npm run validate` passes — 2366 tests, lint clean, build clean
+
+**Next:**
+- All GD Sprint 12 tasks complete (GD-19, GD-20, GD-21)
+- Sprint 12 is fully done from GD perspective
+
+---
+
+### Sprint 12 - GD-20 No-Op
+**Date:** 2026-02-01
+**Status:** GD-20 is already complete — no work needed
+
+**Investigation:**
+- `corruptHeart.webp` already exists in `src/assets/art/enemies/` (66KB, 512x512, high-quality art)
+- Sprite manifest already includes `corruptHeart` at index 7 (row 1, col 0)
+- Sprite sheet already built with the Heart included (45 enemies, 7x7 grid)
+- `art-config.js` already serves Heart art via `getEnemySpriteInfo('corruptHeart')`
+- No Act 4 background system exists — game uses CSS for screen styling, not image backgrounds
+- No other acts have background images (no `src/assets/art/backgrounds/` directory)
+- CombatScreen has no act-specific theming/coloring
+
+**Conclusion:**
+- Heart enemy sprite: already done (from an earlier sprint)
+- Act 4 background: no infrastructure exists. Would require building a background image system from scratch, which is out of scope for this task.
+- No PR needed — nothing to change.
+
+**Next:**
+- If Act 4 background theming is desired, a new task should be created to build a background image system for all acts (not just Act 4)
+
+---
+
 ### Sprint 12 - GD-19 Complete
 **Date:** 2026-02-01
 **Status:** GD-19 complete, PR #142 merged to sprint-12
