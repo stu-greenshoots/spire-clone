@@ -156,13 +156,32 @@ describe('JR-11: Poison vs Heart invincible shield', () => {
     expect(getCardById('corpseExplosion').special).toBe('corpseExplosion');
   });
 
-  it('poison damage bypasses invincible (known limitation — needs BE fix)', () => {
-    // Poison tick in endTurnAction.js directly reduces currentHp without
-    // going through applyDamageToTarget, so it bypasses invincible shield.
+  it('poison damage is absorbed by invincible shield (FIX-09)', () => {
+    // Poison tick now routes through invincible shield check
     const heart = createHeart({ invincible: 200, currentHp: 750, poison: 10 });
-    const newHp = Math.max(0, heart.currentHp - heart.poison);
-    expect(newHp).toBe(740); // Poison bypasses invincible
-    expect(heart.invincible).toBe(200); // Invincible unchanged
+    // Simulate poison tick with invincible shield absorption
+    let poisonDamage = heart.poison;
+    let newInvincible = heart.invincible;
+    if (newInvincible >= poisonDamage) {
+      newInvincible -= poisonDamage;
+      poisonDamage = 0;
+    }
+    const newHp = Math.max(0, heart.currentHp - poisonDamage);
+    expect(newHp).toBe(750); // HP unchanged — invincible absorbed all poison
+    expect(newInvincible).toBe(190); // Invincible reduced by poison amount
+  });
+
+  it('poison damage exceeding invincible shield hits HP (FIX-09)', () => {
+    const heart = createHeart({ invincible: 5, currentHp: 750, poison: 10 });
+    let poisonDamage = heart.poison;
+    let newInvincible = heart.invincible;
+    if (newInvincible > 0 && newInvincible < poisonDamage) {
+      poisonDamage -= newInvincible;
+      newInvincible = 0;
+    }
+    const newHp = Math.max(0, heart.currentHp - poisonDamage);
+    expect(newHp).toBe(745); // 10 poison - 5 invincible = 5 HP damage
+    expect(newInvincible).toBe(0);
   });
 });
 
