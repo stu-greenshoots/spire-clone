@@ -5,6 +5,31 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 16 Entries
 
+### BE-32: Custom Seeded Runs
+**Date:** 2026-02-01
+**Status:** MERGED (PR #199)
+
+**Done:**
+- Added `stringToSeed()` and `generateSeedString()` to seededRandom.js
+- CharacterSelect: seed input field with random seed generator and clear button
+- `selectCharacter()` accepts optional `customSeed` parameter
+- `generateMap()` accepts optional SeededRNG for deterministic map generation
+- All `Math.random()` calls in mapGenerator.js replaced with seeded `rand()` function
+- `customSeed` persisted in game state, save/load, and run history
+- mapReducer threads seed through act transitions and endless mode loops via `getMapRng()`
+- RunHistoryPanel displays seed on seeded runs
+- 14 new tests, 3104 total passing, lint clean, build clean
+
+**Architecture:**
+- `getMapRng(state, act)` combines seed + act * 7919 + loop * 104729 for unique per-act maps
+- Map generation fully deterministic with seed; encounters/rewards still use Math.random()
+- Backward compatible: null rng falls through to Math.random in all functions
+
+**Blockers:** None
+**Next:** Continue with remaining P0 tasks (JR-15, UX-12)
+
+---
+
 ### BE-31: Endless Mode Infrastructure
 **Date:** 2026-02-01
 **Status:** MERGED (PR #197)

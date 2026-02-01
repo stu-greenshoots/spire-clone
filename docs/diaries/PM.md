@@ -14,6 +14,22 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — BE-32 Complete
+**Date:** 2026-02-01
+**Status:** BE-32 merged (PR #199) — Sprint 16 now 3/14 tasks done
+
+**Done:**
+- Implemented as BE: Custom seeded runs — seed input on character select, deterministic map generation, seed in run history
+- `generateMap()` now accepts optional SeededRNG, all Math.random() calls replaced with seeded rand()
+- Seed persisted through save/load and displayed in run history panel
+- 14 new tests (3104 total passing), lint clean, build passes
+- Both Copilot and Mentor reviews passed
+- Merged PR #199 via squash, updated sprint board and BE diary
+
+**Next:** Continue with next P0 task (JR-15: Character-specific relics, or UX-12: Smart card targeting)
+
+---
+
 ### Sprint 16 — UX-33 Complete
 **Date:** 2026-02-01
 **Status:** UX-33 merged (PR #198) — Sprint 16 now 2/14 tasks done
