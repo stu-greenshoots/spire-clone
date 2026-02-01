@@ -324,13 +324,27 @@ export const handleEndTurn = (state) => {
   combatLog.push(`--- Turn ${newTurn + 1} ---`);
 
   // Apply poison damage to enemies at start of player turn
+  // Poison bypasses block but respects invincible shield (Heart)
   newEnemies = newEnemies.map(enemy => {
     if (enemy.currentHp <= 0 || !enemy.poison || enemy.poison <= 0) return enemy;
-    const poisonDamage = enemy.poison;
+    let poisonDamage = enemy.poison;
     const updatedEnemy = { ...enemy };
+    // Invincible shield absorbs poison damage before HP
+    let newInvincible = updatedEnemy.invincible || 0;
+    if (newInvincible > 0) {
+      if (newInvincible >= poisonDamage) {
+        newInvincible -= poisonDamage;
+        poisonDamage = 0;
+      } else {
+        poisonDamage -= newInvincible;
+        newInvincible = 0;
+      }
+      updatedEnemy.invincible = newInvincible;
+    }
     updatedEnemy.currentHp = Math.max(0, updatedEnemy.currentHp - poisonDamage);
     updatedEnemy.poison = updatedEnemy.poison - 1;
-    combatLog.push(`${enemy.name} took ${poisonDamage} Poison damage (${updatedEnemy.poison} remaining)`);
+    const absorbed = enemy.poison - poisonDamage;
+    combatLog.push(`${enemy.name} took ${enemy.poison} Poison damage${absorbed > 0 ? ` (${absorbed} absorbed by invincible)` : ''} (${updatedEnemy.poison} remaining)`);
     audioManager.playSFX(SOUNDS.combat.poison, 'combat');
     return updatedEnemy;
   });
