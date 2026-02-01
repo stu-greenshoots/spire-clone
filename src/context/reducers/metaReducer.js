@@ -574,6 +574,7 @@ export const metaReducer = (state, action) => {
         cardsPlayed: state.runStats?.cardsPlayed || 0,
         defeatedEnemies: state.runStats?.defeatedEnemies || [],
         relics: state.relics,
+        potions: state.potions,
         deckSize: state.deck?.length || 0,
         ascension: currentAscension,
         causeOfDeath: won ? null : causeOfDeath,
