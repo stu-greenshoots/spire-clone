@@ -138,7 +138,9 @@ export const createInitialState = () => ({
   character: null,
   // Endless mode state
   endlessMode: false,
-  endlessLoop: 0
+  endlessLoop: 0,
+  // Custom seeded run (null when not seeded)
+  customSeed: null
 });
 
 // Re-export combat calculation functions for testing (implementations in combatSystem.js)
@@ -304,8 +306,8 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'START_GAME', payload: { ascensionLevel } });
   }, []);
 
-  const selectCharacter = useCallback((characterId) => {
-    dispatch({ type: 'SELECT_CHARACTER', payload: { characterId } });
+  const selectCharacter = useCallback((characterId, customSeed = null) => {
+    dispatch({ type: 'SELECT_CHARACTER', payload: { characterId, customSeed } });
   }, []);
 
   const startDailyChallenge = useCallback((challenge) => {

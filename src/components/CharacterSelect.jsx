@@ -2,10 +2,23 @@ import { useState } from 'react';
 import { useGame } from '../context/GameContext';
 import { CHARACTERS } from '../data/characters';
 import { getCharacterImage } from '../assets/art/art-config';
+import { generateSeedString } from '../utils/seededRandom';
 
 const CharacterSelect = () => {
   const { selectCharacter } = useGame();
   const [hoveredId, setHoveredId] = useState(null);
+  const [seedInput, setSeedInput] = useState('');
+  const [showSeedInput, setShowSeedInput] = useState(false);
+
+  const handleSelectCharacter = (characterId) => {
+    const seed = seedInput.trim() || null;
+    selectCharacter(characterId, seed);
+  };
+
+  const handleRandomSeed = () => {
+    setSeedInput(generateSeedString());
+    setShowSeedInput(true);
+  };
 
   return (
     <div style={{
@@ -32,11 +45,107 @@ const CharacterSelect = () => {
       <p style={{
         color: '#8878a0',
         fontSize: '14px',
-        marginBottom: '32px',
+        marginBottom: '24px',
         fontStyle: 'italic'
       }}>
         Each warrior enters the Endless War differently.
       </p>
+
+      {/* Seed Input Section */}
+      <div style={{
+        marginBottom: '24px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '8px'
+      }}>
+        {showSeedInput ? (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <input
+              data-testid="seed-input"
+              type="text"
+              value={seedInput}
+              onChange={(e) => setSeedInput(e.target.value.toUpperCase())}
+              placeholder="Enter seed..."
+              maxLength={20}
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(136, 120, 160, 0.4)',
+                borderRadius: '6px',
+                color: '#ddd',
+                padding: '8px 12px',
+                fontSize: '14px',
+                fontFamily: 'monospace',
+                letterSpacing: '2px',
+                width: '180px',
+                textAlign: 'center',
+                outline: 'none'
+              }}
+            />
+            <button
+              data-testid="btn-random-seed"
+              onClick={handleRandomSeed}
+              title="Generate random seed"
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(136, 120, 160, 0.3)',
+                borderRadius: '6px',
+                color: '#8878a0',
+                padding: '8px 12px',
+                fontSize: '13px',
+                cursor: 'pointer'
+              }}
+            >
+              Random
+            </button>
+            <button
+              data-testid="btn-clear-seed"
+              onClick={() => { setSeedInput(''); setShowSeedInput(false); }}
+              title="Clear seed"
+              style={{
+                background: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(136, 120, 160, 0.2)',
+                borderRadius: '6px',
+                color: '#665577',
+                padding: '8px 10px',
+                fontSize: '13px',
+                cursor: 'pointer'
+              }}
+            >
+              Clear
+            </button>
+          </div>
+        ) : (
+          <button
+            data-testid="btn-set-seed"
+            onClick={() => setShowSeedInput(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#665577',
+              fontSize: '12px',
+              cursor: 'pointer',
+              textDecoration: 'underline',
+              padding: '4px 8px'
+            }}
+          >
+            Set Custom Seed
+          </button>
+        )}
+        {seedInput && (
+          <div style={{
+            color: '#665577',
+            fontSize: '11px',
+            letterSpacing: '1px'
+          }}>
+            Seed: <span style={{ color: '#aa99cc', fontFamily: 'monospace' }}>{seedInput}</span>
+          </div>
+        )}
+      </div>
 
       <div style={{
         display: 'flex',
@@ -52,7 +161,7 @@ const CharacterSelect = () => {
             <button
               key={character.id}
               data-testid={`btn-select-${character.id}`}
-              onClick={() => selectCharacter(character.id)}
+              onClick={() => handleSelectCharacter(character.id)}
               onMouseEnter={() => setHoveredId(character.id)}
               onMouseLeave={() => setHoveredId(null)}
               style={{
