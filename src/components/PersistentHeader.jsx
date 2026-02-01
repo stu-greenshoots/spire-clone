@@ -7,7 +7,7 @@ import { isMuted, setMuted } from '../systems/audioSystem';
 
 const PersistentHeader = ({ onPauseClick }) => {
   const { state } = useGame();
-  const { player, phase, act, currentFloor, relics, deck } = state;
+  const { player, phase, act, currentFloor, relics, deck, character } = state;
   const [selectedRelic, setSelectedRelic] = useState(null);
   const [showDeckView, setShowDeckView] = useState(false);
   const [muted, setMutedState] = useState(isMuted());
@@ -138,6 +138,24 @@ const PersistentHeader = ({ onPauseClick }) => {
                 {player.block}
               </span>
             </div>
+
+            {/* Stance indicator - compact (Watcher only) */}
+            {character === 'watcher' && player.currentStance && (() => {
+              const stanceMap = { calm: { icon: '🧘', color: '#44aacc' }, wrath: { icon: '⚔️', color: '#cc4444' }, divinity: { icon: '✨', color: '#ffcc00' } };
+              const s = stanceMap[player.currentStance];
+              return s ? (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '3px',
+                  padding: '3px 6px', background: `${s.color}22`, borderRadius: '6px',
+                  border: `1px solid ${s.color}66`, fontSize: '11px'
+                }}>
+                  <span>{s.icon}</span>
+                  <span style={{ color: s.color, fontWeight: 'bold', fontSize: '9px', textTransform: 'uppercase' }}>
+                    {player.currentStance}
+                  </span>
+                </div>
+              ) : null;
+            })()}
 
             {/* Floor indicator - compact */}
             <div style={{
