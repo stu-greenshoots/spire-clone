@@ -15,6 +15,23 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 12 - UX-25 Complete
+**Date:** 2026-02-01
+**Status:** UX-25 DONE (PR #147)
+
+**What I did:**
+- Updated `docs/SELF_ASSESSMENT.md` — full re-score against Game Zone Magazine rubric
+- Previous score: 85/100 (Sprint 10). New projected score: **93/100** (+8)
+- Breakdown: Gameplay 9→10, Presentation 8→9, Stability 9→10, UX/Polish 8→9
+- All 18/18 original complaints now resolved (was 15/18 at Sprint 10)
+- Key Sprint 11-12 additions: The Silent, The Corrupt Heart, boss dialogue, animated sprites, run history, card rarity, Heart audio
+- Documented path from 93 to 100 (art fidelity, cloud save, QoL extras)
+- Added sprint-over-sprint metrics table and score trajectory
+
+**Sprint 12 UX status:** All UX tasks complete (UX-24, UX-25).
+
+---
+
 ### Sprint 12 - UX-24 Complete
 **Date:** 2026-02-01
 **Status:** UX-24 DONE (PR #141)

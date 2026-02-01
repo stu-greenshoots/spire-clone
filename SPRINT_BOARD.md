@@ -512,7 +512,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Add the true final boss (The Corrupt Heart), wire boss dialogue rendering, animate key boss sprites, push past 90/100 score.
 **Plan:** See `SPRINT_12_PLAN.md`
 **Branch:** `sprint-12`
-**Status:** IN PROGRESS — PM-12, BE-25, JR-10, VARROW-07, UX-24, GD-19, BE-26, QA-17, AR-12, GD-20, JR-11 complete
+**Status:** IN PROGRESS — PM-12, BE-25, JR-10, VARROW-07, UX-24, GD-19, BE-26, QA-17, AR-12, GD-20, JR-11, UX-25 complete
 
 ### P0 — Must Ship
 
@@ -534,7 +534,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | AR-12 | AR | S | Heart audio — heartbeat loop, Beat of Death SFX, phase transition | MERGED (PR #145) |
 | GD-20 | GD | S | Heart art — enemy sprite + Act 4 background | DONE (pre-existing) |
 | JR-11 | JR | S | Heart card interactions — 60+ card edge case audit vs Heart mechanics | MERGED (PR #146) |
-| UX-25 | UX | S | Updated self-assessment — re-score for 90+ target | PENDING |
+| UX-25 | UX | S | Updated self-assessment — re-score for 90+ target | MERGED (PR #147) |
 
 ### P2 — Stretch
 

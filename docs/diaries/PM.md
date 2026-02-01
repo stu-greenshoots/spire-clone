@@ -14,6 +14,23 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 12 — UX-25 Complete
+**Date:** 2026-02-01
+**Status:** UX-25 merged (PR #147)
+
+**Done:**
+- Implemented as UX: Updated self-assessment against Game Zone Magazine rubric
+- Score trajectory: 58 → 85 → 93/100 (exceeds 90+ target)
+- All 18/18 original complaints resolved (was 15/18 at Sprint 10)
+- Docs-only change, both reviews passed
+- Merged PR #147 via squash, updated sprint board and UX diary
+
+**Sprint 12 Progress:** 12/15 tasks done (PM-12, BE-25, JR-10, VARROW-07, UX-24, GD-19, BE-26, QA-17, AR-12, GD-20, JR-11, UX-25)
+
+**Remaining P2:** VARROW-08, QA-18, GD-21
+
+---
+
 ### Sprint 12 — JR-11 Complete
 **Date:** 2026-02-01
 **Status:** JR-11 merged (PR #146), GD-20 marked DONE (pre-existing)
