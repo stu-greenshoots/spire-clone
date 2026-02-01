@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
 import { ENDLESS_LOOP_MILESTONES } from '../data/flavorText';
+import { audioManager, SOUNDS } from '../systems/audioSystem';
 
 const EndlessTransition = () => {
   const { state, enterEndless, returnToMenu, updateProgression } = useGame();
@@ -18,6 +19,11 @@ const EndlessTransition = () => {
     const generic = ENDLESS_LOOP_MILESTONES.generic;
     return generic[Math.floor(Math.random() * generic.length)];
   }, [state.endlessLoop]);
+
+  // AR-18: Play milestone fanfare on endless transition
+  useEffect(() => {
+    audioManager.playSFX(SOUNDS.combat.milestoneFanfare, 'combat');
+  }, []);
 
   // Record progression on mount (player beat the Heart)
   useEffect(() => {

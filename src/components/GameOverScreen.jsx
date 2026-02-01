@@ -4,6 +4,7 @@ import { DEFEAT_NARRATIVE, DEFEAT_FOOTER, ENDLESS_DEFEAT_NARRATIVE, ENDLESS_DEFE
 import { SILENT_DEFEAT_NARRATIVE, DEFECT_DEFEAT_NARRATIVE, WATCHER_DEFEAT_NARRATIVE } from '../data/bossDialogue';
 import { getRelicImage } from '../assets/art/art-config';
 import { calculateChallengeScore, saveChallengeScore } from '../systems/dailyChallengeSystem';
+import { audioManager, SOUNDS } from '../systems/audioSystem';
 
 const getDefeatText = (act, currentFloor, currentNode, characterId, endlessMode, endlessLoop) => {
   // Endless mode has its own dissolution narrative based on loop depth
@@ -56,6 +57,13 @@ const GameOverScreen = () => {
     saveChallengeScore(dailyChallenge.date, score);
     return score;
   }, [dailyChallenge, runStats, currentFloor, player]);
+
+  // AR-18: Play endless-specific death SFX
+  useEffect(() => {
+    if (endlessMode) {
+      audioManager.playSFX(SOUNDS.combat.endlessDeath, 'combat');
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Record run in history and update progression on mount
   useEffect(() => {
