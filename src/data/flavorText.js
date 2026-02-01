@@ -197,7 +197,23 @@ export const CARD_FLAVOR = {
   prostrate: 'Devotion accumulates. Each prayer brings divinity closer.',
   protectingLight: 'The light does not judge. It simply shields.',
   sashWhip: 'Silk and steel intertwined. Grace that cuts.',
-  miracle: 'A gift from beyond. Pure energy, freely given, never lasting.'
+  miracle: 'A gift from beyond. Pure energy, freely given, never lasting.',
+  // Watcher Uncommon/Rare
+  wallop: 'The impact reverberates inward. Every blow defended is a blow returned.',
+  tantrum: 'Discipline cracks. What pours through the fractures is older than reason.',
+  reachHeaven: 'To touch the divine, one must first reach through violence.',
+  throughViolence: 'The path was always forward. The blade simply clears the way.',
+  worship: 'The body bows. The spirit ascends. The boundary between thins.',
+  thirdEye: 'Sight beyond sight. The draw pile reveals its secrets to the patient.',
+  deceiveReality: 'What is real bends to perception. Calm is its own defense.',
+  safety: 'A ward held in reserve. Protection that waits for the moment of need.',
+  fearNoEvil: 'Face the incoming blow with serenity. Let their aggression become your stillness.',
+  mentalFortress: 'Each transition between states strengthens the walls of the mind.',
+  ragnarok: 'The end of all things begins with a single strike repeated beyond counting.',
+  brilliance: 'Every prayer answered at once. Devotion made manifest as destruction.',
+  blasphemy: 'To seize divinity uninvited. The price is everything. The power is absolute.',
+  devaForm: 'Ascension without end. Each turn draws more power from the infinite.',
+  wish: 'The universe grants one request. Choose carefully — there are no second chances.'
 };
 
 // ========== ENEMY LORE ==========
