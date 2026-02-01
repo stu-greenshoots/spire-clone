@@ -304,6 +304,7 @@ export const metaReducer = (state, action) => {
     }
 
     case 'RETURN_TO_MENU': {
+      deleteSave();
       return createInitialState();
     }
 
@@ -385,6 +386,8 @@ export const metaReducer = (state, action) => {
         act: saveData.act,
         ascension: saveData.ascension || 0,
         character: saveData.character || 'ironclad',
+        endlessMode: saveData.endlessMode || false,
+        endlessLoop: saveData.endlessLoop || 0,
       };
     }
 

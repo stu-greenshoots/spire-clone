@@ -35,7 +35,9 @@ export const GAME_PHASE = {
   CARD_SELECT_HAND: 'card_select_hand',
   CARD_SELECT_DISCARD: 'card_select_discard',
   CARD_SELECT_EXHAUST: 'card_select_exhaust',
-  CARD_SELECT_DRAW: 'card_select_draw'
+  CARD_SELECT_DRAW: 'card_select_draw',
+  // Endless mode
+  ENDLESS_TRANSITION: 'endless_transition'
 };
 
 // Initial game state
@@ -133,7 +135,10 @@ export const createInitialState = () => ({
   // Daily challenge state (null when not in a daily challenge)
   dailyChallenge: null,
   // Character ID (e.g., 'ironclad', 'silent')
-  character: null
+  character: null,
+  // Endless mode state
+  endlessMode: false,
+  endlessLoop: 0
 });
 
 // Re-export combat calculation functions for testing (implementations in combatSystem.js)
@@ -423,6 +428,10 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'SELECT_STARTING_BONUS', payload: { bonusId } });
   }, []);
 
+  const enterEndless = useCallback(() => {
+    dispatch({ type: 'ENTER_ENDLESS' });
+  }, []);
+
   const loadScenario = useCallback((scenario) => {
     dispatch({ type: 'LOAD_SCENARIO', payload: scenario });
   }, []);
@@ -461,6 +470,7 @@ export const GameProvider = ({ children }) => {
     usePotion,
     discardPotion,
     selectStartingBonus,
+    enterEndless,
     loadScenario
   };
 
