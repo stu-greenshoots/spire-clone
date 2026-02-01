@@ -20,6 +20,11 @@ const imageCache = new Map();
 // Set of image paths currently being preloaded
 const preloadingSet = new Set();
 
+// Base URL for public assets (respects Vite's --base flag for GitHub Pages)
+function getBasePath() {
+  return typeof import.meta !== 'undefined' ? import.meta.env?.BASE_URL || '/' : '/';
+}
+
 /**
  * Get the expected image path for an enemy ID in PNG format.
  * Convention: public/images/enemies/{enemyId}.png
@@ -27,7 +32,7 @@ const preloadingSet = new Set();
  * @returns {string} The path to the enemy PNG image relative to public root
  */
 export function getEnemyImagePath(enemyId) {
-  return `/images/enemies/${enemyId}.png`;
+  return `${getBasePath()}images/enemies/${enemyId}.png`;
 }
 
 /**
@@ -37,7 +42,7 @@ export function getEnemyImagePath(enemyId) {
  * @returns {string} The path to the enemy WebP image relative to public root
  */
 export function getEnemyImagePathWebP(enemyId) {
-  return `/images/enemies/${enemyId}.webp`;
+  return `${getBasePath()}images/enemies/${enemyId}.webp`;
 }
 
 /**
