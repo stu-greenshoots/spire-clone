@@ -507,7 +507,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     const boss = enemies.find(e => e.type === 'boss');
     if (!boss) return;
 
-    const bossData = getBossDialogue(boss.id, state.character);
+    const bossData = getBossDialogue(boss.id, state.character, state.endlessLoop);
     if (!bossData) return;
 
     const dialogueKey = `${boss.instanceId}`;
@@ -592,7 +592,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     removedEnemyIds.forEach(id => {
       const enemyData = prevEnemyData.current[id];
       if (enemyData && enemyData.type === 'boss') {
-        const bossData = getBossDialogue(enemyData.id, state.character);
+        const bossData = getBossDialogue(enemyData.id, state.character, state.endlessLoop);
         if (bossData && !shownDialogues.current.has(`${id}-death`)) {
           shownDialogues.current.add(`${id}-death`);
           setBossDialogue({

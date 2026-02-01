@@ -1,10 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
+import { ENDLESS_LOOP_MILESTONES } from '../data/flavorText';
 
 const EndlessTransition = () => {
   const { state, enterEndless, returnToMenu, updateProgression } = useGame();
   const [showContent, setShowContent] = useState(false);
   const loopNumber = (state.endlessLoop || 0) + 1;
+
+  const milestoneText = useMemo(() => {
+    const loop = state.endlessLoop || 0;
+    // Check for specific milestone text (highest matching threshold)
+    const thresholds = [25, 15, 10, 7, 5, 3];
+    for (const threshold of thresholds) {
+      if (loop >= threshold) return ENDLESS_LOOP_MILESTONES[threshold];
+    }
+    // Generic loop text
+    const generic = ENDLESS_LOOP_MILESTONES.generic;
+    return generic[Math.floor(Math.random() * generic.length)];
+  }, [state.endlessLoop]);
 
   // Record progression on mount (player beat the Heart)
   useEffect(() => {
@@ -76,7 +89,7 @@ const EndlessTransition = () => {
         animation: showContent ? 'fadeIn 0.5s ease 0.4s both' : 'none'
       }}>
         {state.endlessMode
-          ? 'The Spire reassembles. Enemies grow stronger. How far can you ascend?'
+          ? milestoneText
           : 'The Spire crumbles, yet its corruption lingers. Will you descend once more into the endless dark?'}
       </p>
 

@@ -1,11 +1,21 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useGame } from '../context/GameContext';
-import { DEFEAT_NARRATIVE, DEFEAT_FOOTER } from '../data/flavorText';
+import { DEFEAT_NARRATIVE, DEFEAT_FOOTER, ENDLESS_DEFEAT_NARRATIVE, ENDLESS_DEFEAT_FOOTER } from '../data/flavorText';
 import { SILENT_DEFEAT_NARRATIVE, DEFECT_DEFEAT_NARRATIVE, WATCHER_DEFEAT_NARRATIVE } from '../data/bossDialogue';
 import { getRelicImage } from '../assets/art/art-config';
 import { calculateChallengeScore, saveChallengeScore } from '../systems/dailyChallengeSystem';
 
-const getDefeatText = (act, currentFloor, currentNode, characterId) => {
+const getDefeatText = (act, currentFloor, currentNode, characterId, endlessMode, endlessLoop) => {
+  // Endless mode has its own dissolution narrative based on loop depth
+  if (endlessMode && endlessLoop >= 1) {
+    let pool;
+    if (endlessLoop >= 10) pool = ENDLESS_DEFEAT_NARRATIVE.extreme;
+    else if (endlessLoop >= 6) pool = ENDLESS_DEFEAT_NARRATIVE.deep;
+    else if (endlessLoop >= 3) pool = ENDLESS_DEFEAT_NARRATIVE.mid;
+    else pool = ENDLESS_DEFEAT_NARRATIVE.early;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
   const isBoss = currentNode?.type === 'boss';
   const narrative = characterId === 'silent' ? SILENT_DEFEAT_NARRATIVE : characterId === 'defect' ? DEFECT_DEFEAT_NARRATIVE : characterId === 'watcher' ? WATCHER_DEFEAT_NARRATIVE : DEFEAT_NARRATIVE;
   let pool;
@@ -29,8 +39,11 @@ const GameOverScreen = () => {
   const { state, returnToMenu, updateProgression } = useGame();
   const { player, deck, relics, currentFloor, act, dailyChallenge, runStats, endlessMode, endlessLoop } = state;
   const [showContent, setShowContent] = useState(false);
-  const defeatText = useMemo(() => getDefeatText(act, currentFloor, state.currentNode, state.character), [act, currentFloor, state.currentNode, state.character]);
-  const footerText = useMemo(() => DEFEAT_FOOTER[Math.floor(Math.random() * DEFEAT_FOOTER.length)], []);
+  const defeatText = useMemo(() => getDefeatText(act, currentFloor, state.currentNode, state.character, endlessMode, endlessLoop), [act, currentFloor, state.currentNode, state.character, endlessMode, endlessLoop]);
+  const footerText = useMemo(() => {
+    const pool = endlessMode ? ENDLESS_DEFEAT_FOOTER : DEFEAT_FOOTER;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }, [endlessMode]);
 
   // Calculate and save daily challenge score
   const challengeScore = useMemo(() => {
@@ -263,9 +276,7 @@ const GameOverScreen = () => {
         fontStyle: 'italic',
         animation: showContent ? 'fadeIn 0.5s ease 1s both' : 'none'
       }}>
-        {endlessMode
-          ? `You held on for ${endlessLoop} loop${endlessLoop !== 1 ? 's' : ''}. The war forgets your name.`
-          : footerText}
+        {footerText}
       </p>
     </div>
   );
