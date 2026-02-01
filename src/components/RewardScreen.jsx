@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useGame, GAME_PHASE } from '../context/GameContext';
 import Card from './Card';
 import { getRelicImage, getPotionImage } from '../assets/art/art-config';
 
 const RewardScreen = ({ isOverlay = false }) => {
   const { state, collectGold, collectRelic, collectPotion, openCardRewards, selectCardReward, skipCardReward, proceedToMap } = useGame();
+  const [showSkipConfirm, setShowSkipConfirm] = useState(false);
   const { phase, combatRewards, cardRewards, player } = state;
 
   // Overlay styles for victory screen
@@ -99,25 +101,68 @@ const RewardScreen = ({ isOverlay = false }) => {
           background: 'linear-gradient(180deg, rgba(25, 25, 35, 0.98) 0%, rgba(15, 15, 20, 1) 100%)',
           borderTop: '2px solid #333',
           display: 'flex',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          gap: '10px'
         }}>
-          <button
-            data-testid="btn-skip-reward"
-            onClick={skipCardReward}
-            style={{
-              padding: '14px 50px',
-              fontSize: '16px',
-              background: 'linear-gradient(180deg, #444 0%, #333 100%)',
-              color: 'white',
-              border: '2px solid #555',
-              borderRadius: '25px',
-              cursor: 'pointer',
-              fontWeight: 'bold',
-              touchAction: 'manipulation'
-            }}
-          >
-             Skip Reward
-          </button>
+          {showSkipConfirm ? (
+            <>
+              <span style={{ color: '#ccc', fontSize: '14px', alignSelf: 'center', marginRight: '5px' }}>
+                Skip this reward?
+              </span>
+              <button
+                data-testid="btn-skip-confirm"
+                onClick={skipCardReward}
+                style={{
+                  padding: '14px 30px',
+                  fontSize: '16px',
+                  background: 'linear-gradient(180deg, #aa2020 0%, #661010 100%)',
+                  color: 'white',
+                  border: '2px solid #cc4444',
+                  borderRadius: '25px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  touchAction: 'manipulation'
+                }}
+              >
+                Yes, Skip
+              </button>
+              <button
+                data-testid="btn-skip-cancel"
+                onClick={() => setShowSkipConfirm(false)}
+                style={{
+                  padding: '14px 30px',
+                  fontSize: '16px',
+                  background: 'linear-gradient(180deg, #444 0%, #333 100%)',
+                  color: 'white',
+                  border: '2px solid #555',
+                  borderRadius: '25px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  touchAction: 'manipulation'
+                }}
+              >
+                Go Back
+              </button>
+            </>
+          ) : (
+            <button
+              data-testid="btn-skip-reward"
+              onClick={() => setShowSkipConfirm(true)}
+              style={{
+                padding: '14px 50px',
+                fontSize: '16px',
+                background: 'linear-gradient(180deg, #444 0%, #333 100%)',
+                color: 'white',
+                border: '2px solid #555',
+                borderRadius: '25px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                touchAction: 'manipulation'
+              }}
+            >
+               Skip Reward
+            </button>
+          )}
         </div>
       </div>
     );
