@@ -1,9 +1,9 @@
 {
   "cellSize": 512,
   "cols": 10,
-  "rows": 13,
+  "rows": 16,
   "sheetWidth": 5120,
-  "sheetHeight": 6656,
+  "sheetHeight": 8192,
   "cards": {
     "aThousandCuts": {
       "x": 0,
@@ -54,845 +54,1055 @@
       "row": 0,
       "index": 6
     },
-    "barricade": {
+    "ballLightning": {
       "x": 3584,
       "y": 0,
       "col": 7,
       "row": 0,
       "index": 7
     },
-    "bash": {
+    "barricade": {
       "x": 4096,
       "y": 0,
       "col": 8,
       "row": 0,
       "index": 8
     },
-    "battleTrance": {
+    "bash": {
       "x": 4608,
       "y": 0,
       "col": 9,
       "row": 0,
       "index": 9
     },
-    "berserk": {
+    "battleTrance": {
       "x": 0,
       "y": 512,
       "col": 0,
       "row": 1,
       "index": 10
     },
-    "bladeDance": {
+    "beamCell": {
       "x": 512,
       "y": 512,
       "col": 1,
       "row": 1,
       "index": 11
     },
-    "bloodForBlood": {
+    "berserk": {
       "x": 1024,
       "y": 512,
       "col": 2,
       "row": 1,
       "index": 12
     },
-    "bloodletting": {
+    "bladeDance": {
       "x": 1536,
       "y": 512,
       "col": 3,
       "row": 1,
       "index": 13
     },
-    "bludgeon": {
+    "blizzard": {
       "x": 2048,
       "y": 512,
       "col": 4,
       "row": 1,
       "index": 14
     },
-    "bodySlam": {
+    "bloodForBlood": {
       "x": 2560,
       "y": 512,
       "col": 5,
       "row": 1,
       "index": 15
     },
-    "brutality": {
+    "bloodletting": {
       "x": 3072,
       "y": 512,
       "col": 6,
       "row": 1,
       "index": 16
     },
-    "bulletTime": {
+    "bludgeon": {
       "x": 3584,
       "y": 512,
       "col": 7,
       "row": 1,
       "index": 17
     },
-    "burn": {
+    "bodySlam": {
       "x": 4096,
       "y": 512,
       "col": 8,
       "row": 1,
       "index": 18
     },
-    "burningPact": {
+    "brutality": {
       "x": 4608,
       "y": 512,
       "col": 9,
       "row": 1,
       "index": 19
     },
-    "carnage": {
+    "bulletTime": {
       "x": 0,
       "y": 1024,
       "col": 0,
       "row": 2,
       "index": 20
     },
-    "clash": {
+    "burn": {
       "x": 512,
       "y": 1024,
       "col": 1,
       "row": 2,
       "index": 21
     },
-    "cleave": {
+    "burningPact": {
       "x": 1024,
       "y": 1024,
       "col": 2,
       "row": 2,
       "index": 22
     },
-    "cloakAndDagger": {
+    "capacitor": {
       "x": 1536,
       "y": 1024,
       "col": 3,
       "row": 2,
       "index": 23
     },
-    "clothesline": {
+    "carnage": {
       "x": 2048,
       "y": 1024,
       "col": 4,
       "row": 2,
       "index": 24
     },
-    "combust": {
+    "chargeUp": {
       "x": 2560,
       "y": 1024,
       "col": 5,
       "row": 2,
       "index": 25
     },
-    "combust_plus": {
+    "clash": {
       "x": 3072,
       "y": 1024,
       "col": 6,
       "row": 2,
       "index": 26
     },
-    "corpseExplosion": {
+    "cleave": {
       "x": 3584,
       "y": 1024,
       "col": 7,
       "row": 2,
       "index": 27
     },
-    "corruption": {
+    "cloakAndDagger": {
       "x": 4096,
       "y": 1024,
       "col": 8,
       "row": 2,
       "index": 28
     },
-    "curse_decay": {
+    "clothesline": {
       "x": 4608,
       "y": 1024,
       "col": 9,
       "row": 2,
       "index": 29
     },
-    "curse_doubt": {
+    "coldSnap": {
       "x": 0,
       "y": 1536,
       "col": 0,
       "row": 3,
       "index": 30
     },
-    "curse_pain": {
+    "combust": {
       "x": 512,
       "y": 1536,
       "col": 1,
       "row": 3,
       "index": 31
     },
-    "curse_regret": {
+    "combust_plus": {
       "x": 1024,
       "y": 1536,
       "col": 2,
       "row": 3,
       "index": 32
     },
-    "daggerSpray": {
+    "compileDrive": {
       "x": 1536,
       "y": 1536,
       "col": 3,
       "row": 3,
       "index": 33
     },
-    "daggerThrow": {
+    "consume": {
       "x": 2048,
       "y": 1536,
       "col": 4,
       "row": 3,
       "index": 34
     },
-    "darkEmbrace": {
+    "coolheaded": {
       "x": 2560,
       "y": 1536,
       "col": 5,
       "row": 3,
       "index": 35
     },
-    "darkShackles": {
+    "corpseExplosion": {
       "x": 3072,
       "y": 1536,
       "col": 6,
       "row": 3,
       "index": 36
     },
-    "dash": {
+    "corruption": {
       "x": 3584,
       "y": 1536,
       "col": 7,
       "row": 3,
       "index": 37
     },
-    "dazed": {
+    "creativeAI": {
       "x": 4096,
       "y": 1536,
       "col": 8,
       "row": 3,
       "index": 38
     },
-    "deadlyPoison": {
+    "curse_decay": {
       "x": 4608,
       "y": 1536,
       "col": 9,
       "row": 3,
       "index": 39
     },
-    "defend": {
+    "curse_doubt": {
       "x": 0,
       "y": 2048,
       "col": 0,
       "row": 4,
       "index": 40
     },
-    "defend_silent": {
+    "curse_pain": {
       "x": 512,
       "y": 2048,
       "col": 1,
       "row": 4,
       "index": 41
     },
-    "demonForm": {
+    "curse_regret": {
       "x": 1024,
       "y": 2048,
       "col": 2,
       "row": 4,
       "index": 42
     },
-    "demonStrike": {
+    "daggerSpray": {
       "x": 1536,
       "y": 2048,
       "col": 3,
       "row": 4,
       "index": 43
     },
-    "disarm": {
+    "daggerThrow": {
       "x": 2048,
       "y": 2048,
       "col": 4,
       "row": 4,
       "index": 44
     },
-    "dodgeAndRoll": {
+    "darkEmbrace": {
       "x": 2560,
       "y": 2048,
       "col": 5,
       "row": 4,
       "index": 45
     },
-    "doubleTap": {
+    "darkShackles": {
       "x": 3072,
       "y": 2048,
       "col": 6,
       "row": 4,
       "index": 46
     },
-    "doubleTapPlus": {
+    "dash": {
       "x": 3584,
       "y": 2048,
       "col": 7,
       "row": 4,
       "index": 47
     },
-    "dropkick": {
+    "dazed": {
       "x": 4096,
       "y": 2048,
       "col": 8,
       "row": 4,
       "index": 48
     },
-    "dualWield": {
+    "deadlyPoison": {
       "x": 4608,
       "y": 2048,
       "col": 9,
       "row": 4,
       "index": 49
     },
-    "entrench": {
+    "defend": {
       "x": 0,
       "y": 2560,
       "col": 0,
       "row": 5,
       "index": 50
     },
-    "envenom": {
+    "defend_defect": {
       "x": 512,
       "y": 2560,
       "col": 1,
       "row": 5,
       "index": 51
     },
-    "evolve": {
+    "defend_silent": {
       "x": 1024,
       "y": 2560,
       "col": 2,
       "row": 5,
       "index": 52
     },
-    "evolvedRage": {
+    "defragment": {
       "x": 1536,
       "y": 2560,
       "col": 3,
       "row": 5,
       "index": 53
     },
-    "exhume": {
+    "demonForm": {
       "x": 2048,
       "y": 2560,
       "col": 4,
       "row": 5,
       "index": 54
     },
-    "feed": {
+    "demonStrike": {
       "x": 2560,
       "y": 2560,
       "col": 5,
       "row": 5,
       "index": 55
     },
-    "feelNoPain": {
+    "disarm": {
       "x": 3072,
       "y": 2560,
       "col": 6,
       "row": 5,
       "index": 56
     },
-    "fiendFire": {
+    "dodgeAndRoll": {
       "x": 3584,
       "y": 2560,
       "col": 7,
       "row": 5,
       "index": 57
     },
-    "finisher": {
+    "doom": {
       "x": 4096,
       "y": 2560,
       "col": 8,
       "row": 5,
       "index": 58
     },
-    "fireBreath": {
+    "doubleTap": {
       "x": 4608,
       "y": 2560,
       "col": 9,
       "row": 5,
       "index": 59
     },
-    "fireBreathing": {
+    "doubleTapPlus": {
       "x": 0,
       "y": 3072,
       "col": 0,
       "row": 6,
       "index": 60
     },
-    "flameBarrier": {
+    "dropkick": {
       "x": 512,
       "y": 3072,
       "col": 1,
       "row": 6,
       "index": 61
     },
-    "flameStrike": {
+    "dualWield": {
       "x": 1024,
       "y": 3072,
       "col": 2,
       "row": 6,
       "index": 62
     },
-    "flechettes": {
+    "dualcast": {
       "x": 1536,
       "y": 3072,
       "col": 3,
       "row": 6,
       "index": 63
     },
-    "flexCard": {
+    "echoForm": {
       "x": 2048,
       "y": 3072,
       "col": 4,
       "row": 6,
       "index": 64
     },
-    "flyingKnee": {
+    "electrodynamics": {
       "x": 2560,
       "y": 3072,
       "col": 5,
       "row": 6,
       "index": 65
     },
-    "footwork": {
+    "entrench": {
       "x": 3072,
       "y": 3072,
       "col": 6,
       "row": 6,
       "index": 66
     },
-    "ghostlyArmor": {
+    "envenom": {
       "x": 3584,
       "y": 3072,
       "col": 7,
       "row": 6,
       "index": 67
     },
-    "glassKnife": {
+    "equilibrium": {
       "x": 4096,
       "y": 3072,
       "col": 8,
       "row": 6,
       "index": 68
     },
-    "havoc": {
+    "evolve": {
       "x": 4608,
       "y": 3072,
       "col": 9,
       "row": 6,
       "index": 69
     },
-    "headbutt": {
+    "evolvedRage": {
       "x": 0,
       "y": 3584,
       "col": 0,
       "row": 7,
       "index": 70
     },
-    "heavyBlade": {
+    "exhume": {
       "x": 512,
       "y": 3584,
       "col": 1,
       "row": 7,
       "index": 71
     },
-    "hemokinesis": {
+    "feed": {
       "x": 1024,
       "y": 3584,
       "col": 2,
       "row": 7,
       "index": 72
     },
-    "immolate": {
+    "feelNoPain": {
       "x": 1536,
       "y": 3584,
       "col": 3,
       "row": 7,
       "index": 73
     },
-    "impervious": {
+    "fiendFire": {
       "x": 2048,
       "y": 3584,
       "col": 4,
       "row": 7,
       "index": 74
     },
-    "infernalBlade": {
+    "finisher": {
       "x": 2560,
       "y": 3584,
       "col": 5,
       "row": 7,
       "index": 75
     },
-    "infernalStrike": {
+    "fireBreath": {
       "x": 3072,
       "y": 3584,
       "col": 6,
       "row": 7,
       "index": 76
     },
-    "inflame": {
+    "fireBreathing": {
       "x": 3584,
       "y": 3584,
       "col": 7,
       "row": 7,
       "index": 77
     },
-    "intimidate": {
+    "flameBarrier": {
       "x": 4096,
       "y": 3584,
       "col": 8,
       "row": 7,
       "index": 78
     },
-    "ironWave": {
+    "flameStrike": {
       "x": 4608,
       "y": 3584,
       "col": 9,
       "row": 7,
       "index": 79
     },
-    "juggernaut": {
+    "flechettes": {
       "x": 0,
       "y": 4096,
       "col": 0,
       "row": 8,
       "index": 80
     },
-    "legSweep": {
+    "flexCard": {
       "x": 512,
       "y": 4096,
       "col": 1,
       "row": 8,
       "index": 81
     },
-    "limitBreak": {
+    "flyingKnee": {
       "x": 1024,
       "y": 4096,
       "col": 2,
       "row": 8,
       "index": 82
     },
-    "metallicize": {
+    "footwork": {
       "x": 1536,
       "y": 4096,
       "col": 3,
       "row": 8,
       "index": 83
     },
-    "neutralize": {
+    "ftl": {
       "x": 2048,
       "y": 4096,
       "col": 4,
       "row": 8,
       "index": 84
     },
-    "noxiousFumes": {
+    "ghostlyArmor": {
       "x": 2560,
       "y": 4096,
       "col": 5,
       "row": 8,
       "index": 85
     },
-    "offering": {
+    "glacier": {
       "x": 3072,
       "y": 4096,
       "col": 6,
       "row": 8,
       "index": 86
     },
-    "perfectedStrike": {
+    "glassKnife": {
       "x": 3584,
       "y": 4096,
       "col": 7,
       "row": 8,
       "index": 87
     },
-    "poisonedStab": {
+    "havoc": {
       "x": 4096,
       "y": 4096,
       "col": 8,
       "row": 8,
       "index": 88
     },
-    "pommelStrike": {
+    "headbutt": {
       "x": 4608,
       "y": 4096,
       "col": 9,
       "row": 8,
       "index": 89
     },
-    "powerThrough": {
+    "heavyBlade": {
       "x": 0,
       "y": 4608,
       "col": 0,
       "row": 9,
       "index": 90
     },
-    "predator": {
+    "hemokinesis": {
       "x": 512,
       "y": 4608,
       "col": 1,
       "row": 9,
       "index": 91
     },
-    "pummel": {
+    "hyperbeam": {
       "x": 1024,
       "y": 4608,
       "col": 2,
       "row": 9,
       "index": 92
     },
-    "quickSlash": {
+    "immolate": {
       "x": 1536,
       "y": 4608,
       "col": 3,
       "row": 9,
       "index": 93
     },
-    "rage": {
+    "impervious": {
       "x": 2048,
       "y": 4608,
       "col": 4,
       "row": 9,
       "index": 94
     },
-    "rampage": {
+    "infernalBlade": {
       "x": 2560,
       "y": 4608,
       "col": 5,
       "row": 9,
       "index": 95
     },
-    "reaper": {
+    "infernalStrike": {
       "x": 3072,
       "y": 4608,
       "col": 6,
       "row": 9,
       "index": 96
     },
-    "recklessCharge": {
+    "inflame": {
       "x": 3584,
       "y": 4608,
       "col": 7,
       "row": 9,
       "index": 97
     },
-    "rupture": {
+    "intimidate": {
       "x": 4096,
       "y": 4608,
       "col": 8,
       "row": 9,
       "index": 98
     },
-    "rupturePlus": {
+    "ironWave": {
       "x": 4608,
       "y": 4608,
       "col": 9,
       "row": 9,
       "index": 99
     },
-    "searingBlow": {
+    "juggernaut": {
       "x": 0,
       "y": 5120,
       "col": 0,
       "row": 10,
       "index": 100
     },
-    "secondWind": {
+    "leapDefect": {
       "x": 512,
       "y": 5120,
       "col": 1,
       "row": 10,
       "index": 101
     },
-    "seeingRed": {
+    "legSweep": {
       "x": 1024,
       "y": 5120,
       "col": 2,
       "row": 10,
       "index": 102
     },
-    "seeingRedPlus": {
+    "limitBreak": {
       "x": 1536,
       "y": 5120,
       "col": 3,
       "row": 10,
       "index": 103
     },
-    "sentinel": {
+    "metallicize": {
       "x": 2048,
       "y": 5120,
       "col": 4,
       "row": 10,
       "index": 104
     },
-    "sentinel_plus": {
+    "meteorStrike": {
       "x": 2560,
       "y": 5120,
       "col": 5,
       "row": 10,
       "index": 105
     },
-    "severSoul": {
+    "neutralize": {
       "x": 3072,
       "y": 5120,
       "col": 6,
       "row": 10,
       "index": 106
     },
-    "shiv": {
+    "noxiousFumes": {
       "x": 3584,
       "y": 5120,
       "col": 7,
       "row": 10,
       "index": 107
     },
-    "shockwave": {
+    "offering": {
       "x": 4096,
       "y": 5120,
       "col": 8,
       "row": 10,
       "index": 108
     },
-    "shrugItOff": {
+    "perfectedStrike": {
       "x": 4608,
       "y": 5120,
       "col": 9,
       "row": 10,
       "index": 109
     },
-    "slimed": {
+    "poisonedStab": {
       "x": 0,
       "y": 5632,
       "col": 0,
       "row": 11,
       "index": 110
     },
-    "spotWeakness": {
+    "pommelStrike": {
       "x": 512,
       "y": 5632,
       "col": 1,
       "row": 11,
       "index": 111
     },
-    "strike": {
+    "powerThrough": {
       "x": 1024,
       "y": 5632,
       "col": 2,
       "row": 11,
       "index": 112
     },
-    "strike_silent": {
+    "predator": {
       "x": 1536,
       "y": 5632,
       "col": 3,
       "row": 11,
       "index": 113
     },
-    "survivor": {
+    "pummel": {
       "x": 2048,
       "y": 5632,
       "col": 4,
       "row": 11,
       "index": 114
     },
-    "swordBoomerang": {
+    "quickSlash": {
       "x": 2560,
       "y": 5632,
       "col": 5,
       "row": 11,
       "index": 115
     },
-    "thunderclap": {
+    "rage": {
       "x": 3072,
       "y": 5632,
       "col": 6,
       "row": 11,
       "index": 116
     },
-    "trueGrit": {
+    "rampage": {
       "x": 3584,
       "y": 5632,
       "col": 7,
       "row": 11,
       "index": 117
     },
-    "twinStrike": {
+    "reaper": {
       "x": 4096,
       "y": 5632,
       "col": 8,
       "row": 11,
       "index": 118
     },
-    "uppercut": {
+    "recklessCharge": {
       "x": 4608,
       "y": 5632,
       "col": 9,
       "row": 11,
       "index": 119
     },
-    "void": {
+    "rip": {
       "x": 0,
       "y": 6144,
       "col": 0,
       "row": 12,
       "index": 120
     },
-    "warcry": {
+    "rupture": {
       "x": 512,
       "y": 6144,
       "col": 1,
       "row": 12,
       "index": 121
     },
-    "warcryPlus": {
+    "rupturePlus": {
       "x": 1024,
       "y": 6144,
       "col": 2,
       "row": 12,
       "index": 122
     },
-    "wellLaidPlans": {
+    "searingBlow": {
       "x": 1536,
       "y": 6144,
       "col": 3,
       "row": 12,
       "index": 123
     },
-    "whirlwind": {
+    "secondWind": {
       "x": 2048,
       "y": 6144,
       "col": 4,
       "row": 12,
       "index": 124
     },
-    "wildStrike": {
+    "seeingRed": {
       "x": 2560,
       "y": 6144,
       "col": 5,
       "row": 12,
       "index": 125
     },
-    "wound": {
+    "seeingRedPlus": {
       "x": 3072,
       "y": 6144,
       "col": 6,
       "row": 12,
       "index": 126
+    },
+    "seek": {
+      "x": 3584,
+      "y": 6144,
+      "col": 7,
+      "row": 12,
+      "index": 127
+    },
+    "sentinel": {
+      "x": 4096,
+      "y": 6144,
+      "col": 8,
+      "row": 12,
+      "index": 128
+    },
+    "sentinel_plus": {
+      "x": 4608,
+      "y": 6144,
+      "col": 9,
+      "row": 12,
+      "index": 129
+    },
+    "severSoul": {
+      "x": 0,
+      "y": 6656,
+      "col": 0,
+      "row": 13,
+      "index": 130
+    },
+    "shiv": {
+      "x": 512,
+      "y": 6656,
+      "col": 1,
+      "row": 13,
+      "index": 131
+    },
+    "shockwave": {
+      "x": 1024,
+      "y": 6656,
+      "col": 2,
+      "row": 13,
+      "index": 132
+    },
+    "shrugItOff": {
+      "x": 1536,
+      "y": 6656,
+      "col": 3,
+      "row": 13,
+      "index": 133
+    },
+    "slimed": {
+      "x": 2048,
+      "y": 6656,
+      "col": 4,
+      "row": 13,
+      "index": 134
+    },
+    "spotWeakness": {
+      "x": 2560,
+      "y": 6656,
+      "col": 5,
+      "row": 13,
+      "index": 135
+    },
+    "stackDefect": {
+      "x": 3072,
+      "y": 6656,
+      "col": 6,
+      "row": 13,
+      "index": 136
+    },
+    "steamBarrier": {
+      "x": 3584,
+      "y": 6656,
+      "col": 7,
+      "row": 13,
+      "index": 137
+    },
+    "strike": {
+      "x": 4096,
+      "y": 6656,
+      "col": 8,
+      "row": 13,
+      "index": 138
+    },
+    "strike_defect": {
+      "x": 4608,
+      "y": 6656,
+      "col": 9,
+      "row": 13,
+      "index": 139
+    },
+    "strike_silent": {
+      "x": 0,
+      "y": 7168,
+      "col": 0,
+      "row": 14,
+      "index": 140
+    },
+    "sunder": {
+      "x": 512,
+      "y": 7168,
+      "col": 1,
+      "row": 14,
+      "index": 141
+    },
+    "survivor": {
+      "x": 1024,
+      "y": 7168,
+      "col": 2,
+      "row": 14,
+      "index": 142
+    },
+    "sweepingBeam": {
+      "x": 1536,
+      "y": 7168,
+      "col": 3,
+      "row": 14,
+      "index": 143
+    },
+    "swordBoomerang": {
+      "x": 2048,
+      "y": 7168,
+      "col": 4,
+      "row": 14,
+      "index": 144
+    },
+    "thunderclap": {
+      "x": 2560,
+      "y": 7168,
+      "col": 5,
+      "row": 14,
+      "index": 145
+    },
+    "trueGrit": {
+      "x": 3072,
+      "y": 7168,
+      "col": 6,
+      "row": 14,
+      "index": 146
+    },
+    "twinStrike": {
+      "x": 3584,
+      "y": 7168,
+      "col": 7,
+      "row": 14,
+      "index": 147
+    },
+    "uppercut": {
+      "x": 4096,
+      "y": 7168,
+      "col": 8,
+      "row": 14,
+      "index": 148
+    },
+    "void": {
+      "x": 4608,
+      "y": 7168,
+      "col": 9,
+      "row": 14,
+      "index": 149
+    },
+    "warcry": {
+      "x": 0,
+      "y": 7680,
+      "col": 0,
+      "row": 15,
+      "index": 150
+    },
+    "warcryPlus": {
+      "x": 512,
+      "y": 7680,
+      "col": 1,
+      "row": 15,
+      "index": 151
+    },
+    "wellLaidPlans": {
+      "x": 1024,
+      "y": 7680,
+      "col": 2,
+      "row": 15,
+      "index": 152
+    },
+    "whirlwind": {
+      "x": 1536,
+      "y": 7680,
+      "col": 3,
+      "row": 15,
+      "index": 153
+    },
+    "wildStrike": {
+      "x": 2048,
+      "y": 7680,
+      "col": 4,
+      "row": 15,
+      "index": 154
+    },
+    "wound": {
+      "x": 2560,
+      "y": 7680,
+      "col": 5,
+      "row": 15,
+      "index": 155
+    },
+    "zap": {
+      "x": 3072,
+      "y": 7680,
+      "col": 6,
+      "row": 15,
+      "index": 156
     }
   }
 }
