@@ -70,7 +70,7 @@ const BOSS_RADIUS = 30;
 
 const MapScreen = () => {
   const { state, selectNode } = useGame();
-  const { map, currentFloor, deck, relics } = state;
+  const { map, currentFloor, deck, relics, act } = state;
   const containerRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const lastKnownFloorRef = useRef(null);
@@ -251,7 +251,7 @@ const MapScreen = () => {
       flex: 1,
       minHeight: 0,
       overflow: 'hidden',
-      background: '#0a0a12',
+      background: act === 2 ? '#0a0f12' : act === 3 ? '#120a08' : act === 4 ? '#12080a' : '#0a0a12',
       paddingTop: isMobile ? '60px' : '90px',
       maxWidth: '100vw'
     }}>
@@ -359,10 +359,10 @@ const MapScreen = () => {
           {/* Background - Dark spire gradient */}
           <defs>
             <linearGradient id="spireGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#1a0a2e" />
-              <stop offset="30%" stopColor="#0f0a1a" />
-              <stop offset="70%" stopColor="#0a0812" />
-              <stop offset="100%" stopColor="#0a0a12" />
+              <stop offset="0%" stopColor={act === 2 ? '#0a2e1a' : act === 3 ? '#2e1a0a' : act === 4 ? '#2e0a0f' : '#1a0a2e'} />
+              <stop offset="30%" stopColor={act === 2 ? '#0a1a12' : act === 3 ? '#1a120a' : act === 4 ? '#1a0a0f' : '#0f0a1a'} />
+              <stop offset="70%" stopColor={act === 2 ? '#081208' : act === 3 ? '#12100a' : act === 4 ? '#120808' : '#0a0812'} />
+              <stop offset="100%" stopColor={act === 2 ? '#0a0f12' : act === 3 ? '#120a08' : act === 4 ? '#12080a' : '#0a0a12'} />
             </linearGradient>
             <radialGradient id="fogGradient" cx="50%" cy="50%" r="50%">
               <stop offset="0%" stopColor="transparent" />

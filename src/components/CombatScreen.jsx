@@ -598,53 +598,79 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     });
   }, [enemies, state.character]);
 
-  // Determine background based on enemy type
+  // Act-specific color palettes for subtle background differentiation
+  const ACT_THEMES = {
+    1: { hueShift: 0, label: 'dungeon' },       // Act 1: cool blue-purple (default)
+    2: { hueShift: 0.15, label: 'city' },        // Act 2: warmer, slightly green-teal
+    3: { hueShift: 0.35, label: 'beyond' },      // Act 3: warm amber/orange tint
+    4: { hueShift: -0.1, label: 'heart' }        // Act 4: deep crimson shift
+  };
+
+  // Apply subtle act-based tint to a hex color
+  const applyActTint = (hex, act) => {
+    const theme = ACT_THEMES[act] || ACT_THEMES[1];
+    if (theme.hueShift === 0) return hex;
+    // Parse hex and shift red/green channels subtly
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const shift = theme.hueShift;
+    const nr = Math.min(255, Math.max(0, Math.round(r + shift * 30)));
+    const ng = Math.min(255, Math.max(0, Math.round(g + shift * 15)));
+    const nb = Math.min(255, Math.max(0, Math.round(b - shift * 20)));
+    return `#${nr.toString(16).padStart(2, '0')}${ng.toString(16).padStart(2, '0')}${nb.toString(16).padStart(2, '0')}`;
+  };
+
+  // Determine background based on enemy type and current act
   const getBackgroundStyle = () => {
     const hasBoss = enemies.some(e => e.type === 'boss');
     const hasElite = enemies.some(e => e.type === 'elite');
     const enemyId = enemies[0]?.id || '';
+    const act = state.act || 1;
 
+    let style;
     if (hasBoss) {
       // Boss fight - dramatic red/purple theme
-      return {
-        background: 'linear-gradient(180deg, #1a0a1a 0%, #2a1020 30%, #1a0515 60%, #0a0510 100%)',
+      style = {
+        background: `linear-gradient(180deg, ${applyActTint('#1a0a1a', act)} 0%, ${applyActTint('#2a1020', act)} 30%, ${applyActTint('#1a0515', act)} 60%, ${applyActTint('#0a0510', act)} 100%)`,
         particles: 'radial-gradient(ellipse at 50% 20%, rgba(200, 50, 100, 0.15) 0%, transparent 60%)',
         ambientColor: 'rgba(255, 50, 100, 0.1)',
         groundGlow: '#aa2244'
       };
     } else if (hasElite) {
       // Elite fight - golden theme
-      return {
-        background: 'linear-gradient(180deg, #1a1508 0%, #252015 30%, #1a150a 60%, #0a0a05 100%)',
+      style = {
+        background: `linear-gradient(180deg, ${applyActTint('#1a1508', act)} 0%, ${applyActTint('#252015', act)} 30%, ${applyActTint('#1a150a', act)} 60%, ${applyActTint('#0a0a05', act)} 100%)`,
         particles: 'radial-gradient(ellipse at 50% 20%, rgba(255, 200, 50, 0.12) 0%, transparent 60%)',
         ambientColor: 'rgba(255, 200, 50, 0.08)',
         groundGlow: '#aa8822'
       };
     } else if (enemyId.includes('slime')) {
       // Slime fight - green swamp theme
-      return {
-        background: 'linear-gradient(180deg, #0a1510 0%, #152518 30%, #0a1a0f 60%, #050a08 100%)',
+      style = {
+        background: `linear-gradient(180deg, ${applyActTint('#0a1510', act)} 0%, ${applyActTint('#152518', act)} 30%, ${applyActTint('#0a1a0f', act)} 60%, ${applyActTint('#050a08', act)} 100%)`,
         particles: 'radial-gradient(ellipse at 50% 80%, rgba(50, 200, 100, 0.1) 0%, transparent 50%)',
         ambientColor: 'rgba(50, 200, 100, 0.08)',
         groundGlow: '#228844'
       };
     } else if (enemyId.includes('cultist') || enemyId.includes('chosen')) {
       // Cult fight - purple mystical theme
-      return {
-        background: 'linear-gradient(180deg, #10081a 0%, #1a1025 30%, #150a20 60%, #080510 100%)',
+      style = {
+        background: `linear-gradient(180deg, ${applyActTint('#10081a', act)} 0%, ${applyActTint('#1a1025', act)} 30%, ${applyActTint('#150a20', act)} 60%, ${applyActTint('#080510', act)} 100%)`,
         particles: 'radial-gradient(ellipse at 50% 30%, rgba(150, 50, 200, 0.12) 0%, transparent 55%)',
         ambientColor: 'rgba(150, 50, 200, 0.1)',
         groundGlow: '#6622aa'
       };
     } else {
-      // Default dungeon theme
-      return {
-        background: 'linear-gradient(180deg, #0a0a1a 0%, #1a1a2e 30%, #12121f 60%, #0a0a12 100%)',
+      // Default dungeon theme with act tint
+      style = {
+        background: `linear-gradient(180deg, ${applyActTint('#0a0a1a', act)} 0%, ${applyActTint('#1a1a2e', act)} 30%, ${applyActTint('#12121f', act)} 60%, ${applyActTint('#0a0a12', act)} 100%)`,
         particles: 'radial-gradient(ellipse at 50% 0%, rgba(100, 100, 200, 0.1) 0%, transparent 50%)',
         ambientColor: 'rgba(100, 150, 200, 0.05)',
-        groundGlow: '#334466'
+        groundGlow: applyActTint('#334466', act)
       };
     }
+    return style;
   };
 
   const bgStyle = getBackgroundStyle();
