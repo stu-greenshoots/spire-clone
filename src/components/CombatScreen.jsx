@@ -8,6 +8,7 @@ import { useAnimations } from '../hooks/useAnimations';
 import { ANIMATION_TYPE } from '../constants/animationTypes';
 import CardSelectionModal from './CardSelectionModal';
 import { CARD_TYPES } from '../data/cards';
+import { getOrbImage } from '../assets/art/art-config';
 import CardTooltip from './CardTooltip';
 import TutorialOverlay from './TutorialOverlay';
 import BossDialogue from './BossDialogue';
@@ -953,7 +954,12 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
                   transition: 'all 0.3s ease'
                 }}
               >
-                {orb ? colors.icon : ''}
+                {orb ? (() => {
+                  const orbImg = getOrbImage(orb.type);
+                  return orbImg
+                    ? <img src={orbImg} alt={orb.type} style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+                    : colors.icon;
+                })() : ''}
               </div>
             );
           })}
