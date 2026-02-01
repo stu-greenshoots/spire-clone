@@ -3,6 +3,34 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 12 Entries
+
+### BE-25: Heart Boss Infrastructure
+**Date:** 2026-02-01
+**Status:** MERGED (PR #138)
+
+**Done:**
+- Added Act 4 single-floor map generation in `generateMap()` — returns one boss node
+- Updated `mapReducer.js` PROCEED_TO_MAP: Act 3 boss now advances to Act 4 (was → Victory)
+- Implemented invincible shield mechanic in `applyDamageToTarget()`:
+  - Absorbs damage after intangible/flight but before block and HP
+  - Does not regenerate once depleted
+- Added `invincible` field to `createEnemyInstance()` (defaults to 0)
+- Added orange invincible shield indicator in Enemy.jsx
+- 13 new tests: Act 4 map (3), invincible combat (5), Heart enemy (5)
+- 2261 tests passing, lint clean, build clean
+
+**Architecture:**
+- Heart enemy definition was already in enemies.js (act: 4, invincible: 300, beatOfDeath: true)
+- This PR wires the infrastructure so Act 4 is reachable and invincible shield works in combat
+- Damage order: intangible → flight → invincible → block → HP
+- Act 4 map is trivial (1 floor, 1 node) — player goes straight to Heart
+
+**Blockers:** None
+**Next:** BE-26 (Heart unlock gate) depends on this. JR-10 (Heart implementation) can now proceed.
+
+---
+
 ## Sprint 11 Entries
 
 ### BE-24: Act 3 Balance Tuning
