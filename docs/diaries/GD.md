@@ -14,6 +14,32 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 11 - GD-18 Complete
+**Date:** 2026-02-01
+**Status:** GD-18 complete, PR #136 merged to sprint-11
+
+**Done today:**
+- Generated placeholder WebP art for all 31 Silent cards (512x512, green/teal dark fantasy palette)
+- Color variation by card type: attacks greener, skills bluer, powers brighter, rares more saturated
+- Created `scripts/generate-silent-card-art.js` for reproducible generation via SVG→sharp→WebP
+- Rebuilt card sprite sheet from 96 → 127 cards (10-col grid, 13 rows, 5120x6656px, 3278KB)
+- Updated sprite-manifest.json with all 127 card positions
+- Sprite sheet generator validates all card IDs have art — zero missing
+
+**Key decisions:**
+- Green/teal palette distinguishes Silent cards from Ironclad's red/fire tones at a glance
+- Followed same placeholder pattern as event/enemy/character art generators
+- Individual images still available as fallback, but sprite sheet is primary delivery
+
+**Validation:** `npm run validate` passes — 2248 tests, lint clean, build clean
+
+**Next:**
+- All GD Sprint 11 tasks complete (GD-16, GD-17, GD-18)
+- Sprint 11 is fully done from GD perspective
+- Placeholder art could be upgraded to higher quality in future sprints
+
+---
+
 ### Sprint 11 - GD-17 Complete
 **Date:** 2026-02-01
 **Status:** GD-17 complete, PR #130 merged to sprint-11
