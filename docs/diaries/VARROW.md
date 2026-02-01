@@ -205,3 +205,34 @@ The Heart = the war's core algorithm. Beating it proves you're complex enough to
 **Validation:** `npm run validate` passes — 2282 tests, lint clean, build clean
 
 ---
+
+### VARROW-10: Fourth Character Concept — The Watcher
+**Date:** 2026-02-01
+**Status:** Complete, PR #174 merged
+
+**Done:**
+- Created `docs/FOURTH_CHARACTER_CONCEPT.md` — full design document for The Watcher
+- Stance mechanic: Calm (energy banking), Wrath (double damage), Divinity (triple damage burst)
+- 5 sample cards: Eruption, Vigilance, Halt, Empty Mind, Worship
+- Mantra resource for Divinity access
+- Full narrative integration: the war's observation layer that became sentient
+- Boss dialogue concepts for all 4 boss tiers
+- Defeat/victory text in Endless War voice
+- Implementation complexity assessment and open design questions
+
+**Design decisions:**
+- Chose Stances as core mechanic — creates rhythmic Calm→Wrath play pattern that mirrors the narrative (observation→action cycle)
+- The Watcher as the war's monitoring process made sentient — each character now maps to a different aspect of the Endless War (force, absence, system, awareness)
+- Acknowledged StS inspiration openly in design rationale — the game already follows StS structure, diverging for the fourth character would create inconsistency
+- Kept Mantra as accumulation resource (like Poison but self-targeted) for Divinity access — rewards patience and planning
+
+**Voice consistency check:**
+- War as system ✓ (observation layer, monitoring process, log entry, memory leak, deallocated)
+- Identity as deck ✓ (collection of perspectives, each card a different way of perceiving)
+- Watcher identity ✓ (observation, awareness, perception, watching as violence)
+- No derivative StS language ✓ (no "monk" or "meditation" framing — reframed as system observation)
+- Dry technical tone ✓ ("threat classification: UNDEFINED", "classified as memory leak")
+
+**Validation:** `npm run validate` passes — doc only, no code changes
+
+---
