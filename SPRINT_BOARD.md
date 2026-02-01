@@ -733,7 +733,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Player retention — endless mode, custom seeded runs, performance optimization, quality-of-life features.
 **Plan:** See `SPRINT_16_PLAN.md`
 **Branch:** `sprint-16`
-**Status:** IN PROGRESS — 11/14 tasks done
+**Status:** IN PROGRESS — 12/14 tasks done
 
 ### P0 — Must Ship
 
@@ -761,7 +761,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | UX-34 | UX | S | Achievement notification toasts — in-game popups on unlock | MERGED (PR #207) |
-| QA-26 | QA | S | Performance regression — bundle size gate, Lighthouse 90+ | PENDING |
+| QA-26 | QA | S | Performance regression — bundle size gate, Lighthouse 90+ | MERGED (PR #208) |
 | GD-31 | GD | S | Endless mode visual escalation — background shifts every 10 floors | PENDING |
 
 ### Sprint 16 Validation Gate

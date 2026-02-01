@@ -14,6 +14,22 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — QA-26 Complete
+**Date:** 2026-02-01
+**Status:** QA-26 merged (PR #208) — Sprint 16 now 12/14 tasks done
+
+**Done:**
+- Implemented as QA: Performance regression tests — bundle size gates after BE-33 code-splitting
+- 24 tests: chunk size limits, total bundle budget, code-split structure, lazy-loaded screens, Vite config
+- All chunks under 200KB (largest: vendor-react 188KB), total JS ~700KB
+- 24 new tests (3258 total passing), lint clean, build clean
+- Both Copilot and Mentor reviews passed
+- Merged PR #208 via squash, updated sprint board and QA diary
+
+**Next:** Continue with P2 stretch task (GD-31).
+
+---
+
 ### Sprint 16 — UX-34 Complete
 **Date:** 2026-02-01
 **Status:** UX-34 merged (PR #207) — Sprint 16 now 11/14 tasks done

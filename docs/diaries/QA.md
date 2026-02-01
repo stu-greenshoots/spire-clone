@@ -2,6 +2,27 @@
 
 ## Sprint 16 Entries
 
+### QA-26: Performance Regression
+**Date:** 2026-02-01
+**Status:** Complete, PR #208 merged
+**Sprint:** Sprint 16 (Endless Mode, Custom Runs, Performance & QoL)
+**Task:** QA-26 (Performance regression — S size, P2)
+
+**Done:**
+1. Created `src/test/performanceRegression.test.js` — 24 regression tests
+2. **Bundle size gates:** No chunk >500KB (largest: vendor-react at 188KB), total JS <1.5MB (~700KB)
+3. **Code-split structure:** 7 expected manual chunks verified (vendor-react, game-data, game-systems, game-reducers, game-context, audio, art-assets)
+4. **Lazy-loaded screens:** 5+ route-level split chunks confirmed
+5. **Individual budgets:** Per-chunk size limits enforced (vendor-react <200KB, game-data <200KB, etc.)
+6. **Vite config validation:** manualChunks and assetsInlineLimit verified
+
+**Test count:** 3234 → 3258 (+24 tests). Lint clean (0 errors), build clean.
+
+**Blockers:** None
+**Next:** All QA Sprint 16 tasks complete (QA-25, QA-26). GD-31 is last remaining task.
+
+---
+
 ### QA-25: Endless Mode Regression + Balance
 **Date:** 2026-02-01
 **Status:** Complete, PR #205 merged
