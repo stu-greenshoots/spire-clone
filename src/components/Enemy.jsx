@@ -213,6 +213,16 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
 
   const hpColors = getHpColor();
 
+  // Boss-specific idle animations (GD-19)
+  const getBossIdleAnimation = (enemyId) => {
+    switch (enemyId) {
+      case 'hexaghost': return 'hexaghostPulse 2.5s ease-in-out infinite';
+      case 'awakened_one': return 'awakenedShift 4s ease-in-out infinite';
+      case 'corruptHeart': return 'heartBeat 1.5s ease-in-out infinite';
+      default: return 'breathe 3s ease-in-out infinite';
+    }
+  };
+
   // Determine animation based on state
   const getAnimation = () => {
     if (isEntering && isBoss) {
@@ -221,7 +231,8 @@ const Enemy = memo(function Enemy({ enemy, onClick, targeted, hideIntents = fals
     if (isEntering && isElite) {
       return 'fadeIn 0.5s ease-out';
     }
-    return isBoss ? 'breathe 3s ease-in-out infinite' : 'breathe 4s ease-in-out infinite';
+    if (isBoss) return getBossIdleAnimation(enemy.id);
+    return 'breathe 4s ease-in-out infinite';
   };
 
   // Compute sprite rendering values if sprite sheet is available
