@@ -1,6 +1,7 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { audioManager } from '../systems/audioSystem';
 import { loadSettings, saveSettings, DEFAULT_SETTINGS } from '../systems/settingsSystem';
+import { downloadExport, importAllData } from '../systems/saveSystem';
 
 function Settings() {
   const [settings, setSettings] = useState(() => loadSettings());
@@ -49,6 +50,36 @@ function Settings() {
     audioManager.setMasterVolume(DEFAULT_SETTINGS.masterVolume);
     audioManager.setSFXVolume(DEFAULT_SETTINGS.sfxVolume);
     audioManager.setMusicVolume(DEFAULT_SETTINGS.musicVolume);
+  }, []);
+
+  const fileInputRef = useRef(null);
+  const [importStatus, setImportStatus] = useState(null);
+
+  const handleExport = useCallback(() => {
+    downloadExport();
+  }, []);
+
+  const handleImportClick = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
+  const handleImportFile = useCallback((e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const result = importAllData(evt.target.result);
+      if (result.success) {
+        setImportStatus(`Restored ${result.keysRestored} data entries. Reload to apply.`);
+        // Reload settings into current component
+        setSettings(loadSettings());
+      } else {
+        setImportStatus(result.error);
+      }
+    };
+    reader.readAsText(file);
+    // Reset file input so same file can be re-selected
+    e.target.value = '';
   }, []);
 
   const containerStyle = {
@@ -217,6 +248,43 @@ function Settings() {
           </span>
         </label>
       </div>
+
+      {/* Data Management Section */}
+      <h3 style={styles.sectionTitle}>Data</h3>
+
+      <div style={styles.setting}>
+        <button
+          onClick={handleExport}
+          style={styles.muteButton}
+          aria-label="Export Save Data"
+        >
+          Export Save Data
+        </button>
+      </div>
+
+      <div style={styles.setting}>
+        <button
+          onClick={handleImportClick}
+          style={styles.muteButton}
+          aria-label="Import Save Data"
+        >
+          Import Save Data
+        </button>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".json"
+          onChange={handleImportFile}
+          style={{ display: 'none' }}
+          aria-label="Import file input"
+        />
+      </div>
+
+      {importStatus && (
+        <div style={{ ...styles.setting, color: importStatus.includes('Restored') ? '#4caf50' : '#f44336', fontSize: '0.85rem' }}>
+          {importStatus}
+        </div>
+      )}
 
       {/* Reset */}
       <div style={{ ...styles.setting, marginTop: '24px' }}>
