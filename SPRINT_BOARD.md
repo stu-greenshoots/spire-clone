@@ -673,7 +673,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Implement The Watcher (fourth character with stances), improve art fidelity, close remaining 3-point gap from 97 to 100/100.
 **Plan:** See `SPRINT_15_PLAN.md`
 **Branch:** `sprint-15`
-**Status:** IN PROGRESS — 4/15 tasks done (PM-15, BE-29, JR-14a, JR-14c)
+**Status:** IN PROGRESS — 5/15 tasks done (PM-15, BE-29, JR-14a, JR-14c, BE-30)
 
 ### P0 — Must Ship
 
@@ -695,7 +695,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | UX-31 | UX | M | Stance UI — stance indicator, entry/exit feedback, Mantra progress, Wrath glow | PENDING |
 | QA-23 | QA | M | Watcher regression + balance — 30 cards, stances, Mantra, 4-character regression | PENDING |
 | AR-17 | AR | S | Watcher audio — stance transition SFX, Mantra accumulation tick | PENDING |
-| BE-30 | BE | S | Scrying system — view top N draw pile cards, choose which to discard | PENDING |
+| BE-30 | BE | S | Scrying system — view top N draw pile cards, choose which to discard | MERGED (PR #183) |
 
 ### P2 — Stretch
 
