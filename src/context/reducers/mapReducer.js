@@ -11,6 +11,7 @@ import {
 } from '../../systems/ascensionSystem';
 import { audioManager, SOUNDS } from '../../systems/audioSystem';
 import { channelOrb } from '../../systems/orbSystem';
+import { getCardById } from '../../data/cards';
 import { loadProgression, isHeartUnlocked } from '../../systems/progressionSystem';
 
 export const mapReducer = (state, action) => {
@@ -149,6 +150,16 @@ export const mapReducer = (state, action) => {
             const result = channelOrb(player, orbType, enemiesWithIntents, []);
             if (result) {
               enemiesWithIntents = result.enemies || enemiesWithIntents;
+            }
+          }
+        }
+
+        // Add cards to hand from relics (Pure Water)
+        if (effects.addCards && effects.addCards.length > 0) {
+          for (const cardId of effects.addCards) {
+            const cardTemplate = getCardById(cardId);
+            if (cardTemplate) {
+              hand.push({ ...cardTemplate, instanceId: `${cardId}_relic_${Date.now()}_${Math.random()}` });
             }
           }
         }
@@ -296,6 +307,16 @@ export const mapReducer = (state, action) => {
             const result = channelOrb(player, orbType, enemiesWithIntents, []);
             if (result) {
               enemiesWithIntents = result.enemies || enemiesWithIntents;
+            }
+          }
+        }
+
+        // Add cards to hand from relics (Pure Water)
+        if (effects.addCards && effects.addCards.length > 0) {
+          for (const cardId of effects.addCards) {
+            const cardTemplate = getCardById(cardId);
+            if (cardTemplate) {
+              hand.push({ ...cardTemplate, instanceId: `${cardId}_relic_${Date.now()}_${Math.random()}` });
             }
           }
         }

@@ -194,7 +194,7 @@ describe('Watcher Cards Batch 1', () => {
     it('Watcher cards have correct rarity distribution', () => {
       const basic = watcherCards.filter(c => c.rarity === RARITY.BASIC);
       const common = watcherCards.filter(c => c.rarity === RARITY.COMMON);
-      expect(basic.length).toBe(4); // Strike, Defend, Eruption, Vigilance
+      expect(basic.length).toBe(5); // Strike, Defend, Eruption, Vigilance, Miracle
       expect(common.length).toBeGreaterThanOrEqual(8);
     });
   });

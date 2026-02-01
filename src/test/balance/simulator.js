@@ -359,6 +359,9 @@ function processCard(card, player, enemies, targetIndex, combatStats, rng) {
       case 'retainAllBlock':
         player.barricade = true;
         break;
+      case 'gainEnergy':
+        player.energy += (card.energyGain || 1);
+        break;
       case 'hpForEnergy':
         player.currentHp = Math.max(1, player.currentHp - (card.hpLoss || 3));
         player.energy += (card.energyGain || 2);

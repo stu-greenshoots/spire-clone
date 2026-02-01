@@ -44,6 +44,17 @@ export const ALL_RELICS = [
     character: 'defect'
   },
 
+  {
+    id: 'pure_water',
+    name: 'Pure Water',
+    rarity: RELIC_RARITY.STARTER,
+    description: 'At the start of each combat, add a Miracle card to your hand.',
+    emoji: '💧',
+    trigger: 'onCombatStart',
+    effect: { type: 'addCardToHand', cardId: 'miracle' },
+    character: 'watcher'
+  },
+
   // ========== COMMON ==========
   {
     id: 'anchor',
@@ -536,7 +547,8 @@ export const getStarterRelic = (characterId = 'ironclad') => {
   const STARTER_RELICS = {
     ironclad: 'burning_blood',
     silent: 'ring_of_snake',
-    defect: 'cracked_core'
+    defect: 'cracked_core',
+    watcher: 'pure_water'
   };
   const relicId = STARTER_RELICS[characterId] || STARTER_RELICS.ironclad;
   return ALL_RELICS.find(r => r.id === relicId);

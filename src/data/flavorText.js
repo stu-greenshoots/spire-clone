@@ -196,7 +196,8 @@ export const CARD_FLAVOR = {
   tranquility: 'The waters of the mind grow still. Energy pools beneath the surface.',
   prostrate: 'Devotion accumulates. Each prayer brings divinity closer.',
   protectingLight: 'The light does not judge. It simply shields.',
-  sashWhip: 'Silk and steel intertwined. Grace that cuts.'
+  sashWhip: 'Silk and steel intertwined. Grace that cuts.',
+  miracle: 'A gift from beyond. Pure energy, freely given, never lasting.'
 };
 
 // ========== ENEMY LORE ==========
@@ -276,6 +277,7 @@ export const RELIC_FLAVOR = {
   burning_blood: 'Vitae drawn from a dying phoenix. Its warmth mends wounds after every battle.',
   ring_of_snake: 'Coiled serpent silver that whispers secrets at the start of every battle.',
   cracked_core: 'A fractured power source that still sparks with residual energy. The crack pulses with each loop.',
+  pure_water: 'Drawn from a spring that flows between worlds. One sip grants clarity beyond reason.',
 
   // Common
   anchor: 'Cast from the hull of a ship that sailed between worlds. It holds fast against any tide.',
