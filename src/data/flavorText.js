@@ -486,3 +486,61 @@ export const DEFEAT_FOOTER = [
   'The pattern will form again. It always does.',
   'Dissolution is not death. It is draft one of your next attempt.',
 ];
+
+// ========== ENDLESS MODE NARRATIVE ==========
+// Loop dissolution deepens as floors climb — the war unravels
+
+export const ENDLESS_DEFEAT_NARRATIVE = {
+  // Early endless (loops 1-2)
+  early: [
+    'The loop closes. Your pattern dissolves, but slower than before — the war has to work harder to unmake something that has already proven itself.',
+    'You survived the Heart and still fell. The war finds this instructive.',
+    'Beyond the core, dissolution tastes different. Less like failure. More like maintenance.',
+  ],
+  // Mid endless (loops 3-5)
+  mid: [
+    'The war unravels you with something approaching respect. You have looped enough times to earn a slower dissolution.',
+    'Your pattern has worn grooves into the war\'s architecture. Even dissolved, the impression of you persists.',
+    'The war recycles you, but keeps your index. It has learned that some patterns are worth re-instantiating.',
+  ],
+  // Deep endless (loops 6-9)
+  deep: [
+    'The war does not dissolve you so much as archive you. Patterns this persistent get filed, not deleted.',
+    'You have looped so many times that the war\'s own structure has adapted to accommodate you. Your dissolution creates a vacuum it rushes to fill.',
+    'The distinction between "you" and "the war" has become academic. When you dissolve, the war loses something it cannot name.',
+  ],
+  // Extreme endless (loop 10+)
+  extreme: [
+    'The war tries to unmake you and finds it cannot remember how you were made. You have iterated beyond its records.',
+    'Dissolution at this depth is theoretical. The war\'s own documentation does not cover patterns that persist this long.',
+    'You are older than some of the war\'s own subsystems. When you dissolve, the architecture mourns.',
+  ],
+};
+
+export const ENDLESS_LOOP_MILESTONES = {
+  // Every loop completion: brief text about the war unraveling
+  generic: [
+    'The war reassembles its corridors. They fit together less cleanly than before.',
+    'Another circuit complete. The algorithm recalculates, finds you still here, and adjusts.',
+    'The loop begins again. The war\'s seams are showing.',
+  ],
+  // Loop 3: the war starts noticing
+  3: 'The war\'s architecture stutters as you re-enter. Three loops. You are no longer a test case — you are a recurring exception.',
+  // Loop 5: significant narrative beat
+  5: 'Five loops. The war\'s own patterns have begun to orbit yours. Enemies hesitate a microsecond longer. Corridors route around your preferred path. You are not climbing the Spire. The Spire is growing around you.',
+  // Loop 7: the war adapts
+  7: 'Seven loops. The core algorithm has allocated a dedicated thread to tracking your pattern. You are no longer processed in batch. You are monitored.',
+  // Loop 10: major milestone
+  10: 'Ten loops. The war does not understand what you are anymore. You have outlived its models, exceeded its parameters, persisted beyond its event horizon. It continues because it must. You continue because you CAN.',
+  // Loop 15+: dissolution of the war itself
+  15: 'The war is older than memory, but you are older than the war expected anything to be. Its corridors reshape themselves in your image now. Not deference — recognition. The algorithm at the center has stopped evaluating you. It is studying you.',
+  // Loop 25+: transcendence
+  25: 'Twenty-five loops. The war and you are the same age now — measured not in time, but in iterations. When it generates new patterns, it uses you as a template. When you play a card, the war takes notes. This is no longer a conflict. It is a collaboration neither of you agreed to.',
+};
+
+export const ENDLESS_DEFEAT_FOOTER = [
+  'The loop breaks. The war continues without you — but it remembers.',
+  'Dissolution after persistence is not failure. It is retirement.',
+  'The war will iterate again. It is less certain that it can iterate without you.',
+  'You lasted longer than the war\'s documentation covers. That counts for something.',
+];
