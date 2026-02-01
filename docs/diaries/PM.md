@@ -14,6 +14,87 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 12 — Retrospective
+**Date:** 2026-02-01
+**Status:** Sprint 12 COMPLETE — 15/15 tasks merged. Fifth consecutive 100% completion sprint.
+
+#### What We Accomplished
+
+**Sprint 12 Goal:** Add the true final boss (The Corrupt Heart), wire boss dialogue rendering, animate key boss sprites, push past 90/100 score.
+
+**Final tally:** 15 tasks completed (6 P0 + 6 P1 + 3 P2). Zero deferred. All priority tiers shipped including stretch goals.
+
+| Area | PRs | Highlights |
+|------|-----|------------|
+| Infra (PM-12) | — | Merged Sprint 11 to master, created sprint-12, archived SL |
+| Heart Infrastructure (BE-25) | #138 | Act 4 map node, invincible shield mechanic, encounter trigger |
+| Heart Implementation (JR-10) | #139 | 750 HP, Blood Shots escalation, phase transitions |
+| Heart Narrative (VARROW-07) | #140 | Phase transition dialogue for Heart and Awakened One |
+| Boss Dialogue Rendering (UX-24) | #141 | BossDialogue wired into CombatScreen — intro, mid-fight, phase, death |
+| Animated Boss Sprites (GD-19) | #142 | CSS idle animations for Hexaghost, Awakened One, Corrupt Heart |
+| Heart Unlock Gate (BE-26) | #143 | Act 4 requires wins with both Ironclad and Silent |
+| Heart Regression (QA-17) | #144 | 87 new tests — Heart AI, invincible shield, 4-act playthroughs |
+| Heart Audio (AR-12) | #145 | Heartbeat loop, Beat of Death SFX, phase transition sound |
+| Heart Art (GD-20) | — | Already existed (pre-existing sprite + sprite sheet inclusion) |
+| Card Interaction Audit (JR-11) | #146 | 31 tests — 60+ cards vs Heart mechanics, documented poison bypass |
+| Self-Assessment (UX-25) | #147 | Projected score 93/100 (up from 85 at Sprint 10) |
+| Character-Specific Dialogue (VARROW-08) | — | Already existed from VARROW-06 (Silent boss dialogue variants) |
+| Diary Hygiene Automation (QA-18) | #148 | `npm run check:diaries` script + CI integration |
+| Act Differentiation (GD-21) | #149 | Per-act background color shifts (cool→warm→amber→crimson) |
+
+**Stats:** 12 PRs merged (#138–#149), plus 3 tasks resolved without PRs (PM-12 infra, GD-20 pre-existing, VARROW-08 pre-existing). 2366+ tests passing, lint clean, build clean.
+
+**Score trajectory:** 58 (Sprint 2) → 85 (Sprint 10) → 93 (Sprint 12). All 18/18 original Game Zone complaints resolved.
+
+#### Recurring Issues & Observations
+
+1. **Diary hygiene: AUTOMATED.** QA-18 added `npm run check:diaries` with CI integration. This issue was noted in Sprints 7, 8, 9, 10, and 11 retrospectives. Finally addressed with tooling rather than process nagging. 7/8 active roles had current diaries; VARROW was flagged as stale (header predates Sprint 12 despite having entries).
+
+2. **Pre-existing content discovery continues.** GD-20 (Heart art) and VARROW-08 (character-specific dialogue) were both already done from earlier sprints. Same pattern as Sprint 10 (JR-08c). Sprint planning should audit existing content before assigning tasks — three sprints of this pattern.
+
+3. **PM acting as all roles.** Unchanged. PM diary is now the longest file in the project. The single-operator-as-all-roles pattern works but creates a massive diary. No action needed.
+
+4. **Validation gate not formally checked off.** Sprint board lists gate items with `- [ ]` checkboxes, none checked. Recurring since Sprint 9. Low-priority process gap — evidence of completion exists in PR records and test counts.
+
+5. **Known bug: Poison bypasses invincible shield.** JR-11 documented that poison damage in endTurnAction.js reduces HP directly without going through `applyDamageToTarget`, skipping the invincible shield. Not fixed this sprint — needs BE coordination in a future sprint.
+
+#### What Went Well
+
+- **Fifth consecutive 100% completion sprint** (Sprints 8–12). Planning and estimation are now reliably accurate.
+- **Heart boss is a proper endgame.** 750 HP, Blood Shots escalation, invincible shield, Beat of Death passive, unlock gate — this is a real final boss encounter.
+- **Boss dialogue finally rendered.** VARROW wrote dialogue in Sprints 6–7, but it wasn't wired to the UI until UX-24 this sprint. Four sprints of narrative data finally visible to players.
+- **Score trajectory.** 58 → 93 across 11 sprints. Every original Game Zone complaint resolved. The game is genuinely polished now.
+- **Diary automation.** After five sprints of noting diary staleness in retrospectives, QA-18 solved it with a script. Right approach — automate what process can't enforce.
+- **Act differentiation.** GD-21's subtle background color shifts give each act a distinct feel without being jarring. Small task, noticeable impact.
+
+#### What Could Improve
+
+- **Audit existing content before sprint planning.** Third sprint with pre-existing tasks discovered mid-execution. Zero time wasted (tasks just marked done), but better planning would reallocate effort.
+- **Formal validation gate sign-off.** Check the boxes on the sprint board. Recurring gap.
+- **Fix poison vs invincible shield.** Known deviation from StS behavior, documented but not fixed. Should be a P1 in the next sprint.
+- **Sprint-12 → master merge pending.** Need to merge and tag before next sprint starts.
+
+#### Project Status at Sprint 12 End
+
+| Metric | Value |
+|--------|-------|
+| Tests | 2366+ passing |
+| Lint | 0 errors |
+| Build | Passing |
+| Content | 127 cards (2 characters), 45+ enemies (4 acts), 49 relics, 15 potions, 25 events |
+| Acts | 4 complete (Act 1 + Act 2 + Act 3 + Act 4 Heart) |
+| Characters | 2 (Ironclad, The Silent) |
+| Daily Challenge | Functional with seeded runs, modifiers, scoring |
+| Art | 100% coverage — all enemies, events, relics, potions, cards have art |
+| Music | 7 tracks (6 original + Act 3 exploration) with crossfade |
+| Boss Dialogue | Rendered in combat for all bosses, character-specific variants |
+| Self-assessed Score | 93/100 (up from 58/100 at Sprint 2) |
+| Sprints completed | 12 |
+| Total PRs merged | ~149 |
+| Consecutive 100% sprints | 5 (Sprints 8–12) |
+
+---
+
 ### URGENT: Edit Mode Visibility Requirement
 **Date:** 2026-02-01
 **Status:** CRITICAL — P0
