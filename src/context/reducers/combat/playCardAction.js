@@ -284,6 +284,7 @@ export const handlePlayCard = (state, action) => {
       newPlayer.block += newPlayer.mentalFortress;
       combatLog.push(`Mental Fortress: gained ${newPlayer.mentalFortress} Block`);
     }
+    audioManager.playSFX(SOUNDS.combat.stanceTransition, 'combat');
   }
 
   // Mantra accumulation (Watcher)
@@ -291,6 +292,7 @@ export const handlePlayCard = (state, action) => {
     newPlayer.mantra = (newPlayer.mantra || 0) + card.mantra;
     newPlayer.totalMantraGained = (newPlayer.totalMantraGained || 0) + card.mantra;
     combatLog.push(`Gained ${card.mantra} Mantra (${newPlayer.mantra}/10)`);
+    audioManager.playSFX(SOUNDS.combat.mantraTick, 'combat');
     // Mantra triggers Divinity at 10
     if (newPlayer.mantra >= 10) {
       newPlayer.mantra -= 10;
@@ -307,6 +309,7 @@ export const handlePlayCard = (state, action) => {
         newPlayer.block += newPlayer.mentalFortress;
         combatLog.push(`Mental Fortress: gained ${newPlayer.mentalFortress} Block`);
       }
+      audioManager.playSFX(SOUNDS.combat.stanceTransition, 'combat');
     }
   }
 
