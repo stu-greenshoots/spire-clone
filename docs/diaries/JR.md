@@ -2,6 +2,32 @@
 
 ## Sprint 12 Entries
 
+### JR-11: Heart card interactions — 60+ card edge case audit vs Heart mechanics
+**Date:** 2026-02-01
+**Status:** PR pending
+
+**Done:**
+- 31 new tests in heartCardInteractions.test.js covering all card types vs Heart mechanics
+- Beat of Death: verified triggers for 0-cost cards (Shiv, Backstab), exhaust cards, powers, skills, X-cost (Whirlwind), multi-hit (Pummel, Twin Strike), and block interaction
+- Invincible shield: verified multi-hit cards chip per-hit (Pummel 3x4, Twin Strike 5x2, Glass Knife 8x2, Dagger Spray 4x2), mid-attack shield break with HP overflow, Heavy Blade + strength scaling, vulnerable modifier
+- Phase transitions: verified AI cycle unchanged regardless of shield status, low HP behavior
+- Poison vs invincible: documented known limitation — poison tick bypasses invincible shield (goes straight to HP in endTurnAction.js line 331 without applyDamageToTarget)
+- Card audit: validated 60+ cards all have damage or special mechanic, catalogued multi-hit, 0-cost, X-cost, power categories
+- 2366 tests passing, lint clean, build clean
+
+**Finding — Poison bypasses invincible shield:**
+- Poison damage in endTurnAction.js directly reduces `currentHp` without going through `applyDamageToTarget`
+- This means poison ignores the Heart's invincible shield entirely
+- In StS, invincible caps ALL damage per turn. This is a known deviation, documented in test.
+- Not fixed in this PR (out of scope for test-writing task, would need BE coordination)
+
+**Files changed:** heartCardInteractions.test.js (new), JR.md (1 new + 1 existing file)
+
+**Blockers:** None
+**Next:** Await PR review and merge
+
+---
+
 ### JR-10: Heart boss implementation — 750 HP, phase transitions, scaling Blood Shots
 **Date:** 2026-02-01
 **Status:** MERGED (PR #139)
