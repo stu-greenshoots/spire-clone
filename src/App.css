@@ -127,6 +127,32 @@ button:active {
   50% { transform: scale(1.02) translateY(-2px); }
 }
 
+/* Boss-specific idle animations (GD-19) */
+
+/* Hexaghost — fiery pulse glow */
+@keyframes hexaghostPulse {
+  0%, 100% { transform: scale(1) translateY(0); filter: brightness(1) drop-shadow(0 0 4px rgba(255, 102, 68, 0.3)); }
+  25% { transform: scale(1.03) translateY(-1px); filter: brightness(1.15) drop-shadow(0 0 12px rgba(255, 102, 68, 0.6)); }
+  50% { transform: scale(1.05) translateY(-3px); filter: brightness(1.25) drop-shadow(0 0 20px rgba(255, 102, 68, 0.8)); }
+  75% { transform: scale(1.03) translateY(-1px); filter: brightness(1.15) drop-shadow(0 0 12px rgba(255, 102, 68, 0.6)); }
+}
+
+/* Awakened One — eerie phase shimmer */
+@keyframes awakenedShift {
+  0%, 100% { transform: scale(1) translateY(0) rotate(0deg); filter: brightness(1) hue-rotate(0deg); }
+  33% { transform: scale(1.02) translateY(-2px) rotate(0.5deg); filter: brightness(1.1) hue-rotate(10deg); }
+  66% { transform: scale(1.03) translateY(-1px) rotate(-0.5deg); filter: brightness(1.15) hue-rotate(-10deg); }
+}
+
+/* Corrupt Heart — rhythmic heartbeat */
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1) translateY(0); filter: brightness(1) drop-shadow(0 0 4px rgba(204, 51, 102, 0.3)); }
+  8% { transform: scale(1.08) translateY(-2px); filter: brightness(1.3) drop-shadow(0 0 20px rgba(204, 51, 102, 0.8)); }
+  16% { transform: scale(0.98) translateY(1px); filter: brightness(0.95) drop-shadow(0 0 4px rgba(204, 51, 102, 0.3)); }
+  24% { transform: scale(1.05) translateY(-1px); filter: brightness(1.2) drop-shadow(0 0 15px rgba(204, 51, 102, 0.6)); }
+  32% { transform: scale(1) translateY(0); filter: brightness(1) drop-shadow(0 0 4px rgba(204, 51, 102, 0.3)); }
+}
+
 /* Float animation for relics and icons */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
