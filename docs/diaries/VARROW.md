@@ -176,3 +176,32 @@ The Heart = the war's core algorithm. Beating it proves you're complex enough to
 **Validation:** `npm run validate` passes — 2120 tests, lint clean, build clean
 
 ---
+
+### VARROW-07: Heart Phase Transition Dialogue
+**Date:** 2026-02-01
+**Status:** Complete, PR #140 merged
+
+**Done:**
+- Added `phaseTransition` field to Corrupt Heart boss dialogue — fires when invincible shield breaks
+- Added `phaseTransition` field to Awakened One — fires on death/rebuild phase transition
+- Silent-specific phase transition variants for both bosses
+- Updated `getBossDialogue()` to pass through `phaseTransition` for character overrides
+- 4 new tests in flavorText.test.js
+
+**Design decisions:**
+- Heart phase transition: "The shield fractures... The algorithm stops testing and starts defending" — marks the shift from evaluation to survival
+- Silent Heart variant: "The shield dissolves — not shattered, but corroded" — Silent doesn't break through, she seeps through
+- Awakened One phase transition: "It falls... Then — reassembly. Faster this time. Angrier." — captures the death/rebuild horror
+- Placed `phaseTransition` between `intro` and `midFight` in data structure — chronological ordering
+
+**Voice consistency check:**
+- War as system ✓ (algorithm, evaluation layer, threat models, debug logs)
+- Identity as deck ✓ (pattern persistent enough to break through)
+- Technical metaphor ✓ (compiler, metrics, deallocating)
+- No derivative language ✓
+
+**Known gap (still open):** Boss dialogue still not rendered in UI. UX-24 will wire this up. Phase transition text will be available when that task lands.
+
+**Validation:** `npm run validate` passes — 2282 tests, lint clean, build clean
+
+---
