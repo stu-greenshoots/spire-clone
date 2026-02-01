@@ -600,7 +600,7 @@ export const handlePlayCard = (state, action) => {
     if (state.currentNode?.type === 'elite' || state.currentNode?.type === 'boss') {
       relicReward = state.currentNode?.type === 'boss'
         ? getBossRelic(state.relics.map(r => r.id))
-        : getRandomRelic(null, state.relics.map(r => r.id));
+        : getRandomRelic(null, state.relics.map(r => r.id), state.character);
     }
 
     // Potion reward: 40% chance from normal/elite, 100% from boss

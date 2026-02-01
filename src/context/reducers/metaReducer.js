@@ -180,7 +180,7 @@ export const metaReducer = (state, action) => {
       switch (bonusId) {
         case 'random_relic': {
           const existingIds = state.relics.map(r => r.id);
-          const relic = getRandomRelic(RELIC_RARITY.COMMON, existingIds);
+          const relic = getRandomRelic(RELIC_RARITY.COMMON, existingIds, state.character);
           if (relic) {
             newState.relics = [...state.relics, relic];
           }

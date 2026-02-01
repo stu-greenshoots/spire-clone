@@ -153,7 +153,7 @@ const EventScreen = () => {
       case 'trade_gold_relic':
         if (newPlayerState.gold >= option.cost) {
           newPlayerState.gold -= option.cost;
-          const relic = getRandomRelic(null, newRelicState.map(r => r.id));
+          const relic = getRandomRelic(null, newRelicState.map(r => r.id), state.character);
           if (relic) {
             newRelicState.push(relic);
             message = ` You traded 50 gold for ${relic.name}!`;

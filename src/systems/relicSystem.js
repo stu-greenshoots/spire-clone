@@ -212,6 +212,16 @@ export const applyRelicEffect = (effect, effects, trigger, context) => {
       effects.strength += curseCount * effect.amount;
       break;
 
+    case 'strengthAndDexterity':
+      effects.strength += effect.amount;
+      effects.dexterity += effect.amount;
+      break;
+
+    case 'blockAndDraw':
+      effects.block += effect.blockAmount;
+      effects.draw += effect.drawAmount;
+      break;
+
     case 'channelOrb':
       effects.channelOrbs.push(effect.orbType);
       break;
