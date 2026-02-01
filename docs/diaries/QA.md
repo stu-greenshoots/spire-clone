@@ -2,6 +2,51 @@
 
 ## Sprint 11 Entries
 
+### QA-16: Diary Enforcement Audit
+**Date:** 2026-02-01
+**Status:** Complete
+**Sprint:** Sprint 11 (Second Character + QoL + Score Push)
+**Task:** QA-16 (Diary enforcement audit — S size, P2)
+
+**Scope:** Verify all team diaries updated for Sprints 10-11. Document gaps. Recommend process improvements.
+
+**Audit Results:**
+
+| Role | Diary File | Sprint 10 Entries | Sprint 11 Entries | Current? | Notes |
+|------|-----------|-------------------|-------------------|----------|-------|
+| PM | PM.md | Yes (full retro + per-task entries) | Yes (14 task entries) | YES | Most thorough diary. Session-level reflection + per-task updates. |
+| BE | BE.md | No Sprint 10 header, but has BE-21 entry context | Yes (BE-23, BE-24) | PARTIAL | Sprint 11 entries present. Sprint 10 had BE-21 work but diary header says "Sprint 11". Missing Sprint 10 standalone section. |
+| JR | JR.md | No Sprint 10 section | Yes (FIX-08, JR-09a, JR-09b) | PARTIAL | Sprint 11 entries present. Sprint 10 had JR-08a/JR-08b work but no diary entries for those tasks. |
+| AR | AR.md | Yes (AR-10 entry) | Yes (AR-11 entry) | YES | Clean per-task entries for both sprints. |
+| UX | UX.md | No Sprint 10 section visible | Yes (UX-21, UX-22, UX-23) | PARTIAL | Sprint 11 entries present. Sprint 10 had UX-19/UX-20 work but diary header still says "Sprint 3". Missing Sprint 10 entries. |
+| GD | GD.md | No Sprint 10 section visible | Yes (GD-17 entry) | PARTIAL | Sprint 11 entry present. Sprint 10 had GD-14/GD-15 work but no diary entries for those tasks. Diary header still says "Sprint 3". |
+| QA | QA.md | Yes (QA-13, QA-14 entries) | Yes (QA-15, QA-16 entries) | YES | Clean per-task entries for both sprints. |
+| VARROW | VARROW.md | Yes (VARROW-05 entry) | Yes (VARROW-06 entry) | YES | Thorough design decision documentation. |
+| SL | SL.md | N/A (role replaced by Varrow in Sprint 6) | N/A | N/A | Legacy diary. SL role superseded by Varrow. Last real entry: VARROW-04 (Sprint 9). |
+
+**Summary:**
+- **Fully current (4/8):** PM, AR, QA, VARROW — entries for both Sprint 10 and 11 tasks
+- **Partially current (4/8):** BE, JR, UX, GD — have Sprint 11 entries but missing Sprint 10 task entries or have stale diary headers
+- **N/A (1):** SL — role no longer active
+
+**Gaps Identified:**
+1. **Stale headers:** UX and GD diaries still say "Sprint 3" in their header. Should reflect current sprint.
+2. **Missing Sprint 10 entries:** JR (JR-08a/b), UX (UX-19/20), GD (GD-14/15) completed tasks in Sprint 10 without diary entries.
+3. **No session-level reflection:** Only PM writes session summaries. Other diaries are per-task only — no "what I learned" or "what's next" context.
+
+**Recommendations:**
+1. **Make diary update a merge prerequisite.** PM should verify diary entry exists before approving PR merge. Low overhead, high consistency.
+2. **Standardize diary header format.** Each diary should update its sprint header when starting work on a new sprint.
+3. **Accept per-task entries as sufficient.** Session-level reflection is nice-to-have but per-task entries capture the critical context (what was done, what was found, what's next).
+4. **Archive SL diary.** Rename to `SL.md.archived` or add "ARCHIVED — see VARROW.md" header.
+
+**Validation:** Docs-only task — no code changes, no `npm run validate` needed.
+
+**Blockers:** None
+**Next:** All QA Sprint 11 tasks complete.
+
+---
+
 ### QA-15: Silent Regression + Balance
 **Date:** 2026-02-01
 **Status:** Complete, PR #131 merged
