@@ -1,3 +1,38 @@
+# AR Diary - Sprint 11
+
+## Sprint 11 Entries
+
+### AR-11: Silent Audio — Shiv Swoosh, Poison Sizzle, Poison Tick SFX
+**Date:** 2026-02-01
+**Status:** Complete, PR #132 merged
+**Sprint:** Sprint 11 (Second Character + QoL + Score Push)
+**Task:** AR-11 (Silent audio — S size, P1)
+
+**Done:**
+1. Added 3 new sound IDs to SOUNDS.combat: `shivPlay`, `poisonApply`, `discard`
+2. Wired Shiv card play to distinct swoosh SFX (replaces generic card_play for Shiv cards)
+3. Wired poison application to sizzle SFX in both single-target and AoE effect paths
+4. Wired existing `poison_tick` sound to enemy poison damage at start of player turn (endTurnAction.js)
+5. Created 3 placeholder MP3 files — to be replaced with real CC0 sounds
+
+**Architecture:**
+- Follows existing playSFX pattern established in AR-07
+- Shiv detection via `card.id === 'shiv'` — clean, no special flags needed
+- Poison apply plays per-enemy but debounce (80ms) prevents audio spam
+- Poison tick uses existing `SOUNDS.combat.poison` constant (maps to `poison_tick.mp3`)
+
+**Acceptance criteria:**
+- [x] Shiv cards play distinct swoosh sound
+- [x] Poison application triggers sizzle SFX
+- [x] Poison tick at turn start triggers poison_tick SFX
+- [x] Non-Shiv cards unaffected
+- [x] npm run validate passes (2241 tests, 0 errors)
+
+**Blockers:** None
+**Summary:** All AR Sprint 11 tasks complete.
+
+---
+
 # AR Diary - Sprint 10
 
 ## Sprint 10 Entries

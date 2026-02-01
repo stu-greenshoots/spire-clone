@@ -15,6 +15,25 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 11 — AR-11 Complete
+**Date:** 2026-02-01
+**Status:** AR-11 merged (PR #132)
+
+**Done:**
+- Implemented as AR: Silent-specific audio SFX — Shiv swoosh, poison sizzle, poison tick
+- 3 new sound IDs added to SOUNDS.combat, wired in playCardAction.js and endTurnAction.js
+- 3 placeholder MP3 files created
+- 6 files changed, 20 insertions, 5 deletions
+- Both Copilot and Mentor reviews passed
+- Merged PR #132 via squash, updated sprint board and AR diary
+
+**Sprint 11 Progress:** 12/16 tasks done (PM-11, BE-23, JR-09a, JR-09b, FIX-08, GD-16, UX-21, UX-22, VARROW-06, GD-17, QA-15, AR-11)
+**All P0 tasks complete. 5/6 P1 tasks complete.**
+
+**Next highest priority:** BE-24 (Act 3 balance tuning) — last remaining P1
+
+---
+
 ### Sprint 11 — QA-15 Complete
 **Date:** 2026-02-01
 **Status:** QA-15 merged (PR #131)

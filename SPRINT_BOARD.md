@@ -458,7 +458,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Introduce The Silent (second character class), resolve all remaining Game Zone complaints, push toward 90+ score.
 **Plan:** See `SPRINT_11_PLAN.md`
 **Branch:** `sprint-11`
-**Status:** IN PROGRESS — PM-11 + BE-23 + JR-09a + JR-09b + FIX-08 + GD-16 + UX-21 + UX-22 + VARROW-06 + GD-17 + QA-15 complete
+**Status:** IN PROGRESS — PM-11 + BE-23 + JR-09a + JR-09b + FIX-08 + GD-16 + UX-21 + UX-22 + VARROW-06 + GD-17 + QA-15 + AR-11 complete
 
 ### P0 — Must Ship
 
@@ -480,7 +480,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | UX-22 | UX | S | Skip-reward confirmation — last unresolved Game Zone complaint | MERGED (PR #127) |
 | GD-17 | GD | S | Silent character art — portrait + combat silhouette | MERGED (PR #130) |
 | QA-15 | QA | M | Silent regression + balance — 30 cards, character selection, win rates | MERGED (PR #131) |
-| AR-11 | AR | S | Silent audio — Shiv swoosh, poison sizzle, 3-4 new SFX | PENDING |
+| AR-11 | AR | S | Silent audio — Shiv swoosh, poison sizzle, 3-4 new SFX | MERGED (PR #132) |
 | BE-24 | BE | S | Act 3 balance tuning — adjust stats based on QA-13 data | PENDING |
 
 ### P2 — Stretch
