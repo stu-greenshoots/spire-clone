@@ -15,6 +15,20 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 16 - UX-33 Complete
+**Date:** 2026-02-01
+**Status:** UX-33 DONE (PR #198)
+
+**What I did:**
+- Added endless mode indicators to PersistentHeader — loop number and scaling percentage (+N%) in both compact mobile and full desktop views
+- Enhanced GameOverScreen for endless mode — purple theme, unique title ("THE ENDLESS CLAIMS YOU"), loop/scaling stats, enemies killed, damage dealt, and narrative footer text ("You held on for X loops. The war forgets your name.")
+- 5 new tests for endless UI state, death screen data, footer text formatting
+- 3 files changed, 117 insertions, 9 deletions
+
+**Sprint 16 UX status:** UX-33 done. UX-12 (smart card targeting) remaining as P0.
+
+---
+
 ### Sprint 15 - UX-32 Complete
 **Date:** 2026-02-01
 **Status:** UX-32 DONE (PR #194)

@@ -14,6 +14,22 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — UX-33 Complete
+**Date:** 2026-02-01
+**Status:** UX-33 merged (PR #198) — Sprint 16 now 2/14 tasks done
+
+**Done:**
+- Implemented as UX: Endless mode UI — floor counter, difficulty indicator, death stats
+- PersistentHeader shows loop number + scaling % in both mobile compact and desktop views
+- GameOverScreen enhanced with endless-specific theme, title, stats, and footer text
+- 5 new tests (3090 total passing), lint clean, build passes
+- Both Copilot and Mentor reviews passed
+- Merged PR #198 via squash, updated sprint board and UX diary
+
+**Next:** Continue with next P0 task (BE-32: Custom seeded runs, or JR-15: Character-specific relics, or UX-12: Smart card targeting)
+
+---
+
 ### Sprint 15 — Planning Complete
 **Date:** 2026-02-01
 **Status:** PM-15 in progress
