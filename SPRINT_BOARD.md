@@ -673,7 +673,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Implement The Watcher (fourth character with stances), improve art fidelity, close remaining 3-point gap from 97 to 100/100.
 **Plan:** See `SPRINT_15_PLAN.md`
 **Branch:** `sprint-15`
-**Status:** IN PROGRESS — 13/17 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30, VARROW-11, UX-31, GD-27, QA-23, FIX-11, FIX-12, AR-17)
+**Status:** IN PROGRESS — 14/17 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30, VARROW-11, UX-31, GD-27, GD-28, QA-23, FIX-11, FIX-12, AR-17)
 
 ### P0 — Must Ship
 
@@ -693,7 +693,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | GD-27 | GD | M | Watcher art — portrait, silhouette, 30 card illustrations, stance visuals, sprite sheet | MERGED (PR #187) |
-| GD-28 | GD | M | Art consistency pass — re-render 10 most inconsistent sprites to match style guide | PENDING |
+| GD-28 | GD | M | Art consistency pass — re-render 10 most inconsistent sprites to match style guide | MERGED (PR #192) |
 | UX-31 | UX | M | Stance UI — stance indicator, entry/exit feedback, Mantra progress, Wrath glow | MERGED (PR #186) |
 | QA-23 | QA | M | Watcher regression + balance — 30 cards, stances, Mantra, 4-character regression | MERGED (PR #188) |
 | AR-17 | AR | S | Watcher audio — stance transition SFX, Mantra accumulation tick | MERGED (PR #191) |
