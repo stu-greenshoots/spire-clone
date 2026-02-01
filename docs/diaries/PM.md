@@ -14,6 +14,24 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 16 — QA-25 Complete
+**Date:** 2026-02-01
+**Status:** QA-25 merged (PR #205) — Sprint 16 now 9/14 tasks done
+
+**Done:**
+- Implemented as QA: Endless mode regression + balance — 40 new tests
+- Scaling curves, state transitions, floor 100+ stability, seeded reproducibility
+- Character balance via simulator, narrative integration (VARROW-12), defeat tiers
+- Character-specific relics, encounter generation stability, SeededRNG reliability
+- Review findings fixed (unused imports, balance test loop)
+- 40 new tests (3221 total passing), lint clean, build clean
+- Both Copilot and Mentor reviews passed
+- Merged PR #205 via squash, updated sprint board and QA diary
+
+**Next:** Continue with P1 tasks (AR-18). P2 stretch: UX-34, QA-26, GD-31.
+
+---
+
 ### Sprint 16 — VARROW-12 Complete
 **Date:** 2026-02-01
 **Status:** VARROW-12 merged (PR #204) — Sprint 16 now 8/14 tasks done
