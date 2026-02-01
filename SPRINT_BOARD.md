@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-02-01
-**Current Sprint:** 14 (Audio Fix + Real Sounds + Art Quality) - IN PROGRESS
-**Integration Branch:** `sprint-14`
-**Sprint Plan:** See `SPRINT_14_PLAN.md`
+**Current Sprint:** 15 (The Watcher + Art Quality → Score 100) - IN PROGRESS
+**Integration Branch:** `sprint-15`
+**Sprint Plan:** See `SPRINT_15_PLAN.md`
 **Roadmap:** See `ROADMAP.md` (original 4-sprint plan to 1.0, now post-1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 13 COMPLETE (15 tasks, 2627 tests, Cloud Save + Compendium + The Defect + 100 target)
+**Previous:** Sprint 14 COMPLETE (14 tasks, 2713 tests, Audio Fix + Real Sounds + Art Quality)
 
 ---
 
@@ -619,7 +619,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 **Goal:** Fix the broken audio system (P0 — zero sound output for 7 sprints), replace all placeholder MP3s with real CC0 sounds, improve art fidelity, begin fourth character design.
 **Plan:** See `SPRINT_14_PLAN.md`
-**Branch:** `sprint-14`
+**Branch:** `sprint-14` (merged to master)
 **Status:** COMPLETE — All 14 tasks done (5 P0 + 6 P1 + 3 P2). 2713 tests. Eighth consecutive 100% sprint.
 
 ### P0 — Must Ship
@@ -665,3 +665,61 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] 2700+ tests passing
 - [x] `npm run validate` passes
 - [x] Self-assessment score: targeting 97+
+
+---
+
+## Sprint 15: The Watcher + Art Quality → Score 100 - IN PROGRESS
+
+**Goal:** Implement The Watcher (fourth character with stances), improve art fidelity, close remaining 3-point gap from 97 to 100/100.
+**Plan:** See `SPRINT_15_PLAN.md`
+**Branch:** `sprint-15`
+**Status:** IN PROGRESS — 0/15 tasks done
+
+### P0 — Must Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| PM-15 | PM | S | Merge Sprint 14 to master, create sprint-15 branch, draft PR | IN PROGRESS |
+| BE-29 | BE | M | Stance system infrastructure — state, entry/exit events, damage multipliers, Mantra | PENDING |
+| JR-14a | JR | L | The Watcher — 30 card pool batch 1 (15 cards: starters, commons, stance interactions) | PENDING |
+| JR-14b | JR | L | The Watcher — 30 card pool batch 2 (15 cards: uncommon/rare, Worship/Mantra, Scrying) | PENDING |
+| JR-14c | JR | M | The Watcher — starter deck, character selection, starter relic (Pure Water) | PENDING |
+| VARROW-11 | Varrow | M | Watcher narrative — boss dialogue variants, defeat/victory text, flavor text | PENDING |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| GD-27 | GD | M | Watcher art — portrait, silhouette, 30 card illustrations, stance visuals, sprite sheet | PENDING |
+| GD-28 | GD | M | Art consistency pass — re-render 10 most inconsistent sprites to match style guide | PENDING |
+| UX-31 | UX | M | Stance UI — stance indicator, entry/exit feedback, Mantra progress, Wrath glow | PENDING |
+| QA-23 | QA | M | Watcher regression + balance — 30 cards, stances, Mantra, 4-character regression | PENDING |
+| AR-17 | AR | S | Watcher audio — stance transition SFX, Mantra accumulation tick | PENDING |
+| BE-30 | BE | S | Scrying system — view top N draw pile cards, choose which to discard | PENDING |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| GD-29 | GD | S | Key card art re-render — 5 highest-visibility cards improved | PENDING |
+| UX-32 | UX | S | Final self-assessment — re-score targeting 100/100 | PENDING |
+| QA-24 | QA | S | Deploy smoke test — automated audio/asset/boot check on GitHub Pages | PENDING |
+
+### Sprint 15 Validation Gate
+
+- [ ] Stance system functional (Calm → energy on exit, Wrath → 2× damage, Divinity → 3× + 3 energy)
+- [ ] Mantra accumulates across turns, triggers Divinity at 10
+- [ ] Scrying mechanic works (view top N, discard chosen)
+- [ ] 30 Watcher cards implemented with stance interactions
+- [ ] Character selection shows 4 characters
+- [ ] The Watcher playable through all 4 acts
+- [ ] Watcher starter relic (Pure Water / Miracle) functional
+- [ ] Boss dialogue variants for Watcher
+- [ ] Watcher art: portrait, silhouette, 30 card illustrations
+- [ ] Stance UI indicator visible in combat
+- [ ] Watcher-specific SFX for stance transitions
+- [ ] Art consistency improved (10 re-rendered assets)
+- [ ] 2800+ tests passing
+- [ ] `npm run validate` passes
+- [ ] Watcher win rate: 20-30% at A0
+- [ ] Self-assessment score: targeting 100/100

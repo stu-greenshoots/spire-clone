@@ -1,4 +1,4 @@
-# PM Diary - Sprint 14
+# PM Diary - Sprint 15
 
 ## Role
 Project Manager - Sprint coordination, process, CI/CD, PR management
@@ -7,12 +7,35 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 `*.md` docs, `package.json` scripts, `.github/`
 
 ## Current Sprint Tasks
-- PM-14: Sprint 14 setup (merge Sprint 13, create branch, draft PR)
-- Sprint coordination, board maintenance, audio fix prioritization
+- PM-15: Sprint 15 setup (merge Sprint 14, create branch, draft PR)
+- Sprint coordination, board maintenance, Watcher implementation oversight
 
 ---
 
 ## Entries
+
+### Sprint 15 — Planning Complete
+**Date:** 2026-02-01
+**Status:** PM-15 in progress
+
+**Done:**
+- Merged Sprint 14 to master (fast-forward, 93 files changed)
+- Created `sprint-15` branch from master
+- Created `SPRINT_15_PLAN.md` with 15 tasks (6 P0 + 6 P1 + 3 P2)
+- Updated `SPRINT_BOARD.md` with Sprint 15 section
+
+**Sprint 15 Focus:** The Watcher (fourth character) + art quality → targeting 100/100 score.
+
+**Key decisions:**
+- Split Watcher cards into two L-sized batches (JR-14a, JR-14b) to keep PRs under 300 lines
+- BE-29 (stance infrastructure) is the critical path — nothing else can start until stances exist
+- BE-30 (scrying) separated from stance system to keep PRs focused
+- GD-28 (art consistency) runs in parallel — independent of Watcher work
+- QA-24 (deploy smoke test) addresses the Sprint 14 retro finding about audio being broken for 7 sprints undetected
+
+**Next:** Create draft PR, then begin spawning engineers starting with BE-29.
+
+---
 
 ### Sprint 14 Retrospective
 **Date:** 2026-02-01
