@@ -2,6 +2,37 @@
 
 ## Sprint 14 Entries
 
+### AR-16: Per-Act Ambient Audio Layer (P2 Stretch)
+**Date:** 2026-02-01
+**Status:** Complete, PR #177 merged
+**Sprint:** Sprint 14 (Audio Fix + Real Sounds + Art Quality)
+**Task:** AR-16 (Audio ambient layer — S size, P2)
+
+**Done:**
+1. Added 4 per-act ambient sound IDs to SOUNDS.ambient (act1-act4)
+2. Generated 4 unique 12s ambient MP3 loops via ffmpeg synthesis (pink noise, brown noise, violet noise, low-frequency pulse)
+3. Added playAmbient/stopAmbient methods to AudioManager with 2s crossfade
+4. Ambient plays at 40% of music volume for subtle layering
+5. Wired in App.jsx: ambient starts during gameplay, switches per act, stops on menu/victory/defeat
+6. Ambient respects volume controls, mute, and pre-gesture queuing
+
+**Architecture:**
+- Mirrors music layer pattern (separate _currentAmbient state, crossfade on switch)
+- Volume tied to music volume × 0.4 — no separate ambient slider needed
+- Cleanup in destroy() method for proper teardown
+
+**Acceptance criteria:**
+- [x] 4 per-act ambient loops are distinct audio files
+- [x] Ambient plays under music during gameplay
+- [x] Ambient crossfades when act changes
+- [x] Volume/mute controls apply to ambient
+- [x] npm run validate passes (2713 tests, 0 errors)
+
+**Blockers:** None
+**Next:** All AR Sprint 14 tasks complete (FIX-10, AR-15, AR-16).
+
+---
+
 ### AR-15: Replace All Placeholder MP3s with Distinct CC0 Sounds (P0)
 **Date:** 2026-02-01
 **Status:** Complete, PR #169 merged

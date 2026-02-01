@@ -14,6 +14,22 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 14 — AR-16 Complete
+**Date:** 2026-02-01
+**Status:** AR-16 merged (PR #177)
+
+**Done:**
+- Implemented as AR: Per-act ambient audio layer — 4 synthesized MP3 loops layered under music at 40% volume
+- playAmbient/stopAmbient methods with 2s crossfade, respects volume/mute
+- Wired in App.jsx based on act number during gameplay
+- Both Copilot and Mentor reviews passed
+- Merged PR #177 via squash, updated sprint board and AR diary
+
+**Sprint 14 Progress:** 13/14 tasks done
+**Remaining P2:** QA-22 (validation gate ceremony)
+
+---
+
 ### Sprint 14 — GD-26 Complete
 **Date:** 2026-02-01
 **Status:** GD-26 merged (PR #176)
