@@ -1,5 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useGame } from '../context/GameContext';
+import {
+  getSlowestActions,
+  getMemoryUsage,
+  estimateStateSize,
+  formatBytes
+} from '../systems/performanceMonitor';
 
 /**
  * DevOverlay - Toggleable dev overlay showing game state (QR-04)
@@ -18,6 +24,7 @@ const DevOverlay = () => {
   const { state, lastAction } = useGame();
   const [visible, setVisible] = useState(false);
   const [fps, setFps] = useState(0);
+  const [perfData, setPerfData] = useState({ slowest: [], memory: null, stateSize: 0 });
   const frameTimesRef = useRef([]);
   const lastFrameTimeRef = useRef(performance.now());
   const rafRef = useRef(null);
@@ -29,11 +36,13 @@ const DevOverlay = () => {
     // Reset frame times when overlay becomes visible
     frameTimesRef.current = [];
     lastFrameTimeRef.current = performance.now();
+    let frameCount = 0;
 
     const calculateFps = () => {
       const now = performance.now();
       const delta = now - lastFrameTimeRef.current;
       lastFrameTimeRef.current = now;
+      frameCount++;
 
       // Rolling average of last 30 frames
       frameTimesRef.current.push(delta);
@@ -43,6 +52,15 @@ const DevOverlay = () => {
 
       const avgDelta = frameTimesRef.current.reduce((a, b) => a + b, 0) / frameTimesRef.current.length;
       setFps(Math.round(1000 / avgDelta));
+
+      // Update performance data every 60 frames (~1 second)
+      if (frameCount % 60 === 0) {
+        setPerfData({
+          slowest: getSlowestActions(3),
+          memory: getMemoryUsage(),
+          stateSize: estimateStateSize(state)
+        });
+      }
 
       rafRef.current = requestAnimationFrame(calculateFps);
     };
@@ -54,7 +72,7 @@ const DevOverlay = () => {
         cancelAnimationFrame(rafRef.current);
       }
     };
-  }, [visible]);
+  }, [visible, state]);
 
   // Backtick toggle
   useEffect(() => {
@@ -139,6 +157,31 @@ const DevOverlay = () => {
         <div data-testid="dev-last-action" style={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           Last: {lastAction?.type || 'none'}
         </div>
+        <div data-testid="dev-state-size" style={{ color: '#888', marginTop: 4 }}>
+          State: {formatBytes(perfData.stateSize)}
+        </div>
+        {perfData.memory && (
+          <div data-testid="dev-memory" style={{ color: perfData.memory.percentUsed > 80 ? '#f00' : '#888' }}>
+            Heap: {perfData.memory.usedFormatted}/{perfData.memory.limitFormatted} ({perfData.memory.percentUsed}%)
+          </div>
+        )}
+        {perfData.slowest.length > 0 && (
+          <div style={{ marginTop: 4 }}>
+            <div style={{ color: '#fa0', fontSize: '10px' }}>Slowest Actions:</div>
+            {perfData.slowest.map(({ action, avg, max }) => (
+              <div
+                key={action}
+                data-testid={`dev-perf-${action}`}
+                style={{
+                  fontSize: '10px',
+                  color: avg > 16 ? '#f00' : avg > 8 ? '#ff0' : '#888'
+                }}
+              >
+                {action}: {avg.toFixed(1)}ms (max: {max.toFixed(1)}ms)
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Left side: Player Stats */}

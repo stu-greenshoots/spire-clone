@@ -8,6 +8,7 @@ import {
 import { canUsePotion, applyPotionEffect, removePotion } from '../systems/potionSystem';
 import { audioManager, SOUNDS } from '../systems/audioSystem';
 import { validateAndCorrectState } from '../systems/stateValidator';
+import { recordActionTiming } from '../systems/performanceMonitor';
 import { shopReducer } from './reducers/shopReducer';
 import { mapReducer } from './reducers/mapReducer';
 import { metaReducer } from './reducers/metaReducer';
@@ -311,7 +312,13 @@ const gameReducer = (state, action) => {
 const isDev = typeof import.meta !== 'undefined' && import.meta.env?.DEV;
 
 const validatingReducer = (state, action) => {
+  // Record timing in dev mode (QR-14)
+  const start = isDev ? performance.now() : 0;
   const newState = gameReducer(state, action);
+  if (isDev) {
+    const end = performance.now();
+    recordActionTiming(action.type, end - start);
+  }
 
   // Only validate in dev mode to avoid performance impact in production
   if (isDev) {
