@@ -14,6 +14,44 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 18 — VP-03 Complete
+**Date:** 2026-02-07
+**Status:** 6/15 tasks complete
+
+**Done:**
+- Completed VP-03: Common Enemy Sprite Replacement (GD)
+  - cultist.webp: 4.7KB → 27.7KB (robed figure with glowing eyes)
+  - jawWorm.webp: 6.3KB → 34.6KB (segmented worm with jagged teeth)
+  - louse_red.webp: 4.9KB → 31.0KB (red tick with compound eyes)
+  - fungiBeast.webp: 3.5KB → 38.0KB (mushroom beast with spores)
+  - automaton.webp: 6.7KB → 40.2KB (bronze construct with glowing core)
+  - All 5 sprites now >20KB (acceptance criteria met)
+  - Created `scripts/generate-common-enemy-art-vp03.js` for reproducible generation
+  - Rebuilt enemy sprite sheet (1560KB)
+
+**Sprint 18 Progress:** 6/15 tasks complete
+- [x] VP-07: Keyboard-Only Playthrough Verification (QA/UX) — MERGED (PR #227)
+- [x] VP-08: DevTools Full Playthrough Test (QA) — DONE
+- [x] VP-09: Honest Self-Assessment (PM/QA) — DONE
+- [x] VP-01: Act 1 Boss Sprite Replacement (GD) — MERGED (PR #229)
+- [x] VP-02: Act 1 Elite Sprite Replacement (GD) — MERGED (PR #230)
+- [x] VP-03: Common Enemy Sprite Replacement (GD) — MERGED (PR #231)
+
+**Validation Gate Progress:**
+- [x] All 3 Act 1 boss sprites are quality art (>30KB each)
+- [x] All 2 Act 1 elite sprites are quality art (>30KB each)
+- [x] Keyboard-only combat playthrough verified for all 4 characters
+- [x] DevTools fullPlaythrough completes for all 4 characters
+- [x] Honest self-assessment document created
+- [x] `npm run validate` passes (3747 tests)
+- [x] 5 common enemy sprites replaced
+
+**All P0 tasks complete! First P1 art task complete!**
+
+**Next:** VP-04 (Character-Specific Relic Art), VP-05 (Card Art), or VP-10 (E2E CI Stabilization)
+
+---
+
 ### Sprint 18 — VP-02 Complete
 **Date:** 2026-02-07
 **Status:** 5/15 tasks complete
