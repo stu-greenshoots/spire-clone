@@ -857,7 +857,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | VP-03 | GD | M | P1 | Common Enemy Sprite Replacement (Cultist, Jaw Worm, etc.) | MERGED (PR #231) |
 | VP-04 | GD | M | P1 | Character-Specific Relic Art (15 missing relics) | MERGED (PR #232) |
 | VP-05 | GD | L | P1 | High-Priority Card Art (20 starter/common cards) | MERGED (PR #233) |
-| VP-06 | GD | M | P2 | Act 2/3 Enemy Art (10 remaining placeholders) | PENDING |
+| VP-06 | GD | M | P2 | Act 2/3 Enemy Art (10 remaining placeholders) | MERGED (PR #235) |
 
 ### Stream B: Validation Completion
 
@@ -895,7 +895,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] 5 common enemy sprites replaced
 
 **P2 (Nice to Have)**
-- [ ] 10 Act 2/3 enemy sprites replaced
+- [x] 10 Act 2/3 enemy sprites replaced
 - [ ] 30 additional card art pieces improved
 - [ ] Bundle optimization reviewed
 - [ ] Audio final pass complete
