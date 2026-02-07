@@ -876,7 +876,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | VP-12 | AR | S | P2 | Audio Final Pass | PENDING |
 | VP-13 | GD | L | P2 | Remaining Card Art (30 additional) | PENDING |
 | VP-14 | PM | S | P2 | Documentation Polish | DONE |
-| VP-15 | PM | S | P2 | Release Checklist | PENDING |
+| VP-15 | PM | S | P2 | Release Checklist | MERGED (PR #236) |
 
 ### Sprint 18 Validation Gate
 
@@ -899,4 +899,4 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [ ] 30 additional card art pieces improved
 - [ ] Bundle optimization reviewed
 - [ ] Audio final pass complete
-- [ ] Release checklist created
+- [x] Release checklist created
