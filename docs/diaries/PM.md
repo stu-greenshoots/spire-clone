@@ -14,24 +14,30 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
-### Sprint 17 — Kickoff
+### Sprint 17 — QR-01 Complete
 **Date:** 2026-02-07
-**Status:** PM-17 in progress — sprint infrastructure setup
+**Status:** Sprint 17 progress — 1/15 tasks done
 
 **Done:**
 - Created `sprint-17` branch from master
-- Pushed branch to origin
-- Sprint plan already exists: `SPRINT_17_PLAN.md`
+- Created draft PR #211 with task checklist
+- Implemented as UX: QR-01 Keyboard combat controls
+  - Full keyboard control: 1-9 select cards, Tab targets, Enter plays, E ends turn
+  - Visual indicators: number badges on cards, gold target highlight on enemies
+  - Help overlay (press ?) with all shortcuts
+  - 14 new tests (3278 total passing)
+- Merged PR #212, updated sprint board
 
 **Sprint 17 Focus:** Quality Reality — make the game actually work, verifiably. No new features. Fix, test, and prove what exists.
 
-**Key changes from previous sprints:**
-- Every change must be verified by ACTUALLY PLAYING THE GAME
-- Agents use keyboard controls to verify gameplay
-- Tests must use real reducers, not mocks
-- No inflated assessments — report what's broken honestly
+**Sprint 17 Progress:** 1/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
 
-**First task:** QR-01 (Keyboard Combat Controls) — enables agent verification
+**Next P0 tasks:**
+- QR-02: Enhanced DevTools API (BE)
+- QR-05: Full Playthrough E2E Test (QA) — depends on QR-01, QR-02
+- QR-06: Visual Asset Audit (GD)
+- QR-07: Card Mechanics Verification (QA/JR)
 
 ---
 
