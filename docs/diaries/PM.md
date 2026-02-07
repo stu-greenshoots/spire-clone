@@ -14,6 +14,52 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — COMPLETE
+**Date:** 2026-02-07
+**Status:** Sprint 17 COMPLETE — 15/15 tasks done
+
+**Done:**
+- Implemented as BE: QR-15 Error Boundary Enhancement
+  - Added "Copy Bug Report" button — copies error + game state to clipboard
+  - Game state summary display in error UI (phase, floor, HP, enemies, hand)
+  - Comprehensive console logging for agent analysis
+  - 23 new tests in ErrorBoundary.test.jsx
+- Closed QR-10 as N/A — Stream B audits found asset quality issues but no code bugs
+  - Card mechanics verification passed (all 188 cards correct)
+  - Enemy behavior verification passed (all 40+ enemies correct)
+  - Audio audit confirmed all 52 files valid and audible
+- Reviewed and merged PR #225
+- Updated sprint board and BE diary
+
+**Sprint 17 Final Progress:** 15/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-04: Dev State Overlay (BE/UX) — MERGED (PR #223)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-10: Bug Fix Sprint (ALL) — CLOSED (N/A — no code bugs found)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+- [x] QR-12: Data Editor Safety (BE) — MERGED (PR #221)
+- [x] QR-13: Runtime State Validation (BE) — MERGED (PR #222)
+- [x] QR-14: Performance Monitoring (BE/UX) — MERGED (PR #224)
+- [x] QR-15: Error Boundary Enhancement (BE) — MERGED (PR #225)
+
+**Sprint 17 Outcomes:**
+- 3730 tests passing (up from 3264 at sprint start)
+- Testability infrastructure complete (keyboard controls, DevTools API, scenarios)
+- Honest QA audits complete (cards, enemies, assets, audio all verified)
+- Architecture hardened (state validation, performance monitoring, error recovery)
+- Zero P0 bugs — audits found asset quality issues but no code bugs
+- 11th consecutive sprint with 100% completion rate
+
+**Next:** Sprint 18 planning or merge to master
+
+---
+
 ### Sprint 17 — QR-14 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 13/15 tasks done

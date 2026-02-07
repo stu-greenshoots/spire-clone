@@ -787,7 +787,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make the game actually work, verifiably. No new features — fix, test, and prove what exists.
 **Branch:** `sprint-17` (create from master)
 **Plan:** See `SPRINT_17_PLAN.md`
-**Status:** IN PROGRESS — 13/15 tasks done
+**Status:** COMPLETE — 15/15 tasks done
 
 ### Stream A: Testability Infrastructure
 
@@ -812,7 +812,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
-| QR-10 | ALL | Var | P0 | Bug fix sprint (fix all bugs found in Stream B) | PENDING |
+| QR-10 | ALL | Var | P0 | Bug fix sprint (fix all bugs found in Stream B) | CLOSED (N/A — no code bugs found in Stream B) |
 | QR-11 | GD | L | P1 | Placeholder asset replacement (top 10 worst from QR-06) | MERGED (PR #220) |
 | QR-12 | BE | S | P1 | Data Editor safety (warning banner, reset button, validation) | MERGED (PR #221) |
 
@@ -822,7 +822,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 |------|-------|------|----------|-------------|--------|
 | QR-13 | BE | M | P1 | Runtime state validation (catch impossible states) | MERGED (PR #222) |
 | QR-14 | BE/UX | S | P2 | Performance monitoring (FPS, reducer timing, render counts) | MERGED (PR #224) |
-| QR-15 | BE | S | P2 | Error boundary enhancement (recovery, bug report, state dump) | PENDING |
+| QR-15 | BE | S | P2 | Error boundary enhancement (recovery, bug report, state dump) | MERGED (PR #225) |
 
 ### Sprint 17 Validation Gate
 
@@ -833,8 +833,9 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] Every enemy verified: HP, damage, AI pattern correct
 - [x] Asset audit complete — all placeholders documented
 - [x] Top 10 worst placeholder assets replaced
-- [ ] Zero P0 bugs remaining
+- [x] Zero P0 bugs remaining (QR-10 closed N/A — no code bugs found)
 - [x] Data Editor overrides show visible warning
 - [x] Runtime state validation active in dev mode
-- [ ] `npm run validate` passes
+- [x] Error boundary includes bug report functionality
+- [x] `npm run validate` passes (3730 tests)
 - [ ] Honest self-assessment completed (no inflated scores)

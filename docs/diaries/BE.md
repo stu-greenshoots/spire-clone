@@ -5,6 +5,41 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 17 Entries
 
+### QR-15: Error Boundary Enhancement
+**Date:** 2026-02-07
+**Status:** MERGED (PR #225)
+
+**Done:**
+- Enhanced ErrorBoundary.jsx with bug reporting functionality
+- Added "Copy Bug Report" button — copies error + game state to clipboard as JSON
+- Game state summary display (phase, floor, HP, enemies, hand) when error occurs
+- Comprehensive console logging for agent analysis:
+  - Error message and stack trace
+  - Game state at time of error (from `window.__SPIRE__.getVisibleState()`)
+  - Timestamp, user agent, environment info
+- Safe localStorage info capture (keys/sizes only, not sensitive data)
+- Graceful handling when `window.__SPIRE__` is not available
+- Fallback to console + alert when clipboard API fails
+- 23 new tests in ErrorBoundary.test.jsx
+- 3730 tests passing, lint clean (5 pre-existing warnings), build clean
+
+**Features:**
+- `captureGameState()` — safely get game state from DevTools API
+- `generateBugReport()` — create comprehensive bug report object
+- `handleCopyBugReport()` — copy report to clipboard with feedback
+- `formatGameStateSummary()` — human-readable state display
+
+**Architecture:**
+- Non-invasive enhancement — builds on existing ErrorBoundary
+- Uses QR-02's `window.__SPIRE__.getVisibleState()` for state capture
+- Clipboard API with fallback for unsupported browsers
+- No breaking changes to existing onReset behavior
+
+**Blockers:** None
+**Next:** Sprint 17 complete — all 15 tasks done
+
+---
+
 ### QR-14: Performance Monitoring
 **Date:** 2026-02-07
 **Status:** MERGED (PR #224)
