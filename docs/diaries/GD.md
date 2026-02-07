@@ -14,6 +14,34 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 18 - VP-02 Complete
+**Date:** 2026-02-07
+**Status:** VP-02 complete, PR #230 merged to sprint-18
+
+**Done today:**
+- Replaced Act 1 elite sprites with high-quality art meeting >30KB requirement
+- Created `scripts/generate-elite-art-vp02.js` for reproducible generation
+
+**Assets replaced:**
+
+| Asset Type | ID | Old Size | New Size | Description |
+|------------|-----|----------|----------|-------------|
+| Enemy | gremlinNob | 6KB | 44KB | Hulking muscular gremlin with massive spiked club |
+| Enemy | lagavulin | 5KB | 36KB | Armored sleeping warrior with glowing eyes |
+
+**Technical approach:**
+- 768px SVG canvas rendered to 512px for anti-aliasing
+- Dense noise patterns (500 elements) for rich textures
+- Near-lossless WebP compression (quality 100)
+- Layered organic blob shapes for Gremlin Nob musculature
+- Armor plates with overlapping scale pattern for Lagavulin
+
+**Validation:** `npm run validate` passes — 3747 tests, lint clean, build clean
+
+**Next:** VP-03 (Common Enemy Sprites) is next P1 task
+
+---
+
 ### Sprint 18 - VP-01 Complete
 **Date:** 2026-02-07
 **Status:** VP-01 complete, PR #229 merged to sprint-18
