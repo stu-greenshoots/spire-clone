@@ -1,3 +1,56 @@
+# QA Diary - Sprint 16
+
+## Sprint 16 Entries
+
+### QA-26: Performance Regression
+**Date:** 2026-02-01
+**Status:** Complete, PR #208 merged
+**Sprint:** Sprint 16 (Endless Mode, Custom Runs, Performance & QoL)
+**Task:** QA-26 (Performance regression — S size, P2)
+
+**Done:**
+1. Created `src/test/performanceRegression.test.js` — 24 regression tests
+2. **Bundle size gates:** No chunk >500KB (largest: vendor-react at 188KB), total JS <1.5MB (~700KB)
+3. **Code-split structure:** 7 expected manual chunks verified (vendor-react, game-data, game-systems, game-reducers, game-context, audio, art-assets)
+4. **Lazy-loaded screens:** 5+ route-level split chunks confirmed
+5. **Individual budgets:** Per-chunk size limits enforced (vendor-react <200KB, game-data <200KB, etc.)
+6. **Vite config validation:** manualChunks and assetsInlineLimit verified
+
+**Test count:** 3234 → 3258 (+24 tests). Lint clean (0 errors), build clean.
+
+**Blockers:** None
+**Next:** All QA Sprint 16 tasks complete (QA-25, QA-26). GD-31 is last remaining task.
+
+---
+
+### QA-25: Endless Mode Regression + Balance
+**Date:** 2026-02-01
+**Status:** Complete, PR #205 merged
+**Sprint:** Sprint 16 (Endless Mode, Custom Runs, Performance & QoL)
+**Task:** QA-25 (Endless mode regression + balance — M size, P1)
+
+**Done:**
+1. Created `src/test/endlessModeRegression.test.js` — 40 regression tests
+2. **Scaling curves:** Verified 10% linear scaling per loop (loops 1-25), Heart invincible shield scaling, edge cases (loop 0, loop 100)
+3. **State transitions:** ENTER_ENDLESS preserves player HP/relics, loop counter increments correctly through 5+ loops
+4. **Floor 100+ stability:** State size bounded (<5x initial through 10 loops), endlessLoop stable at 100, scaling factor finite at loop 100 (11x)
+5. **Seeded reproducibility:** Same seed+loop = identical maps, different loops = different maps, different acts = different maps
+6. **Character balance:** Balance simulator validates >5% Act 1 win rate at A0, deterministic seeded runs
+7. **Narrative integration (VARROW-12):** All 6 milestone thresholds have content, selection logic picks highest applicable, generic pool has 3+ entries
+8. **Defeat tiers:** All 4 tiers (early/mid/deep/extreme) have 3+ entries, tier selection logic matches GameOverScreen
+9. **Character relics:** Starter relics for all 4 characters, character-specific filtering works, exclusion without characterId works
+10. **Encounter stability:** Valid enemies for acts 1-4, valid bosses for acts 1-4, enemy instances have required fields
+11. **SeededRNG stability:** Valid output after 10000 iterations, nextInt stays in bounds, shuffle preserves elements
+
+**Review findings fixed:** Removed 3 unused imports (beforeEach, ALL_ENEMIES, CHARACTERS), fixed balance test loop that wasn't using character variable.
+
+**Test count:** 3181 → 3221 (+40 tests). Lint clean (0 errors), build clean.
+
+**Blockers:** None
+**Next:** AR-18 (endless mode audio) is next P1. QA-26 (performance regression) is P2 stretch.
+
+---
+
 # QA Diary - Sprint 14
 
 ## Sprint 14 Entries

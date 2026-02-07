@@ -8,6 +8,7 @@ import { getDailyChallenge, getModifierDetails, getChallengeScore } from '../sys
 import Settings from './Settings';
 import StateBuilder from './StateBuilder';
 import CardCompendium from './CardCompendium';
+import RelicPotionCompendium from './RelicPotionCompendium';
 
 const MainMenu = () => {
   const { startGame, startDailyChallenge, loadGameState, deleteSaveState, openDataEditor } = useGame();
@@ -22,6 +23,8 @@ const MainMenu = () => {
   const [showRunHistory, setShowRunHistory] = useState(false);
   const [showCompendium, setShowCompendium] = useState(false);
   const [hoveringCompendium, setHoveringCompendium] = useState(false);
+  const [showCollection, setShowCollection] = useState(false);
+  const [hoveringCollection, setHoveringCollection] = useState(false);
   const [saveExists, setSaveExists] = useState(false);
   const [selectedAscension, setSelectedAscension] = useState(0);
   const [unlockedAscension, setUnlockedAscension] = useState(0);
@@ -430,6 +433,33 @@ const MainMenu = () => {
           Card Compendium
         </button>
 
+        {/* Relic & Potion Collection Button */}
+        <button
+          data-testid="btn-collection"
+          onClick={() => setShowCollection(true)}
+          onMouseEnter={() => setHoveringCollection(true)}
+          onMouseLeave={() => setHoveringCollection(false)}
+          style={{
+            background: hoveringCollection
+              ? 'rgba(255, 255, 255, 0.12)'
+              : 'rgba(255, 255, 255, 0.06)',
+            color: '#9988aa',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            padding: '12px 40px',
+            fontSize: '14px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            letterSpacing: '2px',
+            textTransform: 'uppercase',
+            touchAction: 'manipulation',
+            transition: 'all 0.3s ease',
+            transform: hoveringCollection ? 'scale(1.03) translateY(-2px)' : 'scale(1)'
+          }}
+        >
+          Collection
+        </button>
+
         {/* Settings Button */}
         <button
           data-testid="btn-settings"
@@ -597,6 +627,11 @@ const MainMenu = () => {
       {/* Card Compendium Modal */}
       {showCompendium && (
         <CardCompendium onClose={() => setShowCompendium(false)} />
+      )}
+
+      {/* Relic & Potion Collection Modal */}
+      {showCollection && (
+        <RelicPotionCompendium onClose={() => setShowCollection(false)} />
       )}
     </div>
   );
@@ -910,12 +945,13 @@ const RunHistoryPanel = ({ onClose }) => {
                   </span>
                   <span style={{ color: '#555', fontSize: '11px' }}>{formatDate(run.date)}</span>
                 </div>
-                <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: '#888' }}>
+                <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: '#888', flexWrap: 'wrap' }}>
                   <span>Floor {run.floor}</span>
                   <span>Act {run.act}</span>
                   {run.ascension > 0 && <span style={{ color: '#FFD700' }}>A{run.ascension}</span>}
                   <span>{run.deckSize} cards</span>
                   <span>{run.relicCount} relics</span>
+                  {run.seed && <span style={{ color: '#aa99cc', fontFamily: 'monospace' }}>Seed: {run.seed}</span>}
                 </div>
                 {!run.won && run.causeOfDeath && (
                   <div style={{ color: '#775555', fontSize: '11px', marginTop: '4px', fontStyle: 'italic' }}>

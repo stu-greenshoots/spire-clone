@@ -9,10 +9,11 @@ import { generateMap } from '../../utils/mapGenerator';
 import { saveGame, loadGame, deleteSave, addRunToHistory } from '../../systems/saveSystem';
 import { getPassiveRelicEffects } from '../../systems/relicSystem';
 import { createInitialState } from '../GameContext';
-import { loadProgression, updateRunStats, saveProgression } from '../../systems/progressionSystem';
+import { loadProgression, updateRunStats, saveProgression, ACHIEVEMENTS } from '../../systems/progressionSystem';
 import { getAscensionStartGold } from '../../systems/ascensionSystem';
 import { applyDailyChallengeModifiers } from '../../systems/dailyChallengeSystem';
 import { audioManager, SOUNDS } from '../../systems/audioSystem';
+import { SeededRNG, stringToSeed } from '../../utils/seededRandom';
 
 /**
  * Reconstruct a full card object from its serialized form.
@@ -86,11 +87,14 @@ export const metaReducer = (state, action) => {
     }
 
     case 'SELECT_CHARACTER': {
-      const { characterId } = action.payload;
+      const { characterId, customSeed } = action.payload;
       const ascensionLevel = state.ascension || 0;
       const deck = getStarterDeck(characterId);
       const starterRelic = getStarterRelic(characterId);
-      const map = generateMap(1);
+
+      // Create seeded RNG for map generation if custom seed provided
+      const seedRng = customSeed ? new SeededRNG(stringToSeed(customSeed)) : null;
+      const map = generateMap(1, seedRng);
       const character = getCharacterById(characterId);
 
       // Apply ascension starting gold modifier (Ascension 6+)
@@ -109,6 +113,7 @@ export const metaReducer = (state, action) => {
         map,
         currentFloor: -1,
         ascension: ascensionLevel,
+        customSeed: customSeed || null,
         player: {
           ...createInitialState().player,
           maxHp,
@@ -175,7 +180,7 @@ export const metaReducer = (state, action) => {
       switch (bonusId) {
         case 'random_relic': {
           const existingIds = state.relics.map(r => r.id);
-          const relic = getRandomRelic(RELIC_RARITY.COMMON, existingIds);
+          const relic = getRandomRelic(RELIC_RARITY.COMMON, existingIds, state.character);
           if (relic) {
             newState.relics = [...state.relics, relic];
           }
@@ -304,6 +309,7 @@ export const metaReducer = (state, action) => {
     }
 
     case 'RETURN_TO_MENU': {
+      deleteSave();
       return createInitialState();
     }
 
@@ -385,6 +391,9 @@ export const metaReducer = (state, action) => {
         act: saveData.act,
         ascension: saveData.ascension || 0,
         character: saveData.character || 'ironclad',
+        endlessMode: saveData.endlessMode || false,
+        endlessLoop: saveData.endlessLoop || 0,
+        customSeed: saveData.customSeed || null,
       };
     }
 
@@ -565,6 +574,7 @@ export const metaReducer = (state, action) => {
         cardsPlayed: state.runStats?.cardsPlayed || 0,
         defeatedEnemies: state.runStats?.defeatedEnemies || [],
         relics: state.relics,
+        potions: state.potions,
         deckSize: state.deck?.length || 0,
         ascension: currentAscension,
         causeOfDeath: won ? null : causeOfDeath,
@@ -572,7 +582,13 @@ export const metaReducer = (state, action) => {
       };
 
       // Update progression (this also saves to localStorage)
+      const previousAchievements = [...progression.achievements];
       const updatedProgression = updateRunStats(progression, runData);
+
+      // Detect newly unlocked achievements
+      const newAchievements = updatedProgression.achievements.filter(
+        id => !previousAchievements.includes(id)
+      );
 
       // Also save to run history (separate localStorage store with more detail)
       addRunToHistory({
@@ -581,7 +597,8 @@ export const metaReducer = (state, action) => {
         relicCount: state.relics?.length || 0,
         potionCount: state.potions?.filter(Boolean)?.length || 0,
         gold: state.player?.gold || 0,
-        character: state.character || 'ironclad'
+        character: state.character || 'ironclad',
+        seed: state.customSeed || null
       });
 
       // Unlock next ascension level on win
@@ -592,7 +609,29 @@ export const metaReducer = (state, action) => {
         saveProgression(updatedProgression);
       }
 
+      // Surface newly unlocked achievements for toast notifications
+      if (newAchievements.length > 0) {
+        const achievementDetails = newAchievements.map(id =>
+          ACHIEVEMENTS.find(a => a.id === id)
+        ).filter(Boolean);
+        return {
+          ...state,
+          pendingAchievements: [
+            ...(state.pendingAchievements || []),
+            ...achievementDetails
+          ]
+        };
+      }
+
       return state;
+    }
+
+    case 'DISMISS_ACHIEVEMENT_TOAST': {
+      const pending = state.pendingAchievements || [];
+      return {
+        ...state,
+        pendingAchievements: pending.slice(1)
+      };
     }
 
     default:

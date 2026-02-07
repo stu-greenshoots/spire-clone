@@ -17,6 +17,7 @@ const DEFAULT_PROGRESSION = {
   totalCardsPlayed: 0,
   cardsPlayedById: {},
   relicsCollected: {},
+  potionsCollected: {},
   enemiesDefeated: {},
   characterWins: {}, // { ironclad: 2, silent: 1 } — tracks wins per character
   achievements: [],
@@ -95,6 +96,16 @@ export const updateRunStats = (progression, runData) => {
   if (runData.relics) {
     runData.relics.forEach(r => {
       updated.relicsCollected[r.id] = true;
+    });
+  }
+
+  // Track potions collected
+  if (runData.potions) {
+    updated.potionsCollected = { ...updated.potionsCollected };
+    runData.potions.forEach(p => {
+      if (p && p.id) {
+        updated.potionsCollected[p.id] = true;
+      }
     });
   }
 

@@ -3,6 +3,81 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 16 Entries
+
+### BE-33: Bundle Code-Splitting
+**Date:** 2026-02-01
+**Status:** MERGED (PR #202)
+
+**Done:**
+- Added manualChunks function to vite.config.js splitting: vendor-react, vendor, game-data, game-systems, game-reducers, game-context, art-assets, audio, game-hooks, game-utils
+- Converted 9 more components to React.lazy(): MainMenu, CombatScreen, RewardScreen, GameOverScreen, VictoryScreen, EndlessTransition, PersistentHeader, PlayerStatusBar, PauseMenu
+- Set assetsInlineLimit to 0 to prevent base64-inlining hundreds of small images into JS chunks
+- Moved all lazy components inside single Suspense boundary
+- Index chunk reduced from 1.2MB to 9.4KB; largest chunk is vendor-react at 189KB
+- 3155 tests passing, lint clean, build clean
+
+**Architecture:**
+- manualChunks uses path-based matching (id.includes) with specific-before-general ordering
+- assetsInlineLimit: 0 trades slightly more HTTP requests for dramatically smaller JS chunks; PWA service worker caches everything anyway
+- All screens are now lazy-loaded; only DevTools remains eager (78 lines, dev-only)
+
+**Blockers:** None
+**Next:** QA-26 (performance regression) is now unblocked
+
+---
+
+### BE-32: Custom Seeded Runs
+**Date:** 2026-02-01
+**Status:** MERGED (PR #199)
+
+**Done:**
+- Added `stringToSeed()` and `generateSeedString()` to seededRandom.js
+- CharacterSelect: seed input field with random seed generator and clear button
+- `selectCharacter()` accepts optional `customSeed` parameter
+- `generateMap()` accepts optional SeededRNG for deterministic map generation
+- All `Math.random()` calls in mapGenerator.js replaced with seeded `rand()` function
+- `customSeed` persisted in game state, save/load, and run history
+- mapReducer threads seed through act transitions and endless mode loops via `getMapRng()`
+- RunHistoryPanel displays seed on seeded runs
+- 14 new tests, 3104 total passing, lint clean, build clean
+
+**Architecture:**
+- `getMapRng(state, act)` combines seed + act * 7919 + loop * 104729 for unique per-act maps
+- Map generation fully deterministic with seed; encounters/rewards still use Math.random()
+- Backward compatible: null rng falls through to Math.random in all functions
+
+**Blockers:** None
+**Next:** Continue with remaining P0 tasks (JR-15, UX-12)
+
+---
+
+### BE-31: Endless Mode Infrastructure
+**Date:** 2026-02-01
+**Status:** MERGED (PR #197)
+
+**Done:**
+- Added ENDLESS_TRANSITION game phase for post-Heart decision screen
+- Added endlessMode (boolean) and endlessLoop (number) to game state
+- Modified PROCEED_TO_MAP: after Heart defeat, shows Endless Transition instead of Victory
+- Added ENTER_ENDLESS action: resets to Act 1 with incremented loop counter
+- Added applyEndlessScaling(): scales enemy HP, maxHp, and invincible by +10% per loop
+- Endless encounters use effective act (capped at 3) for enemy pools
+- Created EndlessTransition component with "Enter the Endless" and "Claim Victory" buttons
+- Save/load persists endlessMode and endlessLoop
+- 13 new tests, 3085 total passing, lint clean, build clean
+
+**Architecture:**
+- Scaling applied at encounter creation time in mapReducer (same pattern as ascension)
+- Combat system unaware of endless mode — scaling pre-applied to enemy instances
+- Each loop cycles Acts 1→2→3→Heart, then offers another loop
+- Effective act for encounter pools: Math.min(state.act, 3)
+
+**Blockers:** None
+**Next:** UX-33, VARROW-12, AR-18, GD-31 now unblocked
+
+---
+
 ## Sprint 15 Entries
 
 ### BE-30: Scrying System

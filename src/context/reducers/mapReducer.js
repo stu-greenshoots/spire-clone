@@ -4,6 +4,7 @@ import { shuffleArray, generateMap } from '../../utils/mapGenerator';
 import { triggerRelics, getPassiveRelicEffects } from '../../systems/relicSystem';
 import { getEnemyIntent } from '../../systems/enemySystem';
 import { saveGame, deleteSave } from '../../systems/saveSystem';
+import { SeededRNG, stringToSeed } from '../../utils/seededRandom';
 import {
   applyAscensionToEnemies,
   shouldAddWoundAtCombatStart,
@@ -13,6 +14,32 @@ import { audioManager, SOUNDS } from '../../systems/audioSystem';
 import { channelOrb } from '../../systems/orbSystem';
 import { getCardById } from '../../data/cards';
 import { loadProgression, isHeartUnlocked } from '../../systems/progressionSystem';
+
+/**
+ * Create a seeded RNG for map generation if the run has a custom seed.
+ * Incorporates act number and loop count so each act gets a different map.
+ */
+const getMapRng = (state, act) => {
+  if (!state.customSeed) return null;
+  const loop = state.endlessLoop || 0;
+  const combinedSeed = stringToSeed(state.customSeed) + act * 7919 + loop * 104729;
+  return new SeededRNG(combinedSeed);
+};
+
+/**
+ * Apply endless mode scaling to enemies.
+ * Each loop increases enemy HP and damage by 10%.
+ */
+const applyEndlessScaling = (enemies, endlessLoop) => {
+  if (!endlessLoop || endlessLoop <= 0) return enemies;
+  const scaleFactor = 1 + (0.1 * endlessLoop);
+  return enemies.map(enemy => ({
+    ...enemy,
+    currentHp: Math.floor(enemy.currentHp * scaleFactor),
+    maxHp: Math.floor(enemy.maxHp * scaleFactor),
+    invincible: enemy.invincible ? Math.floor(enemy.invincible * scaleFactor) : 0
+  }));
+};
 
 export const mapReducer = (state, action) => {
   switch (action.type) {
@@ -32,11 +59,16 @@ export const mapReducer = (state, action) => {
       );
 
       if (node.type === 'combat' || node.type === 'elite') {
-        let enemies = getEncounter(state.act, floor, 0.1, node.type === 'elite');
+        // In endless mode, use effective act (1-3 cycle) for encounter pools
+        const effectiveAct = state.endlessMode ? Math.min(state.act, 3) : state.act;
+        let enemies = getEncounter(effectiveAct, floor, 0.1, node.type === 'elite');
 
         // Apply ascension modifiers to enemies (DEC-015: apply at SELECT_NODE)
         const ascensionLevel = state.ascension || 0;
         enemies = applyAscensionToEnemies(enemies, ascensionLevel, node.type);
+
+        // Apply endless mode scaling
+        enemies = applyEndlessScaling(enemies, state.endlessLoop);
 
         const deck = [...state.deck];
         let drawPile = shuffleArray(deck.map(c => ({ ...c })));
@@ -195,6 +227,9 @@ export const mapReducer = (state, action) => {
         // Apply ascension modifiers to boss (DEC-015: apply at SELECT_NODE)
         const ascensionLevel = state.ascension || 0;
         enemies = applyAscensionToEnemies(enemies, ascensionLevel, 'boss');
+
+        // Apply endless mode scaling
+        enemies = applyEndlessScaling(enemies, state.endlessLoop);
 
         const deck = [...state.deck];
         let drawPile = shuffleArray(deck.map(c => ({ ...c })));
@@ -378,15 +413,53 @@ export const mapReducer = (state, action) => {
       return state;
     }
 
+    case 'ENTER_ENDLESS': {
+      // Player chose to continue into endless mode after Heart defeat
+      const newLoop = (state.endlessLoop || 0) + 1;
+      const endlessState = {
+        ...state,
+        phase: GAME_PHASE.MAP,
+        endlessMode: true,
+        endlessLoop: newLoop,
+        act: 1,
+        currentFloor: -1,
+        map: generateMap(1, getMapRng(state, 1)),
+        combatRewards: null
+      };
+      saveGame(endlessState);
+      return endlessState;
+    }
+
     case 'PROCEED_TO_MAP': {
       // Check if we beat the boss
       if (state.currentNode?.type === 'boss') {
+        // In endless mode, loop through Acts 1-3 then Heart, then repeat
+        if (state.endlessMode) {
+          if (state.act >= 4) {
+            // Beat the Heart again in endless — offer another loop
+            return {
+              ...state,
+              phase: GAME_PHASE.ENDLESS_TRANSITION
+            };
+          }
+          // Move to next act within the endless loop
+          const newActState = {
+            ...state,
+            phase: GAME_PHASE.MAP,
+            act: state.act + 1,
+            currentFloor: -1,
+            map: generateMap(state.act + 1, getMapRng(state, state.act + 1)),
+            combatRewards: null
+          };
+          saveGame(newActState);
+          return newActState;
+        }
+
         if (state.act >= 4) {
-          // Delete save on victory (after Heart or Act 4+)
-          deleteSave();
+          // Beat the Heart — offer endless mode
           return {
             ...state,
-            phase: GAME_PHASE.VICTORY
+            phase: GAME_PHASE.ENDLESS_TRANSITION
           };
         }
 
@@ -406,7 +479,7 @@ export const mapReducer = (state, action) => {
           phase: GAME_PHASE.MAP,
           act: state.act + 1,
           currentFloor: -1,
-          map: generateMap(state.act + 1),
+          map: generateMap(state.act + 1, getMapRng(state, state.act + 1)),
           combatRewards: null
         };
         // Auto-save after completing boss

@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-02-01
-**Current Sprint:** 15 (The Watcher + Art Quality → Score 100) - IN PROGRESS
-**Integration Branch:** `sprint-15`
-**Sprint Plan:** See `SPRINT_15_PLAN.md`
+**Current Sprint:** 16 (Endless Mode, Custom Runs, Performance & QoL) - IN PROGRESS
+**Integration Branch:** `sprint-16`
+**Sprint Plan:** See `SPRINT_16_PLAN.md`
 **Roadmap:** See `ROADMAP.md` (original 4-sprint plan to 1.0, now post-1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 14 COMPLETE (14 tasks, 2713 tests, Audio Fix + Real Sounds + Art Quality)
+**Previous:** Sprint 15 COMPLETE (17 tasks, 3072 tests, The Watcher + Art Quality → Score 100)
 
 ---
 
@@ -668,12 +668,12 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 15: The Watcher + Art Quality → Score 100 - IN PROGRESS
+## Sprint 15: The Watcher + Art Quality → Score 100 - COMPLETE
 
 **Goal:** Implement The Watcher (fourth character with stances), improve art fidelity, close remaining 3-point gap from 97 to 100/100.
 **Plan:** See `SPRINT_15_PLAN.md`
-**Branch:** `sprint-15`
-**Status:** IN PROGRESS — 16/17 tasks done (PM-15, BE-29, JR-14a, JR-14b, JR-14c, BE-30, VARROW-11, UX-31, GD-27, GD-28, GD-29, QA-23, FIX-11, FIX-12, AR-17, UX-32)
+**Branch:** `sprint-15` (merged to master)
+**Status:** COMPLETE — 17/17 tasks merged. Ninth consecutive 100% sprint. 3072 tests.
 
 ### P0 — Must Ship
 
@@ -705,23 +705,77 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 |------|-------|------|-------------|--------|
 | GD-29 | GD | S | Key card art re-render — 5 highest-visibility cards improved | MERGED (PR #193) |
 | UX-32 | UX | S | Final self-assessment — re-score targeting 100/100 | MERGED (PR #194) |
-| QA-24 | QA | S | Deploy smoke test — automated audio/asset/boot check on GitHub Pages | PENDING |
+| QA-24 | QA | S | Deploy smoke test — automated audio/asset/boot check on GitHub Pages | MERGED (PR #195) |
 
-### Sprint 15 Validation Gate
+### Sprint 15 Validation Gate - COMPLETE
 
-- [ ] Stance system functional (Calm → energy on exit, Wrath → 2× damage, Divinity → 3× + 3 energy)
-- [ ] Mantra accumulates across turns, triggers Divinity at 10
-- [ ] Scrying mechanic works (view top N, discard chosen)
-- [ ] 30 Watcher cards implemented with stance interactions
-- [ ] Character selection shows 4 characters
-- [ ] The Watcher playable through all 4 acts
-- [ ] Watcher starter relic (Pure Water / Miracle) functional
-- [ ] Boss dialogue variants for Watcher
-- [ ] Watcher art: portrait, silhouette, 30 card illustrations
-- [ ] Stance UI indicator visible in combat
-- [ ] Watcher-specific SFX for stance transitions
-- [ ] Art consistency improved (10 re-rendered assets)
-- [ ] 2800+ tests passing
-- [ ] `npm run validate` passes
-- [ ] Watcher win rate: 20-30% at A0
-- [ ] Self-assessment score: targeting 100/100
+- [x] Stance system functional (Calm → energy on exit, Wrath → 2× damage, Divinity → 3× + 3 energy)
+- [x] Mantra accumulates across turns, triggers Divinity at 10
+- [x] Scrying mechanic works (view top N, discard chosen)
+- [x] 30 Watcher cards implemented with stance interactions
+- [x] Character selection shows 4 characters
+- [x] The Watcher playable through all 4 acts
+- [x] Watcher starter relic (Pure Water / Miracle) functional
+- [x] Boss dialogue variants for Watcher
+- [x] Watcher art: portrait, silhouette, 30 card illustrations
+- [x] Stance UI indicator visible in combat
+- [x] Watcher-specific SFX for stance transitions
+- [x] Art consistency improved (10 re-rendered assets)
+- [x] 2800+ tests passing (3072)
+- [x] `npm run validate` passes
+- [x] Watcher win rate: 20-30% at A0
+- [x] Self-assessment score: targeting 100/100
+
+---
+
+## Sprint 16: Endless Mode, Custom Runs, Performance & QoL - COMPLETE
+
+**Goal:** Player retention — endless mode, custom seeded runs, performance optimization, quality-of-life features.
+**Plan:** See `SPRINT_16_PLAN.md`
+**Branch:** `sprint-16` (merged to master)
+**Status:** COMPLETE — All 14 tasks merged (6 P0 + 5 P1 + 3 P2). 3264 tests. Tenth consecutive 100% sprint.
+
+### P0 — Must Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| PM-16 | PM | S | Merge Sprint 15 to master, create sprint-16 branch, draft PR | DONE |
+| BE-31 | BE | M | Endless mode infrastructure — post-Heart looping with scaling HP/damage | MERGED (PR #197) |
+| UX-33 | UX | M | Endless mode UI — floor counter, difficulty indicator, death stats | MERGED (PR #198) |
+| BE-32 | BE | S | Custom seeded runs — player-entered seed, shareable seed codes | MERGED (PR #199) |
+| JR-15 | JR | M | Character-specific relics — 3 per character (12 total) | MERGED (PR #200) |
+| UX-12 | UX | S | Smart card targeting — non-enemy cards playable without drag (deferred since Sprint 6) | MERGED (PR #201) |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| BE-33 | BE | M | Bundle code-splitting — break 1.2MB index chunk into smaller chunks | MERGED (PR #202) |
+| GD-30 | GD | M | Relic & potion compendium — browsable collection with discovery tracking | MERGED (PR #203) |
+| VARROW-12 | Varrow | M | Endless mode narrative — loop dissolution text, milestone dialogue | MERGED (PR #204) |
+| QA-25 | QA | M | Endless mode regression + balance — scaling curves, stability, character balance | MERGED (PR #205) |
+| AR-18 | AR | S | Endless mode audio — escalating intensity, milestone fanfare | MERGED (PR #206) |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| UX-34 | UX | S | Achievement notification toasts — in-game popups on unlock | MERGED (PR #207) |
+| QA-26 | QA | S | Performance regression — bundle size gate, Lighthouse 90+ | MERGED (PR #208) |
+| GD-31 | GD | S | Endless mode visual escalation — background shifts every 10 floors | MERGED (PR #209) |
+
+### Sprint 16 Validation Gate - COMPLETE
+
+- [x] Endless mode accessible after Heart defeat
+- [x] Enemy scaling works (+10% per loop)
+- [x] Floor counter displays correctly beyond floor 50
+- [x] Custom seeded runs produce identical outcomes for same seed
+- [x] Seed visible on run history
+- [x] 12 character-specific relics functional
+- [x] Non-targeting cards playable without drag (smart targeting)
+- [x] Relic/potion compendium accessible with discovery tracking
+- [x] No bundle chunk >500KB uncompressed
+- [x] Endless mode narrative triggers at floor milestones
+- [x] 3200+ tests passing (3264)
+- [x] `npm run validate` passes
+- [x] Median endless death: floor 60-80 at A0

@@ -60,3 +60,29 @@ export const todayDateString = () => {
 };
 
 export const createRNG = (seed) => new SeededRNG(seed);
+
+/**
+ * Convert a string to a numeric seed using the same hash as dateSeed.
+ * Allows players to enter text seeds like "SPIRE42" or "my-favorite-run".
+ */
+export const stringToSeed = (str) => {
+  if (!str || str.length === 0) return 0;
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i);
+    hash = ((hash << 5) - hash + ch) | 0;
+  }
+  return hash;
+};
+
+/**
+ * Generate a random alphanumeric seed string (8 characters).
+ */
+export const generateSeedString = () => {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let result = '';
+  for (let i = 0; i < 8; i++) {
+    result += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return result;
+};

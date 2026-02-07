@@ -10,7 +10,10 @@ import {
   WORLD_LORE,
   SILENT_ACT_DESCRIPTIONS,
   DEFECT_ACT_DESCRIPTIONS,
-  WATCHER_ACT_DESCRIPTIONS
+  WATCHER_ACT_DESCRIPTIONS,
+  ENDLESS_DEFEAT_NARRATIVE,
+  ENDLESS_LOOP_MILESTONES,
+  ENDLESS_DEFEAT_FOOTER
 } from '../data/flavorText';
 import {
   BOSS_DIALOGUE,
@@ -422,6 +425,103 @@ describe('Flavor Text Data', () => {
     it('should return default phaseTransition for ironclad', () => {
       const dialogue = getBossDialogue('corruptHeart', 'ironclad');
       expect(dialogue.phaseTransition).toBe(BOSS_DIALOGUE.corruptHeart.phaseTransition);
+    });
+  });
+
+  describe('endless mode narrative', () => {
+    describe('ENDLESS_DEFEAT_NARRATIVE', () => {
+      it('should have all loop depth pools', () => {
+        expect(ENDLESS_DEFEAT_NARRATIVE.early.length).toBeGreaterThanOrEqual(3);
+        expect(ENDLESS_DEFEAT_NARRATIVE.mid.length).toBeGreaterThanOrEqual(3);
+        expect(ENDLESS_DEFEAT_NARRATIVE.deep.length).toBeGreaterThanOrEqual(3);
+        expect(ENDLESS_DEFEAT_NARRATIVE.extreme.length).toBeGreaterThanOrEqual(3);
+      });
+
+      it('should have non-empty strings in all pools', () => {
+        Object.values(ENDLESS_DEFEAT_NARRATIVE).forEach(pool => {
+          pool.forEach(text => {
+            expect(typeof text).toBe('string');
+            expect(text.length).toBeGreaterThan(0);
+          });
+        });
+      });
+    });
+
+    describe('ENDLESS_LOOP_MILESTONES', () => {
+      it('should have generic pool with multiple entries', () => {
+        expect(ENDLESS_LOOP_MILESTONES.generic.length).toBeGreaterThanOrEqual(3);
+      });
+
+      it('should have milestone text for key loops', () => {
+        [3, 5, 7, 10, 15, 25].forEach(loop => {
+          expect(typeof ENDLESS_LOOP_MILESTONES[loop]).toBe('string');
+          expect(ENDLESS_LOOP_MILESTONES[loop].length).toBeGreaterThan(0);
+        });
+      });
+    });
+
+    describe('ENDLESS_DEFEAT_FOOTER', () => {
+      it('should have multiple footer entries', () => {
+        expect(ENDLESS_DEFEAT_FOOTER.length).toBeGreaterThanOrEqual(3);
+        ENDLESS_DEFEAT_FOOTER.forEach(text => {
+          expect(typeof text).toBe('string');
+          expect(text.length).toBeGreaterThan(0);
+        });
+      });
+    });
+
+    describe('getBossDialogue with endless loop', () => {
+      const bosses = ['slimeBoss', 'theGuardian', 'hexaghost', 'theChamp', 'awakened_one', 'timeEater', 'corruptHeart'];
+
+      it('should return base dialogue when endlessLoop is 0', () => {
+        bosses.forEach(bossId => {
+          const dialogue = getBossDialogue(bossId, 'ironclad', 0);
+          expect(dialogue.intro).toBe(BOSS_DIALOGUE[bossId].intro);
+        });
+      });
+
+      it('should return base dialogue when endlessLoop is 1', () => {
+        bosses.forEach(bossId => {
+          const dialogue = getBossDialogue(bossId, 'ironclad', 1);
+          expect(dialogue.intro).toBe(BOSS_DIALOGUE[bossId].intro);
+        });
+      });
+
+      it('should return endless early dialogue at loop 2+', () => {
+        bosses.forEach(bossId => {
+          const dialogue = getBossDialogue(bossId, 'ironclad', 2);
+          // All bosses have early tier endless dialogue
+          expect(dialogue.intro).not.toBe(BOSS_DIALOGUE[bossId].intro);
+        });
+      });
+
+      it('should return endless mid intro overrides at loop 5+ for bosses that have them', () => {
+        // theChamp and timeEater mid tier only have midFight overrides
+        const bossesWithMidIntro = ['slimeBoss', 'theGuardian', 'hexaghost', 'awakened_one', 'corruptHeart'];
+        bossesWithMidIntro.forEach(bossId => {
+          const dialogue = getBossDialogue(bossId, 'ironclad', 5);
+          expect(dialogue.intro).not.toBe(BOSS_DIALOGUE[bossId].intro);
+        });
+      });
+
+      it('should return endless mid midFight overrides at loop 5+', () => {
+        ['theChamp', 'timeEater'].forEach(bossId => {
+          const dialogue = getBossDialogue(bossId, 'ironclad', 5);
+          expect(dialogue.midFight).not.toBe(BOSS_DIALOGUE[bossId].midFight);
+        });
+      });
+
+      it('should return endless deep dialogue at loop 10+ for bosses that have it', () => {
+        const dialogue = getBossDialogue('corruptHeart', 'ironclad', 10);
+        expect(dialogue.intro).not.toBe(BOSS_DIALOGUE.corruptHeart.intro);
+      });
+
+      it('should apply endless overrides on top of character overrides', () => {
+        const silentBase = getBossDialogue('corruptHeart', 'silent', 0);
+        const silentEndless = getBossDialogue('corruptHeart', 'silent', 5);
+        // Endless overrides character dialogue
+        expect(silentEndless.intro).not.toBe(silentBase.intro);
+      });
     });
   });
 });

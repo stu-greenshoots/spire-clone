@@ -35,7 +35,9 @@ export const GAME_PHASE = {
   CARD_SELECT_HAND: 'card_select_hand',
   CARD_SELECT_DISCARD: 'card_select_discard',
   CARD_SELECT_EXHAUST: 'card_select_exhaust',
-  CARD_SELECT_DRAW: 'card_select_draw'
+  CARD_SELECT_DRAW: 'card_select_draw',
+  // Endless mode
+  ENDLESS_TRANSITION: 'endless_transition'
 };
 
 // Initial game state
@@ -133,7 +135,12 @@ export const createInitialState = () => ({
   // Daily challenge state (null when not in a daily challenge)
   dailyChallenge: null,
   // Character ID (e.g., 'ironclad', 'silent')
-  character: null
+  character: null,
+  // Endless mode state
+  endlessMode: false,
+  endlessLoop: 0,
+  // Custom seeded run (null when not seeded)
+  customSeed: null
 });
 
 // Re-export combat calculation functions for testing (implementations in combatSystem.js)
@@ -286,6 +293,14 @@ const gameReducer = (state, action) => {
       return metaReducer(state, action);
     }
 
+    case 'DISMISS_ACHIEVEMENT_TOAST': {
+      return metaReducer(state, action);
+    }
+
+    case 'ENTER_ENDLESS': {
+      return mapReducer(state, action);
+    }
+
     default:
       return state;
   }
@@ -299,8 +314,8 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'START_GAME', payload: { ascensionLevel } });
   }, []);
 
-  const selectCharacter = useCallback((characterId) => {
-    dispatch({ type: 'SELECT_CHARACTER', payload: { characterId } });
+  const selectCharacter = useCallback((characterId, customSeed = null) => {
+    dispatch({ type: 'SELECT_CHARACTER', payload: { characterId, customSeed } });
   }, []);
 
   const startDailyChallenge = useCallback((challenge) => {
@@ -423,8 +438,16 @@ export const GameProvider = ({ children }) => {
     dispatch({ type: 'SELECT_STARTING_BONUS', payload: { bonusId } });
   }, []);
 
+  const enterEndless = useCallback(() => {
+    dispatch({ type: 'ENTER_ENDLESS' });
+  }, []);
+
   const loadScenario = useCallback((scenario) => {
     dispatch({ type: 'LOAD_SCENARIO', payload: scenario });
+  }, []);
+
+  const dismissAchievementToast = useCallback(() => {
+    dispatch({ type: 'DISMISS_ACHIEVEMENT_TOAST' });
   }, []);
 
   const value = {
@@ -461,7 +484,9 @@ export const GameProvider = ({ children }) => {
     usePotion,
     discardPotion,
     selectStartingBonus,
-    loadScenario
+    enterEndless,
+    loadScenario,
+    dismissAchievementToast
   };
 
   return (

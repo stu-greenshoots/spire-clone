@@ -1,3 +1,38 @@
+# AR Diary - Sprint 16
+
+## Sprint 16 Entries
+
+### AR-18: Endless Mode Audio — Escalating Intensity, Milestone Fanfare, Endless Death SFX
+**Date:** 2026-02-01
+**Status:** Complete, PR #206 merged
+**Sprint:** Sprint 16 (Endless Mode, Custom Runs, Performance & QoL)
+**Task:** AR-18 (Endless mode audio — S size, P1)
+
+**Done:**
+1. Added 3 new SOUNDS entries: `combat.milestoneFanfare` ('milestone_fanfare'), `combat.endlessDeath` ('endless_death'), `ambient.endless` ('ambient_endless')
+2. Generated 3 new MP3 files via ffmpeg synthesis, normalized to EBU R128 (-14 LUFS, -1 dB TP)
+3. Wired milestone fanfare SFX on EndlessTransition mount (plays on loop completion/Heart defeat)
+4. Wired endless-specific death SFX on GameOverScreen mount when `endlessMode` is active
+5. Updated App.jsx ambient layer: switches to endless ambient when in endless mode, falls back to act-based ambient otherwise
+6. 7 new tests (3228 total passing), lint clean, build clean
+
+**Sound design:**
+- milestone_fanfare.mp3: Rising arpeggio (C5-E5-G5-C6), 1.5s, triumphant feel
+- endless_death.mp3: Descending 220Hz with vibrato, pitch-shifted down, lowpass, 2s dramatic
+- ambient_endless.mp3: Brown noise + 55Hz sine rumble, lowpass 1500Hz, 12s loop
+
+**Acceptance criteria:**
+- [x] Milestone fanfare plays on EndlessTransition screen mount
+- [x] Endless death SFX plays on GameOverScreen when in endless mode
+- [x] Endless ambient loop plays during endless mode gameplay
+- [x] Normal act ambients still play in non-endless gameplay
+- [x] npm run validate passes (3228 tests, 0 errors)
+
+**Blockers:** None
+**Next:** All AR Sprint 16 tasks complete.
+
+---
+
 # AR Diary - Sprint 15
 
 ## Sprint 15 Entries

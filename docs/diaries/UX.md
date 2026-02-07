@@ -15,6 +15,53 @@ UX Guy - Combat feedback, tooltips, visual polish
 
 ## Entries
 
+### Sprint 16 - UX-34 Complete
+**Date:** 2026-02-01
+**Status:** UX-34 DONE (PR #207)
+
+**What I did:**
+- Achievement notification toasts — slide-in from top-right on achievement unlock
+- Shows "Achievement Unlocked" header, achievement name (gold), and description
+- Auto-dismisses after 3s (1.5s on instant speed), queues multiple achievements
+- Plays milestone fanfare SFX on unlock
+- Wired through metaReducer: detects new achievements, stores in pendingAchievements
+- Fixed setTimeout cleanup in review
+- 6 new tests (3234 total passing), lint clean, build clean
+
+**Sprint 16 UX status:** UX-12, UX-33, UX-34 all done. No remaining UX tasks.
+
+---
+
+### Sprint 16 - UX-12 Complete
+**Date:** 2026-02-01
+**Status:** UX-12 DONE (PR #201)
+
+**What I did:**
+- Smart card targeting — non-targeting cards (skills, powers, target-all attacks, single-enemy attacks) now play immediately on single tap (mobile) or click (desktop)
+- Only multi-enemy attack cards enter targeting mode (double-tap on mobile)
+- Desktop cursor updated: pointer for non-targeting cards, grab for targeting cards
+- Mobile tap hint updated to "Tap again to target with" for clarity
+- 10 new tests for selectCardAction smart targeting behavior
+- 2 files changed, +114/-11 lines
+
+**Sprint 16 UX status:** UX-12 done, UX-33 done. UX-34 (achievement toasts) is P2 stretch.
+
+---
+
+### Sprint 16 - UX-33 Complete
+**Date:** 2026-02-01
+**Status:** UX-33 DONE (PR #198)
+
+**What I did:**
+- Added endless mode indicators to PersistentHeader — loop number and scaling percentage (+N%) in both compact mobile and full desktop views
+- Enhanced GameOverScreen for endless mode — purple theme, unique title ("THE ENDLESS CLAIMS YOU"), loop/scaling stats, enemies killed, damage dealt, and narrative footer text ("You held on for X loops. The war forgets your name.")
+- 5 new tests for endless UI state, death screen data, footer text formatting
+- 3 files changed, 117 insertions, 9 deletions
+
+**Sprint 16 UX status:** UX-33 done. UX-12 (smart card targeting) remaining as P0.
+
+---
+
 ### Sprint 15 - UX-32 Complete
 **Date:** 2026-02-01
 **Status:** UX-32 DONE (PR #194)

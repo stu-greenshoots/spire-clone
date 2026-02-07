@@ -499,6 +499,142 @@ export const ALL_RELICS = [
     effect: { type: 'energyBonus', amount: 1, cardLimit: 6 }
   },
 
+  // ========== CHARACTER-SPECIFIC ==========
+  // Ironclad relics
+  {
+    id: 'mark_of_pain',
+    name: 'Mark of Pain',
+    rarity: RELIC_RARITY.UNCOMMON,
+    description: 'At the start of each combat, gain 2 Strength.',
+    emoji: '🩹',
+    trigger: 'onCombatStart',
+    effect: { type: 'strength', amount: 2 },
+    character: 'ironclad'
+  },
+  {
+    id: 'charred_glove',
+    name: 'Charred Glove',
+    rarity: RELIC_RARITY.UNCOMMON,
+    description: 'Every 5th Attack you play deals 8 damage to ALL enemies.',
+    emoji: '🧤',
+    trigger: 'onAttackPlayed',
+    counter: 0,
+    threshold: 5,
+    effect: { type: 'damageAll', amount: 8 },
+    character: 'ironclad'
+  },
+  {
+    id: 'blood_oath',
+    name: 'Blood Oath',
+    rarity: RELIC_RARITY.RARE,
+    description: 'At the end of combat, if HP is at or below 50%, heal 10 HP.',
+    emoji: '🫀',
+    trigger: 'onCombatEnd',
+    effect: { type: 'healIfLowHp', amount: 10, threshold: 0.5 },
+    character: 'ironclad'
+  },
+
+  // Silent relics
+  {
+    id: 'envenom_ring',
+    name: 'Envenom Ring',
+    rarity: RELIC_RARITY.UNCOMMON,
+    description: 'At the start of each combat, apply 2 Weak to ALL enemies.',
+    emoji: '💍',
+    trigger: 'onCombatStart',
+    effect: { type: 'weak', amount: 2, targetAll: true },
+    character: 'silent'
+  },
+  {
+    id: 'wrist_blade',
+    name: 'Wrist Blade',
+    rarity: RELIC_RARITY.UNCOMMON,
+    description: 'Every 2nd Skill you play grants 1 Dexterity.',
+    emoji: '🔪',
+    trigger: 'onSkillPlayed',
+    counter: 0,
+    threshold: 2,
+    effect: { type: 'dexterity', amount: 1 },
+    character: 'silent'
+  },
+  {
+    id: 'cloak_of_shadows',
+    name: 'Cloak of Shadows',
+    rarity: RELIC_RARITY.RARE,
+    description: 'At the start of each combat, gain 12 Block.',
+    emoji: '🧥',
+    trigger: 'onCombatStart',
+    effect: { type: 'block', amount: 12 },
+    character: 'silent'
+  },
+
+  // Defect relics
+  {
+    id: 'capacitor_coil',
+    name: 'Capacitor Coil',
+    rarity: RELIC_RARITY.UNCOMMON,
+    description: 'At the start of each combat, Channel 1 Frost orb.',
+    emoji: '🌀',
+    trigger: 'onCombatStart',
+    effect: { type: 'channelOrb', orbType: 'frost' },
+    character: 'defect'
+  },
+  {
+    id: 'data_disk',
+    name: 'Data Disk',
+    rarity: RELIC_RARITY.UNCOMMON,
+    description: 'At the start of each combat, gain 1 Strength and 1 Dexterity.',
+    emoji: '💾',
+    trigger: 'onCombatStart',
+    effect: { type: 'strengthAndDexterity', amount: 1 },
+    character: 'defect'
+  },
+  {
+    id: 'emotion_chip',
+    name: 'Emotion Chip',
+    rarity: RELIC_RARITY.RARE,
+    description: 'The first time you lose HP each combat, gain 3 Block and draw 2 cards.',
+    emoji: '🤖',
+    trigger: 'onFirstHpLoss',
+    effect: { type: 'blockAndDraw', blockAmount: 3, drawAmount: 2 },
+    usedThisCombat: false,
+    character: 'defect'
+  },
+
+  // Watcher relics
+  {
+    id: 'damaru',
+    name: 'Damaru',
+    rarity: RELIC_RARITY.UNCOMMON,
+    description: 'At the start of each combat, gain 1 Energy.',
+    emoji: '🪘',
+    trigger: 'onCombatStart',
+    effect: { type: 'energy', amount: 1 },
+    character: 'watcher'
+  },
+  {
+    id: 'golden_eye',
+    name: 'Golden Eye',
+    rarity: RELIC_RARITY.UNCOMMON,
+    description: 'At the start of each combat, draw 1 additional card.',
+    emoji: '👁️',
+    trigger: 'onCombatStart',
+    effect: { type: 'draw', amount: 1 },
+    character: 'watcher'
+  },
+  {
+    id: 'duality',
+    name: 'Duality',
+    rarity: RELIC_RARITY.RARE,
+    description: 'Every 4th Attack you play grants 8 Block.',
+    emoji: '☯️',
+    trigger: 'onAttackPlayed',
+    counter: 0,
+    threshold: 4,
+    effect: { type: 'block', amount: 8 },
+    character: 'watcher'
+  },
+
   // ========== SHOP ==========
   {
     id: 'membership_card',
@@ -524,12 +660,13 @@ export const ALL_RELICS = [
 
 export const getRelicById = (id) => ALL_RELICS.find(r => r.id === id);
 
-export const getRandomRelic = (rarity = null, excludeIds = []) => {
+export const getRandomRelic = (rarity = null, excludeIds = [], characterId = null) => {
   let relics = ALL_RELICS.filter(r =>
     r.rarity !== RELIC_RARITY.STARTER &&
     r.rarity !== RELIC_RARITY.BOSS &&
     r.rarity !== RELIC_RARITY.SHOP &&
-    !excludeIds.includes(r.id)
+    !excludeIds.includes(r.id) &&
+    (!r.character || r.character === characterId)
   );
   if (rarity) relics = relics.filter(r => r.rarity === rarity);
   return relics[Math.floor(Math.random() * relics.length)];

@@ -63,7 +63,10 @@ export const saveGame = (state) => {
         currentNode: state.currentNode,
         ascension: state.ascension || 0,
         phase: state.phase || null,
-        character: state.character || 'ironclad'
+        character: state.character || 'ironclad',
+        endlessMode: state.endlessMode || false,
+        endlessLoop: state.endlessLoop || 0,
+        customSeed: state.customSeed || null
       }
     };
     // Simple checksum for corruption detection
@@ -272,7 +275,8 @@ export const addRunToHistory = (runData) => {
       enemiesKilled: runData.enemiesKilled || 0,
       elitesKilled: runData.elitesKilled || 0,
       bossesKilled: runData.bossesKilled || 0,
-      duration: runData.duration || 0
+      duration: runData.duration || 0,
+      seed: runData.seed || null
     });
     // Keep only last 20
     const trimmed = history.slice(0, 20);

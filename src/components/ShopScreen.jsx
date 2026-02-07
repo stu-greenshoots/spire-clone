@@ -30,7 +30,7 @@ const ShopScreen = () => {
     const rareCard = getRandomCard(RARITY.RARE);
     if (rareCard) cards.push({ ...rareCard, price: 150 + Math.floor(Math.random() * 50), bought: false });
 
-    const relic = getRandomRelic(RELIC_RARITY.UNCOMMON, purchasedRelics.map(r => r.id));
+    const relic = getRandomRelic(RELIC_RARITY.UNCOMMON, purchasedRelics.map(r => r.id), state.character);
     const removal = { type: 'removal', price: 75 };
 
     // 2 potions: 1 common, 1 uncommon
@@ -41,7 +41,7 @@ const ShopScreen = () => {
     if (uncommonPotion) shopPotions.push({ ...uncommonPotion, price: 75 + Math.floor(Math.random() * 50), bought: false });
 
     return { cards, relic: relic ? { ...relic, price: 150 + Math.floor(Math.random() * 50), bought: false } : null, potions: shopPotions, removal };
-  }, [purchasedRelics]);
+  }, [purchasedRelics, state.character]);
 
   const [shopState, setShopState] = useState(shopItems);
 

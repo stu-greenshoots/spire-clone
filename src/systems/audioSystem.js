@@ -30,7 +30,9 @@ export const SOUNDS = {
     orbPlasma: 'orb_plasma',
     orbEvoke: 'orb_evoke',
     stanceTransition: 'stance_transition',
-    mantraTick: 'mantra_tick'
+    mantraTick: 'mantra_tick',
+    milestoneFanfare: 'milestone_fanfare',
+    endlessDeath: 'endless_death'
   },
   ui: {
     buttonClick: 'ui_click',
@@ -49,7 +51,8 @@ export const SOUNDS = {
     act1: 'ambient_act1',
     act2: 'ambient_act2',
     act3: 'ambient_act3',
-    act4: 'ambient_act4'
+    act4: 'ambient_act4',
+    endless: 'ambient_endless'
   },
   music: {
     menu: 'music_menu',

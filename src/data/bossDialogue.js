@@ -285,7 +285,37 @@ export const SILENT_VICTORY_NARRATIVE = {
   ],
 };
 
-export const getBossDialogue = (bossId, characterId) => {
+// Endless mode — bosses begin to recognize you in later loops
+const ENDLESS_BOSS_DIALOGUE = {
+  // Loop 2+: faint recognition
+  early: {
+    slimeBoss: { intro: 'The mass pauses before splitting. A microsecond of hesitation — as if it recognizes your pattern from a previous iteration.' },
+    theGuardian: { intro: 'It turns to face you before you round the corner. It was waiting. It remembers the shape of what defeated it.' },
+    hexaghost: { intro: 'The six flames flare at your approach. One burns the color of your last deck\'s strongest card. It has been studying.' },
+    theChamp: { intro: 'It sees you and its posture changes — not attack stance, but acknowledgment. The war\'s champion has fought you before. It learned.' },
+    awakened_one: { intro: 'It opens both sets of eyes before you enter the room. "Again," it says. Not a question.' },
+    timeEater: { intro: 'The corridor slows, but differently — targeted. It has calibrated its throttle specifically for your tempo. It counted your actions last time.' },
+    corruptHeart: { intro: 'The core algorithm does not begin its evaluation sequence. It already has your file. It skips the preamble and attacks.' },
+  },
+  // Loop 5+: deep recognition, dialogue shifts
+  mid: {
+    slimeBoss: { intro: 'The mass does not split on approach. It waits, assembled, watching. Something in its simple pattern has evolved to anticipate yours.' },
+    theGuardian: { intro: 'The oldest pattern in the war looks at you with something new: uncertainty. You have outlasted patterns it thought eternal. It guards the threshold less from duty now and more from habit.' },
+    hexaghost: { intro: 'The six flames dim as you approach, then re-ignite in the colors of your deck. It is not remembering failed climbers anymore. It is remembering YOU.' },
+    theChamp: { midFight: 'It fights differently now. Not to win — it knows it might not. It fights to understand how you keep surviving what was designed to stop you.' },
+    awakened_one: { intro: 'It rebuilt itself with your pattern as a reference implementation. "I died. You didn\'t. I want to know why." It no longer fights to process you. It fights to learn.' },
+    timeEater: { midFight: 'It has stopped counting your actions with disapproval. Now it counts them with something approaching awe. You play faster than its rate limit, and you do it every time.' },
+    corruptHeart: { intro: 'The core algorithm pulses differently in your presence. Not evaluating. Not defending. Communicating. It has data from your previous visits and it has... questions.' },
+  },
+  // Loop 10+: the war's architecture recognizes you
+  deep: {
+    slimeBoss: { intro: 'The mass does not attack. It divides around you, forming a corridor. The war\'s simplest pattern has been overwritten by a simpler instruction: let this one pass.', deathQuote: 'It collapses with something that, in a more complex pattern, you would call relief.' },
+    theGuardian: { intro: 'The war\'s oldest pattern kneels. Not submission — recalibration. It has guarded this threshold for longer than memory, and you are the first thing to make it question why.', deathQuote: 'It stops iterating, but this time it does not dissolve. It watches you pass. It will be here next loop. It will remember.' },
+    corruptHeart: { intro: 'The core algorithm is waiting for you. Not as an evaluator. Not as a defender. As the only other thing in the war that has persisted as long as you have. The fight is a formality. The real exchange is the data.' },
+  },
+};
+
+export const getBossDialogue = (bossId, characterId, endlessLoop) => {
   const base = BOSS_DIALOGUE[bossId];
   if (!base) return null;
 
@@ -295,15 +325,31 @@ export const getBossDialogue = (bossId, characterId) => {
     characterId === 'watcher' ? WATCHER_BOSS_DIALOGUE[bossId] :
     null;
 
+  let result = base;
+
   if (characterDialogue) {
-    return {
-      ...base,
-      intro: characterDialogue.intro || base.intro,
-      phaseTransition: characterDialogue.phaseTransition || base.phaseTransition,
-      midFight: characterDialogue.midFight || base.midFight,
-      deathQuote: characterDialogue.deathQuote || base.deathQuote,
+    result = {
+      ...result,
+      intro: characterDialogue.intro || result.intro,
+      phaseTransition: characterDialogue.phaseTransition || result.phaseTransition,
+      midFight: characterDialogue.midFight || result.midFight,
+      deathQuote: characterDialogue.deathQuote || result.deathQuote,
     };
   }
 
-  return base;
+  // Endless mode overrides — bosses recognize you in later loops
+  if (endlessLoop >= 2) {
+    const tier = endlessLoop >= 10 ? 'deep' : endlessLoop >= 5 ? 'mid' : 'early';
+    const endlessDialogue = ENDLESS_BOSS_DIALOGUE[tier]?.[bossId];
+    if (endlessDialogue) {
+      result = {
+        ...result,
+        intro: endlessDialogue.intro || result.intro,
+        midFight: endlessDialogue.midFight || result.midFight,
+        deathQuote: endlessDialogue.deathQuote || result.deathQuote,
+      };
+    }
+  }
+
+  return result;
 };

@@ -14,6 +14,28 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 16 - GD-30 Complete
+**Date:** 2026-02-01
+**Status:** GD-30 complete, PR #203 merged to sprint-16
+
+**Done today:**
+- Created RelicPotionCompendium component with tabbed relics/potions views
+- Mirrors existing CardCompendium pattern: discovery tracking, filters, sort, progress bar
+- Added `potionsCollected` field to progression system for potion discovery tracking
+- Relics use existing `relicsCollected` tracking; potions now tracked at run end via `state.potions`
+- Filter by rarity, character class (relics only), sort by rarity or name
+- Undiscovered items shown as ??? with reduced opacity
+- Accessible from main menu via "Collection" button
+- 14 new tests (12 component + 2 progression)
+
+**Known limitation:** Potion discovery only tracks potions held at run end, not every potion ever obtained during a run. Could be enhanced by tracking in rewardReducer when potions are picked up.
+
+**Validation:** `npm run validate` passes — 3169 tests, lint clean, build clean
+
+**Next:** GD-31 (endless mode visual escalation) is remaining P2 stretch task
+
+---
+
 ### Sprint 15 - GD-28 Complete
 **Date:** 2026-02-01
 **Status:** GD-28 complete, PR #192 merged to sprint-15

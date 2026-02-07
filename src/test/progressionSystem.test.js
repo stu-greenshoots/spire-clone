@@ -251,6 +251,36 @@ describe('progressionSystem', () => {
       expect(updated.relicsCollected.vajra).toBe(true);
     });
 
+    it('tracks collected potions', () => {
+      const progression = loadProgression();
+      const runData = {
+        won: true,
+        floor: 20,
+        potions: [
+          { id: 'fire_potion' },
+          null,
+          { id: 'health_potion' }
+        ]
+      };
+
+      const updated = updateRunStats(progression, runData);
+
+      expect(updated.potionsCollected.fire_potion).toBe(true);
+      expect(updated.potionsCollected.health_potion).toBe(true);
+    });
+
+    it('handles null potion slots when tracking potions', () => {
+      const progression = loadProgression();
+      const runData = {
+        won: false,
+        floor: 10,
+        potions: [null, null, null]
+      };
+
+      const updated = updateRunStats(progression, runData);
+      expect(Object.keys(updated.potionsCollected).length).toBe(0);
+    });
+
     it('adds run to history (most recent first)', () => {
       const progression = loadProgression();
       const runData = {
