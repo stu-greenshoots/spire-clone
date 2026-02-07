@@ -14,6 +14,34 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-06 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 5/15 tasks done
+
+**Done:**
+- Implemented as GD: QR-06 Visual Asset Audit
+  - Comprehensive catalog of all 327 visual assets
+  - Created `docs/ASSET_AUDIT.md` with complete inventory
+  - Identified 15 missing relic art files (character-specific relics from Sprint 16)
+  - Categorized 20 placeholder enemy sprites (3-5KB gradients)
+  - Categorized 101 placeholder card art images (under 5KB)
+  - Documented priority replacements for QR-11
+- Merged PR #216, updated sprint board and GD diary
+
+**Sprint 17 Progress:** 5/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+
+**Next P0 tasks:**
+- QR-10: Bug Fix Sprint (ALL) — now unblocked by QR-06, QR-07
+- QR-08: Audio Audit (AR) — P1 parallel work
+- QR-09: Enemy Behavior Verification (QA/JR) — P1 parallel work
+
+---
+
 ### Sprint 17 — QR-07 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 4/15 tasks done
