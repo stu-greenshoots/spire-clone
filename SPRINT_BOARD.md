@@ -852,7 +852,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
-| VP-01 | GD | L | P0 | Act 1 Boss Sprite Replacement (Slime Boss, Guardian, Hexaghost) | PENDING |
+| VP-01 | GD | L | P0 | Act 1 Boss Sprite Replacement (Slime Boss, Guardian, Hexaghost) | MERGED (PR #229) |
 | VP-02 | GD | M | P0 | Act 1 Elite Sprite Replacement (Gremlin Nob, Lagavulin) | PENDING |
 | VP-03 | GD | M | P1 | Common Enemy Sprite Replacement (Cultist, Jaw Worm, etc.) | PENDING |
 | VP-04 | GD | M | P1 | Character-Specific Relic Art (15 missing relics) | PENDING |
@@ -881,7 +881,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 ### Sprint 18 Validation Gate
 
 **P0 (Must Pass)**
-- [ ] All 3 Act 1 boss sprites are quality art (>30KB each)
+- [x] All 3 Act 1 boss sprites are quality art (>30KB each)
 - [ ] All 2 Act 1 elite sprites are quality art (>30KB each)
 - [x] Keyboard-only combat playthrough verified for all 4 characters
 - [x] DevTools fullPlaythrough completes for all 4 characters

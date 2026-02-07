@@ -14,6 +14,36 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 
 ## Entries
 
+### Sprint 18 - VP-01 Complete
+**Date:** 2026-02-07
+**Status:** VP-01 complete, PR #229 merged to sprint-18
+
+**Done today:**
+- Replaced Act 1 boss sprites with high-quality art meeting >30KB requirement
+- Created `scripts/generate-boss-art-vp01.js` for reproducible generation
+
+**Assets replaced:**
+
+| Asset Type | ID | Old Size | New Size | Description |
+|------------|-----|----------|----------|-------------|
+| Enemy | slimeBoss | 9.3KB | 47KB | Act 1 boss — massive toxic blob with multiple eyes, dripping slime |
+| Enemy | theGuardian | 6.0KB | 47KB | Act 1 boss — towering stone construct with glowing gem core |
+| Enemy | hexaghost | 7.5KB | 52KB | Act 1 boss — six spectral flames orbiting skull core |
+
+**Technical approach:**
+- 768px SVG canvas rendered to 512px for anti-aliasing
+- Dense noise patterns (600 elements) for rich textures
+- Near-lossless WebP compression (quality 100)
+- Multiple organic blob layers for Slime Boss
+- Layered stone textures and rivets for Guardian
+- Six orbiting flame shapes with energy connections for Hexaghost
+
+**Validation:** `npm run validate` passes — 3747 tests, lint clean, build clean
+
+**Next:** VP-02 (Act 1 Elite Sprites) is next P0 task
+
+---
+
 ### Sprint 17 - QR-11 Complete
 **Date:** 2026-02-07
 **Status:** QR-11 complete, PR pending to sprint-17

@@ -14,6 +14,42 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 18 — VP-01 Complete
+**Date:** 2026-02-07
+**Status:** 4/15 tasks complete
+
+**Done:**
+- Completed VP-01: Act 1 Boss Sprite Replacement (GD)
+  - slimeBoss.webp: 9KB → 47KB (massive toxic blob with eyes)
+  - theGuardian.webp: 6KB → 47KB (stone construct with gem core)
+  - hexaghost.webp: 8KB → 52KB (six spectral flames)
+  - All 3 sprites now >30KB (acceptance criteria met)
+  - Created `scripts/generate-boss-art-vp01.js` for reproducible generation
+  - Rebuilt enemy sprite sheet (1.56MB)
+
+**Sprint 18 Progress:** 4/15 tasks complete
+- [x] VP-07: Keyboard-Only Playthrough Verification (QA/UX) — MERGED (PR #227)
+- [x] VP-08: DevTools Full Playthrough Test (QA) — DONE
+- [x] VP-09: Honest Self-Assessment (PM/QA) — DONE
+- [x] VP-01: Act 1 Boss Sprite Replacement (GD) — MERGED (PR #229)
+- [ ] VP-02: Act 1 Elite Sprite Replacement (GD) — PENDING
+
+**Validation Gate Progress:**
+- [x] All 3 Act 1 boss sprites are quality art (>30KB each)
+- [x] Keyboard-only combat playthrough verified for all 4 characters
+- [x] DevTools fullPlaythrough completes for all 4 characters
+- [x] Honest self-assessment document created
+- [x] `npm run validate` passes (3747 tests)
+
+**Urgent Items Status:**
+- ✅ Mobile controls regression → FIXED (PR #228)
+- Card art not displaying → Needs GD/BE investigation (deferred, not blocking sprint tasks)
+- Audio quality issues → Needs AR investigation (deferred, not blocking sprint tasks)
+
+**Next:** VP-02 (Act 1 Elite Sprites) — next P0 art task
+
+---
+
 ### Sprint 18 — VP-09 Complete
 **Date:** 2026-02-07
 **Status:** 3/15 tasks complete
