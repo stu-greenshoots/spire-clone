@@ -12,8 +12,16 @@ export const test = base.extend({
 
   gameActions: async ({ page }, use) => {
     const actions = {
-      startNewGame: async () => {
+      startNewGame: async (character = 'ironclad') => {
         await page.click(SELECTORS.newGameButton);
+
+        // Handle character selection screen
+        const charBtn = page.locator(`[data-testid="btn-select-${character}"]`);
+        await charBtn.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+        if (await charBtn.isVisible().catch(() => false)) {
+          await charBtn.click();
+        }
+
         // Skip starting bonus to go straight to map
         const skipBtn = page.locator('[data-testid="bonus-skip"]');
         await skipBtn.waitFor({ timeout: 3000 }).catch(() => {});

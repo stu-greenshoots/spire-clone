@@ -1,4 +1,4 @@
-# UX Diary - Sprint 17
+# UX Diary - Sprint 18
 
 ## Role
 UX Guy - Combat feedback, tooltips, visual polish
@@ -7,11 +7,41 @@ UX Guy - Combat feedback, tooltips, visual polish
 `src/components/CombatScreen.jsx`, `src/components/AnimationOverlay.jsx`, `src/hooks/useAnimations.js`, `src/hooks/useKeyboardControls.js`
 
 ## Current Sprint Tasks
-- QR-01: Keyboard combat controls (P0) — DONE
+- UX-URGENT: Mobile controls fix — DONE (PR #228)
 
 ---
 
 ## Entries
+
+### Sprint 18 — Mobile Controls Fix (URGENT)
+**Date:** 2026-02-07
+**Status:** DONE (PR #228)
+
+**What I did:**
+- Fixed mobile controls regression reported in PM diary as URGENT
+- Restored drag-and-drop on mobile — wired touch events to drag handlers
+- Simplified targeting flow — single tap on attack card now enters targeting mode immediately
+- Added 10px drag movement threshold to distinguish tap from drag gesture
+- Removed dead `mobileSelectedCard` state and associated UI code
+
+**Technical notes:**
+- `handleDragStart` now records start position in `dragStartPosition` ref
+- `handleDragMove` tracks if user has moved >10px from start (`hasDragMoved` ref)
+- `handleDragEnd` returns early if `!hasDragMoved` — lets onClick handle tap
+- Touch flow: touchstart → (optional touchmove) → touchend → onClick fires if no drag
+- Drag flow: touchstart → touchmove (>10px) → touchend → card plays to target
+
+**User feedback addressed:**
+- ✅ Drag and drop works (drag card to enemy/self to play)
+- ✅ Single tap card → tap target (no intermediate click needed)
+- ✅ Targeting flow no longer clunky
+
+**Testing:**
+- 3747 tests passing
+- Lint clean (0 errors)
+- Build passing
+
+---
 
 ### Sprint 17 - QR-01 Complete
 **Date:** 2026-02-07

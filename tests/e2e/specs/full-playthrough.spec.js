@@ -260,7 +260,8 @@ test.describe('Full Playthrough E2E', () => {
       await characterSelectBtn.click();
 
       // Wait for character selection screen
-      const characterBtn = gamePage.locator(`[data-testid="character-${character}"]`);
+      // Character buttons use data-testid="btn-select-{character}" format
+      const characterBtn = gamePage.locator(`[data-testid="btn-select-${character}"]`);
       await characterBtn.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
 
       // If character selection screen is visible, select character

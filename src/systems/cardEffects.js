@@ -850,13 +850,29 @@ const cardSelectionEffects = {
 
   upgradeInHand: (card, ctx) => {
     const upgradableInHand = ctx.hand.filter(c => !c.upgraded && c.upgradedVersion);
+
+    // Armaments+ (upgradeAll): immediately upgrade all cards, no selection needed
+    if (card.upgradeAll) {
+      ctx.hand = ctx.hand.map(c => {
+        if (!c.upgraded && c.upgradedVersion) {
+          return { ...c, ...c.upgradedVersion, upgraded: true, name: c.name + '+' };
+        }
+        return c;
+      });
+      if (upgradableInHand.length > 0) {
+        ctx.combatLog.push('Armaments+ upgraded all cards in hand');
+      }
+      return null;
+    }
+
+    // Armaments (not upgraded): show selection if there are upgradable cards
     if (upgradableInHand.length > 0) {
       return {
         earlyReturn: true,
         earlyReturnState: {
           ...ctx.state,
           phase: ctx.GAME_PHASE.CARD_SELECT_HAND,
-          cardSelection: { type: 'upgradeInHand', sourceCard: card, upgradeAll: card.upgradeAll },
+          cardSelection: { type: 'upgradeInHand', sourceCard: card, upgradeAll: false },
           player: ctx.player,
           enemies: ctx.enemies,
           hand: ctx.hand,
@@ -868,15 +884,8 @@ const cardSelectionEffects = {
           combatLog: ctx.combatLog
         }
       };
-    } else if (card.upgradeAll) {
-      ctx.hand = ctx.hand.map(c => {
-        if (!c.upgraded && c.upgradedVersion) {
-          return { ...c, ...c.upgradedVersion, upgraded: true, name: c.name + '+' };
-        }
-        return c;
-      });
-      ctx.combatLog.push('Armaments+ upgraded all cards in hand');
     }
+
     return null;
   },
 

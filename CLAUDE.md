@@ -198,23 +198,23 @@ localStorage.removeItem('spireAscent_customData')
 12. **NEVER auto-merge PRs.** Wait for Copilot review → address findings → wait for Mentor approval → then merge.
 13. **Honest assessment.** No inflated scores. Report what's broken, not what passes.
 
-## Current State (Sprint 17 - Quality Reality)
+## Current State (Sprint 18 - Visual Polish & Ship Readiness)
 
-- **Branch:** `sprint-17` (create from master)
-- **Previous Sprint:** Sprint 16 COMPLETE (14 tasks, 3264 tests, Endless Mode + Custom Runs)
-- **Tests:** 3264 passing (75 test files)
+- **Branch:** `sprint-18` (create from master)
+- **Previous Sprint:** Sprint 17 COMPLETE (15 tasks, 3730 tests, Zero bugs found)
+- **Tests:** 3730 passing (75 test files)
 - **Lint:** 0 errors
-- **Build:** Passing (865ms)
+- **Build:** Passing (~940ms)
 - **Bundle:** Code-split, no chunk >200KB, total JS ~700KB
-- **Content:** 4 characters, 157+ cards, 40+ enemies, 49 relics, 15 potions, 4 acts + Heart
-- **Features:** Endless mode, daily challenges, custom seeded runs, compendium, run history
-- **Sprint 17 Focus:** Quality — testability, honest QA, bug fixing, architecture hardening. NO new features.
-- **Sprint Plan:** See `SPRINT_17_PLAN.md` (15 QR tasks across 4 parallel work streams)
-- **Ship Date:** Pushed back. Quality is the only priority.
+- **Content:** 4 characters, 188 cards, 45 enemies, 64 relics, 15 potions, 4 acts + Heart
+- **Features:** Endless mode, daily challenges, custom seeded runs, compendium, run history, keyboard controls
+- **Sprint 18 Focus:** Art polish, validation completion, ship readiness. Replace 131 placeholder assets.
+- **Sprint Plan:** See `SPRINT_18_PLAN.md` (15 VP tasks across 3 parallel work streams)
+- **Asset Backlog:** 20 enemy placeholders, 101 card placeholders, 15 missing relic icons
 
 ### Sprint Infrastructure Checklist
-- [ ] `sprint-17` branch exists
-- [ ] Draft PR from `sprint-17` to `master` with task checklist
+- [ ] `sprint-18` branch exists
+- [ ] Draft PR from `sprint-18` to `master` with task checklist
 - [ ] All engineers using their `engineer-{role}.md` commands
 - [ ] All commits authored correctly
 - [ ] All PRs reviewed before merge
@@ -245,4 +245,5 @@ docs/archive/                        # Historical docs, old sprint plans
 - **Sprints 10-12:** Content — Act 3, The Silent, The Heart, daily challenges
 - **Sprints 13-15:** Characters — The Defect, The Watcher, orbs, stances, score 100
 - **Sprint 16:** Retention — Endless mode, custom seeds, code-splitting, compendiums
-- **Sprint 17:** Quality Reality — Fix what's broken. Prove it works. No new features.
+- **Sprint 17:** Quality Reality — Zero bugs found. 3730 tests. Verification complete.
+- **Sprint 18:** Visual Polish — Replace placeholders, honest assessment, ship readiness.
