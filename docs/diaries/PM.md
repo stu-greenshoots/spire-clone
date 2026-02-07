@@ -14,6 +14,55 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 18 — VP-10 Complete
+**Date:** 2026-02-07
+**Status:** 9/15 tasks complete
+
+**Done:**
+- Completed VP-10: E2E CI Stabilization (BE/QA)
+  - Fixed game.fixture.js: Added character selection step to startNewGame()
+  - Fixed deploy-smoke.spec.js: Corrected selectors (btn-select-{char}), audio paths (sounds/)
+  - Fixed full-playthrough.spec.js: Corrected character selector
+  - Added card reward detection to combat.js helper
+  - 23/30 E2E tests now pass consistently (smoke, deploy-smoke, viewport, progression, boss-dialogue)
+  - Remaining 7 tests (full-run, full-playthrough) fail due to game state bug: reward modal overlays combat
+  - PR #234 merged
+
+**Game State Bug Found:**
+- Card reward modal appears during combat before victory animation completes
+- Root cause: Phase transition (COMBAT → REWARD) happens before UI updates
+- This is a game logic bug, not a test infrastructure issue
+- Follow-up needed: FIX-13 to address this in combatReducer or CombatScreen
+
+**Sprint 18 Progress:** 9/15 tasks complete
+- [x] VP-07: Keyboard-Only Playthrough Verification (QA/UX) — MERGED (PR #227)
+- [x] VP-08: DevTools Full Playthrough Test (QA) — DONE
+- [x] VP-09: Honest Self-Assessment (PM/QA) — DONE
+- [x] VP-01: Act 1 Boss Sprite Replacement (GD) — MERGED (PR #229)
+- [x] VP-02: Act 1 Elite Sprite Replacement (GD) — MERGED (PR #230)
+- [x] VP-03: Common Enemy Sprite Replacement (GD) — MERGED (PR #231)
+- [x] VP-04: Character-Specific Relic Art (GD) — MERGED (PR #232)
+- [x] VP-05: High-Priority Card Art (GD) — MERGED (PR #233)
+- [x] VP-10: E2E CI Stabilization (BE/QA) — MERGED (PR #234)
+
+**Validation Gate Progress:**
+- [x] All 3 Act 1 boss sprites are quality art (>30KB each)
+- [x] All 2 Act 1 elite sprites are quality art (>30KB each)
+- [x] Keyboard-only combat playthrough verified for all 4 characters
+- [x] DevTools fullPlaythrough completes for all 4 characters
+- [x] Honest self-assessment document created
+- [x] `npm run validate` passes (3747 tests)
+- [x] 5 common enemy sprites replaced
+- [x] All 15 character-specific relics have art
+- [x] 20 high-visibility card art pieces replaced
+- [ ] E2E tests pass consistently on CI (23/30 — blocked by game state bug)
+
+**All P0 tasks complete! 4/5 P1 tasks complete!**
+
+**Next:** VP-06 (Act 2/3 Enemy Art) or VP-11-VP-15 (P2 tasks)
+
+---
+
 ### Sprint 18 — VP-05 Complete
 **Date:** 2026-02-07
 **Status:** 8/15 tasks complete

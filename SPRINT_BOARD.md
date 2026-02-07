@@ -871,7 +871,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
-| VP-10 | BE/QA | M | P1 | E2E CI Stabilization | PENDING |
+| VP-10 | BE/QA | M | P1 | E2E CI Stabilization | MERGED (PR #234) — 23/30 tests stable, game state bug filed |
 | VP-11 | BE | S | P2 | Bundle Optimization | PENDING |
 | VP-12 | AR | S | P2 | Audio Final Pass | PENDING |
 | VP-13 | GD | L | P2 | Remaining Card Art (30 additional) | PENDING |

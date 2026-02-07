@@ -3,6 +3,52 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 18 Entries
+
+### VP-10: E2E CI Stabilization
+**Date:** 2026-02-07
+**Status:** MERGED (PR #234)
+**Sprint:** Sprint 18 (Visual Polish & Ship Readiness)
+**Task:** VP-10 (E2E CI Stabilization — M size, P1)
+
+**Done:**
+- Fixed E2E test infrastructure issues that caused consistent failures:
+  1. **game.fixture.js**: Added character selection step to `startNewGame()`
+     - After clicking "New Game", click `btn-select-{character}` button
+     - Previously tests failed expecting to go directly to map
+  2. **deploy-smoke.spec.js**: Fixed broken selectors and paths
+     - Changed `[data-testid^="character-"]` to `[data-testid^="btn-select-"]`
+     - Fixed audio paths from `audio/sfx/` to `sounds/` (actual directory)
+     - Added proper URL path joining for baseURL
+  3. **full-playthrough.spec.js**: Fixed character selector pattern
+  4. **combat.js helper**: Added card reward modal detection
+     - Detect `skipRewardButton` and `cardReward` as victory indicators
+     - Prevents timeout when reward modal appears after combat
+
+**Test Results:**
+- 23/30 E2E tests now pass consistently
+- Stable tests: smoke, deploy-smoke, viewport, progression, boss-dialogue
+- Failing tests: full-run (1), full-playthrough (6) — blocked by game state bug
+
+**Game State Bug Discovered:**
+- Root cause of remaining failures: card reward modal appears DURING combat
+- Phase transition (COMBAT → REWARD) happens before combat UI updates
+- Reward modal overlays the combat screen instead of replacing it
+- This is a GAME LOGIC BUG, not a test infrastructure issue
+- Investigation needed in: combatReducer.js, CombatScreen.jsx
+
+**Recommendation:**
+File follow-up task FIX-13: "Card reward modal appears during combat before victory animation"
+- Affects: `src/context/reducers/combatReducer.js`, `src/components/CombatScreen.jsx`
+- Root cause: `COMBAT_VICTORY` action dispatches before enemy death animations complete
+
+**Validation:** `npm run validate` passes — 3747 tests, lint clean, build clean
+
+**Blockers:** None for VP-10 scope (infrastructure is fixed)
+**Follow-up:** Game state bug needs separate investigation (FIX-13)
+
+---
+
 ## Sprint 17 Entries
 
 ### QR-15: Error Boundary Enhancement
