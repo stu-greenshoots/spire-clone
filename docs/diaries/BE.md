@@ -5,6 +5,34 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 17 Entries
 
+### QR-13: Runtime State Validation
+**Date:** 2026-02-07
+**Status:** MERGED (PR #222)
+
+**Done:**
+- Created comprehensive runtime state validation system (`src/systems/stateValidator.js`)
+- Validates player, enemies, cards, potions, relics, and game phase after each reducer action
+- Catches impossible states: negative HP/energy/gold, NaN values, duplicate instanceIds, invalid phases
+- Validates orb system (Defect) and stance system (Watcher) specific state
+- Dev mode: throws errors with actionable messages for debugging
+- Production: no validation (performance optimization)
+- Player corrections auto-applied (HP capping, negative value fixes)
+- Enemy/card corrections logged only (to avoid masking real bugs)
+- Integrated via `validatingReducer` wrapper in `GameContext.jsx`
+- 76 new tests in `stateValidator.test.js`
+- 3688 tests passing, lint clean, build clean
+
+**Architecture:**
+- Wrapping reducer pattern - non-invasive, doesn't modify existing game logic
+- Validators return `{ valid, errors, warnings, corrections }` for consistency with customDataManager
+- Skip validation for high-frequency UI-only actions (SELECT_CARD, CANCEL_TARGET)
+- Re-throw unexpected JavaScript errors (TypeError, ReferenceError) to avoid masking bugs
+
+**Blockers:** None
+**Next:** QR-10 (Bug Fix Sprint) may be minimal, Stream B found no code bugs
+
+---
+
 ### QR-12: Data Editor Safety
 **Date:** 2026-02-07
 **Status:** MERGED (PR #221)
