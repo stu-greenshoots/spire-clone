@@ -14,6 +14,41 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-08 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 6/15 tasks done
+
+**Done:**
+- Implemented as AR: QR-08 Audio Audit
+  - Comprehensive catalog of all 52 MP3 audio files
+  - Created `docs/AUDIO_AUDIT.md` with complete inventory
+  - Verified file existence, audibility, uniqueness (MD5 hashes)
+  - All 52 files are unique and audible (normalized in Sprint 15)
+  - Identified 5 reserved-but-unused sound definitions (not bugs)
+  - No bugs found for QR-10
+- Merged PR #217, updated sprint board and AR diary
+
+**Sprint 17 Progress:** 6/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+
+**Stream B audit status:**
+- QR-05: ✅ Complete — E2E playthrough works
+- QR-06: ✅ Complete — 15 missing relic art, 20 placeholder enemy sprites, 101 placeholder cards
+- QR-07: ✅ Complete — All 188 cards verified, no bugs found
+- QR-08: ✅ Complete — All 52 audio files verified, no bugs found
+- QR-09: ❌ Pending — Enemy behavior verification still needed
+
+**Next P0 tasks:**
+- QR-10: Bug Fix Sprint (ALL) — needs QR-09 findings first
+- QR-09: Enemy Behavior Verification (QA/JR) — last Stream B audit task
+
+---
+
 ### Sprint 17 — QR-06 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 5/15 tasks done

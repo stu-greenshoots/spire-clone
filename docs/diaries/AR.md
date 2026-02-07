@@ -1,3 +1,38 @@
+# AR Diary - Sprint 17
+
+## Sprint 17 Entries
+
+### QR-08: Audio Audit — Comprehensive Catalog of All 52 Audio Files
+**Date:** 2026-02-07
+**Status:** Complete, PR #217 merged
+**Sprint:** Sprint 17 (Quality Reality)
+**Task:** QR-08 (Audio audit — S size, P1)
+
+**Done:**
+1. Systematically verified all 52 MP3 files in `public/sounds/`
+2. Created `docs/AUDIO_AUDIT.md` with complete inventory
+3. Verified file existence, audibility, uniqueness (MD5 hashes), and trigger points
+4. Identified 5 reserved-but-unused sound definitions (not bugs)
+
+**Key findings:**
+- 32 combat SFX: All exist and trigger correctly
+- 8 UI SFX: All exist and trigger correctly
+- 5/8 ambient tracks: All used tracks exist (3 reserved for future)
+- 7/9 music tracks: All used tracks exist (2 reserved for future)
+- No duplicate files (MD5 verification confirms all 52 unique)
+- All files audible (normalized to EBU R128 in Sprint 15 FIX-12)
+
+**Acceptance criteria:**
+- [x] Every audio file cataloged with path, size, status
+- [x] Silent/broken/duplicate files identified (none found)
+- [x] Trigger points verified in code
+- [x] npm run validate passes (3495 tests, 0 errors)
+
+**Blockers:** None
+**Next:** QR-08 complete. Audio system healthy. No bugs for QR-10.
+
+---
+
 # AR Diary - Sprint 16
 
 ## Sprint 16 Entries
