@@ -297,6 +297,10 @@ const gameReducer = (state, action) => {
       return metaReducer(state, action);
     }
 
+    case 'ENTER_ENDLESS': {
+      return mapReducer(state, action);
+    }
+
     default:
       return state;
   }
