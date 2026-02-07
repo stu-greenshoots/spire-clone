@@ -793,7 +793,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
-| QR-01 | UX | M | P0 | Keyboard combat controls (1-9 cards, Tab target, Enter confirm, E end turn) | PENDING |
+| QR-01 | UX | M | P0 | Keyboard combat controls (1-9 cards, Tab target, Enter confirm, E end turn) | MERGED (PR #212) |
 | QR-02 | BE | M | P0 | Enhanced DevTools API (playCard, autoFight, fullPlaythrough, getVisibleState) | PENDING |
 | QR-03 | QA | S | P1 | Expanded scenario library (30+ scenarios, all characters/phases) | PENDING |
 | QR-04 | BE/UX | S | P2 | Dev state overlay (phase, HP, energy, FPS, backtick toggle) | PENDING |
