@@ -41,10 +41,29 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 - [x] `npm run validate` passes (3747 tests)
 
 **Urgent Items Status:**
+- ✅ Mobile controls regression → FIXED (PR #228)
 - Card art not displaying → Needs GD/BE investigation (deferred, not blocking this task)
 - Audio quality issues → Needs AR investigation (deferred, not blocking this task)
 
 **Next:** VP-01 (Act 1 Boss Sprites) — highest priority P0 art task
+
+---
+
+### ✅ RESOLVED: Mobile Controls Regression
+**Date:** 2026-02-07
+**Priority:** HIGH
+**Status:** FIXED (PR #228)
+
+**User Feedback (addressed):**
+- ✅ **Drag and drop restored** — touch events now wire to drag handlers on mobile
+- ✅ **Simplified targeting flow** — single tap on attack card enters targeting mode immediately
+- ✅ **Tap card → tap target** — no intermediate click required
+
+**Fix implemented:**
+- Wired drag handlers to touch events on mobile
+- Added 10px threshold to distinguish tap from drag
+- Removed intermediate "mobileSelectedCard" state
+- Flow: tap card → enter targeting (or play if non-targeted) → tap enemy
 
 ---
 
