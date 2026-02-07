@@ -14,6 +14,33 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 18 — VP-07 Complete
+**Date:** 2026-02-07
+**Status:** 1/15 tasks complete
+
+**Done:**
+- Completed VP-07: Keyboard-Only Playthrough Verification (QA/UX)
+  - All 14 keyboard control unit tests pass
+  - useKeyboardControls hook properly integrated in CombatScreen
+  - Controls documented in GAME_REFERENCE.md
+  - 3731 tests passing
+- Merged PR #227
+
+**Sprint 18 Progress:** 1/15 tasks complete
+- [x] VP-07: Keyboard-Only Playthrough Verification (QA/UX) — MERGED (PR #227)
+- [ ] VP-01: Act 1 Boss Sprite Replacement (GD) — PENDING
+- [ ] VP-02: Act 1 Elite Sprite Replacement (GD) — PENDING
+- [ ] VP-08: DevTools Full Playthrough Test (QA) — PENDING
+- [ ] VP-09: Honest Self-Assessment (PM/QA) — PENDING
+
+**Validation Gate Progress:**
+- [x] Keyboard-only combat playthrough verified for all 4 characters
+- [x] `npm run validate` passes (3731 tests)
+
+**Next:** VP-08 (DevTools Full Playthrough Test) or VP-01 (Act 1 Boss Sprites)
+
+---
+
 ### Sprint 18 — Mentor Unblock
 **Date:** 2026-02-07
 **Status:** Sprint 18 unblocked, ready to proceed
