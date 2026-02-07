@@ -864,7 +864,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
 | VP-07 | QA/UX | S | P0 | Keyboard-Only Playthrough Verification | DONE |
-| VP-08 | QA | M | P0 | DevTools Full Playthrough Test | PENDING |
+| VP-08 | QA | M | P0 | DevTools Full Playthrough Test | DONE |
 | VP-09 | PM/QA | M | P0 | Honest Self-Assessment | PENDING |
 
 ### Stream C: Ship Prep
@@ -884,9 +884,9 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [ ] All 3 Act 1 boss sprites are quality art (>30KB each)
 - [ ] All 2 Act 1 elite sprites are quality art (>30KB each)
 - [x] Keyboard-only combat playthrough verified for all 4 characters
-- [ ] DevTools fullPlaythrough completes for all 4 characters
+- [x] DevTools fullPlaythrough completes for all 4 characters
 - [ ] Honest self-assessment document created
-- [x] `npm run validate` passes (3731 tests)
+- [x] `npm run validate` passes (3747 tests)
 
 **P1 (Should Pass)**
 - [ ] All 15 character-specific relics have art
