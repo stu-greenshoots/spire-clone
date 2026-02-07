@@ -7,6 +7,7 @@ import {
 } from '../systems/combatSystem';
 import { canUsePotion, applyPotionEffect, removePotion } from '../systems/potionSystem';
 import { audioManager, SOUNDS } from '../systems/audioSystem';
+import { validateAndCorrectState } from '../systems/stateValidator';
 import { shopReducer } from './reducers/shopReducer';
 import { mapReducer } from './reducers/mapReducer';
 import { metaReducer } from './reducers/metaReducer';
@@ -306,9 +307,39 @@ const gameReducer = (state, action) => {
   }
 };
 
+// Wrapping reducer that validates state after each action (dev mode only)
+const isDev = typeof import.meta !== 'undefined' && import.meta.env?.DEV;
+
+const validatingReducer = (state, action) => {
+  const newState = gameReducer(state, action);
+
+  // Only validate in dev mode to avoid performance impact in production
+  if (isDev) {
+    // Skip validation for high-frequency/UI-only actions that don't change game state
+    const skipValidationActions = [
+      'SELECT_CARD',      // Card hover/selection (UI only)
+      'CANCEL_TARGET',    // Cancel targeting mode (UI only)
+    ];
+    if (!skipValidationActions.includes(action.type)) {
+      try {
+        return validateAndCorrectState(newState, action.type);
+      } catch (error) {
+        // Only swallow validation errors (which have already been logged)
+        // Re-throw unexpected JavaScript errors (TypeError, ReferenceError, etc.)
+        if (error.message?.includes('State validation failed')) {
+          return newState;
+        }
+        throw error;
+      }
+    }
+  }
+
+  return newState;
+};
+
 // Context Provider
 export const GameProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(gameReducer, createInitialState());
+  const [state, dispatch] = useReducer(validatingReducer, createInitialState());
 
   const startGame = useCallback((ascensionLevel = 0) => {
     dispatch({ type: 'START_GAME', payload: { ascensionLevel } });
