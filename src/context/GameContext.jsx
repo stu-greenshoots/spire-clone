@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useReducer, useCallback } from 'react';
+import { createContext, useContext, useReducer, useCallback, useState } from 'react';
 import {
   calculateDamage as combatCalculateDamage,
   calculateBlock as combatCalculateBlock,
@@ -341,148 +341,156 @@ const validatingReducer = (state, action) => {
 export const GameProvider = ({ children }) => {
   const [state, dispatch] = useReducer(validatingReducer, createInitialState());
 
-  const startGame = useCallback((ascensionLevel = 0) => {
-    dispatch({ type: 'START_GAME', payload: { ascensionLevel } });
+  // Track last action for DevOverlay (QR-04)
+  const [lastAction, setLastAction] = useState(null);
+  const wrappedDispatch = useCallback((action) => {
+    setLastAction(action);
+    dispatch(action);
   }, []);
+
+  const startGame = useCallback((ascensionLevel = 0) => {
+    wrappedDispatch({ type: 'START_GAME', payload: { ascensionLevel } });
+  }, [wrappedDispatch]);
 
   const selectCharacter = useCallback((characterId, customSeed = null) => {
-    dispatch({ type: 'SELECT_CHARACTER', payload: { characterId, customSeed } });
-  }, []);
+    wrappedDispatch({ type: 'SELECT_CHARACTER', payload: { characterId, customSeed } });
+  }, [wrappedDispatch]);
 
   const startDailyChallenge = useCallback((challenge) => {
-    dispatch({ type: 'START_DAILY_CHALLENGE', payload: challenge });
-  }, []);
+    wrappedDispatch({ type: 'START_DAILY_CHALLENGE', payload: challenge });
+  }, [wrappedDispatch]);
 
   const selectNode = useCallback((nodeId) => {
-    dispatch({ type: 'SELECT_NODE', payload: { nodeId } });
-  }, []);
+    wrappedDispatch({ type: 'SELECT_NODE', payload: { nodeId } });
+  }, [wrappedDispatch]);
 
   const selectCard = useCallback((card) => {
-    dispatch({ type: 'SELECT_CARD', payload: { card } });
-  }, []);
+    wrappedDispatch({ type: 'SELECT_CARD', payload: { card } });
+  }, [wrappedDispatch]);
 
   const playCard = useCallback((card, targetId) => {
-    dispatch({ type: 'PLAY_CARD', payload: { card, targetId } });
-  }, []);
+    wrappedDispatch({ type: 'PLAY_CARD', payload: { card, targetId } });
+  }, [wrappedDispatch]);
 
   const cancelTarget = useCallback(() => {
-    dispatch({ type: 'CANCEL_TARGET' });
-  }, []);
+    wrappedDispatch({ type: 'CANCEL_TARGET' });
+  }, [wrappedDispatch]);
 
   const endTurn = useCallback(() => {
-    dispatch({ type: 'END_TURN' });
-  }, []);
+    wrappedDispatch({ type: 'END_TURN' });
+  }, [wrappedDispatch]);
 
   const collectGold = useCallback(() => {
-    dispatch({ type: 'COLLECT_GOLD' });
-  }, []);
+    wrappedDispatch({ type: 'COLLECT_GOLD' });
+  }, [wrappedDispatch]);
 
   const collectRelic = useCallback(() => {
-    dispatch({ type: 'COLLECT_RELIC' });
-  }, []);
+    wrappedDispatch({ type: 'COLLECT_RELIC' });
+  }, [wrappedDispatch]);
 
   const collectPotion = useCallback(() => {
-    dispatch({ type: 'COLLECT_POTION' });
-  }, []);
+    wrappedDispatch({ type: 'COLLECT_POTION' });
+  }, [wrappedDispatch]);
 
   const openCardRewards = useCallback(() => {
-    dispatch({ type: 'OPEN_CARD_REWARDS' });
-  }, []);
+    wrappedDispatch({ type: 'OPEN_CARD_REWARDS' });
+  }, [wrappedDispatch]);
 
   const selectCardReward = useCallback((card) => {
-    dispatch({ type: 'SELECT_CARD_REWARD', payload: { card } });
-  }, []);
+    wrappedDispatch({ type: 'SELECT_CARD_REWARD', payload: { card } });
+  }, [wrappedDispatch]);
 
   const skipCardReward = useCallback(() => {
-    dispatch({ type: 'SKIP_CARD_REWARD' });
-  }, []);
+    wrappedDispatch({ type: 'SKIP_CARD_REWARD' });
+  }, [wrappedDispatch]);
 
   const proceedToMap = useCallback(() => {
-    dispatch({ type: 'PROCEED_TO_MAP' });
-  }, []);
+    wrappedDispatch({ type: 'PROCEED_TO_MAP' });
+  }, [wrappedDispatch]);
 
   const leaveShop = useCallback((gold, deck, relics, potions) => {
-    dispatch({ type: 'LEAVE_SHOP', payload: { gold, deck, relics, potions } });
-  }, []);
+    wrappedDispatch({ type: 'LEAVE_SHOP', payload: { gold, deck, relics, potions } });
+  }, [wrappedDispatch]);
 
   const rest = useCallback(() => {
-    dispatch({ type: 'REST' });
-  }, []);
+    wrappedDispatch({ type: 'REST' });
+  }, [wrappedDispatch]);
 
   const upgradeCard = useCallback((cardId) => {
-    dispatch({ type: 'UPGRADE_CARD', payload: { cardId } });
-  }, []);
+    wrappedDispatch({ type: 'UPGRADE_CARD', payload: { cardId } });
+  }, [wrappedDispatch]);
 
   const skipEvent = useCallback(() => {
-    dispatch({ type: 'SKIP_EVENT' });
-  }, []);
+    wrappedDispatch({ type: 'SKIP_EVENT' });
+  }, [wrappedDispatch]);
 
   const updateProgression = useCallback((won, causeOfDeath = null) => {
-    dispatch({ type: 'UPDATE_PROGRESSION', payload: { won, causeOfDeath } });
-  }, []);
+    wrappedDispatch({ type: 'UPDATE_PROGRESSION', payload: { won, causeOfDeath } });
+  }, [wrappedDispatch]);
 
   const returnToMenu = useCallback(() => {
-    dispatch({ type: 'RETURN_TO_MENU' });
-  }, []);
+    wrappedDispatch({ type: 'RETURN_TO_MENU' });
+  }, [wrappedDispatch]);
 
   const openDataEditor = useCallback(() => {
-    dispatch({ type: 'OPEN_DATA_EDITOR' });
-  }, []);
+    wrappedDispatch({ type: 'OPEN_DATA_EDITOR' });
+  }, [wrappedDispatch]);
 
   const selectCardFromPile = useCallback((card) => {
-    dispatch({ type: 'SELECT_CARD_FROM_PILE', payload: { card } });
-  }, []);
+    wrappedDispatch({ type: 'SELECT_CARD_FROM_PILE', payload: { card } });
+  }, [wrappedDispatch]);
 
   const cancelCardSelection = useCallback(() => {
-    dispatch({ type: 'CANCEL_CARD_SELECTION' });
-  }, []);
+    wrappedDispatch({ type: 'CANCEL_CARD_SELECTION' });
+  }, [wrappedDispatch]);
 
   const spawnEnemies = useCallback((enemies) => {
-    dispatch({ type: 'SPAWN_ENEMIES', payload: { enemies } });
-  }, []);
+    wrappedDispatch({ type: 'SPAWN_ENEMIES', payload: { enemies } });
+  }, [wrappedDispatch]);
 
   const liftGirya = useCallback(() => {
-    dispatch({ type: 'LIFT_GIRYA' });
-  }, []);
+    wrappedDispatch({ type: 'LIFT_GIRYA' });
+  }, [wrappedDispatch]);
 
   const saveGameState = useCallback(() => {
-    dispatch({ type: 'SAVE_GAME' });
-  }, []);
+    wrappedDispatch({ type: 'SAVE_GAME' });
+  }, [wrappedDispatch]);
 
   const loadGameState = useCallback(() => {
-    dispatch({ type: 'LOAD_GAME' });
-  }, []);
+    wrappedDispatch({ type: 'LOAD_GAME' });
+  }, [wrappedDispatch]);
 
   const deleteSaveState = useCallback(() => {
-    dispatch({ type: 'DELETE_SAVE' });
-  }, []);
+    wrappedDispatch({ type: 'DELETE_SAVE' });
+  }, [wrappedDispatch]);
 
   const usePotion = useCallback((slotIndex, targetIndex = null) => {
-    dispatch({ type: 'USE_POTION', payload: { slotIndex, targetIndex } });
-  }, []);
+    wrappedDispatch({ type: 'USE_POTION', payload: { slotIndex, targetIndex } });
+  }, [wrappedDispatch]);
 
   const discardPotion = useCallback((slotIndex) => {
-    dispatch({ type: 'DISCARD_POTION', payload: { slotIndex } });
-  }, []);
+    wrappedDispatch({ type: 'DISCARD_POTION', payload: { slotIndex } });
+  }, [wrappedDispatch]);
 
   const selectStartingBonus = useCallback((bonusId) => {
-    dispatch({ type: 'SELECT_STARTING_BONUS', payload: { bonusId } });
-  }, []);
+    wrappedDispatch({ type: 'SELECT_STARTING_BONUS', payload: { bonusId } });
+  }, [wrappedDispatch]);
 
   const enterEndless = useCallback(() => {
-    dispatch({ type: 'ENTER_ENDLESS' });
-  }, []);
+    wrappedDispatch({ type: 'ENTER_ENDLESS' });
+  }, [wrappedDispatch]);
 
   const loadScenario = useCallback((scenario) => {
-    dispatch({ type: 'LOAD_SCENARIO', payload: scenario });
-  }, []);
+    wrappedDispatch({ type: 'LOAD_SCENARIO', payload: scenario });
+  }, [wrappedDispatch]);
 
   const dismissAchievementToast = useCallback(() => {
-    dispatch({ type: 'DISMISS_ACHIEVEMENT_TOAST' });
-  }, []);
+    wrappedDispatch({ type: 'DISMISS_ACHIEVEMENT_TOAST' });
+  }, [wrappedDispatch]);
 
   const value = {
     state,
+    lastAction,
     startGame,
     selectCharacter,
     startDailyChallenge,
