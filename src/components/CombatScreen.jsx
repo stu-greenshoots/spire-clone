@@ -5,6 +5,7 @@ import Enemy from './Enemy';
 import EnemyInfoPanel from './EnemyInfoPanel';
 import AnimationOverlay from './AnimationOverlay';
 import { useAnimations } from '../hooks/useAnimations';
+import { useKeyboardControls, KEYBOARD_SHORTCUTS } from '../hooks/useKeyboardControls';
 import { ANIMATION_TYPE } from '../constants/animationTypes';
 import CardSelectionModal from './CardSelectionModal';
 import { CARD_TYPES } from '../data/cards';
@@ -381,6 +382,33 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
     return player.energy >= card.cost;
   }, [player.energy]);
 
+  // Keyboard controls
+  const {
+    keyboardSelectedCardIndex,
+    keyboardTargetedEnemyIndex,
+    showHelp,
+    setShowHelp,
+  } = useKeyboardControls({
+    hand,
+    enemies,
+    selectedCard,
+    targetingMode,
+    canPlayCard,
+    selectCard,
+    playCard,
+    cancelTarget,
+    endTurn,
+    onUsePotion: null, // TODO: Wire up potion use
+    potions: player.potions,
+    onToggleDeckViewer: () => setShowDeck(showDeck ? null : 'draw'),
+    onToggleEnemyInfo: () => {
+      if (enemies.length > 0) {
+        setShowEnemyInfo(showEnemyInfo ? null : enemies[0]);
+      }
+    },
+    enabled: !isMobile && phase === GAME_PHASE.COMBAT,
+  });
+
   // Drag and drop handlers
   const handleDragStart = useCallback((card, e) => {
     if (!canPlayCard(card)) return;
@@ -718,6 +746,99 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         />
       )}
 
+      {/* Keyboard help overlay */}
+      {showHelp && !isMobile && (
+        <div
+          data-testid="keyboard-help-overlay"
+          onClick={() => setShowHelp(false)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.85)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2000
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: 'linear-gradient(180deg, #1a1a2a 0%, #0a0a15 100%)',
+              border: '2px solid #FFD700',
+              borderRadius: '12px',
+              padding: '24px 32px',
+              maxWidth: '400px',
+              boxShadow: '0 0 30px rgba(255, 215, 0, 0.3)'
+            }}
+          >
+            <h2 style={{
+              color: '#FFD700',
+              margin: '0 0 16px 0',
+              fontSize: '20px',
+              textAlign: 'center',
+              textTransform: 'uppercase',
+              letterSpacing: '2px'
+            }}>
+              ⌨️ Keyboard Controls
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {KEYBOARD_SHORTCUTS.map(({ key, description }) => (
+                <div
+                  key={key}
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '6px 0',
+                    borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+                  }}
+                >
+                  <kbd style={{
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    border: '1px solid #555',
+                    borderRadius: '4px',
+                    padding: '4px 8px',
+                    fontSize: '12px',
+                    fontFamily: 'monospace',
+                    color: '#FFD700',
+                    minWidth: '80px',
+                    textAlign: 'center'
+                  }}>
+                    {key}
+                  </kbd>
+                  <span style={{ color: '#aaa', fontSize: '13px', marginLeft: '16px' }}>
+                    {description}
+                  </span>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={() => setShowHelp(false)}
+              style={{
+                marginTop: '20px',
+                width: '100%',
+                padding: '12px',
+                background: 'linear-gradient(180deg, #aa2020 0%, #661010 100%)',
+                color: 'white',
+                border: '2px solid #cc4444',
+                borderRadius: '8px',
+                fontSize: '14px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
+              }}
+            >
+              Close (Escape)
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Act-specific background illustration */}
       {(() => {
         const actBg = getBackgroundImage(`act${state.act || 1}`);
@@ -862,29 +983,61 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
         )}
 
         {/* Render active enemies */}
-        {enemies.map((enemy) => (
-          <div
-            key={enemy.instanceId}
-            data-testid={`enemy-${enemy.instanceId}`}
-            ref={el => enemyRefs.current[enemy.instanceId] = el}
-            className={isMobile ? 'mobile-enemy-wrapper' : ''}
-            style={{
-              animation: enemyHitStates[enemy.instanceId] ? 'enemyHit 0.5s ease-out' : 'none',
-              transform: dropTargetEnemy === enemy.instanceId ? 'scale(1.1)' : 'scale(1)',
-              transition: 'transform 0.15s ease',
-              zIndex: dropTargetEnemy === enemy.instanceId ? 10 : 1,
-              boxShadow: dropTargetEnemy === enemy.instanceId ? '0 0 30px rgba(255, 100, 100, 0.6)' : 'none',
-              borderRadius: '12px'
-            }}
-          >
-            <Enemy
-              enemy={enemy}
-              onClick={() => handleEnemyClick(enemy.instanceId)}
-              targeted={(targetingMode && enemies.length > 1) || dropTargetEnemy === enemy.instanceId}
-              hideIntents={hideIntents}
-            />
-          </div>
-        ))}
+        {enemies.map((enemy, enemyIndex) => {
+          const isKeyboardTargeted = !isMobile && keyboardTargetedEnemyIndex === enemyIndex;
+          const showKeyboardTarget = isKeyboardTargeted && (keyboardSelectedCardIndex !== null || targetingMode);
+          return (
+            <div
+              key={enemy.instanceId}
+              data-testid={`enemy-${enemy.instanceId}`}
+              ref={el => enemyRefs.current[enemy.instanceId] = el}
+              className={isMobile ? 'mobile-enemy-wrapper' : ''}
+              style={{
+                animation: enemyHitStates[enemy.instanceId] ? 'enemyHit 0.5s ease-out' : 'none',
+                transform: dropTargetEnemy === enemy.instanceId || showKeyboardTarget ? 'scale(1.1)' : 'scale(1)',
+                transition: 'transform 0.15s ease',
+                zIndex: dropTargetEnemy === enemy.instanceId || showKeyboardTarget ? 10 : 1,
+                boxShadow: showKeyboardTarget
+                  ? '0 0 30px rgba(255, 215, 0, 0.6)'
+                  : dropTargetEnemy === enemy.instanceId
+                    ? '0 0 30px rgba(255, 100, 100, 0.6)'
+                    : 'none',
+                borderRadius: '12px',
+                position: 'relative'
+              }}
+            >
+              <Enemy
+                enemy={enemy}
+                onClick={() => handleEnemyClick(enemy.instanceId)}
+                targeted={(targetingMode && enemies.length > 1) || dropTargetEnemy === enemy.instanceId || showKeyboardTarget}
+                hideIntents={hideIntents}
+              />
+              {/* Keyboard target indicator */}
+              {showKeyboardTarget && (
+                <div
+                  data-testid={`enemy-target-indicator-${enemyIndex}`}
+                  style={{
+                    position: 'absolute',
+                    top: '-12px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: '#FFD700',
+                    color: '#000',
+                    fontSize: '10px',
+                    fontWeight: 'bold',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    animation: 'glowPulse 1.5s ease-in-out infinite'
+                  }}
+                >
+                  Tab ▼
+                </div>
+              )}
+            </div>
+          );
+        })}
 
         {/* Render dying enemies with death animation */}
         {Object.values(dyingEnemies).map((enemy) => (
@@ -1045,6 +1198,7 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
           const isSelected = selectedCard?.instanceId === card.instanceId;
           const isMobileSelected = mobileSelectedCard?.instanceId === card.instanceId;
           const isBeingDragged = draggingCard?.instanceId === card.instanceId;
+          const isKeyboardSelected = keyboardSelectedCardIndex === index;
 
           // Fan/arc calculation for mobile
           const cardCount = hand.length;
@@ -1056,12 +1210,13 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
 
           const mobileTransform = isMobile
             ? `rotate(${rotation}deg) translateY(${isMobileSelected ? -(20 + arcY) : arcY}px)${isMobileSelected ? ' scale(1.15)' : ''}`
-            : `translateY(${isSelected ? '-10px' : '0'})`;
+            : `translateY(${isSelected || isKeyboardSelected ? '-10px' : '0'})`;
 
           return (
             <div
               key={card.instanceId}
-              className={`${isMobile ? 'mobile-card-slot' : ''}${isMobileSelected ? ' mobile-card-selected' : ''}`}
+              data-testid={`hand-card-${index}`}
+              className={`${isMobile ? 'mobile-card-slot' : ''}${isMobileSelected ? ' mobile-card-selected' : ''}${isKeyboardSelected ? ' keyboard-selected' : ''}`}
               onMouseDown={(e) => !isMobile && handleDragStart(card, e)}
               onTouchStart={(e) => {
                 if (isMobile) {
@@ -1093,14 +1248,39 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
               }}
             >
               <CardTooltip card={card} player={player} targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}>
-                <Card
-                  card={card}
-                  onClick={() => !isDragging && handleCardClick(card)}
-                  selected={isSelected || isMobileSelected}
-                  disabled={!canPlayCard(card)}
-                  player={player}
-                  targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}
-                />
+                <div style={{ position: 'relative' }}>
+                  <Card
+                    card={card}
+                    onClick={() => !isDragging && handleCardClick(card)}
+                    selected={isSelected || isMobileSelected || isKeyboardSelected}
+                    disabled={!canPlayCard(card)}
+                    player={player}
+                    targetEnemy={card.type === CARD_TYPES.ATTACK && enemies.length === 1 ? enemies[0] : null}
+                  />
+                  {/* Keyboard shortcut indicator */}
+                  {!isMobile && index < 9 && (
+                    <div
+                      data-testid={`card-key-hint-${index}`}
+                      style={{
+                        position: 'absolute',
+                        top: '-8px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        background: isKeyboardSelected ? '#FFD700' : 'rgba(0, 0, 0, 0.7)',
+                        color: isKeyboardSelected ? '#000' : '#888',
+                        fontSize: '10px',
+                        fontWeight: 'bold',
+                        padding: '2px 6px',
+                        borderRadius: '4px',
+                        border: isKeyboardSelected ? '1px solid #FFD700' : '1px solid #444',
+                        zIndex: 10,
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      {index + 1}
+                    </div>
+                  )}
+                </div>
               </CardTooltip>
             </div>
           );

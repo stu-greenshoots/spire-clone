@@ -1,19 +1,54 @@
-# UX Diary - Sprint 3
+# UX Diary - Sprint 17
 
 ## Role
 UX Guy - Combat feedback, tooltips, visual polish
 
 ## Owned Files
-`src/components/CombatScreen.jsx`, `src/components/AnimationOverlay.jsx`, `src/hooks/useAnimations.js`
+`src/components/CombatScreen.jsx`, `src/components/AnimationOverlay.jsx`, `src/hooks/useAnimations.js`, `src/hooks/useKeyboardControls.js`
 
-## Sprint 3 Tasks
-- UX-05: Card text truncation fix (Day 1, P1)
-- UX-06: Tooltip infrastructure (Day 2, P1)
-- UX-07: Combat feedback/floating numbers (Day 3, P1)
+## Current Sprint Tasks
+- QR-01: Keyboard combat controls (P0) — DONE
 
 ---
 
 ## Entries
+
+### Sprint 17 - QR-01 Complete
+**Date:** 2026-02-07
+**Status:** QR-01 DONE
+
+**What I did:**
+- Created `src/hooks/useKeyboardControls.js` — full keyboard controls hook for combat
+- Keyboard shortcuts: 1-9 select cards, Tab cycles enemies, Enter/Space plays, E ends turn, Escape cancels
+- Q uses first potion, D opens deck viewer, I toggles enemy info, ? shows help overlay
+- Visual indicators: number badges above cards, gold highlight on keyboard-selected card
+- Target indicator on enemies: "Tab ▼" badge with gold glow when card selected
+- Keyboard help overlay: press ? to show all shortcuts in styled modal
+- Integrated into CombatScreen.jsx with full visual feedback
+- Only active on desktop (disabled on mobile) and only during COMBAT phase
+- Updated GAME_REFERENCE.md with keyboard controls documentation
+- 14 new tests in keyboardControls.test.js
+- 3278 tests total (up from 3264), lint clean, build clean
+
+**Technical notes:**
+- Hook returns: keyboardSelectedCardIndex, keyboardTargetedEnemyIndex, showHelp, setShowHelp
+- Uses window keydown event listener with proper cleanup
+- Checks enabled flag and isMobile to prevent keyboard controls on touch devices
+- canPlayCard check prevents selecting unplayable cards via keyboard
+- Target cycling wraps around at both ends
+- KEYBOARD_SHORTCUTS exported for help overlay rendering
+
+**Sprint 17 QR-01 Acceptance Criteria:**
+- [x] Full combat playable without mouse (1-9 select, Tab target, Enter play, E end turn)
+- [x] Visual indicator shows which card is keyboard-selected (number badge + lift)
+- [x] Visual indicator shows which enemy is keyboard-targeted (Tab ▼ + glow)
+- [x] Key bindings shown in help overlay (press ?)
+- [x] All shortcuts documented in GAME_REFERENCE.md
+- [x] Works alongside existing mouse/touch controls (no regressions)
+
+**Next:** QR-02 (Enhanced DevTools API) is the next P0 task for BE to enable agent-friendly testing.
+
+---
 
 ### Sprint 16 - UX-34 Complete
 **Date:** 2026-02-01
