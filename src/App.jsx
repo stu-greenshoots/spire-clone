@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState, useCallback } from 'react';
 import { GameProvider, useGame, GAME_PHASE } from './context/GameContext';
 import DevTools from './components/DevTools';
+import DevOverlay from './components/DevOverlay';
 import { audioManager, SOUNDS } from './systems/audioSystem';
 import { getEndlessBackgroundStyle } from './assets/art/art-config';
 import './App.css';
@@ -178,6 +179,7 @@ const GameContent = () => {
   return (
     <div className="game-container" style={state.endlessMode ? getEndlessBackgroundStyle(state.endlessLoop || 0) : undefined}>
       <DevTools />
+      <DevOverlay />
       <Suspense fallback={<div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888' }}>Loading...</div>}>
         {!hideChrome && <PersistentHeader onPauseClick={handlePauseToggle} />}
         {renderPhase()}
