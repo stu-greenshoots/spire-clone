@@ -782,19 +782,19 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 17: Quality Reality - PLANNING
+## Sprint 17: Quality Reality - IN PROGRESS
 
 **Goal:** Make the game actually work, verifiably. No new features — fix, test, and prove what exists.
 **Branch:** `sprint-17` (create from master)
 **Plan:** See `SPRINT_17_PLAN.md`
-**Status:** PLANNING — Sprint plan written, pending kickoff
+**Status:** IN PROGRESS — 2/15 tasks done
 
 ### Stream A: Testability Infrastructure
 
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
 | QR-01 | UX | M | P0 | Keyboard combat controls (1-9 cards, Tab target, Enter confirm, E end turn) | MERGED (PR #212) |
-| QR-02 | BE | M | P0 | Enhanced DevTools API (playCard, autoFight, fullPlaythrough, getVisibleState) | PENDING |
+| QR-02 | BE | M | P0 | Enhanced DevTools API (playCard, autoFight, fullPlaythrough, getVisibleState) | MERGED (PR #213) |
 | QR-03 | QA | S | P1 | Expanded scenario library (30+ scenarios, all characters/phases) | PENDING |
 | QR-04 | BE/UX | S | P2 | Dev state overlay (phase, HP, energy, FPS, backtick toggle) | PENDING |
 

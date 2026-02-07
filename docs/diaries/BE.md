@@ -3,6 +3,34 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 17 Entries
+
+### QR-02: Enhanced DevTools API
+**Date:** 2026-02-07
+**Status:** MERGED (PR #213)
+
+**Done:**
+- Expanded `window.__SPIRE__` with automation-friendly methods for agent-verifiable testing
+- Combat Actions: `playCard(handIndex, targetIndex?)`, `endTurn()`, `getVisibleState()`
+- Automation: `autoPlayTurn()`, `autoFight()`, `fullPlaythrough(options?)`
+- State Manipulation: `giveCard()`, `giveRelic()`, `givePotion()`, `giveGold()`, `setHp()`, `setEnergy()`, `setFloor()`, `skipToPhase()`
+- Helper exports: `PHASES`, `inCombat()`, `handSize()`, `enemyCount()`, `hpPercent()`
+- Fixed `targetAll` check in `requiresTargeting()` to handle both `target === 'all'` and `targetAll: true`
+- 37 new tests in devToolsApi.test.js
+- 3315 tests passing (3278 + 37 new), lint clean, build clean
+
+**Architecture:**
+- Uses refs (`stateRef`, `gameContextRef`) to avoid stale closure issues in the `useEffect` callback
+- State manipulation uses existing `loadScenario` mechanism from `metaReducer`
+- `autoPlayTurn()` prioritizes attacks → skills → powers, targets lowest HP enemy
+- `autoFight()` loops `autoPlayTurn()` until combat ends or max turns reached
+- `fullPlaythrough()` is async, handles all game phases including map navigation
+
+**Blockers:** None
+**Next:** QR-05 (E2E test) and QR-03 (scenarios) are now unblocked by this API
+
+---
+
 ## Sprint 16 Entries
 
 ### BE-33: Bundle Code-Splitting

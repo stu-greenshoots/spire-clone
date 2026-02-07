@@ -14,6 +14,31 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-02 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 2/15 tasks done
+
+**Done:**
+- Implemented as BE: QR-02 Enhanced DevTools API
+  - Combat Actions: playCard(), endTurn(), getVisibleState()
+  - Automation: autoPlayTurn(), autoFight(), fullPlaythrough()
+  - State Manipulation: giveCard(), giveRelic(), givePotion(), giveGold(), setHp(), setEnergy(), setFloor(), skipToPhase()
+  - 37 new tests (3315 total passing)
+- Merged PR #213, updated sprint board and BE diary
+
+**Sprint 17 Focus:** Quality Reality — make the game actually work, verifiably. No new features. Fix, test, and prove what exists.
+
+**Sprint 17 Progress:** 2/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+
+**Next P0 tasks:**
+- QR-05: Full Playthrough E2E Test (QA) — now unblocked by QR-01, QR-02
+- QR-06: Visual Asset Audit (GD)
+- QR-07: Card Mechanics Verification (QA/JR)
+
+---
+
 ### Sprint 17 — QR-01 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 1/15 tasks done
