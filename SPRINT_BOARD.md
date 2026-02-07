@@ -787,7 +787,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make the game actually work, verifiably. No new features — fix, test, and prove what exists.
 **Branch:** `sprint-17` (create from master)
 **Plan:** See `SPRINT_17_PLAN.md`
-**Status:** IN PROGRESS — 6/15 tasks done
+**Status:** IN PROGRESS — 7/15 tasks done
 
 ### Stream A: Testability Infrastructure
 
@@ -806,7 +806,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | QR-06 | GD | M | P0 | Visual asset audit (every sprite, card art, icon cataloged) | MERGED (PR #216) |
 | QR-07 | QA/JR | L | P0 | Card mechanics verification (all 188 cards, real reducers) | MERGED (PR #215) |
 | QR-08 | AR | S | P1 | Audio audit (every file: exists, audible, distinct, correct trigger) | MERGED (PR #217) |
-| QR-09 | QA/JR | M | P1 | Enemy behavior verification (all 40+ enemies, AI patterns, abilities) | PENDING |
+| QR-09 | QA/JR | M | P1 | Enemy behavior verification (all 40+ enemies, AI patterns, abilities) | MERGED (PR #218) |
 
 ### Stream C: Bug Fixing
 
@@ -830,7 +830,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [ ] `__SPIRE__.fullPlaythrough()` completes Act 1 for all 4 characters
 - [ ] E2E Playwright test passes for all 4 characters through 5+ floors
 - [ ] Every card verified: cost, damage, effects match description
-- [ ] Every enemy verified: HP, damage, AI pattern correct
+- [x] Every enemy verified: HP, damage, AI pattern correct
 - [x] Asset audit complete — all placeholders documented
 - [ ] Top 10 worst placeholder assets replaced
 - [ ] Zero P0 bugs remaining

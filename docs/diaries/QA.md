@@ -2,6 +2,51 @@
 
 ## Sprint 17 Entries
 
+### QR-09: Enemy Behavior Verification
+**Date:** 2026-02-07
+**Status:** Complete, PR #218 merged
+**Sprint:** Sprint 17 (Quality Reality)
+**Task:** QR-09 (Enemy behavior verification — M size, P1)
+
+**Done:**
+1. Created `src/test/enemyBehaviorVerification.test.js` — 91 comprehensive tests for 40+ enemies
+2. **Enemy Inventory:** 40+ enemies across Acts 1-4, all types (normal/elite/boss/minion)
+3. **HP Verification:** Valid ranges, baseline spot checks (Cultist 48-54, Jaw Worm 42-46, Heart 750)
+4. **Moveset Verification:** Valid moves, damage values, block values, status effects
+5. **AI Pattern Verification:** 10 bosses/enemies tested for correct move cycles
+   - Cultist: Ritual → Dark Strike pattern
+   - Slime Boss: Goop → Preparing → Slam cycle, 50% HP split
+   - Guardian: Offensive vs Defensive mode patterns
+   - Hexaghost: Activate → Divider opening
+   - Automaton: Boost → Dual Strike → Hyper Beam cycle
+   - Corrupt Heart: Debilitate → Blood Shots → Echo → Buff cycle
+   - Lagavulin: 3-turn sleep, alternate attack/siphon
+   - Time Eater: Haste at 50% HP
+   - Awakened One: Rebirth at 0 HP
+   - The Champ: Anger at 50% HP
+6. **Damage Values:** Spot checks against StS baseline (Cultist 6, Jaw Worm 11, Heart 2x15, etc.)
+7. **Special Abilities:** Artifact, metallicize, plated armor, thorns, flight, invincible shield, asleep, retain block
+8. **Enemy Turn Processing:** Real combatReducer used — damage, block, multi-hit, strength, weak, vulnerable
+9. **Ally/Minion Behavior:** Centurion/Mystic pair, Gremlin Leader enrage, Reptomancer daggers, Automaton orbs
+10. **Encounter Generation:** Act 1-3 normal, elite, boss encounter pools
+11. **Boss Phase Transitions:** Rebirth, split, mode shift, phase2, beat of death flags verified
+12. **Status Cards:** Slimed, Dazed, Burn application to player deck
+
+**Key findings:**
+- **No bugs found** during verification
+- All 40+ enemies have valid HP, movesets, and AI functions
+- All boss phase transitions correctly flagged
+- All special abilities properly initialized on instances
+
+**Test count:** 3586 total (91 new from this PR)
+
+**Validation:** `npm run validate` passes — all tests green, lint clean (0 errors, 5 pre-existing warnings), build clean
+
+**Blockers:** None
+**Next:** QR-10 (Bug fix sprint) now ready — no new bugs discovered from QR-09
+
+---
+
 ### QR-07: Card Mechanics Verification
 **Date:** 2026-02-07
 **Status:** Complete, PR #215 merged

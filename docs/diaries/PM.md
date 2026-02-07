@@ -14,6 +14,48 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-09 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 7/15 tasks done
+
+**Done:**
+- Implemented as QA: QR-09 Enemy Behavior Verification
+  - Comprehensive test suite for all 40+ enemies (91 tests)
+  - HP verification, AI pattern verification, damage value verification
+  - 10 boss/enemy AI patterns verified (Cultist, Slime Boss, Guardian, Hexaghost, Automaton, Heart, Lagavulin, Time Eater, Awakened One, Champ)
+  - Special abilities: artifact, metallicize, plated armor, thorns, flight, invincible shield, asleep
+  - Enemy turn processing with real combatReducer
+  - Ally/minion behavior, encounter generation, boss phase transitions
+  - **No bugs found** — QR-10 unaffected
+- Merged PR #218, updated sprint board and QA diary
+
+**Sprint 17 Progress:** 7/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+
+**Stream B audit status — COMPLETE:**
+- QR-05: ✅ Complete — E2E playthrough works
+- QR-06: ✅ Complete — 15 missing relic art, 20 placeholder enemy sprites, 101 placeholder cards
+- QR-07: ✅ Complete — All 188 cards verified, no bugs found
+- QR-08: ✅ Complete — All 52 audio files verified, no bugs found
+- QR-09: ✅ Complete — All 40+ enemies verified, no bugs found
+
+**Stream B Summary — No critical bugs found!**
+The audits identified placeholder assets (QR-06) but no functional bugs in cards (QR-07), audio (QR-08), or enemies (QR-09). QR-10 bug fix sprint may be minimal or closed as "no bugs to fix."
+
+**Next tasks:**
+- QR-10: Bug Fix Sprint (ALL) — may be minimal, Stream B found no code bugs
+- QR-03: Expanded Scenario Library (QA) — P1
+- QR-11: Placeholder Asset Replacement (GD) — P1, address QR-06 findings
+- QR-12: Data Editor Safety (BE) — P1
+
+---
+
 ### Sprint 17 — QR-08 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 6/15 tasks done
