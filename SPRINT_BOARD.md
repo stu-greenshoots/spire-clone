@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-02-07
-**Current Sprint:** 17 (Quality Reality) - IN PROGRESS
-**Integration Branch:** `sprint-17`
-**Sprint Plan:** See `SPRINT_17_PLAN.md`
+**Current Sprint:** 18 (Visual Polish & Ship Readiness) - IN PROGRESS
+**Integration Branch:** `sprint-18`
+**Sprint Plan:** See `SPRINT_18_PLAN.md`
 **Roadmap:** See `docs/archive/ROADMAP.md` (historical — original 4-sprint plan to 1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 16 COMPLETE (14 tasks, 3264 tests, Endless Mode + Custom Runs)
+**Previous:** Sprint 17 COMPLETE (15 tasks, 3730 tests, Quality Reality — zero bugs found)
 
 ---
 
@@ -782,12 +782,12 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 17: Quality Reality - IN PROGRESS
+## Sprint 17: Quality Reality - COMPLETE
 
 **Goal:** Make the game actually work, verifiably. No new features — fix, test, and prove what exists.
-**Branch:** `sprint-17` (create from master)
+**Branch:** `sprint-17` (merged to master)
 **Plan:** See `SPRINT_17_PLAN.md`
-**Status:** COMPLETE — 15/15 tasks done
+**Status:** COMPLETE — 15/15 tasks done. Zero bugs found. 11th consecutive 100% sprint.
 
 ### Stream A: Testability Infrastructure
 
@@ -812,7 +812,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
-| QR-10 | ALL | Var | P0 | Bug fix sprint (fix all bugs found in Stream B) | CLOSED (N/A — no code bugs found in Stream B) |
+| QR-10 | ALL | Var | P0 | Bug fix sprint (fix all bugs found in Stream B) | CLOSED (N/A — no code bugs found) |
 | QR-11 | GD | L | P1 | Placeholder asset replacement (top 10 worst from QR-06) | MERGED (PR #220) |
 | QR-12 | BE | S | P1 | Data Editor safety (warning banner, reset button, validation) | MERGED (PR #221) |
 
@@ -826,16 +826,77 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ### Sprint 17 Validation Gate
 
-- [ ] Full combat playable via keyboard only
-- [ ] `__SPIRE__.fullPlaythrough()` completes Act 1 for all 4 characters
-- [ ] E2E Playwright test passes for all 4 characters through 5+ floors
-- [ ] Every card verified: cost, damage, effects match description
+- [x] Full combat playable via keyboard only
+- [x] `__SPIRE__.fullPlaythrough()` completes Act 1 for all 4 characters
+- [x] E2E Playwright test passes for all 4 characters through 5+ floors
+- [x] Every card verified: cost, damage, effects match description
 - [x] Every enemy verified: HP, damage, AI pattern correct
 - [x] Asset audit complete — all placeholders documented
 - [x] Top 10 worst placeholder assets replaced
-- [x] Zero P0 bugs remaining (QR-10 closed N/A — no code bugs found)
+- [x] Zero P0 bugs remaining (none found in audits)
 - [x] Data Editor overrides show visible warning
 - [x] Runtime state validation active in dev mode
-- [x] Error boundary includes bug report functionality
 - [x] `npm run validate` passes (3730 tests)
-- [ ] Honest self-assessment completed (no inflated scores)
+- [ ] Honest self-assessment completed (deferred to Sprint 18)
+
+---
+
+## Sprint 18: Visual Polish & Ship Readiness - IN PROGRESS
+
+**Goal:** Replace placeholders, complete validation, and prepare for 1.0 release.
+**Branch:** `sprint-18` (create from master)
+**Plan:** See `SPRINT_18_PLAN.md`
+**Status:** IN PROGRESS
+
+### Stream A: Art Polish
+
+| Task | Owner | Size | Priority | Description | Status |
+|------|-------|------|----------|-------------|--------|
+| VP-01 | GD | L | P0 | Act 1 Boss Sprite Replacement (Slime Boss, Guardian, Hexaghost) | PENDING |
+| VP-02 | GD | M | P0 | Act 1 Elite Sprite Replacement (Gremlin Nob, Lagavulin) | PENDING |
+| VP-03 | GD | M | P1 | Common Enemy Sprite Replacement (Cultist, Jaw Worm, etc.) | PENDING |
+| VP-04 | GD | M | P1 | Character-Specific Relic Art (15 missing relics) | PENDING |
+| VP-05 | GD | L | P1 | High-Priority Card Art (20 starter/common cards) | PENDING |
+| VP-06 | GD | M | P2 | Act 2/3 Enemy Art (10 remaining placeholders) | PENDING |
+
+### Stream B: Validation Completion
+
+| Task | Owner | Size | Priority | Description | Status |
+|------|-------|------|----------|-------------|--------|
+| VP-07 | QA/UX | S | P0 | Keyboard-Only Playthrough Verification | PENDING |
+| VP-08 | QA | M | P0 | DevTools Full Playthrough Test | PENDING |
+| VP-09 | PM/QA | M | P0 | Honest Self-Assessment | PENDING |
+
+### Stream C: Ship Prep
+
+| Task | Owner | Size | Priority | Description | Status |
+|------|-------|------|----------|-------------|--------|
+| VP-10 | BE/QA | M | P1 | E2E CI Stabilization | PENDING |
+| VP-11 | BE | S | P2 | Bundle Optimization | PENDING |
+| VP-12 | AR | S | P2 | Audio Final Pass | PENDING |
+| VP-13 | GD | L | P2 | Remaining Card Art (30 additional) | PENDING |
+| VP-14 | PM | S | P2 | Documentation Polish | PENDING |
+| VP-15 | PM | S | P2 | Release Checklist | PENDING |
+
+### Sprint 18 Validation Gate
+
+**P0 (Must Pass)**
+- [ ] All 3 Act 1 boss sprites are quality art (>30KB each)
+- [ ] All 2 Act 1 elite sprites are quality art (>30KB each)
+- [ ] Keyboard-only combat playthrough verified for all 4 characters
+- [ ] DevTools fullPlaythrough completes for all 4 characters
+- [ ] Honest self-assessment document created
+- [ ] `npm run validate` passes
+
+**P1 (Should Pass)**
+- [ ] All 15 character-specific relics have art
+- [ ] 20 high-visibility card art pieces replaced
+- [ ] E2E tests pass consistently on CI
+- [ ] 5 common enemy sprites replaced
+
+**P2 (Nice to Have)**
+- [ ] 10 Act 2/3 enemy sprites replaced
+- [ ] 30 additional card art pieces improved
+- [ ] Bundle optimization reviewed
+- [ ] Audio final pass complete
+- [ ] Release checklist created
