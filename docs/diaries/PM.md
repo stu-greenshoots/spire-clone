@@ -14,6 +14,42 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-14 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 13/15 tasks done
+
+**Done:**
+- Implemented as BE: QR-14 Performance Monitoring
+  - Created performanceMonitor.js with timing, memory, and state size utilities
+  - Added reducer timing instrumentation to GameContext.jsx
+  - Extended DevOverlay to show performance metrics (state size, heap usage, slowest actions)
+  - Console warnings for slow actions (>16ms)
+  - DevTools API: window.__SPIRE_PERF__
+  - 20 new tests in performanceMonitor.test.js
+- Reviewed and merged PR #224
+- Updated sprint board and BE diary
+
+**Sprint 17 Progress:** 13/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-04: Dev State Overlay (BE/UX) — MERGED (PR #223)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+- [x] QR-12: Data Editor Safety (BE) — MERGED (PR #221)
+- [x] QR-13: Runtime State Validation (BE) — MERGED (PR #222)
+- [x] QR-14: Performance Monitoring (BE/UX) — MERGED (PR #224)
+
+**Remaining tasks (2):**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be closed as N/A
+- QR-15: Error Boundary Enhancement (BE) — P2
+
+---
+
 ### Sprint 17 — QR-04 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 12/15 tasks done

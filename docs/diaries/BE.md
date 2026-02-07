@@ -5,6 +5,43 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 17 Entries
 
+### QR-14: Performance Monitoring
+**Date:** 2026-02-07
+**Status:** MERGED (PR #224)
+
+**Done:**
+- Created performance monitoring system (`src/systems/performanceMonitor.js`)
+- Added reducer timing instrumentation to GameContext.jsx
+- Extended DevOverlay to show performance metrics:
+  - State size in bytes (formatted)
+  - Memory heap usage (Chrome-only)
+  - Top 3 slowest actions with avg/max times
+  - Color-coded by threshold: red >16ms, yellow >8ms
+- Console warnings for slow actions (>16ms, exceeds 60fps frame budget)
+- DevTools API: `window.__SPIRE_PERF__` with getTimingSummary, getSlowestActions, clearTimings
+- 20 new tests in performanceMonitor.test.js
+- 3708 tests passing, lint clean (0 errors, 5 pre-existing warnings), build clean
+
+**Features:**
+- `recordActionTiming(actionType, durationMs)` — record timing for an action
+- `getTimingSummary()` — get all action timing stats
+- `getSlowestActions(n)` — get top N slowest actions
+- `estimateStateSize(state)` — estimate state size in bytes
+- `getMemoryUsage()` — get heap memory info (Chrome-only)
+- `withTiming(reducer)` — HOF to wrap reducer with timing
+- Rolling 50-action window for averages (prevents memory growth)
+
+**Architecture:**
+- Non-invasive timing wrapper in validatingReducer
+- Performance updates every 60 frames (~1 second) to reduce overhead
+- No performance impact in production builds (isDev checks)
+- Exposed via window.__SPIRE_PERF__ for console debugging
+
+**Blockers:** None
+**Next:** QR-15 (Error Boundary Enhancement) is the final remaining task
+
+---
+
 ### QR-04: Dev State Overlay
 **Date:** 2026-02-07
 **Status:** MERGED (PR #223)

@@ -787,7 +787,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make the game actually work, verifiably. No new features — fix, test, and prove what exists.
 **Branch:** `sprint-17` (create from master)
 **Plan:** See `SPRINT_17_PLAN.md`
-**Status:** IN PROGRESS — 12/15 tasks done
+**Status:** IN PROGRESS — 13/15 tasks done
 
 ### Stream A: Testability Infrastructure
 
@@ -821,7 +821,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
 | QR-13 | BE | M | P1 | Runtime state validation (catch impossible states) | MERGED (PR #222) |
-| QR-14 | BE/UX | S | P2 | Performance monitoring (FPS, reducer timing, render counts) | PENDING |
+| QR-14 | BE/UX | S | P2 | Performance monitoring (FPS, reducer timing, render counts) | MERGED (PR #224) |
 | QR-15 | BE | S | P2 | Error boundary enhancement (recovery, bug report, state dump) | PENDING |
 
 ### Sprint 17 Validation Gate
