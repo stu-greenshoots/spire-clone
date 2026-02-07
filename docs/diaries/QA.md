@@ -2,6 +2,43 @@
 
 ## Sprint 17 Entries
 
+### QR-07: Card Mechanics Verification
+**Date:** 2026-02-07
+**Status:** Complete, PR #215 merged
+**Sprint:** Sprint 17 (Quality Reality)
+**Task:** QR-07 (Card mechanics verification — L size, P0)
+
+**Done:**
+1. Created `src/test/cardMechanicsVerification.test.js` — 180 comprehensive tests for all 188 cards
+2. **Structural Validation:** All cards verified for required fields (id, name, type, cost, description, rarity)
+3. **Cost Verification:** Valid cost ranges (-2 to 10), X-cost (-1), unplayable (-2), 0-cost playability
+4. **Damage Verification:** Attack cards tested for correct damage values, description matching, strength scaling, vulnerable/weak modifiers
+5. **Block Verification:** Skill cards tested for block values, dexterity scaling, frail modifier
+6. **Status Effects:** Vulnerable, weak, poison, strength, and other status applications verified
+7. **Upgrade Verification:** All cards have upgradedVersion property
+8. **Energy Mechanics:** 0-cost cards playable at 0 energy, X-cost always playable
+9. **Character Card Pools:** Ironclad (96), Silent (31), Defect (30), Watcher (31) verified
+10. **Rarity Distribution:** Basic, Common, Uncommon, Rare, Curse counts validated
+11. **Special Keywords:** Exhaust, ethereal, innate, retain mechanics verified
+12. **Combat Calculations:** Real combatReducer used (no mocks), multi-hit attacks, AoE targeting
+13. **Spot Checks:** Individual cards tested for all 4 characters (Strike, Neutralize, Zap, Eruption, etc.)
+
+**Key challenges fixed:**
+- Wound card has cost -2 (unplayable status) — fixed validation to allow -2
+- SELECT_CARD auto-plays when 1 enemy — fixed playCard helper logic
+- Enemy creation requires `hp` as {min,max} or number — used correct format
+
+**Test count:** 3444 total (180 new from this PR)
+
+**Validation:** `npm run validate` passes — all tests green, lint clean (0 errors, 5 pre-existing warnings), build clean
+
+**E2E Note:** E2E tests in CI failed with deploy-smoke infrastructure issues (Invalid URL, timeouts) — same failures exist on sprint-17 base branch. Not related to this PR's changes.
+
+**Blockers:** None
+**Next:** QR-06 (Visual asset audit) and QR-09 (Enemy behavior verification) are remaining P0/P1 tasks.
+
+---
+
 ### QR-05: Full Playthrough E2E Test
 **Date:** 2026-02-07
 **Status:** Complete, PR #214 merged

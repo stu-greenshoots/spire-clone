@@ -14,6 +14,33 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-07 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 4/15 tasks done
+
+**Done:**
+- Implemented as QA: QR-07 Card Mechanics Verification
+  - Comprehensive test suite for all 188 cards (180 tests)
+  - Structural validation: required fields, types, rarities
+  - Cost verification: ranges, X-cost, 0-cost playability
+  - Damage/block verification with strength, dexterity, weak, vulnerable, frail modifiers
+  - Status effect application, upgrade verification, energy mechanics
+  - Character card pools and rarity distribution validated
+  - Uses REAL combatReducer (no mocks for core mechanics)
+- Merged PR #215, updated sprint board and QA diary
+
+**Sprint 17 Progress:** 4/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+
+**Next P0 tasks:**
+- QR-06: Visual Asset Audit (GD)
+- QR-10: Bug Fix Sprint (ALL) — depends on QR-06, QR-07
+
+---
+
 ### Sprint 17 — QR-05 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 3/15 tasks done

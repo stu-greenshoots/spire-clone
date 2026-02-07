@@ -787,7 +787,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make the game actually work, verifiably. No new features — fix, test, and prove what exists.
 **Branch:** `sprint-17` (create from master)
 **Plan:** See `SPRINT_17_PLAN.md`
-**Status:** IN PROGRESS — 3/15 tasks done
+**Status:** IN PROGRESS — 4/15 tasks done
 
 ### Stream A: Testability Infrastructure
 
@@ -804,7 +804,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 |------|-------|------|----------|-------------|--------|
 | QR-05 | QA | L | P0 | Full playthrough E2E test (Playwright, all 4 characters, 5+ floors) | MERGED (PR #214) |
 | QR-06 | GD | M | P0 | Visual asset audit (every sprite, card art, icon cataloged) | PENDING |
-| QR-07 | QA/JR | L | P0 | Card mechanics verification (all 157+ cards, real reducers) | PENDING |
+| QR-07 | QA/JR | L | P0 | Card mechanics verification (all 188 cards, real reducers) | MERGED (PR #215) |
 | QR-08 | AR | S | P1 | Audio audit (every file: exists, audible, distinct, correct trigger) | PENDING |
 | QR-09 | QA/JR | M | P1 | Enemy behavior verification (all 40+ enemies, AI patterns, abilities) | PENDING |
 
