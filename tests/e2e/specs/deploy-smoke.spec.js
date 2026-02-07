@@ -21,7 +21,8 @@ test.describe('Deploy Smoke Tests', () => {
     await page.click('[data-testid="btn-new-game"]');
 
     // Wait for character selection or map nodes to appear
-    const charSelect = page.locator('[data-testid^="character-"]');
+    // Character buttons use data-testid="btn-select-{character}" format
+    const charSelect = page.locator('[data-testid^="btn-select-"]');
     const mapNodes = page.locator('[data-testid^="map-node-"]');
     await charSelect.first().or(mapNodes.first()).waitFor({ timeout: 15000 });
 
@@ -42,15 +43,19 @@ test.describe('Deploy Smoke Tests', () => {
 
   test('audio files are accessible at deployed URL', async ({ page, baseURL }) => {
     // Check a sample of audio files are reachable (HTTP 200)
+    // Audio files are in public/sounds/ directory
     const audioFiles = [
-      'audio/sfx/sfx_attack_slash.mp3',
-      'audio/sfx/sfx_block_gain.mp3',
-      'audio/sfx/sfx_card_play.mp3',
-      'audio/music/music_combat.mp3',
+      'sounds/block_gain.mp3',
+      'sounds/card_play.mp3',
+      'sounds/music_combat.mp3',
+      'sounds/enemy_attack.mp3',
     ];
 
+    // Ensure baseURL ends with '/' for proper path joining
+    const base = baseURL.endsWith('/') ? baseURL : `${baseURL}/`;
+
     for (const file of audioFiles) {
-      const url = `${baseURL}${file}`;
+      const url = `${base}${file}`;
       const response = await page.request.get(url);
       expect(response.status(), `${file} should be accessible`).toBe(200);
       expect(response.headers()['content-type']).toContain('audio');
