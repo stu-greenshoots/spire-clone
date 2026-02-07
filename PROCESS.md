@@ -1,7 +1,7 @@
 # Development Process - Spire Ascent
 
 **Established:** 2026-01-24 (Brainstorm Session 2)
-**Updated:** 2026-01-25 (Sprint 4 - Process Refinement)
+**Updated:** 2026-02-07 (Sprint 17 - Quality Reality)
 **Purpose:** Prevent sprint chaos. Use GitHub properly. Take ownership.
 
 ---
@@ -195,9 +195,9 @@ on:
 3. **Build** - `npm run build` (no errors)
 4. **Coverage** - `npm run test:coverage` (report only, no gate)
 
-### Future Additions (Sprint 2+)
+### Future Additions
 - PR size warning (>500 lines)
-- Smoke test job (dev server + basic navigation)
+- Automated smoke test job (dev server + basic navigation)
 - Branch name validation
 
 ---

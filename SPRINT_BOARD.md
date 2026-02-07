@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
-**Last Updated:** 2026-02-01
-**Current Sprint:** 16 (Endless Mode, Custom Runs, Performance & QoL) - IN PROGRESS
-**Integration Branch:** `sprint-16`
-**Sprint Plan:** See `SPRINT_16_PLAN.md`
-**Roadmap:** See `ROADMAP.md` (original 4-sprint plan to 1.0, now post-1.0)
+**Last Updated:** 2026-02-07
+**Current Sprint:** 17 (Quality Reality) - PLANNING
+**Integration Branch:** `sprint-17`
+**Sprint Plan:** See `SPRINT_17_PLAN.md`
+**Roadmap:** See `docs/archive/ROADMAP.md` (historical — original 4-sprint plan to 1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 15 COMPLETE (17 tasks, 3072 tests, The Watcher + Art Quality → Score 100)
+**Previous:** Sprint 16 COMPLETE (14 tasks, 3264 tests, Endless Mode + Custom Runs)
 
 ---
 
@@ -779,3 +779,62 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] 3200+ tests passing (3264)
 - [x] `npm run validate` passes
 - [x] Median endless death: floor 60-80 at A0
+
+---
+
+## Sprint 17: Quality Reality - PLANNING
+
+**Goal:** Make the game actually work, verifiably. No new features — fix, test, and prove what exists.
+**Branch:** `sprint-17` (create from master)
+**Plan:** See `SPRINT_17_PLAN.md`
+**Status:** PLANNING — Sprint plan written, pending kickoff
+
+### Stream A: Testability Infrastructure
+
+| Task | Owner | Size | Priority | Description | Status |
+|------|-------|------|----------|-------------|--------|
+| QR-01 | UX | M | P0 | Keyboard combat controls (1-9 cards, Tab target, Enter confirm, E end turn) | PENDING |
+| QR-02 | BE | M | P0 | Enhanced DevTools API (playCard, autoFight, fullPlaythrough, getVisibleState) | PENDING |
+| QR-03 | QA | S | P1 | Expanded scenario library (30+ scenarios, all characters/phases) | PENDING |
+| QR-04 | BE/UX | S | P2 | Dev state overlay (phase, HP, energy, FPS, backtick toggle) | PENDING |
+
+### Stream B: Honest QA Audit
+
+| Task | Owner | Size | Priority | Description | Status |
+|------|-------|------|----------|-------------|--------|
+| QR-05 | QA | L | P0 | Full playthrough E2E test (Playwright, all 4 characters, 5+ floors) | PENDING |
+| QR-06 | GD | M | P0 | Visual asset audit (every sprite, card art, icon cataloged) | PENDING |
+| QR-07 | QA/JR | L | P0 | Card mechanics verification (all 157+ cards, real reducers) | PENDING |
+| QR-08 | AR | S | P1 | Audio audit (every file: exists, audible, distinct, correct trigger) | PENDING |
+| QR-09 | QA/JR | M | P1 | Enemy behavior verification (all 40+ enemies, AI patterns, abilities) | PENDING |
+
+### Stream C: Bug Fixing
+
+| Task | Owner | Size | Priority | Description | Status |
+|------|-------|------|----------|-------------|--------|
+| QR-10 | ALL | Var | P0 | Bug fix sprint (fix all bugs found in Stream B) | PENDING |
+| QR-11 | GD | L | P1 | Placeholder asset replacement (top 10 worst from QR-06) | PENDING |
+| QR-12 | BE | S | P1 | Data Editor safety (warning banner, reset button, validation) | PENDING |
+
+### Stream D: Architecture Hardening
+
+| Task | Owner | Size | Priority | Description | Status |
+|------|-------|------|----------|-------------|--------|
+| QR-13 | BE | M | P1 | Runtime state validation (catch impossible states) | PENDING |
+| QR-14 | BE/UX | S | P2 | Performance monitoring (FPS, reducer timing, render counts) | PENDING |
+| QR-15 | BE | S | P2 | Error boundary enhancement (recovery, bug report, state dump) | PENDING |
+
+### Sprint 17 Validation Gate
+
+- [ ] Full combat playable via keyboard only
+- [ ] `__SPIRE__.fullPlaythrough()` completes Act 1 for all 4 characters
+- [ ] E2E Playwright test passes for all 4 characters through 5+ floors
+- [ ] Every card verified: cost, damage, effects match description
+- [ ] Every enemy verified: HP, damage, AI pattern correct
+- [ ] Asset audit complete — all placeholders documented
+- [ ] Top 10 worst placeholder assets replaced
+- [ ] Zero P0 bugs remaining
+- [ ] Data Editor overrides show visible warning
+- [ ] Runtime state validation active in dev mode
+- [ ] `npm run validate` passes
+- [ ] Honest self-assessment completed (no inflated scores)

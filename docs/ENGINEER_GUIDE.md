@@ -12,9 +12,10 @@ Before doing ANY work:
 2. **Read git flow:** `docs/GIT_FLOW.md`
 3. **Check git state:**
    ```bash
-   cd /root/spire-clone && git status && git branch
+   git status && git branch
    ```
 4. **Read sprint board:** `SPRINT_BOARD.md`
+5. **Read sprint plan:** `SPRINT_17_PLAN.md` (or current sprint plan)
 
 ---
 
@@ -106,4 +107,5 @@ Before ending:
 | UX | `--author="UX <ux@spire-ascent.dev>"` |
 | GD | `--author="GD <gd@spire-ascent.dev>"` |
 | SL | `--author="SL <sl@spire-ascent.dev>"` |
+| Varrow | `--author="Varrow <varrow@spire-ascent.dev>"` |
 | QA | `--author="QA <qa@spire-ascent.dev>"` |

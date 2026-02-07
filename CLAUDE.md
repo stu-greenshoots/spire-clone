@@ -1,20 +1,24 @@
 # Spire Ascent - Claude Code Project Instructions
 
+**Last Updated:** 2026-02-07 (Sprint 17 Planning)
+
 ## Required Reading (Every Session)
 
 Before starting any work, read these files to understand current state:
 
 1. **SPRINT_BOARD.md** - Current sprint, task status, what's in progress
-2. **docs/ENGINEER_GUIDE.md** - Common engineer workflow, git, reviews, checklists
-3. **Your diary** - `docs/diaries/{ROLE}.md` - Your previous context and notes
-4. **Your engineer command** - `.claude/commands/engineer-{role}.md` - Role-specific checks
+2. **SPRINT_17_PLAN.md** - Current sprint plan, task assignments, parallel execution
+3. **docs/ENGINEER_GUIDE.md** - Common engineer workflow, git, reviews, checklists
+4. **Your diary** - `docs/diaries/{ROLE}.md` - Your previous context and notes
+5. **Your engineer command** - `.claude/commands/engineer-{role}.md` - Role-specific checks
 
 For deeper context (read when relevant to your task):
 - **docs/GIT_FLOW.md** - Detailed git workflow reference
-- **SPRINT_4_PLAN.md** - Current sprint plan, task assignments, delivery order
 - **PROCESS.md** - Branch naming, PR workflow, commit conventions
-- **DEPENDENCIES.md** - Task ordering, conflict zones, what blocks what
 - **GAME_REFERENCE.md** - Card/enemy/relic mechanics (for content tasks)
+- **DEFINITION_OF_DONE.md** - When is a task actually done
+
+Historical sprint plans are archived in `docs/archive/sprint-plans/`.
 
 ## Commands
 
@@ -109,49 +113,41 @@ Each "team member" is a role with owned files and responsibilities. When working
 ### PM (Project Manager)
 - **Owns:** `*.md` docs, `package.json` scripts, `.github/`
 - **Focus:** Sprint coordination, process, CI/CD, PR management
-- **Sprint 3 tasks:** PM-03 (hide Data Editor in production)
 
 ### BE (Back Ender)
-- **Owns:** `src/context/`, `src/context/reducers/`
+- **Owns:** `src/context/`, `src/context/reducers/`, `src/systems/` (infrastructure)
 - **Focus:** Architecture, state management, performance
-- **Sprint 3 tasks:** BE-05 (damage preview with modifiers)
 - **Rule:** Same public interfaces - useGame hook shape must not change without team discussion
 
 ### JR (Junior Developer)
-- **Owns:** `src/data/potions.js`, `src/data/enemies.js`, `src/systems/potionSystem.js`, `src/components/PotionSlots.jsx`
-- **Focus:** Potion system, card upgrades, new content
-- **Sprint 3 tasks:** JR-05 (enemy intent specificity)
+- **Owns:** `src/data/` (cards, enemies, potions), `src/systems/potionSystem.js`, `src/components/PotionSlots.jsx`
+- **Focus:** Content (cards, enemies, potions), card mechanics, balance
 - **Rule:** Build against existing APIs. If a function doesn't exist in the hook, don't call it - wire it up first.
 
 ### AR (Allrounder)
 - **Owns:** `src/systems/audioSystem.js`, `src/systems/saveSystem.js`, `src/components/Settings.jsx`
 - **Focus:** Audio, save/load, settings, honest assessment
-- **Sprint 3 tasks:** AR-04 (audio investigation), AR-03 (settings - deferred from Sprint 2)
 - **Rule:** Data formats must match between save and load. Serialize IDs, not full objects.
 
 ### UX (UX Guy)
 - **Owns:** `src/components/CombatScreen.jsx`, `src/components/AnimationOverlay.jsx`, `src/hooks/useAnimations.js`
-- **Focus:** Combat feedback, tooltips, visual polish
-- **Sprint 3 tasks:** UX-05 (card truncation), UX-06 (tooltip infra), UX-07 (combat feedback)
+- **Focus:** Combat feedback, tooltips, visual polish, keyboard controls
 - **Rule:** Animations must not block input. Speed multiplier always respected.
 
 ### GD (Graphic Designer)
 - **Owns:** `public/images/`, `src/utils/assetLoader.js`, `scripts/compress-images.js`
 - **Focus:** Art pipeline, asset optimization, visual consistency
-- **Sprint 3 tasks:** GD-05 (theme brightness), GD-06 (sprite sheets)
 - **Rule:** Always provide fallback when assets missing. Lazy-load images.
 
 ### Varrow (The Loop Doctor)
 - **Owns:** `src/data/events.js`, `src/data/flavorText.js`, `src/data/bossDialogue.js`
 - **Focus:** Narrative design, mechanic-story synergy, emergent storytelling, loop justification
-- **Specialty:** Indie roguelikes - makes the gameplay loop and story inseparable
-- **Rule:** Story must embrace what the game IS, not explain it away. No derivative concepts. Challenge premises ruthlessly.
+- **Rule:** Story must embrace what the game IS, not explain it away. No derivative concepts.
 
 ### QA (Tester)
-- **Owns:** `src/test/`, test infrastructure
-- **Focus:** Component tests, balance simulator, E2E tests
-- **Sprint 3 tasks:** QA-03 (E2E tests - deferred from Sprint 2)
-- **Rule:** Tests validate behavior against real interfaces. Use data-testid, not fragile regex.
+- **Owns:** `src/test/`, `tests/e2e/`, test infrastructure
+- **Focus:** E2E tests, card/enemy verification, balance simulator, regression
+- **Rule:** Tests validate behavior against real interfaces. Use data-testid, not fragile regex. Tests must use real reducers, not mocks, wherever possible.
 
 ## Key Commands
 
@@ -164,36 +160,61 @@ npm run test:run         # Vitest once
 npm run build            # Production build
 ```
 
+## Dev Tools (Development Mode)
+
+In dev mode (`npm run dev`), the following tools are available:
+
+### Main Menu
+- **Data Editor** button - Edit card/enemy/relic data at runtime (persists to localStorage)
+- **State Builder** button - Load predefined game scenarios
+
+### Console API
+```javascript
+__SPIRE__.listScenarios()           // List all available scenarios
+__SPIRE__.loadScenario("name")      // Load a scenario (e.g. "combat-basic")
+__SPIRE__.getState()                // Get current game state
+__SPIRE__.setState(scenario)        // Load custom state
+```
+
+### WARNING: Data Editor Persistence
+The Data Editor saves custom changes to `localStorage` under key `spireAscent_customData`. These changes **silently override** card/enemy/relic definitions at runtime. If the game behaves unexpectedly (e.g. cards cost 0), check and clear this key:
+```javascript
+localStorage.removeItem('spireAscent_customData')
+```
+
 ## Critical Rules
 
 1. **One PR per task.** No bundling multiple tasks.
 2. **`npm run validate` before push.** No exceptions.
 3. **Smoke test your change.** Run the game, click things, document what works.
 4. **Tests passing ≠ validated.** Feature must work at runtime in the actual game.
-5. **Stay in your lane.** Each role has owned files. Don't touch files outside your scope without coordination.
-6. **Fix before feature.** All P0 bugs must close before new features start.
-7. **No auto-generated branch names.** Follow the convention.
-8. **Max 300 lines per PR.** Split larger tasks into sub-tasks.
-9. **No unused imports/variables.** Lint must be clean.
-10. **No forward-referencing.** Don't call APIs that don't exist yet.
-11. **NEVER auto-merge PRs.** Wait for Copilot review → address findings → wait for Mentor approval → then merge.
+5. **Play the game.** Every change verified by actually playing, not just running tests.
+6. **Stay in your lane.** Each role has owned files. Don't touch files outside your scope without coordination.
+7. **Fix before feature.** All P0 bugs must close before new features start.
+8. **No auto-generated branch names.** Follow the convention.
+9. **Max 300 lines per PR.** Split larger tasks into sub-tasks.
+10. **No unused imports/variables.** Lint must be clean.
+11. **No forward-referencing.** Don't call APIs that don't exist yet.
+12. **NEVER auto-merge PRs.** Wait for Copilot review → address findings → wait for Mentor approval → then merge.
+13. **Honest assessment.** No inflated scores. Report what's broken, not what passes.
 
-## Current State (Sprint 4 - Active)
+## Current State (Sprint 17 - Quality Reality)
 
-- **Branch:** `sprint-4` (create if not exists)
-- **Previous Sprint:** Sprint 3 COMPLETE (10 PRs merged, all validation gates passed)
-- **Tests:** 837 passing (29 test files)
+- **Branch:** `sprint-17` (create from master)
+- **Previous Sprint:** Sprint 16 COMPLETE (14 tasks, 3264 tests, Endless Mode + Custom Runs)
+- **Tests:** 3264 passing (75 test files)
 - **Lint:** 0 errors
-- **Build:** Passing
-- **Runtime:** All systems functional
-- **Review Score:** 58/100 (Game Zone Magazine) - target 70+
-- **Diaries:** `docs/diaries/{ROLE}.md` - update daily
-- **Sprint 4 Plan:** See `SPRINT_4_PLAN.md` (15 visual polish tasks VP-01 to VP-15)
-- **Sprint 4 Focus:** Map auto-scroll, victory overlay, sequential enemy turns, visual polish
+- **Build:** Passing (865ms)
+- **Bundle:** Code-split, no chunk >200KB, total JS ~700KB
+- **Content:** 4 characters, 157+ cards, 40+ enemies, 49 relics, 15 potions, 4 acts + Heart
+- **Features:** Endless mode, daily challenges, custom seeded runs, compendium, run history
+- **Sprint 17 Focus:** Quality — testability, honest QA, bug fixing, architecture hardening. NO new features.
+- **Sprint Plan:** See `SPRINT_17_PLAN.md` (15 QR tasks across 4 parallel work streams)
+- **Ship Date:** Pushed back. Quality is the only priority.
 
 ### Sprint Infrastructure Checklist
-- [ ] `sprint-4` branch exists
-- [ ] Draft PR from `sprint-4` to `master` with task checklist
+- [ ] `sprint-17` branch exists
+- [ ] Draft PR from `sprint-17` to `master` with task checklist
 - [ ] All engineers using their `engineer-{role}.md` commands
 - [ ] All commits authored correctly
 - [ ] All PRs reviewed before merge
@@ -201,12 +222,27 @@ npm run build            # Production build
 ## Architecture Quick Reference
 
 ```
-src/context/GameContext.jsx          # 375-line orchestrator
+src/context/GameContext.jsx          # Game state orchestrator
 src/context/reducers/                # Domain reducers (combat, map, meta, reward, shop)
-src/systems/                         # Game logic (combat, cards, potions, audio, save)
-src/data/                            # Content definitions (cards, enemies, events, potions, relics)
-src/components/                      # React UI components
-src/hooks/                           # Custom hooks (useGame, useAnimations)
+src/systems/                         # Game logic (combat, cards, potions, audio, save, seededRandom)
+src/data/                            # Content (cards, enemies, events, potions, relics, scenarios)
+src/components/                      # React UI (lazy-loaded screens)
+src/hooks/                           # Custom hooks (useGame, useAnimations, useKeyboardControls)
 src/utils/                           # Utilities (assetLoader, mapGenerator)
-src/test/                            # Test suites
+src/test/                            # Unit/integration tests (Vitest)
+tests/e2e/                           # E2E tests (Playwright)
+public/images/                       # Game assets (sprites, cards, backgrounds)
+public/sounds/                       # Audio files (music, SFX, ambient)
+docs/                                # Documentation, diaries, guides
+docs/archive/                        # Historical docs, old sprint plans
 ```
+
+## Project History
+
+- **Sprints 1-3:** Foundation — core game loop, bug fixes, review feedback
+- **Sprints 4-8:** Polish — visual effects, mobile support, title screen, Act 2, juice
+- **Sprint 9:** Ship prep — 1.0 release, PWA, regression, music, tutorial
+- **Sprints 10-12:** Content — Act 3, The Silent, The Heart, daily challenges
+- **Sprints 13-15:** Characters — The Defect, The Watcher, orbs, stances, score 100
+- **Sprint 16:** Retention — Endless mode, custom seeds, code-splitting, compendiums
+- **Sprint 17:** Quality Reality — Fix what's broken. Prove it works. No new features.
