@@ -13,6 +13,66 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 ---
 
 ## Entries
+### Sprint 18 - VP-05 Complete
+**Date:** 2026-02-07
+**Status:** VP-05 complete, PR #233 merged to sprint-18
+
+**Done today:**
+- Replaced placeholder art for 20 high-priority cards meeting >10KB requirement
+- Created `scripts/generate-high-priority-card-art-vp05.js` for reproducible generation
+- Rebuilt card sprite sheet (3148KB)
+
+**Cards replaced:**
+
+| Character | Card | Old Size | New Size | Description |
+|-----------|------|----------|----------|-------------|
+| Ironclad | strike | 4.3KB | 16.7KB | Sword blade with motion lines |
+| Ironclad | defend | 3.5KB | 16.4KB | Shield with iron cross emblem |
+| Ironclad | bash | 4.0KB | 15.7KB | Spiked gauntlet with impact |
+| Ironclad | anger | 4.0KB | 16.5KB | Angry mask with rage flames |
+| Ironclad | pommelStrike | 5.2KB | 16.3KB | Sword pommel strike |
+| Silent | strike_silent | 2.8KB | 13.5KB | Serrated dagger |
+| Silent | defend_silent | 2.9KB | 13.4KB | Cloak defense |
+| Silent | neutralize | 4.3KB | 13.6KB | Poison knife with weak icon |
+| Silent | survivor | 2.9KB | 13.0KB | Dodging silhouette |
+| Silent | shiv | 2.9KB | 14.0KB | Multiple throwing knives |
+| Defect | strike_defect | 2.9KB | 16.1KB | Energy blade |
+| Defect | defend_defect | 3.0KB | 17.2KB | Hexagonal energy shield |
+| Defect | zap | 3.5KB | 17.8KB | Lightning orb |
+| Defect | dualcast | 3.6KB | 16.7KB | Twin orbs with x2 |
+| Defect | ballLightning | 3.8KB | 18.5KB | Lightning ball + orb channel |
+| Watcher | strike_watcher | 2.9KB | 13.6KB | Spirit staff with blade |
+| Watcher | defend_watcher | 2.8KB | 14.3KB | Lotus barrier |
+| Watcher | eruption | 3.7KB | 16.2KB | Volcano with wrath glow |
+| Watcher | vigilance | 2.8KB | 16.1KB | Meditation calm aura |
+| Watcher | miracle | 3.2KB | 15.9KB | Divine water droplet |
+
+**Technical approach:**
+- 512px SVG canvas rendered to 256px for quality
+- Dense noise patterns (350 elements) for textures
+- Character-specific color schemes
+- Motion lines for attack cards
+- Near-lossless WebP compression (quality 100)
+
+**Validation:** `npm run validate` passes — 3747 tests, lint clean, build clean
+
+**Sprint 18 Progress:** 8/15 tasks complete
+- [x] VP-01: Act 1 Boss Sprites — MERGED (PR #229)
+- [x] VP-02: Act 1 Elite Sprites — MERGED (PR #230)
+- [x] VP-03: Common Enemy Sprites — MERGED (PR #231)
+- [x] VP-04: Character-Specific Relic Art — MERGED (PR #232)
+- [x] VP-05: High-Priority Card Art — MERGED (PR #233)
+- [x] VP-07: Keyboard-Only Playthrough — MERGED (PR #227)
+- [x] VP-08: DevTools Full Playthrough — DONE
+- [x] VP-09: Honest Self-Assessment — DONE
+
+**P1 Validation Gate:**
+- [x] 20 high-visibility card art pieces replaced
+
+**Next:** VP-06 (Act 2/3 Enemy Art) or VP-10 (E2E CI Stabilization)
+
+---
+
 ### Sprint 18 - VP-04 Complete
 **Date:** 2026-02-07
 **Status:** VP-04 complete, PR #232 merged to sprint-18
