@@ -3,6 +3,197 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 17 Entries
+
+### QR-15: Error Boundary Enhancement
+**Date:** 2026-02-07
+**Status:** MERGED (PR #225)
+
+**Done:**
+- Enhanced ErrorBoundary.jsx with bug reporting functionality
+- Added "Copy Bug Report" button — copies error + game state to clipboard as JSON
+- Game state summary display (phase, floor, HP, enemies, hand) when error occurs
+- Comprehensive console logging for agent analysis:
+  - Error message and stack trace
+  - Game state at time of error (from `window.__SPIRE__.getVisibleState()`)
+  - Timestamp, user agent, environment info
+- Safe localStorage info capture (keys/sizes only, not sensitive data)
+- Graceful handling when `window.__SPIRE__` is not available
+- Fallback to console + alert when clipboard API fails
+- 23 new tests in ErrorBoundary.test.jsx
+- 3730 tests passing, lint clean (5 pre-existing warnings), build clean
+
+**Features:**
+- `captureGameState()` — safely get game state from DevTools API
+- `generateBugReport()` — create comprehensive bug report object
+- `handleCopyBugReport()` — copy report to clipboard with feedback
+- `formatGameStateSummary()` — human-readable state display
+
+**Architecture:**
+- Non-invasive enhancement — builds on existing ErrorBoundary
+- Uses QR-02's `window.__SPIRE__.getVisibleState()` for state capture
+- Clipboard API with fallback for unsupported browsers
+- No breaking changes to existing onReset behavior
+
+**Blockers:** None
+**Next:** Sprint 17 complete — all 15 tasks done
+
+---
+
+### QR-14: Performance Monitoring
+**Date:** 2026-02-07
+**Status:** MERGED (PR #224)
+
+**Done:**
+- Created performance monitoring system (`src/systems/performanceMonitor.js`)
+- Added reducer timing instrumentation to GameContext.jsx
+- Extended DevOverlay to show performance metrics:
+  - State size in bytes (formatted)
+  - Memory heap usage (Chrome-only)
+  - Top 3 slowest actions with avg/max times
+  - Color-coded by threshold: red >16ms, yellow >8ms
+- Console warnings for slow actions (>16ms, exceeds 60fps frame budget)
+- DevTools API: `window.__SPIRE_PERF__` with getTimingSummary, getSlowestActions, clearTimings
+- 20 new tests in performanceMonitor.test.js
+- 3708 tests passing, lint clean (0 errors, 5 pre-existing warnings), build clean
+
+**Features:**
+- `recordActionTiming(actionType, durationMs)` — record timing for an action
+- `getTimingSummary()` — get all action timing stats
+- `getSlowestActions(n)` — get top N slowest actions
+- `estimateStateSize(state)` — estimate state size in bytes
+- `getMemoryUsage()` — get heap memory info (Chrome-only)
+- `withTiming(reducer)` — HOF to wrap reducer with timing
+- Rolling 50-action window for averages (prevents memory growth)
+
+**Architecture:**
+- Non-invasive timing wrapper in validatingReducer
+- Performance updates every 60 frames (~1 second) to reduce overhead
+- No performance impact in production builds (isDev checks)
+- Exposed via window.__SPIRE_PERF__ for console debugging
+
+**Blockers:** None
+**Next:** QR-15 (Error Boundary Enhancement) is the final remaining task
+
+---
+
+### QR-04: Dev State Overlay
+**Date:** 2026-02-07
+**Status:** MERGED (PR #223)
+
+**Done:**
+- Created toggleable DevOverlay component (`src/components/DevOverlay.jsx`)
+- Toggle with backtick (`) key, dev mode only
+- Displays comprehensive game state:
+  - Phase, floor, act, turn, character (top-left)
+  - FPS counter with color-coding: red <30, yellow <50, green 50+ (top-right)
+  - Last action dispatched for debugging reducer flow (top-right)
+  - Player stats: HP, energy, block, gold, stance, mantra, focus, orbs, status effects (left)
+  - Enemies: HP, block, intent, status effects (right)
+  - Hand: cards with costs, playability indicator (green=playable, grey=not) (bottom-left)
+  - Pile counts: draw, discard, exhaust (bottom-left)
+- Click-through design with `pointerEvents: 'none'` - doesn't interfere with gameplay
+- Machine-parseable with `data-testid` attributes on all values for automated testing
+- FPS calculation uses rolling 30-frame average, only runs when overlay visible to save CPU
+- Added `lastAction` tracking to GameContext via `wrappedDispatch` pattern
+- 3688+ tests passing, lint clean, build clean
+
+**Architecture:**
+- Standalone component with no side effects - just reads state and renders
+- Uses existing `useGame` hook for state access
+- Non-invasive integration: just imported in App.jsx
+- Production-safe: renders nothing when `import.meta.env.DEV` is false
+- Proper cleanup of requestAnimationFrame and event listeners
+
+**Blockers:** None
+**Next:** QR-14 (Performance Monitoring) can build on FPS counter infrastructure
+
+---
+
+### QR-13: Runtime State Validation
+**Date:** 2026-02-07
+**Status:** MERGED (PR #222)
+
+**Done:**
+- Created comprehensive runtime state validation system (`src/systems/stateValidator.js`)
+- Validates player, enemies, cards, potions, relics, and game phase after each reducer action
+- Catches impossible states: negative HP/energy/gold, NaN values, duplicate instanceIds, invalid phases
+- Validates orb system (Defect) and stance system (Watcher) specific state
+- Dev mode: throws errors with actionable messages for debugging
+- Production: no validation (performance optimization)
+- Player corrections auto-applied (HP capping, negative value fixes)
+- Enemy/card corrections logged only (to avoid masking real bugs)
+- Integrated via `validatingReducer` wrapper in `GameContext.jsx`
+- 76 new tests in `stateValidator.test.js`
+- 3688 tests passing, lint clean, build clean
+
+**Architecture:**
+- Wrapping reducer pattern - non-invasive, doesn't modify existing game logic
+- Validators return `{ valid, errors, warnings, corrections }` for consistency with customDataManager
+- Skip validation for high-frequency UI-only actions (SELECT_CARD, CANCEL_TARGET)
+- Re-throw unexpected JavaScript errors (TypeError, ReferenceError) to avoid masking bugs
+
+**Blockers:** None
+**Next:** QR-10 (Bug Fix Sprint) may be minimal, Stream B found no code bugs
+
+---
+
+### QR-12: Data Editor Safety
+**Date:** 2026-02-07
+**Status:** MERGED (PR #221)
+
+**Done:**
+- Added persistent warning banner on MainMenu when custom data overrides are active
+- Warning shows count of overridden cards/relics/enemies
+- "Reset All" button clears custom data and reloads page
+- Console logging on game start shows all active overrides
+- Validation for custom data before applying:
+  - Cards: reject negative cost, damage, block; require valid id
+  - Enemies: reject HP less than 1; require valid id
+  - Relics: require valid id
+- Invalid entries are skipped with console error instead of applying bad data
+- Added helper functions: `hasCustomOverrides()`, `getCustomOverridesSummary()`
+- Added validators: `validateCardData()`, `validateEnemyData()`, `validateRelicData()`
+- 26 new tests in customDataSafety.test.js
+- 3612 tests passing, lint clean, build clean
+
+**Architecture:**
+- Validators return `{ valid: boolean, errors: string[] }` for easy testing and clear error messages
+- Console warnings use styled output for visibility (`%c` formatting)
+- MainMenu checks `hasCustomOverrides()` on mount and displays banner when true
+- Reset triggers `window.location.reload()` to ensure fresh state
+
+**Blockers:** None
+**Next:** QR-13 (Runtime State Validation) is the next P1 task
+
+---
+
+### QR-02: Enhanced DevTools API
+**Date:** 2026-02-07
+**Status:** MERGED (PR #213)
+
+**Done:**
+- Expanded `window.__SPIRE__` with automation-friendly methods for agent-verifiable testing
+- Combat Actions: `playCard(handIndex, targetIndex?)`, `endTurn()`, `getVisibleState()`
+- Automation: `autoPlayTurn()`, `autoFight()`, `fullPlaythrough(options?)`
+- State Manipulation: `giveCard()`, `giveRelic()`, `givePotion()`, `giveGold()`, `setHp()`, `setEnergy()`, `setFloor()`, `skipToPhase()`
+- Helper exports: `PHASES`, `inCombat()`, `handSize()`, `enemyCount()`, `hpPercent()`
+- Fixed `targetAll` check in `requiresTargeting()` to handle both `target === 'all'` and `targetAll: true`
+- 37 new tests in devToolsApi.test.js
+- 3315 tests passing (3278 + 37 new), lint clean, build clean
+
+**Architecture:**
+- Uses refs (`stateRef`, `gameContextRef`) to avoid stale closure issues in the `useEffect` callback
+- State manipulation uses existing `loadScenario` mechanism from `metaReducer`
+- `autoPlayTurn()` prioritizes attacks → skills → powers, targets lowest HP enemy
+- `autoFight()` loops `autoPlayTurn()` until combat ends or max turns reached
+- `fullPlaythrough()` is async, handles all game phases including map navigation
+
+**Blockers:** None
+**Next:** QR-05 (E2E test) and QR-03 (scenarios) are now unblocked by this API
+
+---
+
 ## Sprint 16 Entries
 
 ### BE-33: Bundle Code-Splitting

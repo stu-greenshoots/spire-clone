@@ -1,3 +1,155 @@
+# QA Diary - Sprint 17
+
+## Sprint 17 Entries
+
+### QR-03: Expanded Scenario Library
+**Date:** 2026-02-07
+**Status:** Complete, PR #219 merged
+**Sprint:** Sprint 17 (Quality Reality)
+**Task:** QR-03 (Expanded scenario library — S size, P1)
+
+**Done:**
+1. Expanded scenarios.js from ~20 to 40 scenarios
+2. **Silent scenarios (3):** Basic combat, poison build, shiv build
+3. **Defect scenarios (3):** Basic combat, lightning orbs, frost orbs
+4. **Watcher scenarios (4):** Basic combat, wrath stance, calm stance, divinity stance
+5. **Act 2/3 combat (5):** Normal encounters, Centurion/Mystic elite, Automaton, Awakened One
+6. **Heart boss scenario (1):** Final boss with invincible shield
+7. **Event phase scenario (1):** Generic event encounter
+8. **Edge cases (6):** Zero energy, no playable cards, combat victory, status-heavy (player/enemy), 5-enemy encounter
+9. Updated `getScenariosByCategory()` to group by character and phase
+10. Updated test expectations to match new category structure
+
+**Card ID fixes:** Corrected snake_case to camelCase for all card references (e.g., `heavy_blade` → `heavyBlade`)
+
+**Test count:** 3586 total (unchanged)
+
+**Validation:** `npm run validate` passes — all tests green, lint clean (0 errors, 5 pre-existing warnings), build clean
+
+**Blockers:** None
+**Next:** QR-10 (Bug fix sprint) — Stream B found no code bugs, may be minimal
+
+---
+
+### QR-09: Enemy Behavior Verification
+**Date:** 2026-02-07
+**Status:** Complete, PR #218 merged
+**Sprint:** Sprint 17 (Quality Reality)
+**Task:** QR-09 (Enemy behavior verification — M size, P1)
+
+**Done:**
+1. Created `src/test/enemyBehaviorVerification.test.js` — 91 comprehensive tests for 40+ enemies
+2. **Enemy Inventory:** 40+ enemies across Acts 1-4, all types (normal/elite/boss/minion)
+3. **HP Verification:** Valid ranges, baseline spot checks (Cultist 48-54, Jaw Worm 42-46, Heart 750)
+4. **Moveset Verification:** Valid moves, damage values, block values, status effects
+5. **AI Pattern Verification:** 10 bosses/enemies tested for correct move cycles
+   - Cultist: Ritual → Dark Strike pattern
+   - Slime Boss: Goop → Preparing → Slam cycle, 50% HP split
+   - Guardian: Offensive vs Defensive mode patterns
+   - Hexaghost: Activate → Divider opening
+   - Automaton: Boost → Dual Strike → Hyper Beam cycle
+   - Corrupt Heart: Debilitate → Blood Shots → Echo → Buff cycle
+   - Lagavulin: 3-turn sleep, alternate attack/siphon
+   - Time Eater: Haste at 50% HP
+   - Awakened One: Rebirth at 0 HP
+   - The Champ: Anger at 50% HP
+6. **Damage Values:** Spot checks against StS baseline (Cultist 6, Jaw Worm 11, Heart 2x15, etc.)
+7. **Special Abilities:** Artifact, metallicize, plated armor, thorns, flight, invincible shield, asleep, retain block
+8. **Enemy Turn Processing:** Real combatReducer used — damage, block, multi-hit, strength, weak, vulnerable
+9. **Ally/Minion Behavior:** Centurion/Mystic pair, Gremlin Leader enrage, Reptomancer daggers, Automaton orbs
+10. **Encounter Generation:** Act 1-3 normal, elite, boss encounter pools
+11. **Boss Phase Transitions:** Rebirth, split, mode shift, phase2, beat of death flags verified
+12. **Status Cards:** Slimed, Dazed, Burn application to player deck
+
+**Key findings:**
+- **No bugs found** during verification
+- All 40+ enemies have valid HP, movesets, and AI functions
+- All boss phase transitions correctly flagged
+- All special abilities properly initialized on instances
+
+**Test count:** 3586 total (91 new from this PR)
+
+**Validation:** `npm run validate` passes — all tests green, lint clean (0 errors, 5 pre-existing warnings), build clean
+
+**Blockers:** None
+**Next:** QR-10 (Bug fix sprint) now ready — no new bugs discovered from QR-09
+
+---
+
+### QR-07: Card Mechanics Verification
+**Date:** 2026-02-07
+**Status:** Complete, PR #215 merged
+**Sprint:** Sprint 17 (Quality Reality)
+**Task:** QR-07 (Card mechanics verification — L size, P0)
+
+**Done:**
+1. Created `src/test/cardMechanicsVerification.test.js` — 180 comprehensive tests for all 188 cards
+2. **Structural Validation:** All cards verified for required fields (id, name, type, cost, description, rarity)
+3. **Cost Verification:** Valid cost ranges (-2 to 10), X-cost (-1), unplayable (-2), 0-cost playability
+4. **Damage Verification:** Attack cards tested for correct damage values, description matching, strength scaling, vulnerable/weak modifiers
+5. **Block Verification:** Skill cards tested for block values, dexterity scaling, frail modifier
+6. **Status Effects:** Vulnerable, weak, poison, strength, and other status applications verified
+7. **Upgrade Verification:** All cards have upgradedVersion property
+8. **Energy Mechanics:** 0-cost cards playable at 0 energy, X-cost always playable
+9. **Character Card Pools:** Ironclad (96), Silent (31), Defect (30), Watcher (31) verified
+10. **Rarity Distribution:** Basic, Common, Uncommon, Rare, Curse counts validated
+11. **Special Keywords:** Exhaust, ethereal, innate, retain mechanics verified
+12. **Combat Calculations:** Real combatReducer used (no mocks), multi-hit attacks, AoE targeting
+13. **Spot Checks:** Individual cards tested for all 4 characters (Strike, Neutralize, Zap, Eruption, etc.)
+
+**Key challenges fixed:**
+- Wound card has cost -2 (unplayable status) — fixed validation to allow -2
+- SELECT_CARD auto-plays when 1 enemy — fixed playCard helper logic
+- Enemy creation requires `hp` as {min,max} or number — used correct format
+
+**Test count:** 3444 total (180 new from this PR)
+
+**Validation:** `npm run validate` passes — all tests green, lint clean (0 errors, 5 pre-existing warnings), build clean
+
+**E2E Note:** E2E tests in CI failed with deploy-smoke infrastructure issues (Invalid URL, timeouts) — same failures exist on sprint-17 base branch. Not related to this PR's changes.
+
+**Blockers:** None
+**Next:** QR-06 (Visual asset audit) and QR-09 (Enemy behavior verification) are remaining P0/P1 tasks.
+
+---
+
+### QR-05: Full Playthrough E2E Test
+**Date:** 2026-02-07
+**Status:** Complete, PR #214 merged
+**Sprint:** Sprint 17 (Quality Reality)
+**Task:** QR-05 (Full playthrough E2E test — L size, P0)
+
+**Done:**
+1. Created `tests/e2e/specs/full-playthrough.spec.js` — Comprehensive E2E test suite (622 lines)
+2. **Full Playthrough Tests:** 4 tests (one per character: Ironclad, Silent, Defect, Watcher)
+   - Each test plays through 5+ combat encounters
+   - Uses keyboard controls (QR-01) for agent-friendly automation
+   - Verifies game mechanics during play (energy, damage, gold)
+   - Takes screenshots at every phase transition
+   - Saves full game state as JSON for debugging
+3. **Keyboard Controls Verification Test:** Validates 1-9 card selection, Enter to play, E to end turn
+4. **DevTools API Verification Test:** Validates `__SPIRE__.listScenarios()`, `getVisibleState()`, `playCard()`, `endTurn()`
+5. Added `npm run test:e2e:playthrough` script for focused execution
+
+**Test verifications:**
+- Energy decreases when cards are played
+- Enemies take damage from attacks (HP decreases)
+- Gold increases after combat victories
+- State transitions happen correctly
+- No JavaScript errors during playthrough
+- All 4 characters reach at least 5 combat encounters
+
+**Review findings fixed:** Moved JavaScript error listener to start of test (Copilot review), removed unused `getRawState` function.
+
+**Test count:** 3315 (unchanged — E2E tests in separate Playwright suite)
+
+**Validation:** `npm run validate` passes — 3315 unit tests green, lint clean (0 errors, 5 pre-existing warnings), build clean.
+
+**Blockers:** None
+**Next:** QR-07 (Card mechanics verification) or QR-06 (Visual asset audit) are next P0 tasks.
+
+---
+
 # QA Diary - Sprint 16
 
 ## Sprint 16 Entries

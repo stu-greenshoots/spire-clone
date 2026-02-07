@@ -5,7 +5,8 @@ This document provides a complete reference for all game mechanics, enabling eas
 ---
 
 ## Table of Contents
-1. [Card System](#card-system)
+1. [Keyboard Controls](#keyboard-controls)
+2. [Card System](#card-system)
 2. [Card Effect Types](#card-effect-types)
 3. [Enemy System](#enemy-system)
 4. [Enemy Special Actions](#enemy-special-actions)
@@ -13,6 +14,43 @@ This document provides a complete reference for all game mechanics, enabling eas
 6. [Relic Trigger Types](#relic-trigger-types)
 7. [Status Effects](#status-effects)
 8. [Creating New Content](#creating-new-content)
+
+---
+
+## Keyboard Controls
+
+Combat is fully playable via keyboard (desktop only). Press `?` at any time to toggle the help overlay.
+
+| Key | Action |
+|-----|--------|
+| `1-9` | Select card by hand position (1 = leftmost) |
+| `Tab` / `Shift+Tab` | Cycle target between enemies |
+| `Enter` / `Space` | Play selected card on targeted enemy |
+| `E` | End turn |
+| `Escape` | Cancel / deselect card |
+| `Q` | Use first available potion |
+| `D` | View draw pile |
+| `I` | Toggle enemy info panel |
+| `?` | Toggle keyboard help overlay |
+
+### Visual Indicators
+
+When using keyboard controls:
+- **Card selection**: Number badges appear above each card (1-9). Selected card shows gold highlight and lifts up.
+- **Enemy targeting**: Current target shows "Tab ▼" indicator and gold glow. Use Tab to cycle through enemies.
+- **Play confirmation**: Press Enter/Space to play the selected card on the targeted enemy.
+
+### Agent-Friendly Testing
+
+For automated testing, combine keyboard controls with the DevTools API:
+```javascript
+// Load a combat scenario
+__SPIRE__.loadScenario('combat-basic');
+
+// Then use keyboard simulation or DevTools:
+__SPIRE__.playCard(0, 0);  // Play first card on first enemy
+__SPIRE__.endTurn();        // End the turn
+```
 
 ---
 

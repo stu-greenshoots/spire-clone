@@ -1,4 +1,4 @@
-# PM Diary - Sprint 16
+# PM Diary - Sprint 17
 
 ## Role
 Project Manager - Sprint coordination, process, CI/CD, PR management
@@ -7,12 +7,479 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 `*.md` docs, `package.json` scripts, `.github/`
 
 ## Current Sprint Tasks
-- PM-16: Sprint 16 setup and finalization
-- Sprint coordination, board maintenance, endless mode orchestration
+- PM-17: Sprint 17 setup and coordination
+- Sprint coordination, board maintenance, quality reality orchestration
 
 ---
 
 ## Entries
+
+### Sprint 17 — COMPLETE
+**Date:** 2026-02-07
+**Status:** Sprint 17 COMPLETE — 15/15 tasks done
+
+**Done:**
+- Implemented as BE: QR-15 Error Boundary Enhancement
+  - Added "Copy Bug Report" button — copies error + game state to clipboard
+  - Game state summary display in error UI (phase, floor, HP, enemies, hand)
+  - Comprehensive console logging for agent analysis
+  - 23 new tests in ErrorBoundary.test.jsx
+- Closed QR-10 as N/A — Stream B audits found asset quality issues but no code bugs
+  - Card mechanics verification passed (all 188 cards correct)
+  - Enemy behavior verification passed (all 40+ enemies correct)
+  - Audio audit confirmed all 52 files valid and audible
+- Reviewed and merged PR #225
+- Updated sprint board and BE diary
+
+**Sprint 17 Final Progress:** 15/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-04: Dev State Overlay (BE/UX) — MERGED (PR #223)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-10: Bug Fix Sprint (ALL) — CLOSED (N/A — no code bugs found)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+- [x] QR-12: Data Editor Safety (BE) — MERGED (PR #221)
+- [x] QR-13: Runtime State Validation (BE) — MERGED (PR #222)
+- [x] QR-14: Performance Monitoring (BE/UX) — MERGED (PR #224)
+- [x] QR-15: Error Boundary Enhancement (BE) — MERGED (PR #225)
+
+**Sprint 17 Outcomes:**
+- 3730 tests passing (up from 3264 at sprint start)
+- Testability infrastructure complete (keyboard controls, DevTools API, scenarios)
+- Honest QA audits complete (cards, enemies, assets, audio all verified)
+- Architecture hardened (state validation, performance monitoring, error recovery)
+- Zero P0 bugs — audits found asset quality issues but no code bugs
+- 11th consecutive sprint with 100% completion rate
+
+**Next:** Sprint 18 planning or merge to master
+
+---
+
+### Sprint 17 — QR-14 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 13/15 tasks done
+
+**Done:**
+- Implemented as BE: QR-14 Performance Monitoring
+  - Created performanceMonitor.js with timing, memory, and state size utilities
+  - Added reducer timing instrumentation to GameContext.jsx
+  - Extended DevOverlay to show performance metrics (state size, heap usage, slowest actions)
+  - Console warnings for slow actions (>16ms)
+  - DevTools API: window.__SPIRE_PERF__
+  - 20 new tests in performanceMonitor.test.js
+- Reviewed and merged PR #224
+- Updated sprint board and BE diary
+
+**Sprint 17 Progress:** 13/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-04: Dev State Overlay (BE/UX) — MERGED (PR #223)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+- [x] QR-12: Data Editor Safety (BE) — MERGED (PR #221)
+- [x] QR-13: Runtime State Validation (BE) — MERGED (PR #222)
+- [x] QR-14: Performance Monitoring (BE/UX) — MERGED (PR #224)
+
+**Remaining tasks (2):**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be closed as N/A
+- QR-15: Error Boundary Enhancement (BE) — P2
+
+---
+
+### Sprint 17 — QR-04 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 12/15 tasks done
+
+**Done:**
+- Reviewed and merged PR #223: QR-04 Dev State Overlay
+  - Toggleable debug overlay (backtick key) showing comprehensive game state
+  - Phase, floor, act, turn, character info
+  - Player stats: HP, energy, block, gold, stance, mantra, orbs, status effects
+  - Enemy display: HP, block, intent, status effects
+  - Hand with playability indicators
+  - FPS counter (color-coded by performance)
+  - Last action dispatched for debugging
+  - Click-through design, dev mode only
+  - Machine-parseable with data-testid attributes
+- Updated sprint board and BE diary
+
+**Sprint 17 Progress:** 12/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-04: Dev State Overlay (BE/UX) — MERGED (PR #223)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+- [x] QR-12: Data Editor Safety (BE) — MERGED (PR #221)
+- [x] QR-13: Runtime State Validation (BE) — MERGED (PR #222)
+
+**Remaining tasks (3):**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be closed as N/A
+- QR-14: Performance Monitoring (BE/UX) — P2
+- QR-15: Error Boundary Enhancement (BE) — P2
+
+---
+
+### Sprint 17 — QR-13 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 11/15 tasks done
+
+**Done:**
+- Implemented as BE: QR-13 Runtime State Validation
+  - Comprehensive validation system catches impossible game states in dev mode
+  - Validates player, enemies, cards, potions, relics, game phase
+  - Catches: negative HP/energy/gold, NaN values, duplicate instanceIds, invalid phases
+  - Dev mode throws errors with actionable messages
+  - Production has no validation overhead
+  - 76 new tests for validation rules
+- Merged PR #222, updated sprint board and BE diary
+
+**Sprint 17 Progress:** 11/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+- [x] QR-12: Data Editor Safety (BE) — MERGED (PR #221)
+- [x] QR-13: Runtime State Validation (BE) — MERGED (PR #222)
+
+**Remaining tasks (4):**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be minimal or closed
+- QR-04: Dev State Overlay (BE/UX) — P2
+- QR-14: Performance Monitoring (BE/UX) — P2
+- QR-15: Error Boundary Enhancement (BE) — P2
+
+---
+
+### Sprint 17 — QR-12 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 10/15 tasks done
+
+**Done:**
+- Implemented as BE: QR-12 Data Editor Safety
+  - Warning banner on MainMenu when custom data overrides are active
+  - Shows count of overridden cards/relics/enemies
+  - "Reset All" button to clear custom data and reload
+  - Console logging of active overrides on game start
+  - Validation prevents negative costs/damage/HP from being applied
+  - 26 new tests for validation and override detection
+- Merged PR #221, updated sprint board and BE diary
+
+**Sprint 17 Progress:** 10/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+- [x] QR-12: Data Editor Safety (BE) — MERGED (PR #221)
+
+**Remaining tasks (5):**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be minimal or closed
+- QR-13: Runtime State Validation (BE) — P1
+- QR-04: Dev State Overlay (BE/UX) — P2
+- QR-14: Performance Monitoring (BE/UX) — P2
+- QR-15: Error Boundary Enhancement (BE) — P2
+
+---
+
+### Sprint 17 — QR-11 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 9/15 tasks done
+
+**Done:**
+- Implemented as GD: QR-11 Placeholder Asset Replacement
+  - Replaced 9 priority enemy sprites from QR-06 audit (slimeBoss, theGuardian, hexaghost, gremlinNob, lagavulin, cultist, jawWorm, automaton, louse_red)
+  - Created pure_water relic art (Watcher starter)
+  - Created `scripts/generate-priority-art-qr11.js` with detailed SVG→WebP pipeline
+  - File sizes improved from 2.7-5KB → 4.5-9.3KB (more detail)
+  - Rebuilt enemy sprite sheet (1562KB, 45 enemies)
+- Merged PR #220, updated sprint board and GD diary
+
+**Sprint 17 Progress:** 9/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+
+**Remaining tasks (6):**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be minimal or closed
+- QR-12: Data Editor Safety (BE) — P1
+- QR-13: Runtime State Validation (BE) — P1
+- QR-04: Dev State Overlay (BE/UX) — P2
+- QR-14: Performance Monitoring (BE/UX) — P2
+- QR-15: Error Boundary Enhancement (BE) — P2
+
+---
+
+### Sprint 17 — QR-03 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 8/15 tasks done
+
+**Done:**
+- Implemented as QA: QR-03 Expanded Scenario Library
+  - Expanded from ~20 to 40 scenarios (30+ requirement met)
+  - Added 3 Silent, 3 Defect, 4 Watcher scenarios
+  - Added Act 2/3/4 combat scenarios, event phase, edge cases
+  - Updated getScenariosByCategory() for new character-based grouping
+  - Fixed card IDs from snake_case to camelCase
+- Merged PR #219, updated sprint board and QA diary
+
+**Sprint 17 Progress:** 8/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+
+**Stream A/B fully complete. Next tasks:**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be minimal
+- QR-11: Placeholder Asset Replacement (GD) — P1, address QR-06 findings
+- QR-12: Data Editor Safety (BE) — P1
+- QR-04: Dev State Overlay (BE/UX) — P2
+
+---
+
+### Sprint 17 — QR-09 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 7/15 tasks done
+
+**Done:**
+- Implemented as QA: QR-09 Enemy Behavior Verification
+  - Comprehensive test suite for all 40+ enemies (91 tests)
+  - HP verification, AI pattern verification, damage value verification
+  - 10 boss/enemy AI patterns verified (Cultist, Slime Boss, Guardian, Hexaghost, Automaton, Heart, Lagavulin, Time Eater, Awakened One, Champ)
+  - Special abilities: artifact, metallicize, plated armor, thorns, flight, invincible shield, asleep
+  - Enemy turn processing with real combatReducer
+  - Ally/minion behavior, encounter generation, boss phase transitions
+  - **No bugs found** — QR-10 unaffected
+- Merged PR #218, updated sprint board and QA diary
+
+**Sprint 17 Progress:** 7/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+
+**Stream B audit status — COMPLETE:**
+- QR-05: ✅ Complete — E2E playthrough works
+- QR-06: ✅ Complete — 15 missing relic art, 20 placeholder enemy sprites, 101 placeholder cards
+- QR-07: ✅ Complete — All 188 cards verified, no bugs found
+- QR-08: ✅ Complete — All 52 audio files verified, no bugs found
+- QR-09: ✅ Complete — All 40+ enemies verified, no bugs found
+
+**Stream B Summary — No critical bugs found!**
+The audits identified placeholder assets (QR-06) but no functional bugs in cards (QR-07), audio (QR-08), or enemies (QR-09). QR-10 bug fix sprint may be minimal or closed as "no bugs to fix."
+
+**Next tasks:**
+- QR-10: Bug Fix Sprint (ALL) — may be minimal, Stream B found no code bugs
+- QR-03: Expanded Scenario Library (QA) — P1
+- QR-11: Placeholder Asset Replacement (GD) — P1, address QR-06 findings
+- QR-12: Data Editor Safety (BE) — P1
+
+---
+
+### Sprint 17 — QR-08 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 6/15 tasks done
+
+**Done:**
+- Implemented as AR: QR-08 Audio Audit
+  - Comprehensive catalog of all 52 MP3 audio files
+  - Created `docs/AUDIO_AUDIT.md` with complete inventory
+  - Verified file existence, audibility, uniqueness (MD5 hashes)
+  - All 52 files are unique and audible (normalized in Sprint 15)
+  - Identified 5 reserved-but-unused sound definitions (not bugs)
+  - No bugs found for QR-10
+- Merged PR #217, updated sprint board and AR diary
+
+**Sprint 17 Progress:** 6/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+
+**Stream B audit status:**
+- QR-05: ✅ Complete — E2E playthrough works
+- QR-06: ✅ Complete — 15 missing relic art, 20 placeholder enemy sprites, 101 placeholder cards
+- QR-07: ✅ Complete — All 188 cards verified, no bugs found
+- QR-08: ✅ Complete — All 52 audio files verified, no bugs found
+- QR-09: ❌ Pending — Enemy behavior verification still needed
+
+**Next P0 tasks:**
+- QR-10: Bug Fix Sprint (ALL) — needs QR-09 findings first
+- QR-09: Enemy Behavior Verification (QA/JR) — last Stream B audit task
+
+---
+
+### Sprint 17 — QR-06 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 5/15 tasks done
+
+**Done:**
+- Implemented as GD: QR-06 Visual Asset Audit
+  - Comprehensive catalog of all 327 visual assets
+  - Created `docs/ASSET_AUDIT.md` with complete inventory
+  - Identified 15 missing relic art files (character-specific relics from Sprint 16)
+  - Categorized 20 placeholder enemy sprites (3-5KB gradients)
+  - Categorized 101 placeholder card art images (under 5KB)
+  - Documented priority replacements for QR-11
+- Merged PR #216, updated sprint board and GD diary
+
+**Sprint 17 Progress:** 5/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+
+**Next P0 tasks:**
+- QR-10: Bug Fix Sprint (ALL) — now unblocked by QR-06, QR-07
+- QR-08: Audio Audit (AR) — P1 parallel work
+- QR-09: Enemy Behavior Verification (QA/JR) — P1 parallel work
+
+---
+
+### Sprint 17 — QR-07 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 4/15 tasks done
+
+**Done:**
+- Implemented as QA: QR-07 Card Mechanics Verification
+  - Comprehensive test suite for all 188 cards (180 tests)
+  - Structural validation: required fields, types, rarities
+  - Cost verification: ranges, X-cost, 0-cost playability
+  - Damage/block verification with strength, dexterity, weak, vulnerable, frail modifiers
+  - Status effect application, upgrade verification, energy mechanics
+  - Character card pools and rarity distribution validated
+  - Uses REAL combatReducer (no mocks for core mechanics)
+- Merged PR #215, updated sprint board and QA diary
+
+**Sprint 17 Progress:** 4/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+
+**Next P0 tasks:**
+- QR-06: Visual Asset Audit (GD)
+- QR-10: Bug Fix Sprint (ALL) — depends on QR-06, QR-07
+
+---
+
+### Sprint 17 — QR-05 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 3/15 tasks done
+
+**Done:**
+- Implemented as QA: QR-05 Full Playthrough E2E Test
+  - Comprehensive Playwright E2E test (622 lines)
+  - Tests all 4 characters through 5+ combat encounters each
+  - Uses keyboard controls (QR-01) for agent-friendly automation
+  - Uses DevTools API (QR-02) for state verification
+  - Verifies game mechanics: energy, damage, gold, state transitions
+  - Takes screenshots at phase transitions, saves state as JSON
+  - Add `npm run test:e2e:playthrough` script
+- Merged PR #214, updated sprint board and QA diary
+
+**Sprint 17 Focus:** Quality Reality — make the game actually work, verifiably. No new features. Fix, test, and prove what exists.
+
+**Sprint 17 Progress:** 3/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+
+**Next P0 tasks:**
+- QR-06: Visual Asset Audit (GD)
+- QR-07: Card Mechanics Verification (QA/JR)
+
+---
+
+### Sprint 17 — QR-02 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 2/15 tasks done
+
+**Done:**
+- Implemented as BE: QR-02 Enhanced DevTools API
+  - Combat Actions: playCard(), endTurn(), getVisibleState()
+  - Automation: autoPlayTurn(), autoFight(), fullPlaythrough()
+  - State Manipulation: giveCard(), giveRelic(), givePotion(), giveGold(), setHp(), setEnergy(), setFloor(), skipToPhase()
+  - 37 new tests (3315 total passing)
+- Merged PR #213, updated sprint board and BE diary
+
+**Sprint 17 Focus:** Quality Reality — make the game actually work, verifiably. No new features. Fix, test, and prove what exists.
+
+**Sprint 17 Progress:** 2/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+
+**Next P0 tasks:**
+- QR-05: Full Playthrough E2E Test (QA) — now unblocked by QR-01, QR-02
+- QR-06: Visual Asset Audit (GD)
+- QR-07: Card Mechanics Verification (QA/JR)
+
+---
+
+### Sprint 17 — QR-01 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 1/15 tasks done
+
+**Done:**
+- Created `sprint-17` branch from master
+- Created draft PR #211 with task checklist
+- Implemented as UX: QR-01 Keyboard combat controls
+  - Full keyboard control: 1-9 select cards, Tab targets, Enter plays, E ends turn
+  - Visual indicators: number badges on cards, gold target highlight on enemies
+  - Help overlay (press ?) with all shortcuts
+  - 14 new tests (3278 total passing)
+- Merged PR #212, updated sprint board
+
+**Sprint 17 Focus:** Quality Reality — make the game actually work, verifiably. No new features. Fix, test, and prove what exists.
+
+**Sprint 17 Progress:** 1/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+
+**Next P0 tasks:**
+- QR-02: Enhanced DevTools API (BE)
+- QR-05: Full Playthrough E2E Test (QA) — depends on QR-01, QR-02
+- QR-06: Visual Asset Audit (GD)
+- QR-07: Card Mechanics Verification (QA/JR)
+
+---
 
 ### Sprint 16 — COMPLETE (14/14 tasks merged)
 **Date:** 2026-02-07

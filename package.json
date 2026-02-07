@@ -22,6 +22,7 @@
     "test:e2e:headed": "npx playwright test --config=tests/e2e/playwright.config.js --headed",
     "test:e2e:screenshots": "SCREENSHOT_DIR=screenshots npx playwright test --config=tests/e2e/playwright.config.js",
     "test:e2e:debug": "npx playwright test --config=tests/e2e/playwright.config.js --debug",
+    "test:e2e:playthrough": "npx playwright test --config=tests/e2e/playwright.config.js full-playthrough.spec.js",
     "test:deploy-smoke": "npx playwright test --config=tests/e2e/playwright.deploy.config.js",
     "check:diaries": "node scripts/check-diary-freshness.js",
     "check:diaries:strict": "node scripts/check-diary-freshness.js --strict"
