@@ -855,7 +855,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | VP-01 | GD | L | P0 | Act 1 Boss Sprite Replacement (Slime Boss, Guardian, Hexaghost) | MERGED (PR #229) |
 | VP-02 | GD | M | P0 | Act 1 Elite Sprite Replacement (Gremlin Nob, Lagavulin) | MERGED (PR #230) |
 | VP-03 | GD | M | P1 | Common Enemy Sprite Replacement (Cultist, Jaw Worm, etc.) | MERGED (PR #231) |
-| VP-04 | GD | M | P1 | Character-Specific Relic Art (15 missing relics) | PENDING |
+| VP-04 | GD | M | P1 | Character-Specific Relic Art (15 missing relics) | MERGED (PR #232) |
 | VP-05 | GD | L | P1 | High-Priority Card Art (20 starter/common cards) | PENDING |
 | VP-06 | GD | M | P2 | Act 2/3 Enemy Art (10 remaining placeholders) | PENDING |
 
@@ -889,7 +889,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] `npm run validate` passes (3747 tests)
 
 **P1 (Should Pass)**
-- [ ] All 15 character-specific relics have art
+- [x] All 15 character-specific relics have art
 - [ ] 20 high-visibility card art pieces replaced
 - [ ] E2E tests pass consistently on CI
 - [x] 5 common enemy sprites replaced

@@ -14,6 +14,44 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 18 — VP-04 Complete
+**Date:** 2026-02-07
+**Status:** 7/15 tasks complete
+
+**Done:**
+- Completed VP-04: Character-Specific Relic Art (GD)
+  - Ironclad: mark_of_pain (16.6KB), charred_glove (15.5KB), blood_oath (15.3KB)
+  - Silent: ring_of_the_snake (12.6KB), envenom_ring (12.5KB), wrist_blade (11.8KB), cloak_of_shadows (12.6KB)
+  - Defect: cracked_core (16.8KB), capacitor_coil (16.8KB), data_disk (16.8KB), emotion_chip (15.4KB)
+  - Watcher: pure_water (12.5KB), damaru (13.0KB), golden_eye (12.4KB), duality (13.3KB)
+  - All 15 relics now >3KB (acceptance criteria met)
+  - Created `scripts/generate-character-relic-art-vp04.js` for reproducible generation
+
+**Sprint 18 Progress:** 7/15 tasks complete
+- [x] VP-07: Keyboard-Only Playthrough Verification (QA/UX) — MERGED (PR #227)
+- [x] VP-08: DevTools Full Playthrough Test (QA) — DONE
+- [x] VP-09: Honest Self-Assessment (PM/QA) — DONE
+- [x] VP-01: Act 1 Boss Sprite Replacement (GD) — MERGED (PR #229)
+- [x] VP-02: Act 1 Elite Sprite Replacement (GD) — MERGED (PR #230)
+- [x] VP-03: Common Enemy Sprite Replacement (GD) — MERGED (PR #231)
+- [x] VP-04: Character-Specific Relic Art (GD) — MERGED (PR #232)
+
+**Validation Gate Progress:**
+- [x] All 3 Act 1 boss sprites are quality art (>30KB each)
+- [x] All 2 Act 1 elite sprites are quality art (>30KB each)
+- [x] Keyboard-only combat playthrough verified for all 4 characters
+- [x] DevTools fullPlaythrough completes for all 4 characters
+- [x] Honest self-assessment document created
+- [x] `npm run validate` passes (3747 tests)
+- [x] 5 common enemy sprites replaced
+- [x] All 15 character-specific relics have art
+
+**All P0 tasks complete! Two P1 art tasks complete!**
+
+**Next:** VP-05 (Card Art), VP-10 (E2E CI Stabilization), or VP-06 (Act 2/3 Enemy Art)
+
+---
+
 ### Sprint 18 — VP-03 Complete
 **Date:** 2026-02-07
 **Status:** 6/15 tasks complete

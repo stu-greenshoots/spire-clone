@@ -13,6 +13,58 @@ Graphic Designer - Art pipeline, asset optimization, visual consistency
 ---
 
 ## Entries
+### Sprint 18 - VP-04 Complete
+**Date:** 2026-02-07
+**Status:** VP-04 complete, PR #232 merged to sprint-18
+
+**Done today:**
+- Created art for all 15 character-specific relics meeting >3KB requirement
+- Created `scripts/generate-character-relic-art-vp04.js` for reproducible generation
+
+**Assets created:**
+
+| Character | Relic | Size | Description |
+|-----------|-------|------|-------------|
+| Ironclad | mark_of_pain | 16.6KB | Bloody scar/wound symbol |
+| Ironclad | charred_glove | 15.5KB | Burning gauntlet with embers |
+| Ironclad | blood_oath | 15.3KB | Pulsing anatomical heart |
+| Silent | ring_of_the_snake | 12.6KB | Coiled snake ring with gem |
+| Silent | envenom_ring | 12.5KB | Poison dripping ring |
+| Silent | wrist_blade | 11.8KB | Hidden blade mechanism |
+| Silent | cloak_of_shadows | 12.6KB | Dark hooded cloak |
+| Defect | cracked_core | 16.8KB | Damaged orb with lightning |
+| Defect | capacitor_coil | 16.8KB | Electric coil with frost |
+| Defect | data_disk | 16.8KB | Glowing data storage disk |
+| Defect | emotion_chip | 15.4KB | Circuit board with heart |
+| Watcher | pure_water | 12.5KB | Glowing water droplet |
+| Watcher | damaru | 13.0KB | Ritual drum with striker beads |
+| Watcher | golden_eye | 12.4KB | All-seeing eye with radial iris |
+| Watcher | duality | 13.3KB | Yin-yang balance symbol |
+
+**Technical approach:**
+- 768px SVG canvas rendered to 256px for quality (matching existing relics)
+- Dense noise patterns (400 elements) for rich textures
+- Near-lossless WebP compression (quality 100)
+- Character-specific color schemes for visual consistency
+
+**Validation:** `npm run validate` passes — 3747 tests, lint clean, build clean
+
+**Sprint 18 Progress:** 7/15 tasks complete
+- [x] VP-01: Act 1 Boss Sprites — MERGED (PR #229)
+- [x] VP-02: Act 1 Elite Sprites — MERGED (PR #230)
+- [x] VP-03: Common Enemy Sprites — MERGED (PR #231)
+- [x] VP-04: Character-Specific Relic Art — MERGED (PR #232)
+- [x] VP-07: Keyboard-Only Playthrough — MERGED (PR #227)
+- [x] VP-08: DevTools Full Playthrough — DONE
+- [x] VP-09: Honest Self-Assessment — DONE
+
+**P1 Validation Gate:**
+- [x] All 15 character-specific relics have art
+
+**Next:** VP-05 (High-Priority Card Art) or VP-10 (E2E CI Stabilization)
+
+---
+
 ### Sprint 18 - VP-03 Complete
 **Date:** 2026-02-07
 **Status:** VP-03 complete, PR #231 merged to sprint-18
