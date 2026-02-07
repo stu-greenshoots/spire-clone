@@ -5,6 +5,7 @@ import { loadProgression } from '../systems/progressionSystem';
 import { getAscensionDescription, getMaxAscension } from '../systems/ascensionSystem';
 import { audioManager } from '../systems/audioSystem';
 import { getDailyChallenge, getModifierDetails, getChallengeScore } from '../systems/dailyChallengeSystem';
+import { hasCustomOverrides, getCustomOverridesSummary, resetAllCustomData } from '../systems/customDataManager';
 import Settings from './Settings';
 import StateBuilder from './StateBuilder';
 import CardCompendium from './CardCompendium';
@@ -29,16 +30,28 @@ const MainMenu = () => {
   const [selectedAscension, setSelectedAscension] = useState(0);
   const [unlockedAscension, setUnlockedAscension] = useState(0);
   const [entered, setEntered] = useState(false);
+  const [customOverridesActive, setCustomOverridesActive] = useState(false);
+  const [overridesSummary, setOverridesSummary] = useState({ cards: [], relics: [], enemies: [] });
 
   useEffect(() => {
     setSaveExists(hasSave());
     const progression = loadProgression();
     const maxUnlocked = Math.min(progression.highestAscension, getMaxAscension());
     setUnlockedAscension(maxUnlocked);
+    // Check for custom data overrides
+    setCustomOverridesActive(hasCustomOverrides());
+    setOverridesSummary(getCustomOverridesSummary());
     // Trigger entrance animation
     const timer = setTimeout(() => setEntered(true), 100);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleResetCustomData = () => {
+    if (confirm('Reset all custom data overrides? This will restore default game data and reload the page.')) {
+      resetAllCustomData();
+      window.location.reload();
+    }
+  };
 
   return (
     <div style={{
@@ -53,6 +66,58 @@ const MainMenu = () => {
       position: 'relative',
       overflow: 'hidden'
     }}>
+      {/* Custom Data Warning Banner */}
+      {customOverridesActive && (
+        <div
+          data-testid="custom-data-warning"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            background: 'linear-gradient(180deg, #ff6600 0%, #cc4400 100%)',
+            color: 'white',
+            padding: '10px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            zIndex: 100,
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
+            flexWrap: 'wrap'
+          }}
+        >
+          <span style={{ fontWeight: 'bold', fontSize: '13px' }}>
+            ⚠️ CUSTOM DATA ACTIVE
+          </span>
+          <span style={{ fontSize: '12px', opacity: 0.9 }}>
+            {[
+              overridesSummary.cards.length > 0 && `${overridesSummary.cards.length} cards`,
+              overridesSummary.relics.length > 0 && `${overridesSummary.relics.length} relics`,
+              overridesSummary.enemies.length > 0 && `${overridesSummary.enemies.length} enemies`
+            ].filter(Boolean).join(', ')} modified
+          </span>
+          <button
+            onClick={handleResetCustomData}
+            data-testid="btn-reset-custom-data"
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              color: 'white',
+              border: '1px solid rgba(255, 255, 255, 0.4)',
+              padding: '5px 12px',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '11px',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              letterSpacing: '1px'
+            }}
+          >
+            Reset All
+          </button>
+        </div>
+      )}
+
       {/* Animated starfield background */}
       <div style={{
         position: 'absolute',

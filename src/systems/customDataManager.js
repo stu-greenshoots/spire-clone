@@ -117,6 +117,106 @@ export function isCustomEntry(type, id) {
   return !!(store && store[type] && store[type][id]);
 }
 
+/**
+ * Check if any custom overrides are active
+ * @returns {boolean} true if any custom data exists
+ */
+export function hasCustomOverrides() {
+  const store = loadCustomData();
+  if (!store) return false;
+  const hasCards = store.cards && Object.keys(store.cards).length > 0;
+  const hasRelics = store.relics && Object.keys(store.relics).length > 0;
+  const hasEnemies = store.enemies && Object.keys(store.enemies).length > 0;
+  return hasCards || hasRelics || hasEnemies;
+}
+
+/**
+ * Get a summary of all active custom overrides
+ * @returns {{ cards: string[], relics: string[], enemies: string[] }}
+ */
+export function getCustomOverridesSummary() {
+  const store = loadCustomData();
+  return {
+    cards: store?.cards ? Object.keys(store.cards) : [],
+    relics: store?.relics ? Object.keys(store.relics) : [],
+    enemies: store?.enemies ? Object.keys(store.enemies) : []
+  };
+}
+
+/**
+ * Validate custom card data against schema
+ * @param {Object} cardData - Card data to validate
+ * @returns {{ valid: boolean, errors: string[] }}
+ */
+export function validateCardData(cardData) {
+  const errors = [];
+
+  if (!cardData.id || typeof cardData.id !== 'string') {
+    errors.push('Card must have a valid id');
+  }
+
+  if (cardData.cost !== undefined) {
+    if (typeof cardData.cost !== 'number' && cardData.cost !== 'X') {
+      errors.push(`Invalid cost: ${cardData.cost} (must be number or "X")`);
+    } else if (typeof cardData.cost === 'number' && cardData.cost < 0) {
+      errors.push(`Negative cost not allowed: ${cardData.cost}`);
+    }
+  }
+
+  if (cardData.damage !== undefined && typeof cardData.damage === 'number' && cardData.damage < 0) {
+    errors.push(`Negative damage not allowed: ${cardData.damage}`);
+  }
+
+  if (cardData.block !== undefined && typeof cardData.block === 'number' && cardData.block < 0) {
+    errors.push(`Negative block not allowed: ${cardData.block}`);
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
+/**
+ * Validate custom enemy data against schema
+ * @param {Object} enemyData - Enemy data to validate
+ * @returns {{ valid: boolean, errors: string[] }}
+ */
+export function validateEnemyData(enemyData) {
+  const errors = [];
+
+  if (!enemyData.id || typeof enemyData.id !== 'string') {
+    errors.push('Enemy must have a valid id');
+  }
+
+  if (enemyData.hp !== undefined) {
+    if (typeof enemyData.hp === 'object') {
+      if (enemyData.hp.min !== undefined && enemyData.hp.min < 1) {
+        errors.push(`Invalid HP min: ${enemyData.hp.min} (must be >= 1)`);
+      }
+      if (enemyData.hp.max !== undefined && enemyData.hp.max < 1) {
+        errors.push(`Invalid HP max: ${enemyData.hp.max} (must be >= 1)`);
+      }
+    } else if (typeof enemyData.hp === 'number' && enemyData.hp < 1) {
+      errors.push(`Invalid HP: ${enemyData.hp} (must be >= 1)`);
+    }
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
+/**
+ * Validate custom relic data against schema
+ * @param {Object} relicData - Relic data to validate
+ * @returns {{ valid: boolean, errors: string[] }}
+ */
+export function validateRelicData(relicData) {
+  const errors = [];
+
+  if (!relicData.id || typeof relicData.id !== 'string') {
+    errors.push('Relic must have a valid id');
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
 function deepMerge(target, source) {
   const result = { ...target };
   for (const key of Object.keys(source)) {
@@ -135,17 +235,31 @@ export function applyCustomData() {
   const store = loadCustomData();
   if (!store) return;
 
+  const appliedCards = [];
+  const appliedRelics = [];
+  const appliedEnemies = [];
+  const validationErrors = [];
+
   // Apply card overrides
   if (store.cards) {
     for (const [id, overrides] of Object.entries(store.cards)) {
+      // Validate before applying
+      const validation = validateCardData({ id, ...overrides });
+      if (!validation.valid) {
+        validationErrors.push(`Card "${id}": ${validation.errors.join(', ')}`);
+        continue; // Skip invalid entries
+      }
+
       const idx = ALL_CARDS.findIndex(c => c.id === id);
       if (idx >= 0) {
         // Existing card - merge overrides
         const merged = deepMerge(ALL_CARDS[idx], overrides);
         ALL_CARDS[idx] = merged;
+        appliedCards.push(id);
       } else {
         // New custom card - add to array
         ALL_CARDS.push({ ...overrides, id });
+        appliedCards.push(`${id} (new)`);
       }
     }
   }
@@ -153,12 +267,21 @@ export function applyCustomData() {
   // Apply relic overrides
   if (store.relics) {
     for (const [id, overrides] of Object.entries(store.relics)) {
+      // Validate before applying
+      const validation = validateRelicData({ id, ...overrides });
+      if (!validation.valid) {
+        validationErrors.push(`Relic "${id}": ${validation.errors.join(', ')}`);
+        continue;
+      }
+
       const idx = ALL_RELICS.findIndex(r => r.id === id);
       if (idx >= 0) {
         const merged = deepMerge(ALL_RELICS[idx], overrides);
         ALL_RELICS[idx] = merged;
+        appliedRelics.push(id);
       } else {
         ALL_RELICS.push({ ...overrides, id });
+        appliedRelics.push(`${id} (new)`);
       }
     }
   }
@@ -166,6 +289,13 @@ export function applyCustomData() {
   // Apply enemy overrides
   if (store.enemies) {
     for (const [id, overrides] of Object.entries(store.enemies)) {
+      // Validate before applying
+      const validation = validateEnemyData({ id, ...overrides });
+      if (!validation.valid) {
+        validationErrors.push(`Enemy "${id}": ${validation.errors.join(', ')}`);
+        continue;
+      }
+
       const idx = ALL_ENEMIES.findIndex(e => e.id === id);
       if (idx >= 0) {
         const merged = deepMerge(ALL_ENEMIES[idx], overrides);
@@ -176,6 +306,7 @@ export function applyCustomData() {
           merged.ai = originalEnemies[idx].ai;
         }
         ALL_ENEMIES[idx] = merged;
+        appliedEnemies.push(id);
       } else {
         const newEnemy = { ...overrides, id };
         if (overrides.aiPattern && AI_PATTERNS[overrides.aiPattern]) {
@@ -184,7 +315,36 @@ export function applyCustomData() {
           newEnemy.ai = AI_PATTERNS.sequential;
         }
         ALL_ENEMIES.push(newEnemy);
+        appliedEnemies.push(`${id} (new)`);
       }
     }
+  }
+
+  // Log applied overrides if any exist
+  const hasOverrides = appliedCards.length > 0 || appliedRelics.length > 0 || appliedEnemies.length > 0;
+  if (hasOverrides) {
+    console.warn(
+      '%c⚠️ CUSTOM DATA OVERRIDES ACTIVE',
+      'background: #ff6600; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;'
+    );
+    if (appliedCards.length > 0) {
+      console.warn('  Cards overridden:', appliedCards.join(', '));
+    }
+    if (appliedRelics.length > 0) {
+      console.warn('  Relics overridden:', appliedRelics.join(', '));
+    }
+    if (appliedEnemies.length > 0) {
+      console.warn('  Enemies overridden:', appliedEnemies.join(', '));
+    }
+    console.warn('  To reset: localStorage.removeItem("spireAscent_customData") and refresh');
+  }
+
+  // Log validation errors
+  if (validationErrors.length > 0) {
+    console.error(
+      '%c❌ CUSTOM DATA VALIDATION ERRORS (entries skipped)',
+      'background: #cc0000; color: white; padding: 4px 8px; border-radius: 4px; font-weight: bold;'
+    );
+    validationErrors.forEach(err => console.error('  ', err));
   }
 }
