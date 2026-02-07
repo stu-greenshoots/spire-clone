@@ -14,6 +14,37 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-03 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 8/15 tasks done
+
+**Done:**
+- Implemented as QA: QR-03 Expanded Scenario Library
+  - Expanded from ~20 to 40 scenarios (30+ requirement met)
+  - Added 3 Silent, 3 Defect, 4 Watcher scenarios
+  - Added Act 2/3/4 combat scenarios, event phase, edge cases
+  - Updated getScenariosByCategory() for new character-based grouping
+  - Fixed card IDs from snake_case to camelCase
+- Merged PR #219, updated sprint board and QA diary
+
+**Sprint 17 Progress:** 8/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+
+**Stream A/B fully complete. Next tasks:**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be minimal
+- QR-11: Placeholder Asset Replacement (GD) — P1, address QR-06 findings
+- QR-12: Data Editor Safety (BE) — P1
+- QR-04: Dev State Overlay (BE/UX) — P2
+
+---
+
 ### Sprint 17 — QR-09 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 7/15 tasks done

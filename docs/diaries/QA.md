@@ -2,6 +2,35 @@
 
 ## Sprint 17 Entries
 
+### QR-03: Expanded Scenario Library
+**Date:** 2026-02-07
+**Status:** Complete, PR #219 merged
+**Sprint:** Sprint 17 (Quality Reality)
+**Task:** QR-03 (Expanded scenario library — S size, P1)
+
+**Done:**
+1. Expanded scenarios.js from ~20 to 40 scenarios
+2. **Silent scenarios (3):** Basic combat, poison build, shiv build
+3. **Defect scenarios (3):** Basic combat, lightning orbs, frost orbs
+4. **Watcher scenarios (4):** Basic combat, wrath stance, calm stance, divinity stance
+5. **Act 2/3 combat (5):** Normal encounters, Centurion/Mystic elite, Automaton, Awakened One
+6. **Heart boss scenario (1):** Final boss with invincible shield
+7. **Event phase scenario (1):** Generic event encounter
+8. **Edge cases (6):** Zero energy, no playable cards, combat victory, status-heavy (player/enemy), 5-enemy encounter
+9. Updated `getScenariosByCategory()` to group by character and phase
+10. Updated test expectations to match new category structure
+
+**Card ID fixes:** Corrected snake_case to camelCase for all card references (e.g., `heavy_blade` → `heavyBlade`)
+
+**Test count:** 3586 total (unchanged)
+
+**Validation:** `npm run validate` passes — all tests green, lint clean (0 errors, 5 pre-existing warnings), build clean
+
+**Blockers:** None
+**Next:** QR-10 (Bug fix sprint) — Stream B found no code bugs, may be minimal
+
+---
+
 ### QR-09: Enemy Behavior Verification
 **Date:** 2026-02-07
 **Status:** Complete, PR #218 merged
