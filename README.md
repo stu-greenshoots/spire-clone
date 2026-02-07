@@ -84,9 +84,15 @@ src/
 
 ## Documentation
 
+### Game & Process
 - [GAME_REFERENCE.md](./GAME_REFERENCE.md) — Complete game mechanics
 - [SPRINT_BOARD.md](./SPRINT_BOARD.md) — Current sprint status
 - [PROCESS.md](./PROCESS.md) — Development workflow
+
+### Architecture & Technical
+- [ARCHITECTURE_SUMMARY.md](./ARCHITECTURE_SUMMARY.md) — Executive review summary (⭐ 8.5/10)
+- [ARCHITECTURE_REVIEW.md](./ARCHITECTURE_REVIEW.md) — Complete technical deep-dive
+- [TECH_SCALABILITY_REVIEW.md](./TECH_SCALABILITY_REVIEW.md) — Scalability analysis
 
 ## License
 
