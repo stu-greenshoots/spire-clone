@@ -1,4 +1,4 @@
-# PM Diary - Sprint 16
+# PM Diary - Sprint 17
 
 ## Role
 Project Manager - Sprint coordination, process, CI/CD, PR management
@@ -7,12 +7,33 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 `*.md` docs, `package.json` scripts, `.github/`
 
 ## Current Sprint Tasks
-- PM-16: Sprint 16 setup and finalization
-- Sprint coordination, board maintenance, endless mode orchestration
+- PM-17: Sprint 17 setup and coordination
+- Sprint coordination, board maintenance, quality reality orchestration
 
 ---
 
 ## Entries
+
+### Sprint 17 — Kickoff
+**Date:** 2026-02-07
+**Status:** PM-17 in progress — sprint infrastructure setup
+
+**Done:**
+- Created `sprint-17` branch from master
+- Pushed branch to origin
+- Sprint plan already exists: `SPRINT_17_PLAN.md`
+
+**Sprint 17 Focus:** Quality Reality — make the game actually work, verifiably. No new features. Fix, test, and prove what exists.
+
+**Key changes from previous sprints:**
+- Every change must be verified by ACTUALLY PLAYING THE GAME
+- Agents use keyboard controls to verify gameplay
+- Tests must use real reducers, not mocks
+- No inflated assessments — report what's broken honestly
+
+**First task:** QR-01 (Keyboard Combat Controls) — enables agent verification
+
+---
 
 ### Sprint 16 — COMPLETE (14/14 tasks merged)
 **Date:** 2026-02-07

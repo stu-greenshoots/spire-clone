@@ -1,7 +1,7 @@
 # Sprint Board - Spire Ascent
 
 **Last Updated:** 2026-02-07
-**Current Sprint:** 17 (Quality Reality) - PLANNING
+**Current Sprint:** 17 (Quality Reality) - IN PROGRESS
 **Integration Branch:** `sprint-17`
 **Sprint Plan:** See `SPRINT_17_PLAN.md`
 **Roadmap:** See `docs/archive/ROADMAP.md` (historical — original 4-sprint plan to 1.0)
