@@ -5,6 +5,36 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 17 Entries
 
+### QR-12: Data Editor Safety
+**Date:** 2026-02-07
+**Status:** MERGED (PR #221)
+
+**Done:**
+- Added persistent warning banner on MainMenu when custom data overrides are active
+- Warning shows count of overridden cards/relics/enemies
+- "Reset All" button clears custom data and reloads page
+- Console logging on game start shows all active overrides
+- Validation for custom data before applying:
+  - Cards: reject negative cost, damage, block; require valid id
+  - Enemies: reject HP less than 1; require valid id
+  - Relics: require valid id
+- Invalid entries are skipped with console error instead of applying bad data
+- Added helper functions: `hasCustomOverrides()`, `getCustomOverridesSummary()`
+- Added validators: `validateCardData()`, `validateEnemyData()`, `validateRelicData()`
+- 26 new tests in customDataSafety.test.js
+- 3612 tests passing, lint clean, build clean
+
+**Architecture:**
+- Validators return `{ valid: boolean, errors: string[] }` for easy testing and clear error messages
+- Console warnings use styled output for visibility (`%c` formatting)
+- MainMenu checks `hasCustomOverrides()` on mount and displays banner when true
+- Reset triggers `window.location.reload()` to ensure fresh state
+
+**Blockers:** None
+**Next:** QR-13 (Runtime State Validation) is the next P1 task
+
+---
+
 ### QR-02: Enhanced DevTools API
 **Date:** 2026-02-07
 **Status:** MERGED (PR #213)

@@ -14,6 +14,41 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-12 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 10/15 tasks done
+
+**Done:**
+- Implemented as BE: QR-12 Data Editor Safety
+  - Warning banner on MainMenu when custom data overrides are active
+  - Shows count of overridden cards/relics/enemies
+  - "Reset All" button to clear custom data and reload
+  - Console logging of active overrides on game start
+  - Validation prevents negative costs/damage/HP from being applied
+  - 26 new tests for validation and override detection
+- Merged PR #221, updated sprint board and BE diary
+
+**Sprint 17 Progress:** 10/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+- [x] QR-12: Data Editor Safety (BE) — MERGED (PR #221)
+
+**Remaining tasks (5):**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be minimal or closed
+- QR-13: Runtime State Validation (BE) — P1
+- QR-04: Dev State Overlay (BE/UX) — P2
+- QR-14: Performance Monitoring (BE/UX) — P2
+- QR-15: Error Boundary Enhancement (BE) — P2
+
+---
+
 ### Sprint 17 — QR-11 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 9/15 tasks done
