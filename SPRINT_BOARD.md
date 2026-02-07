@@ -728,12 +728,12 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 ---
 
-## Sprint 16: Endless Mode, Custom Runs, Performance & QoL - IN PROGRESS
+## Sprint 16: Endless Mode, Custom Runs, Performance & QoL - COMPLETE
 
 **Goal:** Player retention — endless mode, custom seeded runs, performance optimization, quality-of-life features.
 **Plan:** See `SPRINT_16_PLAN.md`
-**Branch:** `sprint-16`
-**Status:** IN PROGRESS — 12/14 tasks done
+**Branch:** `sprint-16` (merged to master)
+**Status:** COMPLETE — All 14 tasks merged (6 P0 + 5 P1 + 3 P2). 3264 tests. Tenth consecutive 100% sprint.
 
 ### P0 — Must Ship
 
@@ -762,20 +762,20 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 |------|-------|------|-------------|--------|
 | UX-34 | UX | S | Achievement notification toasts — in-game popups on unlock | MERGED (PR #207) |
 | QA-26 | QA | S | Performance regression — bundle size gate, Lighthouse 90+ | MERGED (PR #208) |
-| GD-31 | GD | S | Endless mode visual escalation — background shifts every 10 floors | PENDING |
+| GD-31 | GD | S | Endless mode visual escalation — background shifts every 10 floors | MERGED (PR #209) |
 
-### Sprint 16 Validation Gate
+### Sprint 16 Validation Gate - COMPLETE
 
-- [ ] Endless mode accessible after Heart defeat
-- [ ] Enemy scaling works (+10% per loop)
-- [ ] Floor counter displays correctly beyond floor 50
-- [ ] Custom seeded runs produce identical outcomes for same seed
-- [ ] Seed visible on run history
-- [ ] 12 character-specific relics functional
-- [ ] Non-targeting cards playable without drag (smart targeting)
-- [ ] Relic/potion compendium accessible with discovery tracking
-- [ ] No bundle chunk >500KB uncompressed
-- [ ] Endless mode narrative triggers at floor milestones
-- [ ] 3200+ tests passing
-- [ ] `npm run validate` passes
-- [ ] Median endless death: floor 60-80 at A0
+- [x] Endless mode accessible after Heart defeat
+- [x] Enemy scaling works (+10% per loop)
+- [x] Floor counter displays correctly beyond floor 50
+- [x] Custom seeded runs produce identical outcomes for same seed
+- [x] Seed visible on run history
+- [x] 12 character-specific relics functional
+- [x] Non-targeting cards playable without drag (smart targeting)
+- [x] Relic/potion compendium accessible with discovery tracking
+- [x] No bundle chunk >500KB uncompressed
+- [x] Endless mode narrative triggers at floor milestones
+- [x] 3200+ tests passing (3264)
+- [x] `npm run validate` passes
+- [x] Median endless death: floor 60-80 at A0
