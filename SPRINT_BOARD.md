@@ -787,7 +787,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make the game actually work, verifiably. No new features — fix, test, and prove what exists.
 **Branch:** `sprint-17` (create from master)
 **Plan:** See `SPRINT_17_PLAN.md`
-**Status:** IN PROGRESS — 8/15 tasks done
+**Status:** IN PROGRESS — 9/15 tasks done
 
 ### Stream A: Testability Infrastructure
 
@@ -813,7 +813,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
 | QR-10 | ALL | Var | P0 | Bug fix sprint (fix all bugs found in Stream B) | PENDING |
-| QR-11 | GD | L | P1 | Placeholder asset replacement (top 10 worst from QR-06) | PENDING |
+| QR-11 | GD | L | P1 | Placeholder asset replacement (top 10 worst from QR-06) | MERGED (PR #220) |
 | QR-12 | BE | S | P1 | Data Editor safety (warning banner, reset button, validation) | PENDING |
 
 ### Stream D: Architecture Hardening
@@ -832,7 +832,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [ ] Every card verified: cost, damage, effects match description
 - [x] Every enemy verified: HP, damage, AI pattern correct
 - [x] Asset audit complete — all placeholders documented
-- [ ] Top 10 worst placeholder assets replaced
+- [x] Top 10 worst placeholder assets replaced
 - [ ] Zero P0 bugs remaining
 - [ ] Data Editor overrides show visible warning
 - [ ] Runtime state validation active in dev mode

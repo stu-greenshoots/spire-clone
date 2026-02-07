@@ -14,6 +14,40 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-11 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 9/15 tasks done
+
+**Done:**
+- Implemented as GD: QR-11 Placeholder Asset Replacement
+  - Replaced 9 priority enemy sprites from QR-06 audit (slimeBoss, theGuardian, hexaghost, gremlinNob, lagavulin, cultist, jawWorm, automaton, louse_red)
+  - Created pure_water relic art (Watcher starter)
+  - Created `scripts/generate-priority-art-qr11.js` with detailed SVG→WebP pipeline
+  - File sizes improved from 2.7-5KB → 4.5-9.3KB (more detail)
+  - Rebuilt enemy sprite sheet (1562KB, 45 enemies)
+- Merged PR #220, updated sprint board and GD diary
+
+**Sprint 17 Progress:** 9/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+
+**Remaining tasks (6):**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be minimal or closed
+- QR-12: Data Editor Safety (BE) — P1
+- QR-13: Runtime State Validation (BE) — P1
+- QR-04: Dev State Overlay (BE/UX) — P2
+- QR-14: Performance Monitoring (BE/UX) — P2
+- QR-15: Error Boundary Enhancement (BE) — P2
+
+---
+
 ### Sprint 17 — QR-03 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 8/15 tasks done
