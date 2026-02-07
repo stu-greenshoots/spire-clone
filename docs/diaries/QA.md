@@ -1,3 +1,44 @@
+# QA Diary - Sprint 17
+
+## Sprint 17 Entries
+
+### QR-05: Full Playthrough E2E Test
+**Date:** 2026-02-07
+**Status:** Complete, PR #214 merged
+**Sprint:** Sprint 17 (Quality Reality)
+**Task:** QR-05 (Full playthrough E2E test — L size, P0)
+
+**Done:**
+1. Created `tests/e2e/specs/full-playthrough.spec.js` — Comprehensive E2E test suite (622 lines)
+2. **Full Playthrough Tests:** 4 tests (one per character: Ironclad, Silent, Defect, Watcher)
+   - Each test plays through 5+ combat encounters
+   - Uses keyboard controls (QR-01) for agent-friendly automation
+   - Verifies game mechanics during play (energy, damage, gold)
+   - Takes screenshots at every phase transition
+   - Saves full game state as JSON for debugging
+3. **Keyboard Controls Verification Test:** Validates 1-9 card selection, Enter to play, E to end turn
+4. **DevTools API Verification Test:** Validates `__SPIRE__.listScenarios()`, `getVisibleState()`, `playCard()`, `endTurn()`
+5. Added `npm run test:e2e:playthrough` script for focused execution
+
+**Test verifications:**
+- Energy decreases when cards are played
+- Enemies take damage from attacks (HP decreases)
+- Gold increases after combat victories
+- State transitions happen correctly
+- No JavaScript errors during playthrough
+- All 4 characters reach at least 5 combat encounters
+
+**Review findings fixed:** Moved JavaScript error listener to start of test (Copilot review), removed unused `getRawState` function.
+
+**Test count:** 3315 (unchanged — E2E tests in separate Playwright suite)
+
+**Validation:** `npm run validate` passes — 3315 unit tests green, lint clean (0 errors, 5 pre-existing warnings), build clean.
+
+**Blockers:** None
+**Next:** QR-07 (Card mechanics verification) or QR-06 (Visual asset audit) are next P0 tasks.
+
+---
+
 # QA Diary - Sprint 16
 
 ## Sprint 16 Entries

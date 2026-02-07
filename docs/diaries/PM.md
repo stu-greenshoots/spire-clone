@@ -14,6 +14,34 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-05 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 3/15 tasks done
+
+**Done:**
+- Implemented as QA: QR-05 Full Playthrough E2E Test
+  - Comprehensive Playwright E2E test (622 lines)
+  - Tests all 4 characters through 5+ combat encounters each
+  - Uses keyboard controls (QR-01) for agent-friendly automation
+  - Uses DevTools API (QR-02) for state verification
+  - Verifies game mechanics: energy, damage, gold, state transitions
+  - Takes screenshots at phase transitions, saves state as JSON
+  - Add `npm run test:e2e:playthrough` script
+- Merged PR #214, updated sprint board and QA diary
+
+**Sprint 17 Focus:** Quality Reality — make the game actually work, verifiably. No new features. Fix, test, and prove what exists.
+
+**Sprint 17 Progress:** 3/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+
+**Next P0 tasks:**
+- QR-06: Visual Asset Audit (GD)
+- QR-07: Card Mechanics Verification (QA/JR)
+
+---
+
 ### Sprint 17 — QR-02 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 2/15 tasks done
