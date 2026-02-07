@@ -56,12 +56,23 @@ describe('DevTools API (QR-02)', () => {
 
     it('should categorize scenarios correctly', () => {
       const categories = getScenariosByCategory();
-      expect(categories).toHaveProperty('combat');
+      expect(categories).toHaveProperty('ironclad');
+      expect(categories).toHaveProperty('silent');
+      expect(categories).toHaveProperty('defect');
+      expect(categories).toHaveProperty('watcher');
+      expect(categories).toHaveProperty('bosses');
       expect(categories).toHaveProperty('shop');
       expect(categories).toHaveProperty('map');
       expect(categories).toHaveProperty('rest');
+      expect(categories).toHaveProperty('event');
+      expect(categories).toHaveProperty('edge');
 
-      expect(categories.combat.length).toBeGreaterThan(0);
+      // Each character should have scenarios
+      expect(categories.ironclad.length).toBeGreaterThan(0);
+      expect(categories.silent.length).toBeGreaterThan(0);
+      expect(categories.defect.length).toBeGreaterThan(0);
+      expect(categories.watcher.length).toBeGreaterThan(0);
+      expect(categories.bosses.length).toBeGreaterThan(0);
     });
 
     it('most card IDs in scenarios should be valid (skip known mismatches)', () => {
