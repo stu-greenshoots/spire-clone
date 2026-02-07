@@ -5,6 +5,39 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 17 Entries
 
+### QR-04: Dev State Overlay
+**Date:** 2026-02-07
+**Status:** MERGED (PR #223)
+
+**Done:**
+- Created toggleable DevOverlay component (`src/components/DevOverlay.jsx`)
+- Toggle with backtick (`) key, dev mode only
+- Displays comprehensive game state:
+  - Phase, floor, act, turn, character (top-left)
+  - FPS counter with color-coding: red <30, yellow <50, green 50+ (top-right)
+  - Last action dispatched for debugging reducer flow (top-right)
+  - Player stats: HP, energy, block, gold, stance, mantra, focus, orbs, status effects (left)
+  - Enemies: HP, block, intent, status effects (right)
+  - Hand: cards with costs, playability indicator (green=playable, grey=not) (bottom-left)
+  - Pile counts: draw, discard, exhaust (bottom-left)
+- Click-through design with `pointerEvents: 'none'` - doesn't interfere with gameplay
+- Machine-parseable with `data-testid` attributes on all values for automated testing
+- FPS calculation uses rolling 30-frame average, only runs when overlay visible to save CPU
+- Added `lastAction` tracking to GameContext via `wrappedDispatch` pattern
+- 3688+ tests passing, lint clean, build clean
+
+**Architecture:**
+- Standalone component with no side effects - just reads state and renders
+- Uses existing `useGame` hook for state access
+- Non-invasive integration: just imported in App.jsx
+- Production-safe: renders nothing when `import.meta.env.DEV` is false
+- Proper cleanup of requestAnimationFrame and event listeners
+
+**Blockers:** None
+**Next:** QR-14 (Performance Monitoring) can build on FPS counter infrastructure
+
+---
+
 ### QR-13: Runtime State Validation
 **Date:** 2026-02-07
 **Status:** MERGED (PR #222)

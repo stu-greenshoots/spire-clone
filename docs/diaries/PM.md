@@ -14,6 +14,44 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 17 — QR-04 Complete
+**Date:** 2026-02-07
+**Status:** Sprint 17 progress — 12/15 tasks done
+
+**Done:**
+- Reviewed and merged PR #223: QR-04 Dev State Overlay
+  - Toggleable debug overlay (backtick key) showing comprehensive game state
+  - Phase, floor, act, turn, character info
+  - Player stats: HP, energy, block, gold, stance, mantra, orbs, status effects
+  - Enemy display: HP, block, intent, status effects
+  - Hand with playability indicators
+  - FPS counter (color-coded by performance)
+  - Last action dispatched for debugging
+  - Click-through design, dev mode only
+  - Machine-parseable with data-testid attributes
+- Updated sprint board and BE diary
+
+**Sprint 17 Progress:** 12/15 tasks complete
+- [x] QR-01: Keyboard Combat Controls (UX) — MERGED (PR #212)
+- [x] QR-02: Enhanced DevTools API (BE) — MERGED (PR #213)
+- [x] QR-03: Expanded Scenario Library (QA) — MERGED (PR #219)
+- [x] QR-04: Dev State Overlay (BE/UX) — MERGED (PR #223)
+- [x] QR-05: Full Playthrough E2E Test (QA) — MERGED (PR #214)
+- [x] QR-06: Visual Asset Audit (GD) — MERGED (PR #216)
+- [x] QR-07: Card Mechanics Verification (QA/JR) — MERGED (PR #215)
+- [x] QR-08: Audio Audit (AR) — MERGED (PR #217)
+- [x] QR-09: Enemy Behavior Verification (QA/JR) — MERGED (PR #218)
+- [x] QR-11: Placeholder Asset Replacement (GD) — MERGED (PR #220)
+- [x] QR-12: Data Editor Safety (BE) — MERGED (PR #221)
+- [x] QR-13: Runtime State Validation (BE) — MERGED (PR #222)
+
+**Remaining tasks (3):**
+- QR-10: Bug Fix Sprint (ALL) — Stream B found no code bugs, may be closed as N/A
+- QR-14: Performance Monitoring (BE/UX) — P2
+- QR-15: Error Boundary Enhancement (BE) — P2
+
+---
+
 ### Sprint 17 — QR-13 Complete
 **Date:** 2026-02-07
 **Status:** Sprint 17 progress — 11/15 tasks done
