@@ -871,7 +871,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
-| VP-10 | BE/QA | M | P1 | E2E CI Stabilization | MERGED (PR #234) — 23/30 tests stable, game state bug filed |
+| VP-10 | BE/QA | M | P1 | E2E CI Stabilization | MERGED (PR #234, #238) — 26/30 tests stable, 4 playthrough tests timeout |
 | VP-11 | BE | S | P2 | Bundle Optimization | PENDING |
 | VP-12 | AR | S | P2 | Audio Final Pass | PENDING |
 | VP-13 | GD | L | P2 | Remaining Card Art (30 additional) | PENDING |
@@ -891,7 +891,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **P1 (Should Pass)**
 - [x] All 15 character-specific relics have art
 - [x] 20 high-visibility card art pieces replaced
-- [ ] E2E tests pass consistently on CI
+- [~] E2E tests pass consistently on CI (26/30 — 4 timeout, not blocking)
 - [x] 5 common enemy sprites replaced
 
 **P2 (Nice to Have)**
