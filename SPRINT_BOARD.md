@@ -872,7 +872,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
 | VP-10 | BE/QA | M | P1 | E2E CI Stabilization | MERGED (PR #234, #238) — 26/30 tests stable, 4 playthrough tests timeout |
-| VP-11 | BE | S | P2 | Bundle Optimization | PENDING |
+| VP-11 | BE | S | P2 | Bundle Optimization | MERGED (PR #239) |
 | VP-12 | AR | S | P2 | Audio Final Pass | PENDING |
 | VP-13 | GD | L | P2 | Remaining Card Art (30 additional) | PENDING |
 | VP-14 | PM | S | P2 | Documentation Polish | DONE |
@@ -897,6 +897,6 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **P2 (Nice to Have)**
 - [x] 10 Act 2/3 enemy sprites replaced
 - [ ] 30 additional card art pieces improved
-- [ ] Bundle optimization reviewed
+- [x] Bundle optimization reviewed
 - [ ] Audio final pass complete
 - [x] Release checklist created
