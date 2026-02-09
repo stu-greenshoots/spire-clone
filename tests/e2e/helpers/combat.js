@@ -124,13 +124,17 @@ async function waitForCombatEnd(page, timeout = 15000) {
   const gameOver = page.locator(SELECTORS.gameOverText);
   const victory = page.locator(SELECTORS.victoryText);
   const endTurnBtn = page.locator(SELECTORS.endTurnButton);
+  const skipReward = page.locator(SELECTORS.skipRewardButton);
+  const cardReward = page.locator(SELECTORS.cardReward);
 
   const startTime = Date.now();
   while (Date.now() - startTime < timeout) {
-    // Check victory indicators
+    // Check victory indicators (including card reward modal which appears after combat)
     if (await proceedBtn.isVisible().catch(() => false)) return 'victory';
     if (await goldReward.isVisible().catch(() => false)) return 'victory';
     if (await victory.isVisible().catch(() => false)) return 'victory';
+    if (await skipReward.isVisible().catch(() => false)) return 'victory';
+    if (await cardReward.isVisible().catch(() => false)) return 'victory';
     if (await gameOver.isVisible().catch(() => false)) return 'game_over';
 
     // If end turn button reappears, we're still in combat
@@ -154,11 +158,16 @@ export async function fightCombat(page, maxTurns = 30) {
     const goldReward = page.locator(SELECTORS.goldReward);
     const gameOver = page.locator(SELECTORS.gameOverText);
     const victory = page.locator(SELECTORS.victoryText);
+    const skipReward = page.locator(SELECTORS.skipRewardButton);
+    const cardReward = page.locator(SELECTORS.cardReward);
 
     if (await proceedBtn.isVisible().catch(() => false)) return 'victory';
     if (await goldReward.isVisible().catch(() => false)) return 'victory';
     if (await gameOver.isVisible().catch(() => false)) return 'game_over';
     if (await victory.isVisible().catch(() => false)) return 'victory';
+    // Card reward modals indicate combat victory - player is choosing reward cards
+    if (await skipReward.isVisible().catch(() => false)) return 'victory';
+    if (await cardReward.isVisible().catch(() => false)) return 'victory';
 
     // Check we're still in combat
     const endTurnBtn = page.locator(SELECTORS.endTurnButton);

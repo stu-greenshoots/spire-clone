@@ -86,7 +86,7 @@ async function playTurnWithKeyboard(page) {
     if (!state) break;
 
     // Check if combat ended
-    if (state.phase !== 'COMBAT') break;
+    if (state.phase !== 'combat') break;
 
     // Check if all enemies are dead
     if (state.enemies.length === 0) break;
@@ -127,7 +127,7 @@ async function playTurnWithKeyboard(page) {
     await waitForCondition(async () => {
       const newState = await getVisibleState(page);
       if (!newState) return true;
-      if (newState.phase !== 'COMBAT') return true;
+      if (newState.phase !== 'combat') return true;
       // Check if hand changed or energy changed
       if (newState.hand.length !== state.hand.length) return true;
       if (newState.player.energy !== state.player.energy) return true;
@@ -136,7 +136,7 @@ async function playTurnWithKeyboard(page) {
 
     // Verify card was played
     const afterState = await getVisibleState(page);
-    if (afterState && afterState.phase === 'COMBAT') {
+    if (afterState && afterState.phase === 'combat') {
       const newEnergy = afterState.player.energy;
       if (cardCost >= 0 && newEnergy === state.player.energy - cardCost) {
         cardsPlayed++;
@@ -165,7 +165,7 @@ async function playTurnWithKeyboard(page) {
   await waitForCondition(async () => {
     const state = await getVisibleState(page);
     if (!state) return true;
-    if (state.phase !== 'COMBAT') return true;
+    if (state.phase !== 'combat') return true;
     // New turn started (energy refilled)
     if (state.player.energy > 0) return true;
     return false;
@@ -191,13 +191,13 @@ async function fightCombatWithKeyboard(page, maxTurns = 30) {
     }
 
     // Check if combat ended
-    if (state.phase === 'COMBAT_REWARD' || state.phase === 'CARD_REWARD') {
+    if (state.phase === 'combat_reward' || state.phase === 'card_reward') {
       return { result: 'win', turns, cardsPlayed: totalCardsPlayed, errors };
     }
-    if (state.phase === 'GAME_OVER') {
+    if (state.phase === 'game_over') {
       return { result: 'loss', turns, cardsPlayed: totalCardsPlayed, errors };
     }
-    if (state.phase !== 'COMBAT') {
+    if (state.phase !== 'combat') {
       // Phase changed unexpectedly
       return { result: 'phaseChanged', turns, cardsPlayed: totalCardsPlayed, errors };
     }
@@ -212,7 +212,7 @@ async function fightCombatWithKeyboard(page, maxTurns = 30) {
     await waitForCondition(async () => {
       const s = await getVisibleState(page);
       if (!s) return true;
-      return s.phase !== 'COMBAT' || s.enemies.length === 0;
+      return s.phase !== 'combat' || s.enemies.length === 0;
     }, 3000);
   }
 
@@ -260,7 +260,8 @@ test.describe('Full Playthrough E2E', () => {
       await characterSelectBtn.click();
 
       // Wait for character selection screen
-      const characterBtn = gamePage.locator(`[data-testid="character-${character}"]`);
+      // Character buttons use data-testid="btn-select-{character}" format
+      const characterBtn = gamePage.locator(`[data-testid="btn-select-${character}"]`);
       await characterBtn.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
 
       // If character selection screen is visible, select character
@@ -315,7 +316,7 @@ test.describe('Full Playthrough E2E', () => {
 
         // Handle each phase
         switch (currentState.phase) {
-          case 'MAP': {
+          case 'map': {
             // Select a map node
             const nodeFound = await gameActions.selectFirstNode();
             if (!nodeFound) {
@@ -330,7 +331,7 @@ test.describe('Full Playthrough E2E', () => {
             break;
           }
 
-          case 'COMBAT': {
+          case 'combat': {
             await screenshot(`combat-${combatEncounters}-start`);
             await logState(`combat_${combatEncounters}_start`);
 
@@ -361,16 +362,26 @@ test.describe('Full Playthrough E2E', () => {
             break;
           }
 
-          case 'COMBAT_REWARD':
-          case 'CARD_REWARD': {
+          case 'combat_reward':
+          case 'card_reward': {
             await screenshot('reward');
             await logState('reward');
 
-            // Collect gold
+            // Dismiss any tutorial hints that may be blocking clicks
+            const tutorialHint = gamePage.locator('.tutorial-hint');
+            if (await tutorialHint.isVisible().catch(() => false)) {
+              const skipAllBtn = tutorialHint.locator('button:has-text("Skip All")');
+              if (await skipAllBtn.isVisible().catch(() => false)) {
+                await skipAllBtn.click({ force: true });
+                await gamePage.waitForTimeout(300);
+              }
+            }
+
+            // Collect gold (force: true to bypass any overlays)
             const goldBtn = gamePage.locator(SELECTORS.goldReward);
             if (await goldBtn.isVisible().catch(() => false)) {
               const beforeGold = (await getVisibleState(gamePage))?.player?.gold || 0;
-              await goldBtn.click();
+              await goldBtn.click({ force: true });
               await gamePage.waitForTimeout(300);
 
               // Verify gold increased
@@ -383,16 +394,16 @@ test.describe('Full Playthrough E2E', () => {
             // Skip card reward or pick first card
             const cardRewardBtn = gamePage.locator(SELECTORS.cardReward);
             if (await cardRewardBtn.isVisible().catch(() => false)) {
-              await cardRewardBtn.click();
+              await cardRewardBtn.click({ force: true });
               await gamePage.waitForTimeout(300);
 
               const skipBtn = gamePage.locator(SELECTORS.skipRewardButton);
               if (await skipBtn.isVisible().catch(() => false)) {
-                await skipBtn.click();
+                await skipBtn.click({ force: true });
               } else {
                 const firstCard = gamePage.locator(SELECTORS.rewardCard(0));
                 if (await firstCard.isVisible().catch(() => false)) {
-                  await firstCard.click();
+                  await firstCard.click({ force: true });
                 }
               }
             }
@@ -401,21 +412,21 @@ test.describe('Full Playthrough E2E', () => {
             const proceedBtn = gamePage.locator(SELECTORS.proceedButton);
             await proceedBtn.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
             if (await proceedBtn.isVisible().catch(() => false)) {
-              await proceedBtn.click();
+              await proceedBtn.click({ force: true });
             }
 
             await gamePage.waitForTimeout(500);
             break;
           }
 
-          case 'REST_SITE': {
+          case 'rest_site': {
             await screenshot('rest-site');
             await logState('rest_site');
 
-            // Click rest button
+            // Click rest button (force: true for tutorial overlays)
             const restBtn = gamePage.locator('[data-testid="rest-rest"]');
             if (await restBtn.isVisible().catch(() => false)) {
-              await restBtn.click();
+              await restBtn.click({ force: true });
               await gamePage.waitForTimeout(500);
             }
 
@@ -423,23 +434,23 @@ test.describe('Full Playthrough E2E', () => {
             const proceedBtn = gamePage.locator(SELECTORS.proceedButton);
             await proceedBtn.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
             if (await proceedBtn.isVisible().catch(() => false)) {
-              await proceedBtn.click();
+              await proceedBtn.click({ force: true });
             }
             break;
           }
 
-          case 'EVENT': {
+          case 'event': {
             await screenshot('event');
             await logState('event');
 
-            // Try to skip or pick first option
+            // Try to skip or pick first option (force: true for tutorial overlays)
             const skipBtn = gamePage.locator('[data-testid="event-skip"]');
             const option1 = gamePage.locator('[data-testid="event-option-0"]');
 
             if (await skipBtn.isVisible().catch(() => false)) {
-              await skipBtn.click();
+              await skipBtn.click({ force: true });
             } else if (await option1.isVisible().catch(() => false)) {
-              await option1.click();
+              await option1.click({ force: true });
             }
 
             // Wait for transition
@@ -448,31 +459,31 @@ test.describe('Full Playthrough E2E', () => {
             // Proceed if button visible
             const proceedBtn = gamePage.locator(SELECTORS.proceedButton);
             if (await proceedBtn.isVisible().catch(() => false)) {
-              await proceedBtn.click();
+              await proceedBtn.click({ force: true });
             }
             break;
           }
 
-          case 'SHOP': {
+          case 'shop': {
             await screenshot('shop');
             await logState('shop');
 
-            // Leave shop
+            // Leave shop (force: true for tutorial overlays)
             const leaveBtn = gamePage.locator('[data-testid="shop-leave"]');
             if (await leaveBtn.isVisible().catch(() => false)) {
-              await leaveBtn.click();
+              await leaveBtn.click({ force: true });
             }
             break;
           }
 
-          case 'VICTORY': {
+          case 'victory': {
             await screenshot('victory');
             await logState('victory');
             // Test complete with victory!
             break;
           }
 
-          case 'GAME_OVER': {
+          case 'game_over': {
             await screenshot('game-over');
             await logState('game_over');
             break;
@@ -486,7 +497,7 @@ test.describe('Full Playthrough E2E', () => {
 
         // Safety check - if we're stuck, break
         const checkState = await getVisibleState(gamePage);
-        if (checkState && (checkState.phase === 'VICTORY' || checkState.phase === 'GAME_OVER')) {
+        if (checkState && (checkState.phase === 'victory' || checkState.phase === 'game_over')) {
           break;
         }
       }
@@ -500,7 +511,7 @@ test.describe('Full Playthrough E2E', () => {
 
       // 8. Verify minimum combat encounters were played (unless we won/lost early)
       const finalState = await getVisibleState(gamePage);
-      if (finalState?.phase !== 'GAME_OVER' && finalState?.phase !== 'VICTORY') {
+      if (finalState?.phase !== 'game_over' && finalState?.phase !== 'victory') {
         expect(combatEncounters).toBeGreaterThanOrEqual(MIN_COMBAT_ENCOUNTERS);
       }
 
@@ -533,7 +544,7 @@ test.describe('Keyboard Combat Controls Verification', () => {
     // Get initial state
     const initialState = await getVisibleState(gamePage);
     expect(initialState).not.toBeNull();
-    expect(initialState.phase).toBe('COMBAT');
+    expect(initialState.phase).toBe('combat');
     expect(initialState.hand.length).toBeGreaterThan(0);
 
     const initialEnergy = initialState.player.energy;
@@ -574,7 +585,7 @@ test.describe('Keyboard Combat Controls Verification', () => {
     const postTurnState = await getVisibleState(gamePage);
     expect(postTurnState).not.toBeNull();
     // Energy should be refilled (assuming we're still in combat)
-    if (postTurnState.phase === 'COMBAT') {
+    if (postTurnState.phase === 'combat') {
       expect(postTurnState.player.energy).toBeGreaterThan(0);
     }
   });
@@ -604,7 +615,7 @@ test.describe('DevTools API Verification', () => {
     // Verify getVisibleState works
     const state = await gamePage.evaluate(() => window.__SPIRE__.getVisibleState());
     expect(state).not.toBeNull();
-    expect(state.phase).toBe('COMBAT');
+    expect(state.phase).toBe('combat');
     expect(state.player).toBeDefined();
     expect(state.hand).toBeDefined();
     expect(state.enemies).toBeDefined();

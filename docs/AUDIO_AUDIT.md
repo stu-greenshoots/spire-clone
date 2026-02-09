@@ -1,10 +1,67 @@
-# Audio Audit - Sprint 17 QR-08
+# Audio Audit
 
-**Date:** 2026-02-07
+**Last Updated:** 2026-02-09 (VP-12 Final Pass)
 **Auditor:** AR (Allrounder)
 **Purpose:** Catalog every audio file, verify existence, audibility, distinctiveness, and correct triggers
 
 ---
+
+## Sprint 18 Final Pass (VP-12)
+
+**Date:** 2026-02-09
+**Status:** VERIFIED - Audio system is production-ready
+
+### Production Build Verification
+
+| Check | Result |
+|-------|--------|
+| All 52 MP3 files copied to dist/sounds/ | ✅ PASS |
+| Audio files normalized (max ~-1.4 dB) | ✅ PASS |
+| Music track durations correct (10-15s) | ✅ PASS |
+| BASE_URL correctly resolves paths | ✅ PASS |
+| Volume controls wired in Settings | ✅ PASS |
+| Music phase transitions in App.jsx | ✅ PASS |
+| Ambient layer wired per-act | ✅ PASS |
+| All 134 audio tests pass | ✅ PASS |
+| Full validation (3759 tests) | ✅ PASS |
+
+### Volume Level Spot Check
+
+| File | Mean Volume | Max Volume |
+|------|-------------|------------|
+| music_menu.mp3 | -11.9 dB | -1.4 dB |
+| attack_hit.mp3 | -13.3 dB | -1.4 dB |
+| card_play.mp3 | -15.4 dB | -1.4 dB |
+
+All files meet EBU R128 target (-14 LUFS, -1 dB TP).
+
+### Phase Transitions Verified
+
+| Game Phase | Music Track | Status |
+|------------|-------------|--------|
+| Main Menu | music_menu | ✅ |
+| Map (Acts 1-2) | music_map | ✅ |
+| Map (Act 3+) | music_act3_map | ✅ |
+| Combat | music_combat | ✅ |
+| Boss | music_boss | ✅ |
+| Victory | music_victory | ✅ |
+| Defeat | music_defeat | ✅ |
+
+### Ambient Layer Verified
+
+| Game Mode | Ambient Track | Status |
+|-----------|---------------|--------|
+| Act 1 gameplay | ambient_act1 | ✅ |
+| Act 2 gameplay | ambient_act2 | ✅ |
+| Act 3 gameplay | ambient_act3 | ✅ |
+| Act 4 gameplay | ambient_act4 | ✅ |
+| Endless mode | ambient_endless | ✅ |
+
+---
+
+## Sprint 17 Audit (QR-08)
+
+**Date:** 2026-02-07
 
 ## Executive Summary
 

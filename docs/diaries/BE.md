@@ -3,6 +3,87 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 18 Entries
+
+### VP-11: Bundle Optimization
+**Date:** 2026-02-09
+**Status:** MERGED (PR #239)
+**Sprint:** Sprint 18 (Visual Polish & Ship Readiness)
+**Task:** VP-11 (Bundle Optimization — S size, P2)
+
+**Done:**
+- Created `docs/BUNDLE_ANALYSIS.md` documenting bundle composition
+- Verified all JS chunks under 200KB threshold
+- Documented code-splitting strategy from Sprint 16's BE-33
+
+**Key Metrics:**
+- Total JS: 788 KB across 30 chunks
+- Largest chunk: vendor-react at 184.2 KB (under 200KB limit)
+- Total assets: ~15 MB (includes 11.5 MB images, 4 MB audio)
+- PWA precaches: 425 assets (14.5 MB)
+
+**Analysis:**
+- Code-splitting working as designed (BE-33, Sprint 16)
+- React isolated for long-term caching
+- All screens lazy-loaded
+- No chunks exceed 200KB threshold
+
+**Future Improvements (Not Blocking):**
+1. Sprite sheet splitting by act
+2. Tree-shaking game-data for character-specific builds
+3. WebP quality tuning
+
+**Validation:** `npm run validate` passes — 3759 tests, lint clean, build clean
+
+**Blockers:** None
+**Next:** Sprint 18 nearly complete — 2 P2 tasks remaining (VP-12, VP-13)
+
+---
+
+### VP-10: E2E CI Stabilization
+**Date:** 2026-02-07
+**Status:** MERGED (PR #234)
+**Sprint:** Sprint 18 (Visual Polish & Ship Readiness)
+**Task:** VP-10 (E2E CI Stabilization — M size, P1)
+
+**Done:**
+- Fixed E2E test infrastructure issues that caused consistent failures:
+  1. **game.fixture.js**: Added character selection step to `startNewGame()`
+     - After clicking "New Game", click `btn-select-{character}` button
+     - Previously tests failed expecting to go directly to map
+  2. **deploy-smoke.spec.js**: Fixed broken selectors and paths
+     - Changed `[data-testid^="character-"]` to `[data-testid^="btn-select-"]`
+     - Fixed audio paths from `audio/sfx/` to `sounds/` (actual directory)
+     - Added proper URL path joining for baseURL
+  3. **full-playthrough.spec.js**: Fixed character selector pattern
+  4. **combat.js helper**: Added card reward modal detection
+     - Detect `skipRewardButton` and `cardReward` as victory indicators
+     - Prevents timeout when reward modal appears after combat
+
+**Test Results:**
+- 23/30 E2E tests now pass consistently
+- Stable tests: smoke, deploy-smoke, viewport, progression, boss-dialogue
+- Failing tests: full-run (1), full-playthrough (6) — blocked by game state bug
+
+**Game State Bug Discovered:**
+- Root cause of remaining failures: card reward modal appears DURING combat
+- Phase transition (COMBAT → REWARD) happens before combat UI updates
+- Reward modal overlays the combat screen instead of replacing it
+- This is a GAME LOGIC BUG, not a test infrastructure issue
+- Investigation needed in: combatReducer.js, CombatScreen.jsx
+
+**Recommendation:**
+File follow-up task FIX-13: "Card reward modal appears during combat before victory animation"
+- Affects: `src/context/reducers/combatReducer.js`, `src/components/CombatScreen.jsx`
+- Root cause: `COMBAT_VICTORY` action dispatches before enemy death animations complete
+
+**Validation:** `npm run validate` passes — 3747 tests, lint clean, build clean
+
+**Blockers:** None for VP-10 scope (infrastructure is fixed)
+**Follow-up:** Game state bug needs separate investigation (FIX-13)
+
+---
+
 ## Sprint 17 Entries
 
 ### QR-15: Error Boundary Enhancement
