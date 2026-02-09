@@ -2,6 +2,42 @@
 
 ## Sprint 18 Entries
 
+### FIX-CI: Fix smoke-test to only run after valid deploy
+**Date:** 2026-02-09
+**Status:** Complete, PR #242 created
+**Sprint:** Sprint 18 (Visual Polish & Ship Readiness)
+**Task:** FIX-CI (CI fix blocking Sprint 18 merge)
+
+**Problem:**
+The `deploy-smoke.spec.js` E2E tests were failing on sprint branches, blocking the Sprint 18 PR (#226). The smoke tests attempt to hit the live GitHub Pages URL (https://stu-greenshoots.github.io/spire-clone/), but:
+- GitHub Pages only deploys from the master branch
+- Sprint branches trigger the deploy workflow but don't actually update the live site
+- Smoke tests then hit a URL that doesn't reflect the sprint branch code (404 or stale content)
+
+**Root Cause Analysis:**
+1. `deploy.yml` triggers on both `master` and `sprint-*` branches
+2. The `smoke-test` job runs after `deploy` job completes
+3. For sprint branches, the deploy uploads artifacts but doesn't update live Pages
+4. Smoke tests then fail because they can't reach the expected deployed content
+
+**Fix Applied:**
+Added conditional to `smoke-test` job in `.github/workflows/deploy.yml`:
+```yaml
+if: github.ref == 'refs/heads/master'
+```
+
+This ensures smoke tests only run when:
+1. The branch is master (the actual Pages deployment target)
+2. The deploy has successfully completed
+3. The live site reflects the code being tested
+
+**Validation:** `npm run validate` passes — 3759 tests, 0 lint errors, build clean
+
+**Blockers:** None
+**Next:** Await PR review and merge to unblock Sprint 18
+
+---
+
 ### VP-08: DevTools Full Playthrough Test
 **Date:** 2026-02-07
 **Status:** Complete, committed to sprint-18
