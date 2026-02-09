@@ -17,8 +17,25 @@ import { getBossDialogue } from '../data/bossDialogue';
 import { getPassiveRelicEffects } from '../systems/combatSystem';
 import { loadSettings, getAnimationDuration } from '../systems/settingsSystem';
 
-const CombatScreen = ({ showDefeatedEnemies = false }) => {
-  const { state, selectCard, playCard, cancelTarget, endTurn, selectCardFromPile, cancelCardSelection } = useGame();
+// Base duration for death animations before showing rewards (ms)
+// Actual duration is calculated based on user's animation speed setting
+const BASE_DEATH_ANIMATION_DURATION = 600;
+
+const CombatScreen = ({ showDefeatedEnemies = false, isVictoryTransition = false }) => {
+  const { state, selectCard, playCard, cancelTarget, endTurn, selectCardFromPile, cancelCardSelection, showCombatRewards } = useGame();
+
+  // Calculate death animation duration based on user's animation speed setting
+  const settings = useMemo(() => loadSettings(), []);
+  const deathAnimationDuration = useMemo(() =>
+    getAnimationDuration(settings, BASE_DEATH_ANIMATION_DURATION),
+    [settings]
+  );
+
+  // Use ref to avoid re-creating timer if showCombatRewards reference changes
+  const showCombatRewardsRef = useRef(showCombatRewards);
+  useEffect(() => {
+    showCombatRewardsRef.current = showCombatRewards;
+  }, [showCombatRewards]);
   const { player, enemies, hand, drawPile, discardPile, exhaustPile, selectedCard, targetingMode, turn, phase, cardSelection, character } = state;
 
   const [showDeck, setShowDeck] = useState(null);
@@ -83,6 +100,16 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
 
   const { animations, addAnimation, removeAnimation } = useAnimations();
 
+  // FIX-13: Transition from COMBAT_VICTORY to COMBAT_REWARD after death animations complete
+  // Uses ref to prevent timer reset if callback reference changes during delay
+  useEffect(() => {
+    if (isVictoryTransition) {
+      const timer = setTimeout(() => {
+        showCombatRewardsRef.current();
+      }, deathAnimationDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [isVictoryTransition, deathAnimationDuration]);
 
   // Track card draw animations
   useEffect(() => {

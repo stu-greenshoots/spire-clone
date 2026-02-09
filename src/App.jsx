@@ -48,6 +48,7 @@ function getMusicPhase(gamePhase, currentNode, act) {
     case GAME_PHASE.EVENT:
       return act >= 3 ? 'act3_map' : 'map';
     case GAME_PHASE.COMBAT:
+    case GAME_PHASE.COMBAT_VICTORY:
     case GAME_PHASE.COMBAT_REWARD:
     case GAME_PHASE.CARD_REWARD:
       return currentNode?.type === 'boss' ? 'boss' : 'combat';
@@ -144,6 +145,9 @@ const GameContent = () => {
         return <MapScreen />;
       case GAME_PHASE.COMBAT:
         return <CombatScreen />;
+      case GAME_PHASE.COMBAT_VICTORY:
+        // Transitional phase: show combat with defeated enemies, delay before rewards
+        return <CombatScreen showDefeatedEnemies={true} isVictoryTransition={true} />;
       case GAME_PHASE.COMBAT_REWARD:
       case GAME_PHASE.CARD_REWARD:
         // Keep combat screen visible with defeated enemies, overlay reward screen

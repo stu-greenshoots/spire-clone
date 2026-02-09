@@ -22,6 +22,7 @@ export const GAME_PHASE = {
   MAIN_MENU: 'main_menu',
   MAP: 'map',
   COMBAT: 'combat',
+  COMBAT_VICTORY: 'combat_victory', // Transitional phase — death animations play before rewards
   COMBAT_REWARD: 'combat_reward',
   CARD_REWARD: 'card_reward',
   REST_SITE: 'rest_site',
@@ -303,6 +304,19 @@ const gameReducer = (state, action) => {
       return mapReducer(state, action);
     }
 
+    case 'SHOW_COMBAT_REWARDS': {
+      // Transition from COMBAT_VICTORY to COMBAT_REWARD
+      // Called after death animations complete
+      if (state.phase === GAME_PHASE.COMBAT_VICTORY) {
+        return { ...state, phase: GAME_PHASE.COMBAT_REWARD };
+      }
+      // Dev-mode warning for invalid phase transitions
+      if (import.meta.env?.DEV && state.phase !== GAME_PHASE.COMBAT_REWARD) {
+        console.warn(`SHOW_COMBAT_REWARDS dispatched in unexpected phase: ${state.phase}. Expected COMBAT_VICTORY or COMBAT_REWARD.`);
+      }
+      return state;
+    }
+
     default:
       return state;
   }
@@ -495,6 +509,10 @@ export const GameProvider = ({ children }) => {
     wrappedDispatch({ type: 'DISMISS_ACHIEVEMENT_TOAST' });
   }, [wrappedDispatch]);
 
+  const showCombatRewards = useCallback(() => {
+    wrappedDispatch({ type: 'SHOW_COMBAT_REWARDS' });
+  }, [wrappedDispatch]);
+
   const value = {
     state,
     lastAction,
@@ -532,7 +550,8 @@ export const GameProvider = ({ children }) => {
     selectStartingBonus,
     enterEndless,
     loadScenario,
-    dismissAchievementToast
+    dismissAchievementToast,
+    showCombatRewards
   };
 
   return (

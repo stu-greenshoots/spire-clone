@@ -394,10 +394,11 @@ describe('QA-17: 4-Act Playthrough via Reducers', () => {
     const state = runPlaythrough(0);
     expect(state).toBeDefined();
     expect(state.phase).toBeDefined();
+    // COMBAT_VICTORY is transitional phase before COMBAT_REWARD
     expect([
-      GAME_PHASE.MAP, GAME_PHASE.COMBAT, GAME_PHASE.COMBAT_REWARD,
-      GAME_PHASE.GAME_OVER, GAME_PHASE.VICTORY, GAME_PHASE.REST_SITE,
-      GAME_PHASE.EVENT, GAME_PHASE.SHOP, GAME_PHASE.REWARD
+      GAME_PHASE.MAP, GAME_PHASE.COMBAT, GAME_PHASE.COMBAT_VICTORY,
+      GAME_PHASE.COMBAT_REWARD, GAME_PHASE.GAME_OVER, GAME_PHASE.VICTORY,
+      GAME_PHASE.REST_SITE, GAME_PHASE.EVENT, GAME_PHASE.SHOP, GAME_PHASE.REWARD
     ]).toContain(state.phase);
   });
 
