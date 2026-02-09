@@ -873,7 +873,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 |------|-------|------|----------|-------------|--------|
 | VP-10 | BE/QA | M | P1 | E2E CI Stabilization | MERGED (PR #234, #238) — 26/30 tests stable, 4 playthrough tests timeout |
 | VP-11 | BE | S | P2 | Bundle Optimization | MERGED (PR #239) |
-| VP-12 | AR | S | P2 | Audio Final Pass | PENDING |
+| VP-12 | AR | S | P2 | Audio Final Pass | DONE |
 | VP-13 | GD | L | P2 | Remaining Card Art (30 additional) | PENDING |
 | VP-14 | PM | S | P2 | Documentation Polish | DONE |
 | VP-15 | PM | S | P2 | Release Checklist | MERGED (PR #236) |
@@ -886,7 +886,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] Keyboard-only combat playthrough verified for all 4 characters
 - [x] DevTools fullPlaythrough completes for all 4 characters
 - [x] Honest self-assessment document created
-- [x] `npm run validate` passes (3747 tests)
+- [x] `npm run validate` passes (3759 tests)
 
 **P1 (Should Pass)**
 - [x] All 15 character-specific relics have art
@@ -898,5 +898,5 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] 10 Act 2/3 enemy sprites replaced
 - [ ] 30 additional card art pieces improved
 - [x] Bundle optimization reviewed
-- [ ] Audio final pass complete
+- [x] Audio final pass complete
 - [x] Release checklist created

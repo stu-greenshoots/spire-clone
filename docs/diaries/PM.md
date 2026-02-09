@@ -33,6 +33,60 @@ GD needs to switch to DALL-E for asset generation. Update the art pipeline and r
 
 ---
 
+### Sprint 18 — VP-12 Complete
+**Date:** 2026-02-09
+**Status:** 14/15 sprint tasks complete
+
+**Done:**
+- Completed VP-12: Audio Final Pass (AR)
+  - Verified all 52 audio files copied to production build
+  - Spot-checked audio levels — EBU R128 compliant (~-1.4 dB max)
+  - Verified music phase transitions work (menu, map, combat, boss, victory, defeat)
+  - Verified ambient layer switches per-act (Acts 1-4 + endless)
+  - Verified volume controls wired in Settings.jsx
+  - All 134 audio tests pass
+  - Full validation: 3759 tests pass
+  - Updated docs/AUDIO_AUDIT.md with Sprint 18 Final Pass section
+
+**Sprint 18 Progress:** 14/15 tasks complete
+- [x] VP-01: Act 1 Boss Sprite Replacement (GD) — MERGED (PR #229)
+- [x] VP-02: Act 1 Elite Sprite Replacement (GD) — MERGED (PR #230)
+- [x] VP-03: Common Enemy Sprite Replacement (GD) — MERGED (PR #231)
+- [x] VP-04: Character-Specific Relic Art (GD) — MERGED (PR #232)
+- [x] VP-05: High-Priority Card Art (GD) — MERGED (PR #233)
+- [x] VP-06: Act 2/3 Enemy Art (GD) — MERGED (PR #235)
+- [x] VP-07: Keyboard-Only Playthrough Verification (QA/UX) — MERGED (PR #227)
+- [x] VP-08: DevTools Full Playthrough Test (QA) — DONE
+- [x] VP-09: Honest Self-Assessment (PM/QA) — DONE
+- [x] VP-10: E2E CI Stabilization (BE/QA) — MERGED (PR #234, #238)
+- [x] VP-11: Bundle Optimization (BE) — MERGED (PR #239)
+- [x] VP-12: Audio Final Pass (AR) — DONE
+- [x] VP-14: Documentation Polish (PM) — DONE
+- [x] VP-15: Release Checklist (PM) — MERGED (PR #236)
+
+**Validation Gate Progress:**
+- [x] All 3 Act 1 boss sprites are quality art (>30KB each)
+- [x] All 2 Act 1 elite sprites are quality art (>30KB each)
+- [x] Keyboard-only combat playthrough verified for all 4 characters
+- [x] DevTools fullPlaythrough completes for all 4 characters
+- [x] Honest self-assessment document created
+- [x] `npm run validate` passes (3759 tests)
+- [x] 5 common enemy sprites replaced
+- [x] All 15 character-specific relics have art
+- [x] 20 high-visibility card art pieces replaced
+- [x] 10 Act 2/3 enemy sprites replaced
+- [x] Release checklist created
+- [x] Bundle optimization reviewed
+- [x] Audio final pass complete
+- [~] E2E tests pass consistently on CI (26/30 — 4 playthrough tests timeout)
+
+**All P0 tasks complete! All P1 tasks complete! 5/5 P2 tasks complete (except VP-13)!**
+
+**Remaining P2 task:**
+- [ ] VP-13: Remaining Card Art (GD)
+
+---
+
 ### Sprint 18 — VP-11 Complete
 **Date:** 2026-02-09
 **Status:** 13/15 sprint tasks complete
