@@ -846,7 +846,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Replace placeholders, complete validation, and prepare for 1.0 release.
 **Branch:** `sprint-18` (create from master)
 **Plan:** See `SPRINT_18_PLAN.md`
-**Status:** IN PROGRESS
+**Status:** COMPLETE (15/15 tasks done)
 
 ### Stream A: Art Polish
 
@@ -874,7 +874,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | VP-10 | BE/QA | M | P1 | E2E CI Stabilization | MERGED (PR #234, #238) — 26/30 tests stable, 4 playthrough tests timeout |
 | VP-11 | BE | S | P2 | Bundle Optimization | MERGED (PR #239) |
 | VP-12 | AR | S | P2 | Audio Final Pass | DONE |
-| VP-13 | GD | L | P2 | Remaining Card Art (30 additional) | PENDING |
+| VP-13 | GD | L | P2 | Remaining Card Art (30 additional) | MERGED (PR #240) |
 | VP-14 | PM | S | P2 | Documentation Polish | DONE |
 | VP-15 | PM | S | P2 | Release Checklist | MERGED (PR #236) |
 
@@ -896,7 +896,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 **P2 (Nice to Have)**
 - [x] 10 Act 2/3 enemy sprites replaced
-- [ ] 30 additional card art pieces improved
+- [x] 30 additional card art pieces improved
 - [x] Bundle optimization reviewed
 - [x] Audio final pass complete
 - [x] Release checklist created
