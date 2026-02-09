@@ -40,6 +40,12 @@ Every task is considered "done" when ALL of the following are true:
 22. All HIGH/MEDIUM Copilot findings addressed before merge
 23. Compatible with other in-progress tasks (doesn't break shared interfaces)
 
+### PR Review Audit (NEW - Required for merge)
+24. Copilot review findings posted as PR comment (not just documented locally)
+25. Mentor review findings posted as PR comment
+26. All PR body checkboxes are checked `[x]` (no unchecked `[ ]` items)
+27. If any checklist item cannot be checked, explanation posted as PR comment
+
 ---
 
 ## Task-Specific Criteria
@@ -100,6 +106,8 @@ These patterns from Sprint 1 indicate a task is committed but not actually done:
 | PR has >500 lines changed | Too big to review - split it |
 | No smoke test documented | Nobody actually ran it |
 | Copilot HIGH findings unaddressed | Known bugs being merged |
+| No review comments on PR | No audit trail - can't verify reviews happened |
+| Unchecked boxes in PR body | Incomplete work being merged |
 
 ---
 

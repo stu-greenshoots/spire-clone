@@ -155,12 +155,38 @@ git diff sprint-N...HEAD
 - [ ] Tests are meaningful
 ```
 
+**Post your review findings to the PR (MANDATORY):**
+
+```bash
+gh pr comment --body "$(cat <<'EOF'
+## Copilot Review Findings
+
+### HIGH (must fix before merge)
+- None
+
+### MEDIUM (should fix before merge)
+- None
+
+### LOW (informational)
+- None
+
+### Verified Clean
+- [x] No security vulnerabilities
+- [x] No obvious bugs
+- [x] No breaking changes
+- [x] Tests are meaningful
+EOF
+)"
+```
+
 **If HIGH or MEDIUM findings exist:**
-1. Fix each issue
-2. Run `npm run validate` again
-3. Commit with message: `{TASK-ID}: Address review findings`
-4. Push to branch
-5. Re-run review until clean
+1. Post findings to PR first (for audit trail)
+2. Fix each issue
+3. Run `npm run validate` again
+4. Commit with message: `{TASK-ID}: Address review findings`
+5. Push to branch
+6. Re-run review until clean
+7. Post final clean review to PR
 
 ### Step 7: Perform Mentor Review (MANDATORY)
 
@@ -175,36 +201,63 @@ After Copilot review passes, perform architectural review:
 | **Definition of Done** | All criteria from DEFINITION_OF_DONE.md met |
 | **Runtime Validation** | Feature actually works in the running game |
 
-**Document your findings:**
+**Post your review findings to the PR (MANDATORY):**
 
-```markdown
+```bash
+gh pr comment --body "$(cat <<'EOF'
 ## Mentor Review
 
 ### Architectural Concerns
-- [description] - [action taken]
+- None (or describe and action taken)
 
 ### Integration Verification
-- [ ] Checked against other in-progress work
-- [ ] No conflicts with team member owned files
+- [x] Checked against other in-progress work
+- [x] No conflicts with team member owned files
+
+### Definition of Done
+- [x] All criteria from DEFINITION_OF_DONE.md verified
 
 ### Approval Status
-[x] APPROVED - Ready to merge
-[ ] CHANGES REQUESTED - See above
+- [x] APPROVED - Ready to merge
+EOF
+)"
 ```
 
-### Step 8: Merge After Approval (NEVER SKIP REVIEWS)
+**If CHANGES REQUESTED:** Post the specific issues to the PR, fix them, then post approval once resolved.
+
+### Step 8: Verify PR Checklist (MANDATORY)
+
+Before merging, verify ALL checkboxes in the PR body are checked:
+
+```bash
+# View the PR body and verify all [ ] are now [x]
+gh pr view --json body --jq '.body'
+```
+
+**Update any unchecked items:**
+```bash
+gh pr edit --body "$(cat <<'EOF'
+... updated body with all checkboxes marked [x] ...
+EOF
+)"
+```
+
+Every `[ ]` must become `[x]` before merge. If an item cannot be checked, explain why in a PR comment.
+
+### Step 9: Merge After Approval (NEVER SKIP REVIEWS)
 
 ```bash
 gh pr merge --squash --delete-branch
 ```
 
 **Do NOT merge if:**
-- Reviews were not performed
-- HIGH/MEDIUM findings exist
+- Reviews were not posted as PR comments
+- HIGH/MEDIUM findings exist (even if posted)
 - CI is failing
 - Smoke test was not documented
+- PR body has unchecked checkboxes
 
-### Step 9: Update Sprint Branch
+### Step 10: Update Sprint Branch
 
 ```bash
 git checkout sprint-N
@@ -248,6 +301,8 @@ npm run validate
 | Generic commit messages | Hard to trace | Always prefix with task ID |
 | Touching files you don't own | Creates conflicts | Coordinate with file owner |
 | PRs > 300 lines | Too big to review | Split into sub-tasks |
+| Not posting reviews to PR | No audit trail | Use `gh pr comment` for all reviews |
+| Merging with unchecked boxes | Incomplete work | Verify all `[ ]` become `[x]` first |
 
 ---
 
@@ -265,7 +320,11 @@ git commit --author="{ROLE} <{role}@spire-ascent.dev>" -m "{TASK-ID}: descriptio
 git push -u origin {task-id}-{description}
 gh pr create --base sprint-N --title "{TASK-ID}: Description" --body "..."
 # ... perform Copilot review ...
+gh pr comment --body "## Copilot Review Findings ..."  # POST TO PR!
 # ... perform Mentor review ...
+gh pr comment --body "## Mentor Review ..."             # POST TO PR!
+# ... verify all PR checkboxes are [x] ...
+gh pr view --json body --jq '.body' | grep -c '\[ \]'  # Should be 0
 # ... only then merge ...
 gh pr merge --squash --delete-branch
 git checkout sprint-N && git pull origin sprint-N

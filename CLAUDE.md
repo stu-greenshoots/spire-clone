@@ -82,7 +82,10 @@ git commit --author="{ROLE} <{role}@spire-ascent.dev>" -m "{TASK-ID}: descriptio
 git push -u origin {task-id}-{description}
 gh pr create --base sprint-N --title "{TASK-ID}: Description" --body "..."
 # ... perform Copilot review (security, bugs, quality) ...
+gh pr comment --body "## Copilot Review ..."   # POST TO PR!
 # ... perform Mentor review (architecture, integration) ...
+gh pr comment --body "## Mentor Review ..."    # POST TO PR!
+# ... verify all PR checkboxes checked ...
 gh pr merge --squash --delete-branch
 ```
 
@@ -91,18 +94,25 @@ gh pr merge --squash --delete-branch
 1. **Always use your author flag** - `--author="{ROLE} <{role}@spire-ascent.dev>"`
 2. **Always run `npm run validate`** before pushing
 3. **Always perform both reviews** - Copilot AND Mentor
-4. **Never auto-merge** - Complete all review steps first
-5. **Never skip CI** - If CI fails, fix before proceeding
+4. **Always post reviews as PR comments** - `gh pr comment` for audit trail
+5. **Always verify PR checklist** - All `[ ]` must be `[x]` before merge
+6. **Never auto-merge** - Complete all review steps first
+7. **Never skip CI** - If CI fails, fix before proceeding
 
 ### PR Review Process (MANDATORY)
 
 **DO NOT AUTO-MERGE PRs. EVER.**
 
+**ALL REVIEW FINDINGS MUST BE POSTED AS PR COMMENTS.**
+
 For each PR:
 1. **Check CI status** - Must be passing
 2. **Perform Copilot Review** - Security, bugs, quality checks
-3. **Perform Mentor Review** - Architecture, integration, Definition of Done
-4. **Merge only after approval** - Both reviews must pass
+3. **Post Copilot findings to PR** - `gh pr comment --body "## Copilot Review ..."`
+4. **Perform Mentor Review** - Architecture, integration, Definition of Done
+5. **Post Mentor findings to PR** - `gh pr comment --body "## Mentor Review ..."`
+6. **Verify all PR checkboxes** - Every `[ ]` must be `[x]`
+7. **Merge only after approval** - Both reviews posted, all boxes checked
 
 See `docs/GIT_FLOW.md` for detailed review templates and checklists.
 
@@ -197,6 +207,8 @@ localStorage.removeItem('spireAscent_customData')
 11. **No forward-referencing.** Don't call APIs that don't exist yet.
 12. **NEVER auto-merge PRs.** Wait for Copilot review → address findings → wait for Mentor approval → then merge.
 13. **Honest assessment.** No inflated scores. Report what's broken, not what passes.
+14. **Post all reviews as PR comments.** Use `gh pr comment` - no review = no audit trail.
+15. **Verify all PR checkboxes before merge.** Every `[ ]` must be `[x]` or explained in a comment.
 
 ## Current State (Sprint 18 - Visual Polish & Ship Readiness)
 
