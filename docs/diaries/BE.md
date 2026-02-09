@@ -3,6 +3,49 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 19 Entries
+
+### FIX-13: Fix reward modal timing bug
+**Date:** 2026-02-09
+**Status:** MERGED (PR #243)
+**Sprint:** Sprint 19 (Release Ready)
+**Task:** FIX-13 (Fix reward modal timing bug — M size, P0)
+
+**Problem:**
+- Reward modal appeared during combat before death animations completed
+- Phase transition (COMBAT → COMBAT_REWARD) happened synchronously in reducer
+- Death animations take 600ms, but reward screen appeared immediately
+
+**Solution:**
+Added transitional `COMBAT_VICTORY` phase to delay reward screen:
+1. Added `COMBAT_VICTORY` to `GAME_PHASE` enum
+2. Added `SHOW_COMBAT_REWARDS` action handler in GameContext reducer
+3. Modified `endTurnAction.js` and `playCardAction.js` to use `COMBAT_VICTORY` instead of direct `COMBAT_REWARD`
+4. Added `useEffect` in CombatScreen to trigger phase transition after death animation delay
+5. Integrated with user's animation speed settings (normal: 600ms, fast: 300ms, instant: 0ms)
+6. Added ref to prevent race condition if callback reference changes during delay
+7. Added dev-mode warning for invalid phase transitions
+
+**Files Changed:**
+- `src/context/GameContext.jsx` — new phase + action + callback
+- `src/context/reducers/combat/endTurnAction.js` — use COMBAT_VICTORY (2 places)
+- `src/context/reducers/combat/playCardAction.js` — use COMBAT_VICTORY
+- `src/App.jsx` — handle COMBAT_VICTORY in music and rendering
+- `src/components/CombatScreen.jsx` — useEffect for transition timing
+- 8 test files updated to include new phase in assertions
+
+**Code Review Feedback Addressed:**
+1. ✅ Animation duration respects user's animationSpeed setting
+2. ✅ Dev-mode warning for invalid phase transitions
+3. ✅ Race condition prevention with ref for stable callback
+
+**Validation:** `npm run validate` passes — 3759 tests, lint clean, build clean
+
+**Blockers:** None
+**Next:** Continue with GD-32 (card art batch 1)
+
+---
+
 ## Sprint 18 Entries
 
 ### VP-11: Bundle Optimization

@@ -915,7 +915,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | PM-19 | PM | S | Sprint setup, merge Sprint 18 to master | DONE |
-| FIX-13 | BE | M | Fix reward modal timing bug — appears during combat | PENDING |
+| FIX-13 | BE | M | Fix reward modal timing bug — appears during combat | DONE (PR #243) |
 | GD-32 | GD | L | Card art batch 1 — 25 placeholders replaced | PENDING |
 | GD-33 | GD | L | Card art batch 2 — 25 more placeholders replaced | PENDING |
 | QA-27 | QA | M | E2E test stabilization — fix 4 timeout tests | PENDING |
@@ -943,7 +943,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 ### Sprint 19 Validation Gate
 
 **P0 (Must Pass)**
-- [ ] FIX-13 merged — reward modal timing fixed
+- [x] FIX-13 merged — reward modal timing fixed (PR #243)
 - [ ] GD-32 merged — 25 cards improved
 - [ ] GD-33 merged — 25 cards improved
 - [ ] All 30 E2E tests pass on CI
