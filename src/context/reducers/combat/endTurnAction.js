@@ -328,7 +328,7 @@ export const handleEndTurn = (state) => {
 
     const victoryState = {
       ...state,
-      phase: GAME_PHASE.COMBAT_REWARD,
+      phase: GAME_PHASE.COMBAT_VICTORY,
       player: newPlayer,
       enemies: newEnemies,
       relics: newRelics,
@@ -409,7 +409,7 @@ export const handleEndTurn = (state) => {
     }
     const victoryState = {
       ...state,
-      phase: GAME_PHASE.COMBAT_REWARD,
+      phase: GAME_PHASE.COMBAT_VICTORY,
       player: newPlayer,
       enemies: newEnemies,
       relics: newRelics,
