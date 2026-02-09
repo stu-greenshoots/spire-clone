@@ -914,7 +914,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| PM-19 | PM | S | Sprint setup, merge Sprint 18 to master | IN PROGRESS |
+| PM-19 | PM | S | Sprint setup, merge Sprint 18 to master | DONE |
 | FIX-13 | BE | M | Fix reward modal timing bug — appears during combat | PENDING |
 | GD-32 | GD | L | Card art batch 1 — 25 placeholders replaced | PENDING |
 | GD-33 | GD | L | Card art batch 2 — 25 more placeholders replaced | PENDING |
