@@ -1,13 +1,13 @@
 # Sprint Board - Spire Ascent
 
-**Last Updated:** 2026-02-07
-**Current Sprint:** 18 (Visual Polish & Ship Readiness) - IN PROGRESS
-**Integration Branch:** `sprint-18`
-**Sprint Plan:** See `SPRINT_18_PLAN.md`
+**Last Updated:** 2026-02-09
+**Current Sprint:** 19 (Release Ready) - IN PROGRESS
+**Integration Branch:** `sprint-19`
+**Sprint Plan:** See `SPRINT_19_PLAN.md`
 **Roadmap:** See `docs/archive/ROADMAP.md` (historical — original 4-sprint plan to 1.0)
 **Diaries:** `docs/diaries/{ROLE}.md`
 **Process:** See PROCESS.md for workflow conventions
-**Previous:** Sprint 17 COMPLETE (15 tasks, 3730 tests, Quality Reality — zero bugs found)
+**Previous:** Sprint 18 COMPLETE (15 tasks, 3759 tests, Visual Polish & Ship Readiness)
 
 ---
 
@@ -787,7 +787,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 **Goal:** Make the game actually work, verifiably. No new features — fix, test, and prove what exists.
 **Branch:** `sprint-17` (merged to master)
 **Plan:** See `SPRINT_17_PLAN.md`
-**Status:** COMPLETE — 15/15 tasks done. Zero bugs found. 11th consecutive 100% sprint.
+**Status:** COMPLETE — 15/15 tasks done (11th consecutive 100% sprint)
 
 ### Stream A: Testability Infrastructure
 
@@ -837,16 +837,16 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] Data Editor overrides show visible warning
 - [x] Runtime state validation active in dev mode
 - [x] `npm run validate` passes (3730 tests)
-- [ ] Honest self-assessment completed (deferred to Sprint 18)
+- [x] Honest self-assessment completed (docs/SELF_ASSESSMENT.md)
 
 ---
 
-## Sprint 18: Visual Polish & Ship Readiness - IN PROGRESS
+## Sprint 18: Visual Polish & Ship Readiness - COMPLETE
 
 **Goal:** Replace placeholders, complete validation, and prepare for 1.0 release.
-**Branch:** `sprint-18` (create from master)
+**Branch:** `sprint-18` (merged to master)
 **Plan:** See `SPRINT_18_PLAN.md`
-**Status:** COMPLETE (15/15 tasks done)
+**Status:** COMPLETE — 15/15 tasks done (12th consecutive 100% sprint)
 
 ### Stream A: Art Polish
 
@@ -871,14 +871,14 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Priority | Description | Status |
 |------|-------|------|----------|-------------|--------|
-| VP-10 | BE/QA | M | P1 | E2E CI Stabilization | MERGED (PR #234, #238) — 26/30 tests stable, 4 playthrough tests timeout |
+| VP-10 | BE/QA | M | P1 | E2E CI Stabilization | MERGED (PR #234, #238) — 26/30 tests stable |
 | VP-11 | BE | S | P2 | Bundle Optimization | MERGED (PR #239) |
 | VP-12 | AR | S | P2 | Audio Final Pass | DONE |
 | VP-13 | GD | L | P2 | Remaining Card Art (30 additional) | MERGED (PR #240) |
 | VP-14 | PM | S | P2 | Documentation Polish | DONE |
 | VP-15 | PM | S | P2 | Release Checklist | MERGED (PR #236) |
 
-### Sprint 18 Validation Gate
+### Sprint 18 Validation Gate - COMPLETE
 
 **P0 (Must Pass)**
 - [x] All 3 Act 1 boss sprites are quality art (>30KB each)
@@ -900,3 +900,64 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] Bundle optimization reviewed
 - [x] Audio final pass complete
 - [x] Release checklist created
+
+---
+
+## Sprint 19: Release Ready - IN PROGRESS
+
+**Goal:** Final art push, fix reward modal bug, ship 1.1.0
+**Branch:** `sprint-19`
+**Plan:** See `SPRINT_19_PLAN.md`
+**Status:** IN PROGRESS
+
+### P0 — Must Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| PM-19 | PM | S | Sprint setup, merge Sprint 18 to master | IN PROGRESS |
+| FIX-13 | BE | M | Fix reward modal timing bug — appears during combat | PENDING |
+| GD-32 | GD | L | Card art batch 1 — 25 placeholders replaced | PENDING |
+| GD-33 | GD | L | Card art batch 2 — 25 more placeholders replaced | PENDING |
+| QA-27 | QA | M | E2E test stabilization — fix 4 timeout tests | PENDING |
+
+### P1 — Should Ship
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| BE-34 | BE | S | Phase transition hardening | PENDING |
+| UX-35 | UX | S | Updated self-assessment (target 95+) | PENDING |
+| QA-28 | QA | M | Full regression before release | PENDING |
+| JR-16 | JR | M | Final card balance review | PENDING |
+| VARROW-13 | Varrow | S | Narrative polish — final text pass | PENDING |
+
+### P2 — Stretch
+
+| Task | Owner | Size | Description | Status |
+|------|-------|------|-------------|--------|
+| AR-19 | AR | S | Audio polish | PENDING |
+| GD-34 | GD | M | Remaining card art (stretch) | PENDING |
+| PM-20 | PM | S | v1.1.0 Release | PENDING |
+| UX-36 | UX | S | Mobile gesture refinement | PENDING |
+| QA-29 | QA | S | Performance regression | PENDING |
+
+### Sprint 19 Validation Gate
+
+**P0 (Must Pass)**
+- [ ] FIX-13 merged — reward modal timing fixed
+- [ ] GD-32 merged — 25 cards improved
+- [ ] GD-33 merged — 25 cards improved
+- [ ] All 30 E2E tests pass on CI
+- [ ] `npm run validate` passes (3759+ tests)
+
+**P1 (Should Pass)**
+- [ ] Full regression completed without issues
+- [ ] Card balance verified
+- [ ] Narrative text polished
+- [ ] Phase transitions hardened
+- [ ] Self-assessment updated to 95+
+
+**P2 (Nice to Have)**
+- [ ] v1.1.0 released
+- [ ] Mobile gestures verified
+- [ ] Performance regression passed
+- [ ] 90%+ card art coverage
