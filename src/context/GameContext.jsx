@@ -310,6 +310,10 @@ const gameReducer = (state, action) => {
       if (state.phase === GAME_PHASE.COMBAT_VICTORY) {
         return { ...state, phase: GAME_PHASE.COMBAT_REWARD };
       }
+      // Dev-mode warning for invalid phase transitions
+      if (import.meta.env?.DEV && state.phase !== GAME_PHASE.COMBAT_REWARD) {
+        console.warn(`SHOW_COMBAT_REWARDS dispatched in unexpected phase: ${state.phase}. Expected COMBAT_VICTORY or COMBAT_REWARD.`);
+      }
       return state;
     }
 
