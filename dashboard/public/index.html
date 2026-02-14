@@ -2556,10 +2556,8 @@
 
             await Promise.allSettled(fetches);
 
-            // If SSE is not connected, poll logs too
-            if (!state.sseConnected) {
-                pollLogs();
-            }
+            // Always poll logs as backup — SSE may miss lines on macOS
+            pollLogs();
         }
 
         /**

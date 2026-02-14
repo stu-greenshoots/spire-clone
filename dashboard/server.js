@@ -767,7 +767,10 @@ app.get('/api/log/stream', async (req, res) => {
     }
   };
 
-  // Set up fs.watch
+  // Poll every 2s — fs.watch on macOS is unreliable for appended log files
+  const pollInterval = setInterval(sendNewLines, 2000);
+
+  // Also try fs.watch as a bonus (fires faster when it works)
   try {
     const { watch: fsWatch } = await import('node:fs');
     watcher = fsWatch(PATHS.stuLog, { persistent: false }, (eventType) => {
@@ -775,18 +778,9 @@ app.get('/api/log/stream', async (req, res) => {
         sendNewLines();
       }
     });
-
-    watcher.on('error', () => {
-      // Silently handle watch errors
-    });
+    watcher.on('error', () => {});
   } catch {
-    // If watch fails, fall back to polling
-    const pollInterval = setInterval(sendNewLines, 2000);
-
-    req.on('close', () => {
-      closed = true;
-      clearInterval(pollInterval);
-    });
+    // fs.watch not available — polling covers us
   }
 
   // Heartbeat every 30 seconds to keep connection alive
@@ -800,6 +794,7 @@ app.get('/api/log/stream', async (req, res) => {
   req.on('close', () => {
     closed = true;
     clearInterval(heartbeat);
+    clearInterval(pollInterval);
     if (watcher) {
       watcher.close();
     }
