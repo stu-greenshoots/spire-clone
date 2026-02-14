@@ -115,11 +115,12 @@ run_overseer_raw() { run_agent_raw "copilot" "$1" "${2:-}"; }
 run_engineer() {
   local prompt="$1"
   local phase_name="${2:-}"
+  local agent_tag="${3:-claude-engineer}"
 
   if [[ -n "$phase_name" ]]; then
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "🤖 CLAUDE (Engineer): $phase_name"
+    echo "[AGENT:$agent_tag] 🤖 CLAUDE (Engineer): $phase_name"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   fi
 
@@ -134,11 +135,12 @@ run_engineer() {
 run_overseer() {
   local prompt="$1"
   local phase_name="${2:-}"
+  local agent_tag="${3:-gemini-overseer}"
 
   if [[ -n "$phase_name" ]]; then
     echo ""
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "💎 GEMINI (Overseer): $phase_name"
+    echo "[AGENT:$agent_tag] 💎 GEMINI (Overseer): $phase_name"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
   fi
 
@@ -434,7 +436,7 @@ while true; do
 
   echo ""
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-  echo "💎 GEMINI: Checking Sprint Status"
+  echo "[AGENT:gemini-status] 💎 GEMINI: Checking Sprint Status"
   echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
   TEMP_FILE=$(mktemp)
@@ -454,12 +456,12 @@ while true; do
     # Retrospective (Gemini — PM role)
     log "Running retrospective..."
     PROMPT=$(load_prompt "retrospective.md")
-    run_overseer "$PROMPT" "Running Sprint Retrospective"
+    run_overseer "$PROMPT" "Running Sprint Retrospective" "gemini-retro"
 
     # Plan next sprint (Gemini — PM role)
     log "Planning next sprint..."
     PROMPT=$(load_prompt "plan-sprint.md")
-    run_overseer "$PROMPT" "Planning Next Sprint"
+    run_overseer "$PROMPT" "Planning Next Sprint" "gemini-planner"
 
     log "New sprint planned. Continuing..."
 
@@ -478,7 +480,7 @@ while true; do
 
       echo ""
       echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-      echo "💎 GEMINI: Housekeeping"
+      echo "[AGENT:gemini-housekeeping] 💎 GEMINI: Housekeeping"
       echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
       TEMP_FILE=$(mktemp)
@@ -501,7 +503,7 @@ while true; do
 
       echo ""
       echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-      echo "💎 GEMINI: Reviewing PRs"
+      echo "[AGENT:gemini-reviewer] 💎 GEMINI: Reviewing PRs"
       echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
       TEMP_FILE=$(mktemp)
@@ -515,7 +517,7 @@ while true; do
       if [[ "$RESULT" == *"MERGED"* ]]; then
         echo ""
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        echo "🔍 INDEPENDENT VALIDATION: npm run validate"
+        echo "[AGENT:loop-validate] 🔍 INDEPENDENT VALIDATION: npm run validate"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         log "Running independent validation after merge..."
 
@@ -538,7 +540,7 @@ while true; do
 
         echo ""
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        echo "💎 GEMINI: Attempting to Unblock"
+        echo "[AGENT:gemini-unblock] 💎 GEMINI: Attempting to Unblock"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
         TEMP_FILE=$(mktemp)
@@ -571,7 +573,7 @@ while true; do
 
       echo ""
       echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-      echo "🤖 CLAUDE: Executing Task"
+      echo "[AGENT:claude-engineer] 🤖 CLAUDE: Executing Task"
       echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
       TEMP_FILE=$(mktemp)
@@ -587,7 +589,7 @@ while true; do
 
         echo ""
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-        echo "💎 GEMINI: Attempting to Unblock"
+        echo "[AGENT:gemini-unblock] 💎 GEMINI: Attempting to Unblock"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
         TEMP_FILE=$(mktemp)

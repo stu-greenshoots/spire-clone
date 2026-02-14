@@ -1490,9 +1490,6 @@
             </div>
             <div class="log-tabs" id="log-tabs">
                 <button class="log-tab active" data-agent="all">ALL</button>
-                <button class="log-tab" data-agent="claude">CLAUDE</button>
-                <button class="log-tab" data-agent="gemini">GEMINI</button>
-                <button class="log-tab" data-agent="loop">LOOP</button>
             </div>
             <div class="panel-body">
                 <div class="log-lines" id="log-container">
@@ -1938,17 +1935,60 @@
             renderLog();
         }
 
-        // Classify log lines into agent sections based on markers in stu-loop.sh
-        // Returns 'claude', 'gemini', 'loop', or null (unclassified)
+        // Extract agent tag from [AGENT:name] markers in log lines
+        // Also detects engineer roles from output patterns (author flags, diary reads, slash commands)
         function getLineAgent(text) {
             if (!text) return null;
-            // Loop orchestration markers (cycle boundaries, phase headers, status)
-            if (/=== CYCLE \d|STU LOOP CYCLE|Phase \d:|Review cycle|Work cycle|Housekeeping cycle|NEEDS HUMAN|MAX CYCLES|Stu Loop (started|stopped)|━━━━/i.test(text)) return 'loop';
-            // Claude (Engineer) section markers
-            if (/🤖 CLAUDE|CLAUDE.*Executing/i.test(text)) return 'claude';
-            // Gemini (Overseer) section markers
-            if (/💎 GEMINI|GEMINI.*Checking|GEMINI.*Review|GEMINI.*Housekeep|GEMINI.*Unblock|gemini-\d+-pro/i.test(text)) return 'gemini';
+            // Explicit [AGENT:xxx] marker from stu-loop.sh
+            const tagMatch = text.match(/\[AGENT:([\w-]+)\]/);
+            if (tagMatch) return tagMatch[1];
+            // Detect engineer role from Claude output patterns
+            const roleMatch = text.match(/--author="(BE|GD|QA|JR|UX|AR|SL)\b/i)
+                || text.match(/diaries\/(BE|GD|QA|JR|UX|AR|SL)\.md/i)
+                || text.match(/engineer-(be|gd|qa|jr|ux|ar|sl)/i)
+                || text.match(/\b(BE|GD|QA|JR|UX|AR|SL) Session\b/);
+            if (roleMatch) return roleMatch[1].toLowerCase();
             return null;
+        }
+
+        // Build dynamic tabs from agents found in log lines
+        function updateLogTabs() {
+            const agents = new Set();
+            state.logLines.forEach(line => {
+                const agent = getLineAgent(line);
+                if (agent) agents.add(agent);
+            });
+
+            const tabContainer = document.getElementById('log-tabs');
+            const current = state.logFilter;
+
+            // Agent display config: label and sort order
+            const agentLabels = {
+                'gemini-status': 'STATUS', 'gemini-reviewer': 'REVIEWER',
+                'gemini-housekeeping': 'HOUSEKEEP', 'gemini-unblock': 'UNBLOCK',
+                'gemini-retro': 'RETRO', 'gemini-planner': 'PLANNER',
+                'gemini-overseer': 'OVERSEER',
+                'claude-engineer': 'ENGINEER', 'loop-validate': 'VALIDATE',
+                'be': 'BE', 'gd': 'GD', 'qa': 'QA', 'jr': 'JR',
+                'ux': 'UX', 'ar': 'AR', 'sl': 'SL',
+            };
+            // Sort: team roles first, then gemini agents, then loop
+            const sortOrder = ['be','gd','qa','jr','ux','ar','sl',
+                'claude-engineer','gemini-status','gemini-reviewer',
+                'gemini-housekeeping','gemini-unblock','gemini-retro',
+                'gemini-planner','gemini-overseer','loop-validate'];
+
+            const sorted = [...agents].sort((a, b) => {
+                const ai = sortOrder.indexOf(a), bi = sortOrder.indexOf(b);
+                return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+            });
+
+            let html = '<button class="log-tab' + (current === 'all' ? ' active' : '') + '" data-agent="all">ALL</button>';
+            for (const agent of sorted) {
+                const label = agentLabels[agent] || agent.toUpperCase();
+                html += `<button class="log-tab${current === agent ? ' active' : ''}" data-agent="${agent}">${label}</button>`;
+            }
+            tabContainer.innerHTML = html;
         }
 
         function renderLog() {
@@ -1957,6 +1997,9 @@
                 container.innerHTML = '<div class="log-empty">No log data yet. Waiting for loop activity...</div>';
                 return;
             }
+
+            // Update dynamic tabs based on agents found in log
+            updateLogTabs();
 
             // When 'all', show everything. When filtered, use sticky context:
             // once we see an agent marker, all subsequent lines belong to that
