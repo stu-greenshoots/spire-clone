@@ -1131,6 +1131,178 @@
         }
 
         /* ========================================================================
+           MISSION CONTROL NOTES
+           ======================================================================== */
+        .mc-note {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .mc-note:last-child { margin-bottom: 0; }
+        .mc-note-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .mc-note-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .mc-note-status {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .mc-note-status.urgent { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+        .mc-note-status.needs-input { background: rgba(243, 156, 18, 0.2); color: #f39c12; }
+        .mc-note-status.fyi { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+        .mc-note-status.resolved { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+        .mc-note-body {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        .mc-note-body p { margin: 4px 0; }
+        .mc-note-body strong { color: var(--text-primary); }
+        .mc-note-section {
+            margin-top: 6px;
+            padding: 6px 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+        }
+        .mc-note-section-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+        .mc-note-reply {
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(88, 166, 255, 0.08);
+            border-left: 3px solid var(--accent-blue);
+            border-radius: 0 4px 4px 0;
+            font-size: 12px;
+            color: var(--text-primary);
+        }
+        .mc-reply-form {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+        }
+        .mc-reply-input {
+            flex: 1;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 6px 10px;
+            color: var(--text-primary);
+            font-size: 12px;
+            font-family: var(--font-sans);
+        }
+        .mc-reply-input:focus { outline: none; border-color: var(--accent-blue); }
+        .mc-reply-btn {
+            background: var(--accent-blue);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .mc-reply-btn:hover { opacity: 0.9; }
+        .mc-reply-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .mc-empty {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 13px;
+        }
+
+        /* ========================================================================
+           AI USAGE STATS
+           ======================================================================== */
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+        .usage-card {
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            padding: 12px;
+        }
+        .usage-card-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+        }
+        .usage-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .usage-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            min-width: 80px;
+        }
+        .usage-value {
+            font-size: 12px;
+            font-weight: 600;
+            font-family: var(--font-mono);
+        }
+        .usage-detail {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ========================================================================
+           AGENT LOG TABS
+           ======================================================================== */
+        .log-tabs {
+            display: flex;
+            gap: 2px;
+            padding: 6px 12px 0;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+        }
+        .log-tab {
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 4px 4px 0 0;
+            border: 1px solid transparent;
+            border-bottom: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .log-tab:hover { color: var(--text-secondary); background: var(--bg-secondary); }
+        .log-tab.active {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-color: var(--border);
+        }
+
+        /* ========================================================================
            TOAST NOTIFICATION
            ======================================================================== */
         .toast {
@@ -1316,6 +1488,12 @@
                     <button class="log-btn" id="btn-clear-log" title="Clear log display">CLEAR</button>
                 </div>
             </div>
+            <div class="log-tabs" id="log-tabs">
+                <button class="log-tab active" data-agent="all">ALL</button>
+                <button class="log-tab" data-agent="engineer">ENGINEER</button>
+                <button class="log-tab" data-agent="overseer">OVERSEER</button>
+                <button class="log-tab" data-agent="pm">PM</button>
+            </div>
             <div class="panel-body">
                 <div class="log-lines" id="log-container">
                     <div class="log-empty">Connecting to log stream...</div>
@@ -1389,7 +1567,32 @@
             <div class="panel-error" id="links-error">Offline</div>
         </div>
 
-        <!-- ROW 5, COL 1+2: Handoff Context -->
+        <!-- Mission Control — PM ↔ Stu Notes -->
+        <div class="panel" id="panel-mc" style="grid-column: 1 / -1;">
+            <div class="panel-header">
+                <span class="panel-title"><span class="icon">&#128225;</span> Mission Control</span>
+                <span class="panel-badge orange" id="mc-badge">--</span>
+            </div>
+            <div class="panel-body" id="mc-body">
+                <div class="skeleton skeleton-line long"></div>
+                <div class="skeleton skeleton-line medium"></div>
+            </div>
+            <div class="panel-error" id="mc-error">Offline</div>
+        </div>
+
+        <!-- AI Usage Stats -->
+        <div class="panel" id="panel-usage" style="grid-column: 1 / -1;">
+            <div class="panel-header">
+                <span class="panel-title"><span class="icon">&#9889;</span> AI Usage</span>
+            </div>
+            <div class="panel-body" id="usage-body">
+                <div class="skeleton skeleton-line medium"></div>
+                <div class="skeleton skeleton-line short"></div>
+            </div>
+            <div class="panel-error" id="usage-error">Offline</div>
+        </div>
+
+        <!-- Handoff Context -->
         <div class="panel" id="panel-handoff" style="grid-column: 1 / -1;">
             <div class="panel-header">
                 <span class="panel-title"><span class="icon">&#128257;</span> Handoff Context (last-cycle.md)</span>
@@ -1451,6 +1654,7 @@
             lastRefresh: Date.now(),
             sseConnected: false,
             loopStartTime: null,
+            logFilter: 'all',
         };
 
         // ====================================================================
@@ -1661,7 +1865,8 @@
                     const priority = (t.priority || 'P2').toLowerCase();
                     const statusClass = (t.status === 'MERGED' || t.status === 'DONE') ? 'merged' :
                                         (t.status === 'IN_PROGRESS' || t.status === 'IN PROGRESS') ? 'in-progress' : 'pending';
-                    const prTag = t.pr ? `<a class="task-tag pr" href="${GITHUB_BASE}/pull/${t.pr.replace('#','')}" target="_blank">${t.pr}</a>` : '';
+                    const prNum = t.pr ? String(t.pr).replace('#','') : '';
+                    const prTag = prNum ? `<a class="task-tag pr" href="${GITHUB_BASE}/pull/${prNum}" target="_blank">#${prNum}</a>` : '';
 
                     return `<div class="task-card ${priority}">
                         <div class="task-card-top">
@@ -1733,6 +1938,14 @@
             renderLog();
         }
 
+        function getLineAgent(text) {
+            if (!text) return 'all';
+            if (/\[ENGINEER\]|Engineer session|claude.*engineer/i.test(text)) return 'engineer';
+            if (/\[OVERSEER\]|Overseer session|gemini.*overseer|copilot/i.test(text)) return 'overseer';
+            if (/\[PM\]|PM session|pm-sprint|orchestrat/i.test(text)) return 'pm';
+            return 'all';
+        }
+
         function renderLog() {
             const container = document.getElementById('log-container');
             if (state.logLines.length === 0) {
@@ -1740,7 +1953,19 @@
                 return;
             }
 
-            container.innerHTML = state.logLines.map(line => {
+            const filtered = state.logFilter === 'all'
+                ? state.logLines
+                : state.logLines.filter(line => {
+                    const agent = getLineAgent(line);
+                    return agent === state.logFilter || agent === 'all';
+                });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="log-empty">No ${state.logFilter} log lines yet.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map(line => {
                 const cls = classifyLogLine(line);
                 return `<div class="log-line ${cls}">${escapeHtml(line)}</div>`;
             }).join('');
@@ -2040,6 +2265,156 @@
         }
 
         // ====================================================================
+        // AI USAGE
+        // ====================================================================
+        function renderUsage(data) {
+            hidePanelError('usage-error');
+            const body = document.getElementById('usage-body');
+            const fmtK = (n) => n >= 1000000 ? (n/1000000).toFixed(1) + 'M' : n >= 1000 ? (n/1000).toFixed(1) + 'k' : String(n);
+
+            let html = '<div class="usage-grid">';
+
+            // Claude card — parsed from loop log
+            if (data.claude) {
+                const c = data.claude;
+                html += `<div class="usage-card">
+                    <div class="usage-card-title">Claude</div>
+                    <div class="usage-row">
+                        <span class="usage-label">Plan</span>
+                        <span class="usage-value" style="color:var(--accent-purple)">${c.subscriptionType || 'unknown'}</span>
+                    </div>
+                    <div class="usage-row">
+                        <span class="usage-label">Sessions</span>
+                        <span class="usage-value">${c.sessionCount || 0}</span>
+                    </div>
+                    <div class="usage-row">
+                        <span class="usage-label">Requests</span>
+                        <span class="usage-value">${c.premiumRequests || 0}</span>
+                    </div>
+                    <div class="usage-row">
+                        <span class="usage-label">Session time</span>
+                        <span class="usage-value">${c.totalSessionTime || '--'}</span>
+                    </div>
+                </div>`;
+            } else {
+                html += '<div class="usage-card"><div class="usage-card-title">Claude</div><div class="usage-detail">Info unavailable</div></div>';
+            }
+
+            // Gemini card
+            if (data.gemini && (data.gemini.tokensIn > 0 || data.gemini.tokensOut > 0)) {
+                html += `<div class="usage-card">
+                    <div class="usage-card-title">Gemini</div>
+                    <div class="usage-row">
+                        <span class="usage-label">Tokens in</span>
+                        <span class="usage-value">${fmtK(data.gemini.tokensIn)}</span>
+                    </div>
+                    <div class="usage-row">
+                        <span class="usage-label">Tokens out</span>
+                        <span class="usage-value">${fmtK(data.gemini.tokensOut)}</span>
+                    </div>
+                </div>`;
+            }
+
+            // DALL-E card
+            if (data.openai) {
+                html += `<div class="usage-card">
+                    <div class="usage-card-title">DALL-E</div>
+                    <div class="usage-row">
+                        <span class="usage-label">This week</span>
+                        <span class="usage-value">${data.openai.imagesThisWeek} images</span>
+                    </div>
+                    <div class="usage-row">
+                        <span class="usage-label">Total art</span>
+                        <span class="usage-value">${data.openai.totalImages} files</span>
+                    </div>
+                </div>`;
+            }
+
+            html += '</div>';
+            body.innerHTML = html;
+        }
+
+        // ====================================================================
+        // MISSION CONTROL
+        // ====================================================================
+        function renderMissionControl(data) {
+            hidePanelError('mc-error');
+            const body = document.getElementById('mc-body');
+            const badge = document.getElementById('mc-badge');
+            const notes = data.notes || [];
+
+            const activeCount = notes.filter(n => !n.reply || n.reply === '_[Reply here]_').length;
+            badge.textContent = activeCount > 0 ? `${activeCount} active` : 'All clear';
+            badge.className = activeCount > 0 ? 'panel-badge orange' : 'panel-badge green';
+
+            if (notes.length === 0) {
+                body.innerHTML = '<div class="mc-empty">No notes from PM. All quiet.</div>';
+                return;
+            }
+
+            function getStatusClass(status) {
+                if (!status) return 'fyi';
+                const s = status.toLowerCase();
+                if (s.includes('urgent')) return 'urgent';
+                if (s.includes('input')) return 'needs-input';
+                if (s.includes('resolved') || s.includes('✅')) return 'resolved';
+                return 'fyi';
+            }
+            function getStatusLabel(status) {
+                if (!status) return 'FYI';
+                if (status.includes('URGENT')) return 'URGENT';
+                if (status.includes('INPUT')) return 'NEEDS INPUT';
+                if (status.includes('RESOLVED') || status.includes('✅')) return 'RESOLVED';
+                return status.replace(/[🔴🟡🟢✅]/g, '').trim() || 'FYI';
+            }
+
+            body.innerHTML = notes.map((note, i) => {
+                const hasReply = note.reply && note.reply !== '_[Reply here]_';
+                const replySection = hasReply
+                    ? `<div class="mc-note-reply"><strong>Stu:</strong> ${escapeHtml(note.reply)}</div>`
+                    : `<div class="mc-reply-form">
+                        <input class="mc-reply-input" id="mc-reply-${i}" type="text" placeholder="Type your reply..." onkeydown="if(event.key==='Enter')window.sendMCReply('${escapeHtml(note.title).replace(/'/g, "\\'")}',${i})">
+                        <button class="mc-reply-btn" onclick="window.sendMCReply('${escapeHtml(note.title).replace(/'/g, "\\'")}',${i})">Reply</button>
+                    </div>`;
+
+                return `<div class="mc-note">
+                    <div class="mc-note-header">
+                        <span class="mc-note-title">${escapeHtml(note.title)}</span>
+                        <span class="mc-note-status ${getStatusClass(note.status)}">${getStatusLabel(note.status)}</span>
+                    </div>
+                    <div class="mc-note-body">
+                        ${note.context ? `<p>${escapeHtml(note.context).replace(/\n/g, '<br>')}</p>` : ''}
+                        ${note.question ? `<div class="mc-note-section"><div class="mc-note-section-label">Question</div><p>${escapeHtml(note.question).replace(/\n/g, '<br>')}</p></div>` : ''}
+                        ${note.recommendation ? `<div class="mc-note-section"><div class="mc-note-section-label">Recommendation</div><p>${escapeHtml(note.recommendation).replace(/\n/g, '<br>')}</p></div>` : ''}
+                        ${replySection}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.sendMCReply = async function(noteTitle, noteId) {
+            const input = document.getElementById('mc-reply-' + noteId);
+            if (!input || !input.value.trim()) return;
+            const reply = input.value.trim();
+            const btn = input.nextElementSibling;
+            if (btn) { btn.disabled = true; btn.textContent = 'Sending...'; }
+
+            try {
+                const resp = await fetch(CONFIG.API_BASE + '/mission-control/reply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ noteTitle, reply })
+                });
+                if (!resp.ok) throw new Error('Failed');
+                showToast('Reply sent', 'success');
+                fetchJSON('/mission-control').then(d => renderMissionControl(d)).catch(() => {});
+            } catch (e) {
+                showToast('Failed to send reply', 'error');
+                if (btn) { btn.disabled = false; btn.textContent = 'Reply'; }
+            }
+        };
+
+        // ====================================================================
         // DATA FETCHING - MAIN REFRESH
         // ====================================================================
         async function refreshAll() {
@@ -2163,6 +2538,20 @@
                 }).catch(e => {
                     showPanelError('diary-error');
                 }),
+
+                // Mission Control notes
+                fetchJSON('/mission-control').then(data => {
+                    renderMissionControl(data);
+                }).catch(() => {
+                    showPanelError('mc-error');
+                }),
+
+                // AI Usage
+                fetchJSON('/usage').then(data => {
+                    renderUsage(data);
+                }).catch(() => {
+                    showPanelError('usage-error');
+                }),
             ];
 
             await Promise.allSettled(fetches);
@@ -2199,6 +2588,16 @@
 
         document.getElementById('btn-clear-log').addEventListener('click', function() {
             state.logLines = [];
+            renderLog();
+        });
+
+        // Agent log tab switching
+        document.getElementById('log-tabs').addEventListener('click', function(e) {
+            const tab = e.target.closest('.log-tab');
+            if (!tab) return;
+            document.querySelectorAll('.log-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            state.logFilter = tab.dataset.agent;
             renderLog();
         });
 

@@ -1140,58 +1140,173 @@ app.get('/api/validate', async (_req, res) => {
 });
 
 // ---------------------------------------------------------------------------
-// GET /api/usage — Claude usage info
+// GET /api/usage — Claude session stats + Gemini tokens + DALL-E images
 // ---------------------------------------------------------------------------
 app.get('/api/usage', async (_req, res) => {
   try {
-    const usageOutput = safeExec('claude usage 2>/dev/null', '');
+    const result = { claude: null, gemini: null, openai: null };
 
-    if (!usageOutput) {
-      // Estimate from log file size
-      let logSizeBytes = 0;
-      try {
-        const logStat = await stat(PATHS.stuLog);
-        logSizeBytes = logStat.size;
-      } catch {
-        // No log file
-      }
+    // --- Claude stats from loop log + Keychain ---
+    try {
+      const logContent = await readFile(PATHS.stuLog, 'utf-8');
 
-      return res.json({
-        available: false,
-        estimate: {
-          logFileSizeBytes: logSizeBytes,
-          logFileSizeKB: Math.round(logSizeBytes / 1024),
-          logFileSizeMB: (logSizeBytes / (1024 * 1024)).toFixed(2),
-          note: 'Claude usage command not available. Log file size shown as rough proxy.',
-        },
+      // Parse premium requests and session times
+      const requestMatches = logContent.match(/Total usage est:\s+(\d+)\s+Premium request/g) || [];
+      const sessionTimeMatches = logContent.match(/Total session time:\s+([\dm\s.]+s)/g) || [];
+
+      let totalRequests = 0;
+      requestMatches.forEach(m => {
+        const n = m.match(/(\d+)/);
+        if (n) totalRequests += parseInt(n[1], 10);
       });
+
+      // Sum session times
+      let totalSessionSecs = 0;
+      sessionTimeMatches.forEach(m => {
+        const timeStr = m.replace('Total session time:', '').trim();
+        const mins = timeStr.match(/([\d.]+)m/);
+        const secs = timeStr.match(/([\d.]+)s/);
+        if (mins) totalSessionSecs += parseFloat(mins[1]) * 60;
+        if (secs) totalSessionSecs += parseFloat(secs[1]);
+      });
+
+      const hrs = Math.floor(totalSessionSecs / 3600);
+      const mins = Math.floor((totalSessionSecs % 3600) / 60);
+      const totalTimeStr = hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
+
+      // Get subscription info from Keychain
+      let sub = 'unknown', tier = 'unknown';
+      try {
+        const credRaw = safeExec(
+          'security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null', ''
+        );
+        if (credRaw) {
+          const creds = JSON.parse(credRaw);
+          sub = creds?.claudeAiOauth?.subscriptionType || 'unknown';
+          tier = creds?.claudeAiOauth?.rateLimitTier || 'unknown';
+        }
+      } catch { /* Keychain unavailable */ }
+
+      result.claude = {
+        subscriptionType: sub,
+        rateLimitTier: tier,
+        sessionCount: requestMatches.length,
+        premiumRequests: totalRequests,
+        totalSessionTime: totalTimeStr,
+      };
+    } catch {
+      // No log file or parse error
     }
 
-    // Parse the usage output — format varies but typically has lines like:
-    // "Total cost: $X.XX"
-    // "Total tokens: XXXXX"
-    const parsed = {};
-    for (const line of usageOutput.split('\n')) {
-      const costMatch = line.match(/cost[:\s]+\$?([\d.]+)/i);
-      if (costMatch) parsed.totalCost = parseFloat(costMatch[1]);
-
-      const tokenMatch = line.match(/tokens?[:\s]+([\d,]+)/i);
-      if (tokenMatch) parsed.totalTokens = parseInt(tokenMatch[1].replace(/,/g, ''), 10);
-
-      // Capture the raw line as well
-      if (line.trim()) {
-        if (!parsed.rawLines) parsed.rawLines = [];
-        parsed.rawLines.push(line.trim());
+    // --- Gemini token usage from loop log ---
+    try {
+      const content = await readFile(PATHS.stuLog, 'utf-8');
+      const geminiRegex = /gemini.*?([\d.]+k?)\s+in,\s*([\d.]+k?)\s+out,\s*([\d.]+k?)\s+cached/gi;
+      let match;
+      let totalIn = 0, totalOut = 0;
+      const parseK = (v) => {
+        const s = String(v).toLowerCase();
+        return s.endsWith('k') ? parseFloat(s) * 1000 : parseFloat(s);
+      };
+      while ((match = geminiRegex.exec(content)) !== null) {
+        totalIn += parseK(match[1]);
+        totalOut += parseK(match[2]);
       }
+      result.gemini = { tokensIn: Math.round(totalIn), tokensOut: Math.round(totalOut) };
+    } catch {
+      // No log file
     }
 
-    res.json({
-      available: true,
-      ...parsed,
-      raw: usageOutput,
-    });
+    // --- DALL-E image count ---
+    try {
+      const artDir = path.join(PROJECT_ROOT, 'src', 'assets', 'art', 'cards');
+      const files = await readdir(artDir);
+      const webpFiles = files.filter(f => f.endsWith('.webp'));
+      let recentCount = 0;
+      const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+      for (const f of webpFiles) {
+        try {
+          const s = await stat(path.join(artDir, f));
+          if (s.size > 10000 && s.mtimeMs > weekAgo) recentCount++;
+        } catch { /* skip */ }
+      }
+      result.openai = { imagesThisWeek: recentCount, totalImages: webpFiles.length };
+    } catch {
+      // No art directory
+    }
+
+    res.json(result);
   } catch (err) {
     res.status(500).json({ error: 'Failed to get usage info', details: err.message });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// GET /api/mission-control — Parse PM notes from MISSION_CONTROL.md
+// ---------------------------------------------------------------------------
+app.get('/api/mission-control', async (_req, res) => {
+  try {
+    const content = await safeReadFile(PATHS.missionControl);
+    if (!content) return res.json({ notes: [] });
+
+    const activeSection = content.split('## Active Notes')[1];
+    if (!activeSection) return res.json({ notes: [] });
+
+    const noteBlocks = activeSection.split(/(?=^### )/m).filter(b => b.startsWith('### '));
+    const notes = noteBlocks.map((block, i) => {
+      const titleMatch = block.match(/^### (?:\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}\s+—\s+)?(.+)/);
+      const statusMatch = block.match(/\*\*Status:\*\*\s*(.+)/);
+      const contextMatch = block.match(/\*\*Context:\*\*\s*\n([\s\S]*?)(?=\n\*\*(?:Question|Action|Recommendation|From))/);
+      const questionMatch = block.match(/\*\*(?:Question|Concern)(?:\/Concern)?:\*\*\s*\n([\s\S]*?)(?=\n\*\*(?:Recommendation|From))/);
+      const recommendationMatch = block.match(/\*\*Recommendation:\*\*\s*\n([\s\S]*?)(?=\n\*\*From)/);
+      const replyMatch = block.match(/\*\*From Stu:\*\*\s*\n([\s\S]*?)(?=\n---|$)/);
+
+      return {
+        id: i,
+        title: titleMatch ? titleMatch[1].trim() : 'Untitled',
+        status: statusMatch ? statusMatch[1].trim() : '',
+        context: contextMatch ? contextMatch[1].trim() : '',
+        question: questionMatch ? questionMatch[1].trim() : '',
+        recommendation: recommendationMatch ? recommendationMatch[1].trim() : '',
+        reply: replyMatch ? replyMatch[1].trim() : '',
+      };
+    });
+
+    res.json({ notes });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to parse mission control', details: err.message });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// POST /api/mission-control/reply — Write Stu's reply to a note
+// ---------------------------------------------------------------------------
+app.post('/api/mission-control/reply', async (req, res) => {
+  try {
+    const { noteTitle, reply } = req.body;
+    if (!noteTitle || !reply) return res.status(400).json({ error: 'noteTitle and reply required' });
+
+    let content = await readFile(PATHS.missionControl, 'utf-8');
+    const escapedTitle = noteTitle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+    // Replace content after "From Stu:" for this note
+    const noteRegex = new RegExp(
+      '(### (?:\\d{4}-\\d{2}-\\d{2}\\s+\\d{2}:\\d{2}\\s+—\\s+)?' + escapedTitle +
+      '[\\s\\S]*?\\*\\*From Stu:\\*\\*\\s*\\n)([\\s\\S]*?)(?=\\n---|$)'
+    );
+    let newContent = content.replace(noteRegex, '$1' + reply.trim() + '\n');
+
+    // Also mark as RESOLVED
+    const statusRegex = new RegExp(
+      '(### (?:\\d{4}-\\d{2}-\\d{2}\\s+\\d{2}:\\d{2}\\s+—\\s+)?' + escapedTitle +
+      '[\\s\\S]*?\\*\\*Status:\\*\\*\\s*)([^\\n]+)'
+    );
+    newContent = newContent.replace(statusRegex, '$1✅ RESOLVED');
+
+    await fsWriteFile(PATHS.missionControl, newContent, 'utf-8');
+    res.json({ ok: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to write reply', details: err.message });
   }
 });
 
