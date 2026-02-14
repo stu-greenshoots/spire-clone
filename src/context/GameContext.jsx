@@ -310,10 +310,21 @@ const gameReducer = (state, action) => {
       if (state.phase === GAME_PHASE.COMBAT_VICTORY) {
         return { ...state, phase: GAME_PHASE.COMBAT_REWARD };
       }
-      // Dev-mode warning for invalid phase transitions
-      if (import.meta.env?.DEV && state.phase !== GAME_PHASE.COMBAT_REWARD) {
-        console.warn(`SHOW_COMBAT_REWARDS dispatched in unexpected phase: ${state.phase}. Expected COMBAT_VICTORY or COMBAT_REWARD.`);
+
+      // Idempotent: allow repeat calls when already in COMBAT_REWARD (prevents race conditions)
+      if (state.phase === GAME_PHASE.COMBAT_REWARD) {
+        return state;
       }
+
+      // Defensive check: detect invalid phase transitions in dev mode
+      if (import.meta.env?.DEV) {
+        console.warn(`[Phase Transition Error] SHOW_COMBAT_REWARDS dispatched in invalid phase: ${state.phase}`);
+        console.warn(`Expected: COMBAT_VICTORY or COMBAT_REWARD`);
+        console.warn(`Current enemies: ${state.enemies?.length || 0}, combatRewards: ${state.combatRewards ? 'present' : 'missing'}`);
+        console.warn(`This indicates a timing bug or incorrect action dispatch sequence.`);
+      }
+
+      // Defensive: do not transition from invalid phases
       return state;
     }
 
