@@ -5,6 +5,57 @@ Back Ender - Architecture, state management, performance
 
 ## Sprint 19 Entries
 
+### BE-34: Phase transition hardening
+**Date:** 2026-02-14
+**Status:** PR #251 OPEN (awaiting review)
+**Sprint:** Sprint 19 (Release Ready)
+**Task:** BE-34 (Phase transition hardening — M size, P1)
+
+**Context:**
+FIX-13 fixed the reward modal timing bug by adding COMBAT_VICTORY transitional phase.
+This task hardens the phase transition system to prevent future timing bugs.
+
+**Implementation:**
+Strengthened defensive checks and diagnostics:
+1. **GameContext.jsx SHOW_COMBAT_REWARDS handler:**
+   - Added explicit idempotency check for COMBAT_REWARD phase (prevents race conditions)
+   - Enhanced dev-mode diagnostics with state context (enemies count, combatRewards presence)
+   - Clearer error messages: "Expected COMBAT_VICTORY or COMBAT_REWARD" with current state details
+   - Defensive: do not transition from invalid phases
+
+2. **CombatScreen.jsx useEffect enhancement:**
+   - Added dev-mode logging for transition scheduling, dispatch, and cleanup
+   - Logs animation delay duration and when SHOW_COMBAT_REWARDS is dispatched
+   - Cleanup log confirms timer cancellation on unmount
+
+3. **Comprehensive test coverage (phaseTransitions.test.js):**
+   - 16 new tests covering phase transition edge cases
+   - COMBAT_VICTORY → COMBAT_REWARD sequence validation
+   - Idempotency tests (repeated SHOW_COMBAT_REWARDS dispatches)
+   - Race condition handling
+   - Animation timing with user speed settings (normal: 600ms, fast: 300ms, instant: 0ms)
+   - Phase mismatch detection for invalid phases (COMBAT, MAP, GAME_OVER)
+   - State integrity validation (phase change preserves other state)
+
+**Key Defensive Patterns:**
+- Idempotent phase transitions (safe to call multiple times)
+- Guard clauses for invalid phase transitions
+- Dev-mode diagnostics with actionable context
+- Clear separation of valid vs invalid transition paths
+- Animation cleanup on component unmount
+
+**Validation:** `npm run validate` passes — 3775 tests (86 files), lint clean, build clean
+
+**Files Changed:**
+- `src/context/GameContext.jsx` — enhanced SHOW_COMBAT_REWARDS handler (11 lines added)
+- `src/components/CombatScreen.jsx` — defensive logging in useEffect (12 lines added)
+- `src/test/phaseTransitions.test.js` — NEW (348 lines, 16 tests)
+
+**Blockers:** None
+**Next:** Awaiting PR review, then available for next task
+
+---
+
 ### FIX-13: Fix reward modal timing bug
 **Date:** 2026-02-09
 **Status:** MERGED (PR #243)
