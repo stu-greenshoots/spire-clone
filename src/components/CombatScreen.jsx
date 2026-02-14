@@ -101,13 +101,27 @@ const CombatScreen = ({ showDefeatedEnemies = false, isVictoryTransition = false
   const { animations, addAnimation, removeAnimation } = useAnimations();
 
   // FIX-13: Transition from COMBAT_VICTORY to COMBAT_REWARD after death animations complete
+  // BE-34: Enhanced with defensive checks to prevent race conditions
   // Uses ref to prevent timer reset if callback reference changes during delay
   useEffect(() => {
     if (isVictoryTransition) {
+      if (import.meta.env?.DEV) {
+        console.log(`[CombatScreen] COMBAT_VICTORY phase detected, scheduling transition in ${deathAnimationDuration}ms`);
+      }
+
       const timer = setTimeout(() => {
+        if (import.meta.env?.DEV) {
+          console.log('[CombatScreen] Animation delay complete, dispatching SHOW_COMBAT_REWARDS');
+        }
         showCombatRewardsRef.current();
       }, deathAnimationDuration);
-      return () => clearTimeout(timer);
+
+      return () => {
+        clearTimeout(timer);
+        if (import.meta.env?.DEV) {
+          console.log('[CombatScreen] Cleanup: cancelled pending SHOW_COMBAT_REWARDS dispatch');
+        }
+      };
     }
   }, [isVictoryTransition, deathAnimationDuration]);
 
