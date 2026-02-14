@@ -16,6 +16,7 @@
     "generate-art": "node scripts/generate-images.js",
     "generate-art:dry": "node scripts/generate-images.js --dry-run",
     "compress-images": "node scripts/compress-images.js",
+    "validate-assets": "node scripts/validate-assets.js",
     "generate-sprites": "node scripts/generate-sprite-sheets.js",
     "generate-card-sprites": "node scripts/generate-sprite-sheets.js --type=cards",
     "test:e2e": "npx playwright test --config=tests/e2e/playwright.config.js",

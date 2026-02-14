@@ -619,7 +619,7 @@ export const handlePlayCard = (state, action) => {
 
     const victoryState = {
       ...state,
-      phase: GAME_PHASE.COMBAT_REWARD,
+      phase: GAME_PHASE.COMBAT_VICTORY,
       player: newPlayer,
       enemies: newEnemies,
       hand: newHand,

@@ -212,7 +212,9 @@ describe('Full Game Playthrough', () => {
     }
 
     // Should have ended combat (won or lost)
+    // COMBAT_VICTORY is transitional phase before COMBAT_REWARD
     expect([
+      GAME_PHASE.COMBAT_VICTORY,
       GAME_PHASE.COMBAT_REWARD,
       GAME_PHASE.GAME_OVER
     ]).toContain(state.phase);
@@ -474,9 +476,11 @@ describe('Full Game Playthrough', () => {
     }
 
     // Should have progressed (either still on map, game over, or victory)
+    // COMBAT_VICTORY is transitional phase before COMBAT_REWARD
     expect([
       GAME_PHASE.MAP,
       GAME_PHASE.COMBAT,
+      GAME_PHASE.COMBAT_VICTORY,
       GAME_PHASE.COMBAT_REWARD,
       GAME_PHASE.GAME_OVER,
       GAME_PHASE.VICTORY

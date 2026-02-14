@@ -34,7 +34,21 @@
       "Bash(pkill:*)",
       "Bash(echo \"\n\n---END V1---\")",
       "Bash(echo \"\n\n---END V2---\")",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(gh pr close:*)",
+      "Bash(npm run lint)",
+      "Bash(git cherry-pick:*)",
+      "Bash(gh pr:*)",
+      "Bash(npm run validate-assets:*)",
+      "Bash(gh copilot --help:*)",
+      "Bash(copilot --help:*)",
+      "Bash(copilot --model gemini-3-pro-preview --allow-all -p \"Say ''''hello'''' and nothing else\")",
+      "Bash(claude --dangerously-skip-permissions -p \"Say ''''hello'''' and nothing else\")",
+      "Bash(cmd=\"copilot --model gemini-3-pro-preview --allow-all -p\")",
+      "Bash($cmd \"Say ''''test passed'''' and nothing else\")",
+      "Bash(bash -c 'COPILOT_MODEL=\"\"\"\"gemini-3-pro-preview\"\"\"\"; copilot --model \"\"\"\"$COPILOT_MODEL\"\"\"\" --allow-all -p \"\"\"\"Say test-passed and nothing else\"\"\"\" 2>&1')",
+      "Bash(bash:*)",
+      "Bash(python3:*)"
     ]
   }
 }

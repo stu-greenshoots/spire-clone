@@ -47,8 +47,9 @@ Your task is NOT done until:
 - [ ] `npm run validate` passes
 - [ ] Commit uses correct `--author` flag
 - [ ] PR created with full template
-- [ ] Copilot review performed (security, bugs, quality)
-- [ ] Mentor review performed (architecture, integration)
+- [ ] Copilot review performed AND posted as PR comment
+- [ ] Mentor review performed AND posted as PR comment
+- [ ] All PR checklist items checked `[x]`
 - [ ] Smoke test documented in PR
 - [ ] Feature works at runtime (not just tests)
 - [ ] Your diary updated
@@ -56,6 +57,8 @@ Your task is NOT done until:
 ---
 
 ## Review Process
+
+**CRITICAL: All review findings MUST be posted as PR comments for audit trail.**
 
 ### Copilot Review (perform on your own code)
 
@@ -65,6 +68,8 @@ Check for:
 - Quality: unused vars, dead code, duplication
 - Tests: coverage, meaningful assertions
 
+**Post findings to PR:** `gh pr comment --body "## Copilot Review Findings ..."`
+
 ### Mentor Review (perform on your own code)
 
 Check for:
@@ -72,6 +77,14 @@ Check for:
 - Integration: works with other code
 - File ownership: only your files (or coordinated)
 - Definition of done: all criteria met
+
+**Post findings to PR:** `gh pr comment --body "## Mentor Review ..."`
+
+### Before Merge
+
+1. All PR body checkboxes must be `[x]` (not `[ ]`)
+2. Both reviews posted as PR comments
+3. All HIGH/MEDIUM issues resolved
 
 ---
 

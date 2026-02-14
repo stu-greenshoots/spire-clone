@@ -1,0 +1,84 @@
+name: Update Integration PR
+
+# Trigger when a PR merges to any sprint-* branch
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - 'sprint-*'
+
+jobs:
+  notify-integration-pr:
+    # Only run if the PR was actually merged (not just closed)
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Find Integration PR
+        id: find-pr
+        run: |
+          # Find the open draft PR from sprint-N to master
+          SPRINT_BRANCH="${{ github.event.pull_request.base.ref }}"
+          echo "Looking for integration PR from $SPRINT_BRANCH to master..."
+
+          INTEGRATION_PR=$(gh pr list \
+            --repo ${{ github.repository }} \
+            --base master \
+            --head "$SPRINT_BRANCH" \
+            --state open \
+            --json number \
+            --jq '.[0].number')
+
+          if [ -z "$INTEGRATION_PR" ]; then
+            echo "No integration PR found for $SPRINT_BRANCH"
+            echo "pr_number=" >> $GITHUB_OUTPUT
+          else
+            echo "Found integration PR #$INTEGRATION_PR"
+            echo "pr_number=$INTEGRATION_PR" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on Integration PR
+        if: steps.find-pr.outputs.pr_number != ''
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          TASK_ID=$(echo "$PR_TITLE" | grep -oE '^[A-Z]+-[0-9]+' || echo "TASK")
+
+          # Extract priority from PR labels if present
+          PRIORITY="P?"
+
+          # Post comment to integration PR
+          gh pr comment ${{ steps.find-pr.outputs.pr_number }} --body "## ✅ Task Merged: $PR_TITLE
+
+**PR:** #$PR_NUMBER
+**Author:** @$PR_AUTHOR
+**Task ID:** \`$TASK_ID\`
+
+---
+
+### 📋 Action Required
+
+The integration PR description must be updated to reflect this merge:
+
+1. **Move task from Remaining to Merged PRs table:**
+   - Remove \`$TASK_ID\` from the **Remaining** section
+   - Add new row to **Merged PRs** table:
+   \`\`\`markdown
+   | #$PR_NUMBER | $TASK_ID | $PRIORITY | $PR_AUTHOR | $PR_TITLE |
+   \`\`\`
+
+2. **Update Validation Gate:**
+   - Check off any validation items that are now satisfied
+
+3. **Update Status line:**
+   - Increment merged task count
+   - Update \"What's next\" section
+
+---
+
+See [pm-sprint.md Phase 3](https://github.com/${{ github.repository }}/blob/master/.claude/commands/pm-sprint.md#phase-3-pr-review-and-merge-management-critical) for the integration PR template."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

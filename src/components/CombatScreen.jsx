@@ -17,8 +17,25 @@ import { getBossDialogue } from '../data/bossDialogue';
 import { getPassiveRelicEffects } from '../systems/combatSystem';
 import { loadSettings, getAnimationDuration } from '../systems/settingsSystem';
 
-const CombatScreen = ({ showDefeatedEnemies = false }) => {
-  const { state, selectCard, playCard, cancelTarget, endTurn, selectCardFromPile, cancelCardSelection } = useGame();
+// Base duration for death animations before showing rewards (ms)
+// Actual duration is calculated based on user's animation speed setting
+const BASE_DEATH_ANIMATION_DURATION = 600;
+
+const CombatScreen = ({ showDefeatedEnemies = false, isVictoryTransition = false }) => {
+  const { state, selectCard, playCard, cancelTarget, endTurn, selectCardFromPile, cancelCardSelection, showCombatRewards } = useGame();
+
+  // Calculate death animation duration based on user's animation speed setting
+  const settings = useMemo(() => loadSettings(), []);
+  const deathAnimationDuration = useMemo(() =>
+    getAnimationDuration(settings, BASE_DEATH_ANIMATION_DURATION),
+    [settings]
+  );
+
+  // Use ref to avoid re-creating timer if showCombatRewards reference changes
+  const showCombatRewardsRef = useRef(showCombatRewards);
+  useEffect(() => {
+    showCombatRewardsRef.current = showCombatRewards;
+  }, [showCombatRewards]);
   const { player, enemies, hand, drawPile, discardPile, exhaustPile, selectedCard, targetingMode, turn, phase, cardSelection, character } = state;
 
   const [showDeck, setShowDeck] = useState(null);
@@ -83,6 +100,30 @@ const CombatScreen = ({ showDefeatedEnemies = false }) => {
 
   const { animations, addAnimation, removeAnimation } = useAnimations();
 
+  // FIX-13: Transition from COMBAT_VICTORY to COMBAT_REWARD after death animations complete
+  // BE-34: Enhanced with defensive checks to prevent race conditions
+  // Uses ref to prevent timer reset if callback reference changes during delay
+  useEffect(() => {
+    if (isVictoryTransition) {
+      if (import.meta.env?.DEV) {
+        console.log(`[CombatScreen] COMBAT_VICTORY phase detected, scheduling transition in ${deathAnimationDuration}ms`);
+      }
+
+      const timer = setTimeout(() => {
+        if (import.meta.env?.DEV) {
+          console.log('[CombatScreen] Animation delay complete, dispatching SHOW_COMBAT_REWARDS');
+        }
+        showCombatRewardsRef.current();
+      }, deathAnimationDuration);
+
+      return () => {
+        clearTimeout(timer);
+        if (import.meta.env?.DEV) {
+          console.log('[CombatScreen] Cleanup: cancelled pending SHOW_COMBAT_REWARDS dispatch');
+        }
+      };
+    }
+  }, [isVictoryTransition, deathAnimationDuration]);
 
   // Track card draw animations
   useEffect(() => {

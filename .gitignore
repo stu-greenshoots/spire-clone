@@ -29,3 +29,7 @@ test-results/
 *.sln
 *.sw?
 .private-journal/
+.env
+stu-loop.d/last-cycle.md
+stu-loop.log
+dashboard/node_modules

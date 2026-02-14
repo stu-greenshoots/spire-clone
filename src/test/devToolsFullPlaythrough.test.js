@@ -77,6 +77,13 @@ function dispatch(state, action) {
       if (!potion) return state;
       return removePotion(state, slotIndex);
     }
+    case 'SHOW_COMBAT_REWARDS': {
+      // Transition from COMBAT_VICTORY to COMBAT_REWARD
+      if (state.phase === GAME_PHASE.COMBAT_VICTORY) {
+        return { ...state, phase: GAME_PHASE.COMBAT_REWARD };
+      }
+      return state;
+    }
     default:
       return state;
   }
@@ -183,6 +190,10 @@ function autoFight(state, dispatchFn, options = {}) {
 
   while (turnsPlayed < maxTurns) {
     // Combat over?
+    // COMBAT_VICTORY is transitional phase - dispatch SHOW_COMBAT_REWARDS to complete transition
+    if (state.phase === GAME_PHASE.COMBAT_VICTORY) {
+      state = dispatchFn(state, { type: 'SHOW_COMBAT_REWARDS' });
+    }
     if (state.phase === GAME_PHASE.COMBAT_REWARD ||
         state.phase === GAME_PHASE.CARD_REWARD) {
       return { result: 'win', turnsPlayed, cardsPlayed: totalCardsPlayed, state };
@@ -283,6 +294,12 @@ function fullPlaythrough(characterId, options = {}) {
         if (fightResult.result === 'loss') {
           return { result: 'loss', floorsCleared, state };
         }
+        break;
+      }
+
+      case GAME_PHASE.COMBAT_VICTORY: {
+        // Transitional phase - dispatch SHOW_COMBAT_REWARDS to complete animation timing
+        state = dispatch(state, { type: 'SHOW_COMBAT_REWARDS' });
         break;
       }
 

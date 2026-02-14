@@ -141,13 +141,13 @@ Based on Mentor input, PM creates initial draft:
 
 Spawn each engineer to get their perspective on the draft plan.
 
-### Cancel Any Active Ralph Loop First
+### Cancel Any Active Stu Loop First
 
-**Action:** Invoke `Skill` tool with `skill: "ralph-loop:cancel-ralph"`
+**Action:** Invoke `Skill` tool with `skill: "stu-loop:cancel-ralph"`
 
-### Start Ralph Loop for Team Input
+### Start Stu Loop for Team Input
 
-**Action:** Invoke `Skill` tool with `skill: "ralph-loop:ralph-loop"` and `args: "--max-iterations 15"`
+**Action:** Invoke `Skill` tool with `skill: "stu-loop:stu-loop"` and `args: "--max-iterations 15"`
 
 ### Engineer Input Prompt Template
 

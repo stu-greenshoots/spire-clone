@@ -482,9 +482,10 @@ describe('Watcher Playthrough Regression', () => {
 
     expect(state).toBeDefined();
     expect(state.phase).toBeDefined();
+    // COMBAT_VICTORY is transitional phase before COMBAT_REWARD
     expect([
-      GAME_PHASE.MAP, GAME_PHASE.COMBAT, GAME_PHASE.COMBAT_REWARD,
-      GAME_PHASE.GAME_OVER, GAME_PHASE.VICTORY
+      GAME_PHASE.MAP, GAME_PHASE.COMBAT, GAME_PHASE.COMBAT_VICTORY,
+      GAME_PHASE.COMBAT_REWARD, GAME_PHASE.GAME_OVER, GAME_PHASE.VICTORY
     ]).toContain(state.phase);
   });
 

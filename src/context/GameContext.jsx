@@ -22,6 +22,7 @@ export const GAME_PHASE = {
   MAIN_MENU: 'main_menu',
   MAP: 'map',
   COMBAT: 'combat',
+  COMBAT_VICTORY: 'combat_victory', // Transitional phase — death animations play before rewards
   COMBAT_REWARD: 'combat_reward',
   CARD_REWARD: 'card_reward',
   REST_SITE: 'rest_site',
@@ -303,6 +304,30 @@ const gameReducer = (state, action) => {
       return mapReducer(state, action);
     }
 
+    case 'SHOW_COMBAT_REWARDS': {
+      // Transition from COMBAT_VICTORY to COMBAT_REWARD
+      // Called after death animations complete
+      if (state.phase === GAME_PHASE.COMBAT_VICTORY) {
+        return { ...state, phase: GAME_PHASE.COMBAT_REWARD };
+      }
+
+      // Idempotent: allow repeat calls when already in COMBAT_REWARD (prevents race conditions)
+      if (state.phase === GAME_PHASE.COMBAT_REWARD) {
+        return state;
+      }
+
+      // Defensive check: detect invalid phase transitions in dev mode
+      if (import.meta.env?.DEV) {
+        console.warn(`[Phase Transition Error] SHOW_COMBAT_REWARDS dispatched in invalid phase: ${state.phase}`);
+        console.warn(`Expected: COMBAT_VICTORY or COMBAT_REWARD`);
+        console.warn(`Current enemies: ${state.enemies?.length || 0}, combatRewards: ${state.combatRewards ? 'present' : 'missing'}`);
+        console.warn(`This indicates a timing bug or incorrect action dispatch sequence.`);
+      }
+
+      // Defensive: do not transition from invalid phases
+      return state;
+    }
+
     default:
       return state;
   }
@@ -495,6 +520,10 @@ export const GameProvider = ({ children }) => {
     wrappedDispatch({ type: 'DISMISS_ACHIEVEMENT_TOAST' });
   }, [wrappedDispatch]);
 
+  const showCombatRewards = useCallback(() => {
+    wrappedDispatch({ type: 'SHOW_COMBAT_REWARDS' });
+  }, [wrappedDispatch]);
+
   const value = {
     state,
     lastAction,
@@ -532,7 +561,8 @@ export const GameProvider = ({ children }) => {
     selectStartingBonus,
     enterEndless,
     loadScenario,
-    dismissAchievementToast
+    dismissAchievementToast,
+    showCombatRewards
   };
 
   return (

@@ -13,34 +13,34 @@ Before doing anything else, gather the current state:
 ### 1. Read Required Context Files
 
 ```
-Read: /root/spire-clone/SPRINT_BOARD.md
-Read: /root/spire-clone/SPRINT_4_PLAN.md  (or current sprint plan)
-Read: /root/spire-clone/PROCESS.md
-Read: /root/spire-clone/DEFINITION_OF_DONE.md
-Read: /root/spire-clone/CLAUDE.md
-Read: /root/spire-clone/DEPENDENCIES.md
-Read: /root/spire-clone/docs/GIT_FLOW.md
+Read: SPRINT_BOARD.md
+Read: SPRINT_4_PLAN.md  (or current sprint plan)
+Read: PROCESS.md
+Read: DEFINITION_OF_DONE.md
+Read: CLAUDE.md
+Read: DEPENDENCIES.md
+Read: docs/GIT_FLOW.md
 ```
 
 ### 2. Check Git State
 
 ```bash
-cd /root/spire-clone && git branch -a
-cd /root/spire-clone && git status
-cd /root/spire-clone && gh pr list --state all --limit 30
+git branch -a
+git status
+gh pr list --state all --limit 30
 ```
 
 ### 3. Read All Team Diaries
 
 ```
-Read: /root/spire-clone/docs/diaries/PM.md
-Read: /root/spire-clone/docs/diaries/BE.md
-Read: /root/spire-clone/docs/diaries/JR.md
-Read: /root/spire-clone/docs/diaries/AR.md
-Read: /root/spire-clone/docs/diaries/UX.md
-Read: /root/spire-clone/docs/diaries/GD.md
-Read: /root/spire-clone/docs/diaries/SL.md
-Read: /root/spire-clone/docs/diaries/QA.md
+Read: docs/diaries/PM.md
+Read: docs/diaries/BE.md
+Read: docs/diaries/JR.md
+Read: docs/diaries/AR.md
+Read: docs/diaries/UX.md
+Read: docs/diaries/GD.md
+Read: docs/diaries/SL.md
+Read: docs/diaries/QA.md
 ```
 
 ---
@@ -52,7 +52,6 @@ This phase ensures the sprint has proper infrastructure BEFORE any work begins.
 ### 1. Verify Sprint Branch Exists
 
 ```bash
-cd /root/spire-clone
 git fetch origin
 git branch -a | grep sprint-N  # Replace N with current sprint number
 ```
@@ -275,11 +274,11 @@ Before starting work:
 
 ---
 
-## Phase 6: Cancel Active Ralph Loop
+## Phase 6: Cancel Active Stu Loop
 
 Before starting a new orchestration loop:
 
-**Action:** Invoke `Skill` tool with `skill: "ralph-loop:cancel-ralph"`
+**Action:** Invoke `Skill` tool with `skill: "stu-loop:cancel-ralph"`
 
 ---
 
@@ -299,7 +298,7 @@ Task tool invocation:
 ### Engineer Spawn Prompt Template
 
 ```
-IMPORTANT: Read and follow /root/spire-clone/.claude/commands/engineer-{role}.md
+IMPORTANT: Read and follow .claude/commands/engineer-{role}.md
 
 You are {ROLE} for Spire Ascent.
 
@@ -325,7 +324,7 @@ Do NOT auto-merge. Complete all review steps.
 ### Example: Spawning UX
 
 ```
-IMPORTANT: Read and follow /root/spire-clone/.claude/commands/engineer-ux.md
+IMPORTANT: Read and follow .claude/commands/engineer-ux.md
 
 You are UX (UX Guy) for Spire Ascent.
 
@@ -352,14 +351,14 @@ Do NOT auto-merge. Complete all review steps.
 
 ---
 
-## Phase 8: Start Ralph Loop (FULL SPRINT SCOPE)
+## Phase 8: Start Stu Loop (FULL SPRINT SCOPE)
 
-The ralph loop must run until the **entire sprint is complete** — all tasks merged, validation gate passed, sprint board updated. Do NOT scope the completion promise to a single week or phase.
+The stu loop must run until the **entire sprint is complete** — all tasks merged, validation gate passed, sprint board updated. Do NOT scope the completion promise to a single week or phase.
 
 **Completion promise:** `SPRINT N COMPLETE` (replace N with sprint number)
 
 **Action:** Invoke `Skill` tool with:
-- `skill: "ralph-loop:ralph-loop"`
+- `skill: "stu-loop:stu-loop"`
 - `args: "PM Sprint N orchestration - review and merge open PRs, spawn engineers for remaining tasks, update draft PR and SPRINT_BOARD.md. See SPRINT_N_PLAN.md for full task list. --max-iterations 30 --completion-promise SPRINT N COMPLETE"`
 
 Replace N with the current sprint number. Use a single line with no special shell characters.
@@ -373,7 +372,7 @@ Replace N with the current sprint number. Use a single line with no special shel
 
 ---
 
-## Ralph Loop Iteration Checklist
+## Stu Loop Iteration Checklist
 
 Each iteration should:
 
@@ -522,5 +521,5 @@ After Phase 1-5, output:
 - {Any blocking issues}
 
 ---
-Proceeding with ralph-loop...
+Proceeding with stu-loop...
 ```
