@@ -1490,9 +1490,9 @@
             </div>
             <div class="log-tabs" id="log-tabs">
                 <button class="log-tab active" data-agent="all">ALL</button>
-                <button class="log-tab" data-agent="engineer">ENGINEER</button>
-                <button class="log-tab" data-agent="overseer">OVERSEER</button>
-                <button class="log-tab" data-agent="pm">PM</button>
+                <button class="log-tab" data-agent="claude">CLAUDE</button>
+                <button class="log-tab" data-agent="gemini">GEMINI</button>
+                <button class="log-tab" data-agent="loop">LOOP</button>
             </div>
             <div class="panel-body">
                 <div class="log-lines" id="log-container">
@@ -1939,12 +1939,15 @@
         }
 
         // Classify log lines into agent sections based on markers in stu-loop.sh
-        // Returns 'engineer', 'overseer', 'pm', or null (unclassified)
+        // Returns 'claude', 'gemini', 'loop', or null (unclassified)
         function getLineAgent(text) {
             if (!text) return null;
-            if (/CLAUDE \(Engineer\)|Work cycle|run_engineer|claude --dangerously/i.test(text)) return 'engineer';
-            if (/GEMINI \(Overseer\)|Review cycle|Housekeeping cycle|run_overseer|copilot --model|gemini/i.test(text)) return 'overseer';
-            if (/pm-sprint|pm-plan|orchestrat|SPRINT_BOARD|sprint.board/i.test(text)) return 'pm';
+            // Loop orchestration markers (cycle boundaries, phase headers, status)
+            if (/=== CYCLE \d|STU LOOP CYCLE|Phase \d:|Review cycle|Work cycle|Housekeeping cycle|NEEDS HUMAN|MAX CYCLES|Stu Loop (started|stopped)|━━━━/i.test(text)) return 'loop';
+            // Claude (Engineer) section markers
+            if (/🤖 CLAUDE|CLAUDE.*Executing/i.test(text)) return 'claude';
+            // Gemini (Overseer) section markers
+            if (/💎 GEMINI|GEMINI.*Checking|GEMINI.*Review|GEMINI.*Housekeep|GEMINI.*Unblock|gemini-\d+-pro/i.test(text)) return 'gemini';
             return null;
         }
 
@@ -1957,17 +1960,13 @@
 
             // When 'all', show everything. When filtered, use sticky context:
             // once we see an agent marker, all subsequent lines belong to that
-            // agent until we see a different marker or a cycle boundary.
+            // agent until we see a different agent marker.
             let filtered;
             if (state.logFilter === 'all') {
                 filtered = state.logLines;
             } else {
                 let currentAgent = null;
                 filtered = state.logLines.filter(line => {
-                    // Cycle boundaries reset context
-                    if (/=== CYCLE \d|STU LOOP CYCLE/i.test(line)) {
-                        currentAgent = null;
-                    }
                     const detected = getLineAgent(line);
                     if (detected) currentAgent = detected;
                     return currentAgent === state.logFilter;
