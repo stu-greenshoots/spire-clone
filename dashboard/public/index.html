@@ -2059,8 +2059,8 @@
             if (/=== CYCLE \d+|STU LOOP CYCLE|^[=\u2550]+$/.test(text)) return 'cycle-boundary';
             if (/^[━]+$/.test(text)) return 'cycle-boundary';
             // Agent markers
-            if (/CLAUDE|Engineer|claude/i.test(text) && /\bCLAUDE\b|Engineer/.test(text)) return 'claude';
-            if (/GEMINI|Overseer|copilot/i.test(text) && /\bGEMINI\b|Overseer/.test(text)) return 'gemini';
+            if (/CLAUDE|Engineer|claude-pm/i.test(text) && /\bCLAUDE\b|Engineer|PM Orchestrator/.test(text)) return 'claude';
+            if (/\[(BE|GD|QA|JR|UX|AR|SL|VARROW)\]/.test(text)) return 'claude';
             // Status
             if (/✅|PASSED|SUCCESS|MERGED|COMPLETE|DONE/.test(text)) return 'success';
             if (/❌|FAILED|ERROR|BROKEN/.test(text)) return 'error';
@@ -2078,19 +2078,26 @@
             renderLog();
         }
 
-        // Extract agent tag from [AGENT:name] markers in log lines
-        // Also detects engineer roles from output patterns (author flags, diary reads, slash commands)
+        // Extract agent tag from log lines
+        // Detects: [AGENT:xxx] markers, [ROLE] prefixes, engineer patterns
         function getLineAgent(text) {
             if (!text) return null;
             // Explicit [AGENT:xxx] marker from stu-loop.sh
             const tagMatch = text.match(/\[AGENT:([\w-]+)\]/);
             if (tagMatch) return tagMatch[1];
+            // Sub-agent role prefix: [BE] ..., [GD] ..., [QA] ..., etc.
+            const prefixMatch = text.match(/^\s*\[?(BE|GD|QA|JR|UX|AR|SL|VARROW|PM)\]?\s/);
+            if (prefixMatch) return prefixMatch[1].toLowerCase();
             // Detect engineer role from Claude output patterns
-            const roleMatch = text.match(/--author="(BE|GD|QA|JR|UX|AR|SL)\b/i)
-                || text.match(/diaries\/(BE|GD|QA|JR|UX|AR|SL)\.md/i)
-                || text.match(/engineer-(be|gd|qa|jr|ux|ar|sl)/i)
-                || text.match(/\b(BE|GD|QA|JR|UX|AR|SL) Session\b/);
+            const roleMatch = text.match(/--author="(BE|GD|QA|JR|UX|AR|SL|VARROW)\b/i)
+                || text.match(/diaries\/(BE|GD|QA|JR|UX|AR|SL|VARROW)\.md/i)
+                || text.match(/engineer-(be|gd|qa|jr|ux|ar|sl|varrow)/i)
+                || text.match(/\b(BE|GD|QA|JR|UX|AR|SL|VARROW) Session\b/)
+                || text.match(/spire-(be|gd|qa|jr|ux|ar|sl|varrow)-/i);
             if (roleMatch) return roleMatch[1].toLowerCase();
+            // Task IDs: BE-34, GD-32, QA-28, etc.
+            const taskMatch = text.match(/\b(BE|GD|QA|JR|UX|AR|SL|VARROW)-\d+/);
+            if (taskMatch) return taskMatch[1].toLowerCase();
             return null;
         }
 
@@ -2107,19 +2114,14 @@
 
             // Agent display config: label and sort order
             const agentLabels = {
-                'gemini-status': 'STATUS', 'gemini-reviewer': 'REVIEWER',
-                'gemini-housekeeping': 'HOUSEKEEP', 'gemini-unblock': 'UNBLOCK',
-                'gemini-retro': 'RETRO', 'gemini-planner': 'PLANNER',
-                'gemini-overseer': 'OVERSEER',
-                'claude-engineer': 'ENGINEER', 'loop-validate': 'VALIDATE',
+                'claude-pm': 'PM', 'loop-validate': 'VALIDATE',
                 'be': 'BE', 'gd': 'GD', 'qa': 'QA', 'jr': 'JR',
-                'ux': 'UX', 'ar': 'AR', 'sl': 'SL',
+                'ux': 'UX', 'ar': 'AR', 'sl': 'SL', 'varrow': 'VARROW',
+                'pm': 'PM',
             };
-            // Sort: team roles first, then gemini agents, then loop
-            const sortOrder = ['be','gd','qa','jr','ux','ar','sl',
-                'claude-engineer','gemini-status','gemini-reviewer',
-                'gemini-housekeeping','gemini-unblock','gemini-retro',
-                'gemini-planner','gemini-overseer','loop-validate'];
+            // Sort: team roles first, then infrastructure
+            const sortOrder = ['pm','be','gd','qa','jr','ux','ar','sl','varrow',
+                'claude-pm','loop-validate'];
 
             const sorted = [...agents].sort((a, b) => {
                 const ai = sortOrder.indexOf(a), bi = sortOrder.indexOf(b);
@@ -2308,6 +2310,14 @@
             hidePanelError('diary-error');
             const body = document.getElementById('diary-body');
 
+            // Preserve feedback textarea value across re-renders
+            const existingText = document.getElementById('feedback-text');
+            const savedText = existingText ? existingText.value : '';
+            const savedPriority = document.getElementById('feedback-priority')
+                ? document.getElementById('feedback-priority').value : 'NORMAL';
+            // Don't re-render if user is actively typing (textarea is focused)
+            if (existingText && document.activeElement === existingText) return;
+
             let entriesHtml = '';
             if (entries && entries.length > 0) {
                 entriesHtml = '<div class="diary-entries">' + entries.slice(0, 3).map(entry => `
@@ -2343,6 +2353,15 @@
                     </div>
                 </div>
             `;
+
+            // Restore saved text/priority after re-render
+            if (savedText) {
+                document.getElementById('feedback-text').value = savedText;
+            }
+            const priorityEl = document.getElementById('feedback-priority');
+            if (priorityEl && savedPriority !== 'NORMAL') {
+                priorityEl.value = savedPriority;
+            }
         }
 
         // Make submitFeedback global

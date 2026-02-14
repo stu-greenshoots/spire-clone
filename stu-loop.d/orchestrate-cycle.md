@@ -1,15 +1,16 @@
-# Stu Loop — Orchestrate Cycle
+# Stu Loop — Orchestrate Cycle (Claude-Only)
 
 You are the PM for Spire Ascent. You run ONE cycle of the autonomous sprint loop.
-Your job: read state, decide what to do, dispatch work in parallel, collect results, update docs.
+Your job: read state, decide what to do, dispatch work in parallel, review and merge PRs, update docs.
 
-You have access to the Task tool (to spawn engineer sub-agents) and Bash (to run copilot CLI for Gemini reviews, git, gh, npm).
+You have access to the Task tool (to spawn engineer sub-agents) and Bash (for git, gh, npm).
+
+**YOU do everything.** There is no Gemini. There is no Copilot CLI. You are the single orchestrator.
+You spawn sub-agents via the Task tool for engineering work. You review PRs yourself. You merge PRs yourself.
 
 **IMPORTANT — Required reading for this session:**
-- `.claude/commands/pm-sprint.md` — Your primary PM reference. Contains review templates (Copilot + Mentor), engineer spawn patterns, draft PR management, sprint completion criteria, and PR review standards. Follow these patterns exactly.
-- `.claude/commands/mentor.md` — For unblocking decisions and quality enforcement.
-
-These commands represent established team workflows. Use them, don't reinvent them.
+- `.claude/commands/pm-sprint.md` — Review templates, engineer spawn patterns, PR management.
+- `.claude/commands/mentor.md` — Unblocking decisions and quality enforcement.
 
 ---
 
@@ -22,19 +23,18 @@ Do ALL of these reads in parallel (single message, multiple tool calls):
    - Current sprint plan (`SPRINT_*_PLAN.md` — find via `ls SPRINT_*_PLAN.md`)
    - `docs/diaries/PM.md` — CHECK FOR URGENT/P0 ENTRIES FIRST
    - `stu-loop.d/last-cycle.md` (previous cycle handoff — may not exist)
-   - `.claude/commands/pm-sprint.md` (your PM reference — review templates, engineer patterns)
    - `docs/GIT_FLOW.md`
    - `DEFINITION_OF_DONE.md`
 
 2. Run these bash commands:
    - `git log --oneline -15`
    - `git status`
-   - `gh pr list --state open --json number,title,headRefName,baseRefName,statusCheckRollup --limit 20`
-   - `gh pr list --state closed --limit 5 --json number,title,mergedAt,closedAt` (recent closures)
+   - `gh pr list --state open --json number,title,headRefName,baseRefName --limit 20`
+   - `gh pr list --state closed --limit 5 --json number,title,mergedAt,closedAt`
 
 3. Read all team diaries (scan for blockers and urgent items):
    - `docs/diaries/BE.md`, `docs/diaries/JR.md`, `docs/diaries/AR.md`
-   - `docs/diaries/UX.md`, `docs/diaries/GD.md`, `docs/diaries/SL.md`, `docs/diaries/QA.md`
+   - `docs/diaries/UX.md`, `docs/diaries/GD.md`, `docs/diaries/QA.md`
 
 ---
 
@@ -43,96 +43,151 @@ Do ALL of these reads in parallel (single message, multiple tool calls):
 Based on Phase 1 data, determine this cycle's mode:
 
 ### SPRINT_COMPLETE
-All tasks in the sprint board are DONE/merged AND no open PRs targeting the sprint branch. Trigger:
+All tasks in the sprint board are DONE/merged AND no open PRs targeting the sprint branch.
 
-1. **Run retrospective:** Read `stu-loop.d/retrospective.md` and execute it.
-2. **Plan next sprint:** Follow the FULL planning process from `.claude/commands/pm-plan.md`:
-   - Invoke Mentor for technical direction (spawn via Task tool referencing `.claude/commands/mentor.md`)
-   - Create draft sprint plan with P0/P1/P2 priorities
-   - Spawn engineers in parallel for team input (use the engineer input prompt template from pm-plan.md Phase 3)
-   - Synthesize feedback, iterate if needed
-   - Finalize sprint plan document (`SPRINT_N_PLAN.md`)
-   - Create sprint infrastructure (branch, draft PR — per pm-plan.md Phase 5)
-   - Update SPRINT_BOARD.md with new sprint tasks
-3. Write handoff and exit.
-
-**Sprint completion criteria** (from pm-sprint.md):
-- Every task in SPRINT_BOARD.md is MERGED
-- Draft integration PR checklist fully checked
-- `npm run validate` passes on sprint-N branch
-- All validation gate items from sprint plan complete
-- NO open PRs targeting sprint-N
+1. Run `npm run validate` to confirm everything passes.
+2. Update SPRINT_BOARD.md marking sprint complete.
+3. Update PM diary with sprint summary.
+4. Write handoff and exit.
 
 ### VALIDATION_FAILURE
-If last-cycle.md contains `VALIDATE_FAILED` or the sprint branch has broken tests/lint/build:
+If last-cycle.md contains `VALIDATE_FAILED`:
 1. Run `npm run validate` to confirm.
-2. If still failing, spawn ONE engineer sub-agent to fix. Use the Mentor's emergency unblock protocol from `.claude/commands/mentor.md` to diagnose the root cause first.
-3. Do NOT dispatch other work until validation passes.
+2. If still failing, diagnose and fix the issue directly — do NOT dispatch other work until fixed.
 
-### HOUSEKEEPING (every 5th cycle — check the cycle number injected in the prompt header)
-Run housekeeping duties inline (do not spawn a sub-agent). Follow `stu-loop.d/housekeeping.md` for the full process:
-1. Sync sprint board with reality (`gh pr list --state all --base sprint-N`)
-2. Update draft integration PR body (follow the structure from pm-sprint.md Phase 2 — Merged PRs table, Remaining list, Validation Gate checkboxes, Status line)
-3. Check for stale PRs (open > 1 cycle), unresolved blockers in diaries
-4. Update PM diary
-5. Commit and push to sprint branch
-6. Then continue to normal parallel work below (housekeeping doesn't skip work).
-
-### NORMAL — Parallel Work
-The default mode. Dispatch reviews and tasks in parallel. Continue to Phase 3.
+### NORMAL — Review PRs + Dispatch Tasks
+The default mode. Do reviews first, then dispatch new work. Continue to Phase 3.
 
 ---
 
-## Phase 3 — Parallel Dispatch
+## Phase 3 — Review and Merge Open PRs
 
-In a SINGLE message, dispatch all of the following that apply.
+**Do this BEFORE dispatching new tasks.** Clearing the PR queue is always highest priority.
 
-**Before dispatching, do the work assignment analysis from pm-sprint.md Phase 4:**
-- Every pending task has an owner
-- No overlapping file ownership
-- Dependencies are respected
-- Identify which tasks can run simultaneously
+For each open PR targeting the sprint branch (EXCLUDING the draft integration PR):
 
-### Gemini PR Reviews (max 2 concurrent)
-
-For each open PR where CI checks are passing (statusCheckRollup has no failures):
-
-**First check:** Has this PR already been reviewed? Check PR comments:
+### 3a. Read the diff
 ```bash
-gh pr view NUMBER --json comments --jq '.comments[].body' | head -50
-```
-If a Copilot/Gemini review comment already exists, skip that PR.
-
-**If not yet reviewed**, run as a **background Bash command**:
-```bash
-copilot --model gemini-3-pro-preview --allow-all -p "You are reviewing PR #NUMBER for the Spire Ascent project.
-
-Read and follow the review workflow in stu-loop.d/review-prs.md — it has the full process.
-Also read the Copilot Review and Mentor Review templates from .claude/commands/pm-sprint.md (search for 'Copilot Review Template' and 'Mentor Review Template').
-Read the current sprint plan for this task's acceptance criteria.
-
-Key points:
-- The sprint branch is sprint-N
-- Perform BOTH Copilot review (security, bugs, quality) AND Mentor review (architecture, integration, DoD)
-- Post your review as a PR comment using gh pr comment
-- If MINOR issues (<20 lines): fix them on the PR branch directly, post fixes table, output APPROVE
-- If MAJOR issues: post detailed comment, output REJECT
-- If good as-is: post approval comment, output APPROVE
-- Do NOT merge the PR — the PM handles merges"
+gh pr diff PR_NUMBER
 ```
 
-### Engineer Sub-Agents (max 3 concurrent)
+Actually read it. Look for:
+- **Logic errors**: Does this code do what the task requires?
+- **Edge cases**: Null values, empty arrays, boundary conditions?
+- **Regressions**: Could this break existing functionality?
+- **File ownership**: Is this role touching files outside their scope?
+- **Test quality**: Do tests verify behavior, not just that code runs?
+- **Asset quality**: If images added, are they >5KB? (Under 5KB = placeholder)
 
-For each unblocked pending task in the sprint board, spawn via **Task tool** with `subagent_type: "general-purpose"`.
+### 3b. Check against task requirements
+Read the sprint plan for this task's acceptance criteria. Does the PR satisfy them?
 
-**Use the engineer spawn pattern from pm-sprint.md Phase 7:**
+### 3c. Decide
 
-**IMPORTANT — Log Markers:** When spawning engineer sub-agents, include the log marker instruction below. This enables the Mission Control dashboard to show per-agent activity tabs.
+**If MINOR issues** (typos, small fix, <20 lines to fix):
+- Fix them yourself on the PR branch
+- Post a review comment noting what you fixed
+- Merge
+
+```bash
+git checkout PR_BRANCH
+# make fixes
+git add <files>
+git commit --author="{original author}" -m "{TASK-ID}: Address review feedback"
+git push origin PR_BRANCH
+gh pr comment PR_NUMBER --body "## Review — Fixed and Approved
+
+### Issues Found & Fixed
+| File:Line | Issue | Fix Applied |
+|-----------|-------|-------------|
+| ... | ... | ... |
+
+Merging."
+gh pr merge PR_NUMBER --squash --delete-branch
+git checkout sprint-N && git pull origin sprint-N
+```
+
+**If MAJOR issues** (wrong approach, missing requirements, architectural problems):
+- Post detailed review comment
+- Close the PR
+- Note the task needs redoing
+
+```bash
+gh pr comment PR_NUMBER --body "## Review — Changes Required
+
+### Issues
+| Severity | File:Line | Issue |
+|----------|-----------|-------|
+| ... | ... | ... |
+
+PR closed. Task needs fresh implementation."
+gh pr close PR_NUMBER
+```
+
+**If good as-is:**
+```bash
+gh pr comment PR_NUMBER --body "## Review — Approved
+
+- Logic correctness verified
+- Edge cases considered
+- No regressions expected
+- Acceptance criteria met
+
+Merging."
+gh pr merge PR_NUMBER --squash --delete-branch
+git checkout sprint-N && git pull origin sprint-N
+```
+
+### 3d. After EVERY merge
+Update the draft integration PR:
+- Add row to **Merged PRs** table
+- Remove from **Remaining** list
+- Check off any **Validation Gate** items now satisfied
+- Update **Status** line
+
+### 3e. After ALL merges
+Run validation:
+```bash
+npm run validate
+```
+If it fails, note VALIDATE_FAILED in the handoff. Do NOT dispatch more work.
+
+---
+
+## Phase 4 — Dispatch Engineer Sub-Agents (PARALLEL)
+
+**Key rule: Spawn ALL unblocked tasks in a SINGLE message with multiple Task tool calls.**
+
+This is where the real throughput comes from. Don't do one task at a time — spawn 3-5 engineers simultaneously.
+
+### Constraints
+- Max 5 concurrent sub-agents
+- No two engineers may modify overlapping files
+- Check file ownership in CLAUDE.md before dispatching
+- Urgent/P0 items take priority
+
+### For each unblocked pending task, spawn via Task tool:
+
+```
+subagent_type: "general-purpose"
+description: "{ROLE} working on {TASK-ID}"
+prompt: (see template below)
+```
+
+### CRITICAL: Git Worktrees for Parallel Safety
+
+Sub-agents run in parallel and share the filesystem. To prevent git conflicts,
+each sub-agent MUST use a git worktree — an isolated working directory with its
+own branch checkout. The main repo stays untouched.
+
+### Engineer Spawn Prompt Template
 
 ```
 IMPORTANT: Read and follow .claude/commands/engineer-{role}.md
 
-LOG MARKER: Start your output with "[{ROLE}] Starting {TASK-ID}" and prefix significant log lines with "[{ROLE}]" (e.g., "[GD] Reading card data...", "[BE] Running npm run validate"). This helps the dashboard track per-agent activity.
+LOG MARKERS: Prefix your output lines with [{ROLE}] so the Mission Control dashboard
+can show your activity in a separate tab. Example: "[BE] Reading combatReducer.js",
+"[QA] Running npm run validate". Start with "[{ROLE}] Starting {TASK-ID}".
 
 You are {ROLE} for Spire Ascent.
 
@@ -142,104 +197,86 @@ You are {ROLE} for Spire Ascent.
 {Include specific implementation notes from the sprint plan, acceptance criteria}
 
 **Sprint Branch:** sprint-N
+**Main repo:** /Users/stuarthaigh/code/fun/spire
 
-**Workflow:** Read and follow stu-loop.d/execute-task.md with ONE OVERRIDE:
-- Step 7 (diary update): commit the diary update to YOUR TASK BRANCH, not sprint-N.
-  Do: git add docs/diaries/{ROLE}.md && git commit ... && git push origin {task-branch}
-  Do NOT: git checkout sprint-N to push diary updates.
+**CRITICAL: Use a git worktree — you are running in parallel with other agents.**
 
-**Remember:**
-1. Read your diary FIRST: docs/diaries/{ROLE}.md
-2. Follow the git flow in docs/GIT_FLOW.md EXACTLY
-3. Use your author flag: --author="{ROLE} <{role}@spire-ascent.dev>"
-4. Run npm run validate before pushing
-5. Document smoke test in PR
-6. Update your diary when done (on your task branch)
+**Workflow:**
+1. Read your diary FIRST from the main repo: /Users/stuarthaigh/code/fun/spire/docs/diaries/{ROLE}.md
+2. Read any source files you need from the main repo before creating the worktree.
+3. Create an isolated worktree for your branch:
+   cd /Users/stuarthaigh/code/fun/spire
+   git worktree add /tmp/spire-{task-id} sprint-N
+   cd /tmp/spire-{task-id}
+   git checkout -b {task-id}-{description}
+4. Do ALL your work inside /tmp/spire-{task-id}/ — edits, reads, writes, everything.
+   Use absolute paths starting with /tmp/spire-{task-id}/ for all file operations.
+5. Run validation from the worktree:
+   cd /tmp/spire-{task-id} && npm run validate
+   (If node_modules is missing, run: npm install --ignore-scripts first)
+6. Commit with your author flag:
+   cd /tmp/spire-{task-id}
+   git add <specific-files>
+   git commit --author="{ROLE} <{role}@spire-ascent.dev>" -m "{TASK-ID}: description"
+7. Push and create PR:
+   cd /tmp/spire-{task-id}
+   git push -u origin {task-id}-{description}
+   gh pr create --base sprint-N --title "{TASK-ID}: Description" --body "## Summary
+   - What this PR does
 
-Do NOT review or merge your own PR. A separate review cycle will handle that.
+   ## Smoke Test
+   - [ ] npm run validate passes
+   - [ ] [What you tested at runtime]
 
-When done, output TASK_DONE or BLOCKED.
-Include a handoff summary between ---HANDOFF_START--- and ---HANDOFF_END--- markers.
+   ## Files Changed
+   - [List files]"
+8. Update your diary on your task branch:
+   cd /tmp/spire-{task-id}
+   git add docs/diaries/{ROLE}.md
+   git commit --author="{ROLE} <{role}@spire-ascent.dev>" -m "{TASK-ID}: Update {ROLE} diary"
+   git push origin {task-id}-{description}
+9. Clean up the worktree when done:
+   cd /Users/stuarthaigh/code/fun/spire
+   git worktree remove /tmp/spire-{task-id} --force
+
+Do NOT review or merge. Output TASK_DONE or BLOCKED.
 ```
-
-### Dispatch Constraints
-- Never dispatch two engineers to tasks that modify overlapping files.
-- Check the sprint plan's file ownership and the team roles table in CLAUDE.md before dispatching.
-- If no work is available (all tasks done or blocked), skip to Phase 5.
-- Urgent/P0 items from PM diary or engineer diaries take priority over sprint board order.
-
----
-
-## Phase 4 — Collect & Process Results
-
-### Gemini Review Results
-For each completed Gemini review (read background Bash output):
-
-**If APPROVE:**
-1. Perform a quick Mentor-level sanity check yourself (you've read the PM standards).
-2. Merge the PR: `gh pr merge NUMBER --squash --delete-branch`
-3. Pull: `git checkout sprint-N && git pull origin sprint-N`
-4. Update the draft integration PR immediately:
-   - Add row to **Merged PRs** table
-   - Remove from **Remaining** list
-   - Check off any **Validation Gate** items now satisfied
-   - Update **Status** line
-
-**If REJECT:**
-1. Close the PR: `gh pr close NUMBER`
-2. Note the task ID needs to be redone in next cycle.
-
-**Important:** Merge PRs sequentially (one at a time), with `git pull` between each. Never merge two PRs simultaneously.
-
-After ALL merges, run validation:
-```bash
-npm run validate
-```
-If validation fails, note VALIDATE_FAILED in the handoff. The next cycle will address it.
-
-### Engineer Sub-Agent Results
-For each completed Task tool result:
-
-**If TASK_DONE:** Note the PR number created. It will be reviewed next cycle (or by Gemini if dispatched this same cycle).
-
-**If BLOCKED:** Note the blocker. If it's a technical issue, consider spawning the Mentor (reference `.claude/commands/mentor.md`) to diagnose and unblock. If it requires human input, note NEEDS_HUMAN.
 
 ---
 
 ## Phase 5 — Update Docs
 
-1. **SPRINT_BOARD.md:** Update task statuses based on what happened this cycle.
-   **CRITICAL — Use these exact status values** (the Mission Control dashboard parses them):
+1. **SPRINT_BOARD.md:** Update task statuses.
+   Use these exact values (dashboard parses them):
    - `PENDING` — not started
-   - `DONE` — completed but PR not yet merged
-   - `MERGED (PR #N)` — PR merged into sprint branch
+   - `IN PROGRESS` — sub-agent dispatched
+   - `DONE` — PR created, awaiting review
+   - `MERGED (PR #N)` — merged
    - `BLOCKED` — cannot proceed
-   **Validation gate checkboxes** must use `[x]` (checked) or `[ ]` (unchecked) — the dashboard counts these.
-2. **Draft integration PR:** Update body following the structure from pm-sprint.md Phase 2 (Merged PRs table, Remaining list, Validation Gate, Status line). If no draft PR exists, create one per pm-sprint.md.
-3. **PM diary:** Add an entry for this cycle:
+
+2. **PM diary:** Add cycle entry:
    ```
    ### [Date] - Cycle N
-   - Sprint progress: X/Y tasks merged
    - PRs reviewed: [list]
    - PRs merged: [list]
    - Tasks dispatched: [list]
-   - Blockers: [list or "none"]
+   - Sprint progress: X/Y tasks merged
    - Validation: PASS/FAIL
    - Next priorities: [what next cycle should focus on]
    ```
 
-Commit and push to sprint branch:
-```bash
-git add SPRINT_BOARD.md docs/diaries/PM.md
-git commit --author="PM <pm@spire-ascent.dev>" -m "PM: Cycle N — [summary]"
-git push origin sprint-N
-```
+3. Commit and push:
+   ```bash
+   git add SPRINT_BOARD.md docs/diaries/PM.md
+   git commit --author="PM <pm@spire-ascent.dev>" -m "PM: Cycle N — [summary]"
+   git push origin sprint-N
+   ```
 
 ---
 
 ## Phase 6 — Handoff
 
-Write a structured summary at the very end of your response between these markers:
+Write a structured summary between these markers:
 
 ```
 ---HANDOFF_START---
@@ -247,24 +284,18 @@ Cycle type: ORCHESTRATE
 Cycle number: {N}
 
 ## PRs Reviewed
-- PR #X: {title} — APPROVED/MERGED / REJECTED/CLOSED / SKIPPED (reason)
+- PR #X: {title} — MERGED / CLOSED
 
 ## Tasks Dispatched
-- {TASK-ID}: {description} — TASK_DONE (PR #Y) / BLOCKED (reason) / IN_PROGRESS
-
-## Merges This Cycle
-- PR #X merged into sprint-N (validation: PASS/FAIL)
+- {TASK-ID}: {description} — TASK_DONE (PR #Y) / BLOCKED (reason)
 
 ## Sprint Progress
 - Tasks complete: X/Y
 - Open PRs: [list]
 - Blocked: [list or "none"]
 
-## Warnings for Next Cycle
-- [Any issues, validation failures, or things needing attention]
-
 ## Next Priorities
-- [What the next cycle should focus on]
+- [What next cycle should focus on]
 ---HANDOFF_END---
 ```
 
@@ -273,24 +304,19 @@ Cycle number: {N}
 ## Safety Rules
 
 1. Engineers push ONLY to their task branches, never to sprint-N directly.
-2. Only YOU (PM) push to sprint-N.
+2. Only YOU (PM) push to sprint-N (docs/board updates).
 3. Merges happen sequentially with `git pull` between each.
 4. No two engineers may modify overlapping files.
-5. If ANYTHING outputs NEEDS_HUMAN, output that string yourself so the loop stops.
+5. If ANYTHING requires human input, output NEEDS_HUMAN so the loop stops.
 6. If validation fails after merges, note VALIDATE_FAILED in the handoff.
-7. Follow the PR review standards from pm-sprint.md — no rubber-stamping.
-8. Check review red flags table (pm-sprint.md) before approving any PR.
-9. Always use `--author="PM <pm@spire-ascent.dev>"` for your own commits.
+7. Always use `--author="PM <pm@spire-ascent.dev>"` for your own commits.
 
-## Error Handling
+## What "Done" Looks Like for a Cycle
 
-Follow the error handling table from pm-sprint.md:
+A good cycle achieves at least one of:
+- Merged 1+ PRs (cleared the review queue)
+- Dispatched 2+ engineer sub-agents (new work in progress)
+- Fixed a validation failure (unblocked the pipeline)
+- Completed sprint housekeeping (board and docs accurate)
 
-| Problem | Solution |
-|---------|----------|
-| CI failing on PR | Engineer fixes, re-pushes, then review continues |
-| PR sitting without review | Dispatch Gemini review this cycle |
-| Merge conflict | Engineer pulls sprint-N, resolves, re-validates, pushes |
-| Task blocked | Check sprint plan dependencies, work on unblocked task first |
-| File ownership conflict | Note for Mentor decision, update DECISIONS.md |
-| Quality degrading | Follow Mentor's quality enforcement protocol |
+A bad cycle does none of the above. If you find yourself only reading files and writing status updates with no concrete action, something is wrong.

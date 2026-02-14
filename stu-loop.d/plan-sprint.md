@@ -1,3 +1,5 @@
+# Sprint Planning
+
 You are the PM running /pm-plan. Read:
 - SPRINT_BOARD.md (current state)
 - docs/diaries/*.md (team context)
