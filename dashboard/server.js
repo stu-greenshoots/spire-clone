@@ -1,3 +1,4 @@
+/* global process */
 /**
  * Mission Control Dashboard Server
  *
@@ -1309,7 +1310,7 @@ app.get('/api/status/links', async (_req, res) => {
   try {
     const repoInfoRaw = safeExec('gh repo view --json url,homepageUrl,name,owner 2>/dev/null', '');
     let repoInfo = {};
-    if (repoInfoRaw) { try { repoInfo = JSON.parse(repoInfoRaw); } catch {} }
+    if (repoInfoRaw) { try { repoInfo = JSON.parse(repoInfoRaw); } catch { /* ignore */ } }
     if (!repoInfo.url) {
       const gitConfigContent = await safeReadFile(path.join(PROJECT_ROOT, '.git', 'config'));
       const urlMatch = gitConfigContent.match(/url\s*=\s*(.+)/);
@@ -1386,7 +1387,7 @@ app.get('/api/logs/stream', async (req, res) => {
       } else if (s.size < lastSize) {
         lastSize = 0;
       }
-    } catch {}
+    } catch { /* ignore */ }
   };
   const poll = setInterval(sendNewLines, 2000);
   const heartbeat = setInterval(() => { if (!closed) res.write(': heartbeat\n\n'); }, 30000);
