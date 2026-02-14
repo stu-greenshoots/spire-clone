@@ -925,9 +925,9 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | BE-34 | BE | S | Phase transition hardening | PENDING |
-| UX-35 | UX | S | Updated self-assessment (target 95+) | PENDING |
-| QA-28 | QA | M | Full regression before release | PENDING |
-| JR-16 | JR | M | Final card balance review | PENDING |
+| UX-35 | UX | S | Updated self-assessment (target 95+) | MERGED (PR #249) |
+| QA-28 | QA | M | Full regression before release | MERGED (PR #248) |
+| JR-16 | JR | M | Final card balance review | MERGED (PR #250) |
 | VARROW-13 | Varrow | S | Narrative polish — final text pass | PENDING |
 
 ### P2 — Stretch
@@ -950,11 +950,11 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] `npm run validate` passes (3759 tests)
 
 **P1 (Should Pass)**
-- [ ] Full regression completed without issues
-- [ ] Card balance verified
+- [x] Full regression completed without issues (PR #248)
+- [x] Card balance verified (PR #250 — no changes needed)
 - [ ] Narrative text polished
 - [ ] Phase transitions hardened
-- [ ] Self-assessment updated to 95+
+- [x] Self-assessment updated to 96/100 (PR #249)
 
 **P2 (Nice to Have)**
 - [ ] v1.1.0 released
