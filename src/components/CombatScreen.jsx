@@ -6,6 +6,7 @@ import EnemyInfoPanel from './EnemyInfoPanel';
 import AnimationOverlay from './AnimationOverlay';
 import { useAnimations } from '../hooks/useAnimations';
 import { useKeyboardControls, KEYBOARD_SHORTCUTS } from '../hooks/useKeyboardControls';
+import { useTouchGesture } from '../hooks/useTouchGesture';
 import { ANIMATION_TYPE } from '../constants/animationTypes';
 import CardSelectionModal from './CardSelectionModal';
 import { CARD_TYPES } from '../data/cards';
@@ -52,7 +53,6 @@ const CombatScreen = ({ showDefeatedEnemies = false, isVictoryTransition = false
   // Mobile card selection state removed - tap now directly enters targeting or plays card
   const [inspectCard, setInspectCard] = useState(null);
   const [screenShakeClass, setScreenShakeClass] = useState('');
-  const longPressTimer = useRef(null);
   const prevEnemyStatuses = useRef({});
   const prevPlayerStatuses = useRef({});
 
@@ -335,27 +335,6 @@ const CombatScreen = ({ showDefeatedEnemies = false, isVictoryTransition = false
   }, [enemies]);
 
   // Long-press handlers for mobile card inspect
-  const handleCardTouchStart = useCallback((card) => {
-    if (!isMobile) return;
-    longPressTimer.current = setTimeout(() => {
-      setInspectCard(card);
-      longPressTimer.current = null;
-    }, 500);
-  }, [isMobile]);
-
-  const handleCardTouchEnd = useCallback(() => {
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current);
-      longPressTimer.current = null;
-    }
-  }, []);
-
-  const handleCardTouchMove = useCallback(() => {
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current);
-      longPressTimer.current = null;
-    }
-  }, []);
 
   const handleCardClick = useCallback((card) => {
     if (inspectCard) return;
@@ -432,6 +411,125 @@ const CombatScreen = ({ showDefeatedEnemies = false, isVictoryTransition = false
       }
     },
     enabled: !isMobile && phase === GAME_PHASE.COMBAT,
+  });
+
+  // Touch gesture state machine (mobile)
+  const touchGesture = useTouchGesture({
+    onTap: useCallback((card) => {
+      if (inspectCard) return;
+      if (targetingMode) {
+        cancelTarget();
+        return;
+      }
+      // Instant selection/play - animation runs in parallel (non-blocking)
+      setCardPlaying(card.instanceId);
+      setTimeout(() => setCardPlaying(null), 300);
+      selectCard(card);
+    }, [inspectCard, targetingMode, cancelTarget, selectCard]),
+
+    onLongPress: useCallback((card) => {
+      setInspectCard(card);
+    }, []),
+
+    onDragStart: useCallback((card, e) => {
+      if (!canPlayCard(card)) return;
+
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      setDraggingCard(card);
+      setDragPosition({ x: clientX, y: clientY });
+      dragStartPosition.current = { x: clientX, y: clientY };
+      hasDragMoved.current = false;
+      setIsDragging(true);
+    }, [canPlayCard]),
+
+    onDragMove: useCallback((e) => {
+      if (!isDragging || !draggingCard) return;
+
+      // Throttle to 60fps (16ms)
+      const now = Date.now();
+      if (now - lastDragUpdate.current < 16) return;
+      lastDragUpdate.current = now;
+
+      e.preventDefault();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+      setDragPosition({ x: clientX, y: clientY });
+
+      // Calculate movement for tap vs drag detection
+      const dx = clientX - dragStartPosition.current.x;
+      const dy = clientY - dragStartPosition.current.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      if (distance > 10) {
+        hasDragMoved.current = true;
+      }
+
+      // Enemy drop target detection
+      const container = containerRef.current;
+      if (!container) return;
+
+      const containerRect = container.getBoundingClientRect();
+      const relativeY = clientY - containerRect.top;
+      const enemyThreshold = containerRect.height * 0.6;
+
+      let foundTarget = null;
+      if (relativeY <= enemyThreshold) {
+        Object.entries(enemyRefs.current).forEach(([id, ref]) => {
+          if (!ref) return;
+          const enemyRect = ref.getBoundingClientRect();
+          if (
+            clientX >= enemyRect.left &&
+            clientX <= enemyRect.right &&
+            clientY >= enemyRect.top &&
+            clientY <= enemyRect.bottom
+          ) {
+            foundTarget = parseInt(id, 10);
+          }
+        });
+      }
+      setDropTargetEnemy(foundTarget);
+    }, [isDragging, draggingCard]),
+
+    onDragEnd: useCallback((_e) => {
+      if (!isDragging || !draggingCard) {
+        setIsDragging(false);
+        setDraggingCard(null);
+        setDropTargetEnemy(null);
+        return;
+      }
+
+      const card = draggingCard;
+      const didMove = hasDragMoved.current;
+
+      setIsDragging(false);
+      setDraggingCard(null);
+
+      // If no movement, let onClick handle it (tap gesture)
+      if (!didMove) {
+        setDropTargetEnemy(null);
+        return;
+      }
+
+      // Drag gesture — play card to target
+      if (dropTargetEnemy !== null) {
+        const enemy = enemies.find(e => e.instanceId === dropTargetEnemy);
+        if (enemy) {
+          playCard(card, enemy);
+        }
+      } else {
+        // Dropped on player or non-attack card
+        if (card.type !== 'attack' || enemies.length === 1) {
+          if (card.target === 'self' || card.type !== 'attack') {
+            playCard(card, player);
+          } else if (enemies.length === 1) {
+            playCard(card, enemies[0]);
+          }
+        }
+      }
+      setDropTargetEnemy(null);
+    }, [isDragging, draggingCard, dropTargetEnemy, enemies, playCard, player]),
   });
 
   // Drag and drop handlers
@@ -652,7 +750,7 @@ const CombatScreen = ({ showDefeatedEnemies = false, isVictoryTransition = false
       invincible: boss.invincible,
       defensiveMode: boss.defensiveMode
     };
-  }, [enemies, state.character]);
+  }, [enemies, state.character, state.endlessLoop]);
 
   // Boss death dialogue detection
   useEffect(() => {
@@ -672,7 +770,7 @@ const CombatScreen = ({ showDefeatedEnemies = false, isVictoryTransition = false
         }
       }
     });
-  }, [enemies, state.character]);
+  }, [enemies, state.character, state.endlessLoop]);
 
   // Act-specific color palettes for subtle background differentiation
   const ACT_THEMES = {
@@ -1261,23 +1359,20 @@ const CombatScreen = ({ showDefeatedEnemies = false, isVictoryTransition = false
               onMouseDown={(e) => !isMobile && handleDragStart(card, e)}
               onTouchStart={(e) => {
                 if (isMobile && canPlayCard(card)) {
-                  // Start long-press timer AND drag simultaneously
-                  handleCardTouchStart(card);
-                  handleDragStart(card, e);
+                  // Use touch gesture hook for mobile
+                  touchGesture.handleTouchStart(e, card);
                 } else if (!isMobile) {
                   handleDragStart(card, e);
                 }
               }}
               onTouchEnd={(e) => {
-                handleCardTouchEnd();
-                if (isDragging) {
-                  handleDragEnd(e);
+                if (isMobile) {
+                  touchGesture.handleTouchEnd(e, card);
                 }
               }}
               onTouchMove={(e) => {
-                handleCardTouchMove();
-                if (isDragging) {
-                  handleDragMove(e);
+                if (isMobile) {
+                  touchGesture.handleTouchMove(e);
                 }
               }}
               style={{
