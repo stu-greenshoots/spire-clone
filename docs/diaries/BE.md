@@ -3,6 +3,57 @@
 ## Role
 Back Ender - Architecture, state management, performance
 
+## Sprint 20 Entries
+
+### BE-35: Performance baseline profiling
+**Date:** 2026-02-14
+**Status:** PR #255 COMPLETE (merged)
+**Sprint:** Sprint 20 (Mobile UX Fix)
+**Task:** BE-35 (Performance baseline profiling — S size, P0)
+
+**Context:**
+Sprint 20 focuses on fixing mobile card selection UX (UX-37 refactor).
+Need performance baseline BEFORE UX-37 to detect regressions after refactor.
+
+**Implementation:**
+Created comprehensive performance baseline framework:
+1. **docs/PERFORMANCE_BASELINE.md (420 lines):**
+   - Methodology for reducer timing, React rendering, FPS, memory
+   - Test scenarios covering all 4 characters × 3 encounter types
+   - Regression thresholds (>20% slower = regression, <55fps = regression)
+   - Before/after comparison instructions for UX-37
+   - Structured TBD sections for manual data collection
+
+2. **scripts/profile-combat.js (231 lines):**
+   - Automated profiling via DevTools API (loadScenario, playCard, endTurn)
+   - FPS measurement via requestAnimationFrame sampling
+   - Memory snapshots via performance.memory API
+   - Reducer timing via QR-14's __SPIRE_PERF__
+   - Results exported to window.__PROFILE_RESULTS__ for clipboard copy
+
+**Architecture:**
+- Builds on existing infrastructure (QR-14 performanceMonitor, QR-04 DevOverlay, QR-02 DevTools API)
+- Non-invasive: no production code changes, pure documentation + tooling
+- Manual execution required (open browser, run script in console)
+- Provides framework for UX team to execute before/after comparison
+
+**Key Metrics to Track:**
+- Reducer timing: PLAY_CARD, END_TURN, ENEMY_TURN, SELECT_CARD
+- React renders: CombatScreen, Card, Enemy, AnimationOverlay
+- FPS: 60fps target, <50fps = red flag
+- Memory: <5MB growth per combat, >10MB = potential leak
+
+**Validation:** `npm run validate` passes — 3775 tests (86 files), 6 pre-existing lint warnings, build clean
+
+**Files Changed:**
+- `docs/PERFORMANCE_BASELINE.md` — NEW (420 lines)
+- `scripts/profile-combat.js` — NEW (231 lines)
+
+**Blockers:** None
+**Next:** UX-37 will use this baseline for before/after performance comparison
+
+---
+
 ## Sprint 19 Entries
 
 ### BE-34: Phase transition hardening
