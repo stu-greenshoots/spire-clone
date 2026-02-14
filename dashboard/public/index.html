@@ -565,7 +565,7 @@
             padding: 10px 12px;
             border-left: 3px solid var(--border);
             transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
-            cursor: default;
+            cursor: pointer;
         }
 
         .task-card:hover {
@@ -645,6 +645,77 @@
         .task-tag.pr:hover {
             background: rgba(88, 166, 255, 0.2);
         }
+
+        /* ========================================================================
+           TASK DETAIL MODAL
+           ======================================================================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.visible { display: flex; }
+        .modal-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 24px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--accent-blue);
+        }
+        .modal-close {
+            background: none; border: none; color: var(--text-muted);
+            font-size: 20px; cursor: pointer; padding: 4px 8px;
+        }
+        .modal-close:hover { color: var(--text-primary); }
+        .modal-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+        .modal-row:last-child { border-bottom: none; }
+        .modal-label { color: var(--text-muted); }
+        .modal-value { color: var(--text-primary); font-weight: 600; }
+        .modal-desc {
+            margin-top: 12px;
+            padding: 12px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+        .modal-pr-link {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 6px 14px;
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent-blue);
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .modal-pr-link:hover { background: rgba(88, 166, 255, 0.2); }
 
         /* ========================================================================
            LIVE LOG PANEL
@@ -1652,6 +1723,7 @@
             sseConnected: false,
             loopStartTime: null,
             logFilter: 'all',
+            tasks: [],
         };
 
         // ====================================================================
@@ -1842,6 +1914,8 @@
         function renderKanban(tasks) {
             hidePanelError('kanban-error');
             const body = document.getElementById('kanban-body');
+            // Store tasks for modal lookup
+            state.tasks = tasks;
 
             const pending = tasks.filter(t => t.status === 'PENDING');
             const inProgress = tasks.filter(t =>
@@ -1865,7 +1939,7 @@
                     const prNum = t.pr ? String(t.pr).replace('#','') : '';
                     const prTag = prNum ? `<a class="task-tag pr" href="${GITHUB_BASE}/pull/${prNum}" target="_blank">#${prNum}</a>` : '';
 
-                    return `<div class="task-card ${priority}">
+                    return `<div class="task-card ${priority}" data-task-id="${escapeHtml(t.id)}">
                         <div class="task-card-top">
                             <span class="task-id">${escapeHtml(t.id)}</span>
                             <span class="task-status-dot ${statusClass}"></span>
@@ -1906,6 +1980,49 @@
                 </div>
             `;
         }
+
+        // Task card click → show modal
+        document.getElementById('kanban-body').addEventListener('click', function(e) {
+            const card = e.target.closest('.task-card');
+            if (!card) return;
+            // Don't open modal if clicking a PR link
+            if (e.target.closest('.task-tag.pr')) return;
+            const taskId = card.dataset.taskId;
+            const task = state.tasks.find(t => t.id === taskId);
+            if (task) showTaskModal(task);
+        });
+
+        function showTaskModal(t) {
+            const modal = document.getElementById('task-modal');
+            const body = document.getElementById('task-modal-body');
+            const role = getRoleInfo(t.owner);
+            const prNum = t.pr ? String(t.pr).replace('#','') : '';
+            const statusLabel = t.status === 'MERGED' ? 'Merged' :
+                t.status === 'IN_PROGRESS' || t.status === 'IN PROGRESS' ? 'In Progress' :
+                t.status === 'DONE' ? 'Done' : t.status === 'REVIEW' ? 'In Review' : 'Pending';
+
+            body.innerHTML = `
+                <div class="modal-header">
+                    <span class="modal-title">${escapeHtml(t.id)}</span>
+                    <button class="modal-close" onclick="document.getElementById('task-modal').classList.remove('visible')">&times;</button>
+                </div>
+                <div class="modal-desc">${escapeHtml(t.description || t.title || '')}</div>
+                <div class="modal-row"><span class="modal-label">Status</span><span class="modal-value">${statusLabel}</span></div>
+                <div class="modal-row"><span class="modal-label">Priority</span><span class="modal-value">${escapeHtml(t.priority || '?')}</span></div>
+                <div class="modal-row"><span class="modal-label">Owner</span><span class="modal-value"><span class="task-tag owner ${role.cssClass}">${escapeHtml(t.owner || '?')}</span></span></div>
+                <div class="modal-row"><span class="modal-label">Size</span><span class="modal-value">${escapeHtml(t.size || '?')}</span></div>
+                ${prNum ? `<a class="modal-pr-link" href="${GITHUB_BASE}/pull/${prNum}" target="_blank">View PR #${prNum}</a>` : ''}
+            `;
+            modal.classList.add('visible');
+        }
+
+        // Close modal on overlay click or Escape
+        document.getElementById('task-modal').addEventListener('click', function(e) {
+            if (e.target === this) this.classList.remove('visible');
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') document.getElementById('task-modal').classList.remove('visible');
+        });
 
         // ====================================================================
         // LIVE LOG
@@ -2685,6 +2802,11 @@
 
     })();
     </script>
+
+    <!-- Task Detail Modal -->
+    <div class="modal-overlay" id="task-modal">
+        <div class="modal-content" id="task-modal-body"></div>
+    </div>
 
 </body>
 </html>
