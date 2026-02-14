@@ -915,10 +915,10 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
 | PM-19 | PM | S | Sprint setup, merge Sprint 18 to master | DONE |
-| FIX-13 | BE | M | Fix reward modal timing bug — appears during combat | DONE (PR #243) |
-| GD-32 | GD | L | Card art batch 1 — 25 placeholders replaced | PENDING |
-| GD-33 | GD | L | Card art batch 2 — 25 more placeholders replaced | PENDING |
-| QA-27 | QA | M | E2E test stabilization — fix 4 timeout tests | PENDING |
+| FIX-13 | BE | M | Fix reward modal timing bug — appears during combat | MERGED (PR #243) |
+| GD-32 | GD | L | Card art batch 1 — 25 placeholders replaced | MERGED (PR #244) |
+| GD-33 | GD | L | Card art batch 2 — 28 placeholders replaced (100% coverage!) | MERGED (PR #245) |
+| QA-27 | QA | M | E2E test stabilization — fix 4 timeout tests | DONE (PR #246) |
 
 ### P1 — Should Ship
 
@@ -944,10 +944,10 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 **P0 (Must Pass)**
 - [x] FIX-13 merged — reward modal timing fixed (PR #243)
-- [ ] GD-32 merged — 25 cards improved
-- [ ] GD-33 merged — 25 cards improved
-- [ ] All 30 E2E tests pass on CI
-- [ ] `npm run validate` passes (3759+ tests)
+- [x] GD-32 merged — 25 cards improved (PR #244)
+- [x] GD-33 merged — 28 cards improved, 100% coverage achieved (PR #245)
+- [x] All 30 E2E tests pass on CI (verified on integration PR #241)
+- [x] `npm run validate` passes (3759 tests)
 
 **P1 (Should Pass)**
 - [ ] Full regression completed without issues
