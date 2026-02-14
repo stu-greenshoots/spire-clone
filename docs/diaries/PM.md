@@ -14,6 +14,48 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### Sprint 20 — Planning Complete
+**Date:** 2026-02-14
+**Status:** Sprint 20 APPROVED, infrastructure created, ready to execute
+
+**Planning Process:**
+1. Gathered user feedback: "Mobile card selection is so so slow and hard to use"
+2. Invoked Mentor for planning review (agent a380a4c)
+3. Created draft Sprint 20 plan (SPRINT_20_PLAN.md)
+4. Spawned UX (agent a65bfc3), BE (agent ae5d740), QA (agent a9c218d) for input
+5. Synthesized team feedback, revised task breakdown
+6. Achieved team consensus on all decisions
+
+**Key Changes from Team Input:**
+- **Split UX-37 into 3 sub-tasks:** UX-37a (hook, S), UX-37b (integration, M), UX-37c (delay removal, S)
+- **Promoted BE-35 to P0:** Performance baseline needed BEFORE UX-37 refactor
+- **Split QA-30:** QA-30a (automated E2E, M), QA-30b deferred (real device manual testing)
+- **Deferred to Sprint 21:** UX-38 (mobile polish), GD-34 (more card art)
+
+**Sprint 20 Final Scope:**
+- **P0:** 6 tasks (PM-21, BE-35, UX-37a/b/c, QA-30a)
+- **P1:** 2 tasks (AR-19, QA-29)
+- **P2:** 0 tasks (all deferred to Sprint 21 to avoid scope creep)
+
+**Infrastructure Created:**
+- ✅ Merged sprint-19 to master (resolved conflicts)
+- ✅ Created sprint-20 branch
+- ✅ Committed SPRINT_20_PLAN.md
+- ✅ Created draft PR #253 (sprint-20 → master)
+
+**Architectural Decisions Approved:**
+- **DEC-020:** useTouchGesture hook design
+- **DEC-021:** Instant dispatch (remove 300ms animation delay)
+- **DEC-022:** Keep desktop/mobile code paths separate
+
+**Next Steps:**
+1. Engineers read Sprint 20 plan
+2. BE starts BE-35 (performance baseline)
+3. UX starts UX-37a (hook extraction)
+4. Daily check-ins via PM sprint orchestration
+
+---
+
 ### Sprint 19 — Cycle 12: Validation Confirmed, Sprint Complete
 **Date:** 2026-02-14 (Cycle 12 - Validation)
 **Status:** Sprint 19 COMPLETE, validation confirmed, ready for Sprint 20 planning
