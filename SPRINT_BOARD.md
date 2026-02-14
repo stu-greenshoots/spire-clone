@@ -934,11 +934,11 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 
 | Task | Owner | Size | Description | Status |
 |------|-------|------|-------------|--------|
-| AR-19 | AR | S | Audio polish | PENDING |
-| GD-34 | GD | M | Remaining card art (stretch) | PENDING |
-| PM-20 | PM | S | v1.1.0 Release | PENDING |
-| UX-36 | UX | S | Mobile gesture refinement | PENDING |
-| QA-29 | QA | S | Performance regression | PENDING |
+| AR-19 | AR | S | Audio polish | DEFERRED (Sprint 20) |
+| GD-34 | GD | M | Remaining card art (stretch) | DEFERRED (Sprint 20) |
+| PM-20 | PM | S | v1.1.0 Release | DONE (Released 2026-02-14, live) |
+| UX-36 | UX | S | Mobile gesture refinement | DEFERRED (Sprint 20) |
+| QA-29 | QA | S | Performance regression | DEFERRED (Sprint 20) |
 
 ### Sprint 19 Validation Gate
 
@@ -957,10 +957,10 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 - [x] Self-assessment updated to 96/100 (PR #249)
 
 **P2 (Nice to Have)**
-- [ ] v1.1.0 released
-- [ ] Mobile gestures verified
-- [ ] Performance regression passed
-- [ ] 90%+ card art coverage
+- [x] v1.1.0 released (DONE — live at https://stu-greenshoots.github.io/spire-clone/)
+- [ ] Mobile gestures verified (DEFERRED)
+- [ ] Performance regression passed (DEFERRED)
+- [x] 90%+ card art coverage (DONE — 100% coverage achieved)
 
 ---
 
@@ -986,17 +986,14 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 5. **E2E stability achieved (QA-27)** — 30/30 Playwright tests passing on CI
 6. **Narrative polish (VARROW-13)** — Final text pass, zero typos, voice-consistent
 
-**P2 Tasks Deferred:**
-- AR-19: Audio polish
-- GD-34: Additional card art improvements
-- PM-20: v1.1.0 release (can be executed when ready)
-- UX-36: Mobile gesture refinement
-- QA-29: Performance regression
+**P2 Tasks Status:**
+- PM-20: v1.1.0 release — **DONE** (released 2026-02-14, live in production)
+- GD-34: Additional card art improvements — **DEFERRED** (100% coverage achieved, further improvements can wait)
+- AR-19: Audio polish — **DEFERRED** (audio functional, polish can wait)
+- UX-36: Mobile gesture refinement — **DEFERRED** (mobile playable, refinement can wait)
+- QA-29: Performance regression — **DEFERRED** (performance acceptable, Lighthouse check can wait)
 
-These P2 tasks are not blocking — the game is production-ready. They can be:
-- Completed as bonus work before release
-- Included in Sprint 20
-- Skipped entirely (game is already ship-ready at 96/100)
+These stretch goals can be included in Sprint 20 or addressed based on user feedback.
 
 **Production Readiness:** ✅ SHIP READY
 - Zero P0 bugs
@@ -1006,7 +1003,6 @@ These P2 tasks are not blocking — the game is production-ready. They can be:
 - 3775 tests passing
 - 30/30 E2E tests stable
 
-**Next Options:**
-1. **Ship v1.1.0** — Tag and deploy (execute PM-20)
-2. **Polish P2 tasks** — Complete stretch goals before release
-3. **Start Sprint 20** — Plan new features and content
+**v1.1.0 SHIPPED:** Released 2026-02-14, live at https://stu-greenshoots.github.io/spire-clone/
+
+**Next Step:** Start Sprint 20 planning — use `pm-plan.md` command for collaborative planning with team input.
