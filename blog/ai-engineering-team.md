@@ -32,7 +32,7 @@ Each engineer has their own **diary** at `docs/diaries/{ROLE}.md` where they log
 
 ---
 
-## The Process: Skills, Commands, and the Ralph Loop
+## The Process: Skills, Commands, and the Stu Loop
 
 The agents don't just randomly write code. They follow a structured process using **custom commands** that define their workflows:
 
@@ -41,7 +41,7 @@ The agents don't just randomly write code. They follow a structured process usin
 - **`mentor.md`**: When decisions get stuck, the Mentor steps in with authority to unblock.
 - **`engineer-{role}.md`**: Each role has a dedicated command that sets identity, owned files, and role-specific checks.
 
-The magic happens through the **Ralph Loop** — an iterative process where the PM orchestrates the sprint:
+The magic happens through the **Stu Loop** — an iterative process where the PM orchestrates the sprint:
 
 1. Check for completed work (any PRs ready for review?)
 2. Review and merge ready PRs (Copilot review + Mentor review)

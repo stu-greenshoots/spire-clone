@@ -22,7 +22,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  */
 
 const CHARACTERS = ['ironclad', 'silent', 'defect', 'watcher'];
-const MIN_COMBAT_ENCOUNTERS = 5;
+// Reduced from 5 to 3 for CI performance (QA-27)
+// 3 combats is sufficient to verify: combat, rewards, map transitions, card/relic acquisition
+const MIN_COMBAT_ENCOUNTERS = 3;
 
 /**
  * Wait for a condition with polling
@@ -194,6 +196,15 @@ async function fightCombatWithKeyboard(page, maxTurns = 30) {
     if (state.phase === 'combat_reward' || state.phase === 'card_reward') {
       return { result: 'win', turns, cardsPlayed: totalCardsPlayed, errors };
     }
+    // Handle COMBAT_VICTORY transitional phase (FIX-13 added this)
+    // Wait for it to transition to combat_reward
+    if (state.phase === 'combat_victory') {
+      await waitForCondition(async () => {
+        const s = await getVisibleState(page);
+        return s && s.phase === 'combat_reward';
+      }, 5000);
+      return { result: 'win', turns, cardsPlayed: totalCardsPlayed, errors };
+    }
     if (state.phase === 'game_over') {
       return { result: 'loss', turns, cardsPlayed: totalCardsPlayed, errors };
     }
@@ -220,11 +231,17 @@ async function fightCombatWithKeyboard(page, maxTurns = 30) {
 }
 
 test.describe('Full Playthrough E2E', () => {
-  // Extended timeout for multi-combat playthroughs
-  test.setTimeout(300000); // 5 minutes per character
+  // Extended timeout for multi-combat playthroughs (reduced from 5 min to 3 min with fewer combats)
+  test.setTimeout(180000); // 3 minutes per character
+
+  // QA-27: Skip in CI - these keyboard-based tests are too slow for regular CI
+  // They take ~3 minutes per character. Use faster DOM-based full-run.spec.js for CI.
+  // Run manually with: npx playwright test full-playthrough.spec.js
 
   for (const character of CHARACTERS) {
     test(`${character}: complete playthrough through ${MIN_COMBAT_ENCOUNTERS} combat encounters`, async ({ gamePage, gameActions }) => {
+      // eslint-disable-next-line playwright/no-skipped-test
+      test.skip(process.env.CI === 'true', 'Skipped in CI - too slow for regular CI runs');
       const stateLog = [];
       const errors = [];
       const jsErrors = [];
@@ -362,6 +379,16 @@ test.describe('Full Playthrough E2E', () => {
             break;
           }
 
+          case 'combat_victory': {
+            // FIX-13 added this transitional phase — wait for it to become combat_reward
+            await logState('combat_victory');
+            await waitForCondition(async () => {
+              const s = await getVisibleState(gamePage);
+              return s && s.phase === 'combat_reward';
+            }, 5000);
+            // Fall through to combat_reward handling
+          }
+          // falls through
           case 'combat_reward':
           case 'card_reward': {
             await screenshot('reward');

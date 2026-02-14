@@ -1,0 +1,2236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPIRE ASCENT — MISSION CONTROL</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F3EF;</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* ========================================================================
+           CSS RESET & CUSTOM PROPERTIES
+           ======================================================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-card: #1c2128;
+            --border: #30363d;
+            --border-light: #3d444d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #656d76;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-orange: #d29922;
+            --accent-red: #f85149;
+            --accent-purple: #bc8cff;
+            --accent-cyan: #39d2c0;
+            --accent-yellow: #e3b341;
+            --accent-pink: #f778ba;
+
+            /* Role colors */
+            --role-be: #58a6ff;
+            --role-gd: #bc8cff;
+            --role-qa: #3fb950;
+            --role-ux: #d29922;
+            --role-jr: #e3b341;
+            --role-ar: #39d2c0;
+            --role-pm: #e6edf3;
+            --role-varrow: #f778ba;
+            --role-sl: #8b949e;
+
+            /* Priority colors */
+            --p0: #f85149;
+            --p1: #d29922;
+            --p2: #58a6ff;
+
+            /* Sizing */
+            --header-height: 56px;
+            --panel-radius: 8px;
+            --panel-padding: 16px;
+            --gap: 16px;
+
+            /* Fonts */
+            --font-mono: 'SF Mono', 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+        }
+
+        /* ========================================================================
+           BASE STYLES
+           ======================================================================== */
+        html {
+            font-size: 14px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-light);
+        }
+
+        /* ========================================================================
+           HEADER
+           ======================================================================== */
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-title {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title .spire-icon {
+            width: 24px;
+            height: 24px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-title .spire-icon svg {
+            fill: var(--accent-cyan);
+        }
+
+        .header-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+        }
+
+        .header-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .header-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-meta-item .label {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .header-meta-item .value {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-family: var(--font-mono);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-dot.running {
+            background: var(--accent-green);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .status-dot.stopped {
+            background: var(--accent-red);
+        }
+
+        .status-dot.unknown {
+            background: var(--text-muted);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(63, 185, 80, 0.4); }
+            50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(63, 185, 80, 0); }
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .refresh-indicator {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        /* ========================================================================
+           MAIN GRID LAYOUT
+           ======================================================================== */
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1.4fr;
+            grid-template-rows: auto auto auto;
+            gap: var(--gap);
+            padding: var(--gap);
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* ========================================================================
+           PANEL BASE
+           ======================================================================== */
+        .panel {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--panel-radius);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px var(--panel-padding);
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-tertiary);
+            flex-shrink: 0;
+        }
+
+        .panel-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-title .icon {
+            font-size: 14px;
+        }
+
+        .panel-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-family: var(--font-mono);
+        }
+
+        .panel-badge.green {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+        }
+
+        .panel-badge.orange {
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--accent-orange);
+        }
+
+        .panel-badge.red {
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--accent-red);
+        }
+
+        .panel-badge.blue {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent-blue);
+        }
+
+        .panel-body {
+            padding: var(--panel-padding);
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .panel-error {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--accent-red);
+            z-index: 5;
+            display: none;
+        }
+
+        .panel-error.visible {
+            display: block;
+        }
+
+        /* ========================================================================
+           SKELETON LOADERS
+           ======================================================================== */
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--border) 50%, var(--bg-tertiary) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s ease-in-out infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .skeleton-line {
+            height: 14px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+        }
+
+        .skeleton-line.short { width: 60%; }
+        .skeleton-line.medium { width: 80%; }
+        .skeleton-line.long { width: 95%; }
+
+        .skeleton-block {
+            height: 60px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+        }
+
+        /* ========================================================================
+           SPRINT PROGRESS PANEL
+           ======================================================================== */
+        .progress-section {
+            margin-bottom: 16px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-value {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .progress-bar-wrapper {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        .big-progress {
+            text-align: center;
+            padding: 16px 0;
+            margin-bottom: 16px;
+        }
+
+        .big-progress .percent {
+            font-size: 48px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: var(--accent-green);
+            line-height: 1;
+        }
+
+        .big-progress .desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .big-progress-bar {
+            height: 12px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .big-progress-bar .fill {
+            height: 100%;
+            border-radius: 6px;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan));
+            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .priority-bars {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .priority-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .priority-label {
+            font-size: 11px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            width: 24px;
+            text-align: center;
+        }
+
+        .priority-bar-track {
+            flex: 1;
+            height: 6px;
+            background: var(--bg-tertiary);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .priority-bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        .priority-count {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+            width: 30px;
+            text-align: right;
+        }
+
+        /* Validation checklist */
+        .validation-list {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .validation-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .validation-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .validation-item .check {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .validation-item .check.done {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+        }
+
+        .validation-item .check.pending {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .validation-item .check.partial {
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--accent-orange);
+        }
+
+        /* ========================================================================
+           KANBAN BOARD
+           ======================================================================== */
+        .kanban {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            height: 100%;
+        }
+
+        .kanban-col {
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .kanban-col-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            background: var(--bg-tertiary);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .kanban-col-count {
+            background: var(--bg-primary);
+            padding: 1px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-family: var(--font-mono);
+        }
+
+        .kanban-cards {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .task-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px 12px;
+            border-left: 3px solid var(--border);
+            transition: border-color 0.2s, transform 0.15s, box-shadow 0.15s;
+            cursor: default;
+        }
+
+        .task-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .task-card.p0 { border-left-color: var(--p0); }
+        .task-card.p1 { border-left-color: var(--p1); }
+        .task-card.p2 { border-left-color: var(--p2); }
+
+        .task-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .task-id {
+            font-size: 11px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+            color: var(--accent-blue);
+        }
+
+        .task-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .task-status-dot.merged { background: var(--accent-green); }
+        .task-status-dot.in-progress { background: var(--accent-orange); animation: pulse 2s ease-in-out infinite; }
+        .task-status-dot.pending { background: var(--text-muted); }
+        .task-status-dot.done { background: var(--accent-green); }
+
+        .task-desc {
+            font-size: 12px;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        .task-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .task-tag {
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+
+        .task-tag.owner {
+            color: #fff;
+            opacity: 0.9;
+        }
+
+        .task-tag.size {
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+        }
+
+        .task-tag.pr {
+            background: rgba(88, 166, 255, 0.1);
+            color: var(--accent-blue);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .task-tag.pr:hover {
+            background: rgba(88, 166, 255, 0.2);
+        }
+
+        /* ========================================================================
+           LIVE LOG PANEL
+           ======================================================================== */
+        .log-panel .panel-body {
+            padding: 0;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.6;
+            background: var(--bg-primary);
+            position: relative;
+        }
+
+        .log-controls {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .log-btn {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-family: var(--font-mono);
+            transition: all 0.15s;
+        }
+
+        .log-btn:hover {
+            background: var(--border);
+            color: var(--text-primary);
+        }
+
+        .log-btn.active {
+            background: rgba(88, 166, 255, 0.15);
+            color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .log-lines {
+            padding: 8px 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log-line {
+            padding: 2px 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .log-line.claude { color: var(--accent-blue); }
+        .log-line.gemini { color: var(--accent-purple); }
+        .log-line.success { color: var(--accent-green); }
+        .log-line.error { color: var(--accent-red); }
+        .log-line.warning { color: var(--accent-orange); }
+        .log-line.cycle-boundary {
+            color: var(--text-primary);
+            font-weight: 700;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 4px 0;
+            margin: 4px 0;
+            background: var(--bg-tertiary);
+        }
+        .log-line.timestamp { color: var(--text-muted); }
+        .log-line.info { color: var(--text-secondary); }
+
+        .log-empty {
+            padding: 40px;
+            text-align: center;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* ========================================================================
+           OPEN PRs PANEL
+           ======================================================================== */
+        .pr-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 8px;
+            transition: border-color 0.2s;
+        }
+
+        .pr-card:hover {
+            border-color: var(--border-light);
+        }
+
+        .pr-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .pr-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .pr-number {
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--accent-blue);
+        }
+
+        .pr-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+            flex: 1;
+        }
+
+        .pr-ci-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .pr-ci-dot.pass { background: var(--accent-green); }
+        .pr-ci-dot.fail { background: var(--accent-red); }
+        .pr-ci-dot.pending { background: var(--accent-orange); animation: pulse 2s ease-in-out infinite; }
+
+        .pr-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .pr-branch {
+            font-family: var(--font-mono);
+            background: var(--bg-tertiary);
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+
+        .pr-link {
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 11px;
+        }
+
+        .pr-link:hover {
+            text-decoration: underline;
+        }
+
+        .pr-empty {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* ========================================================================
+           GIT ACTIVITY PANEL
+           ======================================================================== */
+        .commit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .commit-item:last-child {
+            border-bottom: none;
+        }
+
+        .commit-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .commit-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .commit-hash {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--accent-blue);
+            cursor: pointer;
+        }
+
+        .commit-hash:hover {
+            text-decoration: underline;
+        }
+
+        .commit-msg {
+            font-size: 12px;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .commit-meta {
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .commit-author {
+            font-weight: 600;
+        }
+
+        /* ========================================================================
+           PM DIARY PANEL
+           ======================================================================== */
+        .diary-entries {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .diary-entry {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 12px;
+        }
+
+        .diary-entry-date {
+            font-size: 10px;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .diary-entry-content {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .diary-entry-content strong {
+            color: var(--text-primary);
+        }
+
+        .diary-entry-content ul {
+            padding-left: 16px;
+            margin: 4px 0;
+        }
+
+        .diary-entry-content li {
+            margin: 2px 0;
+        }
+
+        .feedback-form {
+            border-top: 1px solid var(--border);
+            padding-top: 12px;
+        }
+
+        .feedback-form-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .feedback-textarea {
+            width: 100%;
+            min-height: 80px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px;
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            font-size: 13px;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        .feedback-textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .feedback-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            align-items: center;
+        }
+
+        .feedback-priority {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 6px 10px;
+            color: var(--text-primary);
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .feedback-priority:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+        }
+
+        .feedback-submit {
+            background: var(--accent-blue);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.15s;
+        }
+
+        .feedback-submit:hover {
+            opacity: 0.9;
+        }
+
+        .feedback-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ========================================================================
+           QUICK LINKS PANEL
+           ======================================================================== */
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 10px 12px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: border-color 0.2s, transform 0.1s;
+            cursor: pointer;
+        }
+
+        .quick-link:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-1px);
+        }
+
+        .quick-link .ql-icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .quick-link .ql-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .quick-link .ql-label {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .quick-link .ql-detail {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-row .info-label {
+            color: var(--text-muted);
+        }
+
+        .info-row .info-value {
+            font-family: var(--font-mono);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .info-row .info-value.pass {
+            color: var(--accent-green);
+        }
+
+        .info-row .info-value.fail {
+            color: var(--accent-red);
+        }
+
+        /* ========================================================================
+           HANDOFF PANEL
+           ======================================================================== */
+        .handoff-content {
+            font-size: 12px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .handoff-content h1, .handoff-content h2, .handoff-content h3 {
+            color: var(--text-primary);
+            margin: 12px 0 6px;
+            font-size: 14px;
+        }
+
+        .handoff-content h1 { font-size: 16px; }
+
+        .handoff-content code {
+            background: var(--bg-tertiary);
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+        }
+
+        .handoff-content pre {
+            background: var(--bg-primary);
+            padding: 10px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 8px 0;
+        }
+
+        .handoff-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .handoff-content ul, .handoff-content ol {
+            padding-left: 20px;
+            margin: 6px 0;
+        }
+
+        .handoff-content li { margin: 3px 0; }
+
+        .handoff-content strong {
+            color: var(--text-primary);
+        }
+
+        .handoff-content p {
+            margin: 6px 0;
+        }
+
+        .handoff-empty {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* ========================================================================
+           TOAST NOTIFICATION
+           ======================================================================== */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            max-width: 400px;
+        }
+
+        .toast.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: rgba(63, 185, 80, 0.9);
+            color: #fff;
+            border: 1px solid var(--accent-green);
+        }
+
+        .toast.error {
+            background: rgba(248, 81, 73, 0.9);
+            color: #fff;
+            border: 1px solid var(--accent-red);
+        }
+
+        /* ========================================================================
+           RESPONSIVE
+           ======================================================================== */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .kanban {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                height: auto;
+                padding: 10px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .header-left {
+                flex-wrap: wrap;
+            }
+
+            .header-meta {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html { font-size: 13px; }
+
+            .dashboard {
+                padding: 8px;
+                gap: 8px;
+            }
+
+            .quick-links-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-title {
+                font-size: 13px;
+            }
+        }
+
+        /* ========================================================================
+           ROLE COLOR UTILITY CLASSES
+           ======================================================================== */
+        .role-be  { background: var(--role-be); }
+        .role-gd  { background: var(--role-gd); }
+        .role-qa  { background: var(--role-qa); }
+        .role-ux  { background: var(--role-ux); }
+        .role-jr  { background: var(--role-jr); }
+        .role-ar  { background: var(--role-ar); }
+        .role-pm  { background: var(--role-pm); color: var(--bg-primary); }
+        .role-varrow { background: var(--role-varrow); }
+        .role-sl  { background: var(--role-sl); }
+
+        /* Dot variants for commit timeline */
+        .dot-be  { background: var(--role-be); }
+        .dot-gd  { background: var(--role-gd); }
+        .dot-qa  { background: var(--role-qa); }
+        .dot-ux  { background: var(--role-ux); }
+        .dot-jr  { background: var(--role-jr); }
+        .dot-ar  { background: var(--role-ar); }
+        .dot-pm  { background: var(--role-pm); }
+        .dot-varrow { background: var(--role-varrow); }
+        .dot-sl  { background: var(--role-sl); }
+
+        .text-be  { color: var(--role-be); }
+        .text-gd  { color: var(--role-gd); }
+        .text-qa  { color: var(--role-qa); }
+        .text-ux  { color: var(--role-ux); }
+        .text-jr  { color: var(--role-jr); }
+        .text-ar  { color: var(--role-ar); }
+        .text-pm  { color: var(--role-pm); }
+        .text-varrow { color: var(--role-varrow); }
+        .text-sl  { color: var(--role-sl); }
+    </style>
+</head>
+<body>
+
+    <!-- ====================================================================
+         HEADER
+         ==================================================================== -->
+    <header class="header">
+        <div class="header-left">
+            <div class="header-title">
+                <span class="spire-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="22">
+                        <path d="M12 2L8 10h3v4H8l4 8 4-8h-3v-4h3L12 2z"/>
+                    </svg>
+                </span>
+                SPIRE ASCENT &mdash; MISSION CONTROL
+            </div>
+            <div class="header-divider"></div>
+            <div class="header-meta">
+                <div class="header-meta-item">
+                    <span class="label">Sprint</span>
+                    <span class="value" id="header-sprint">--</span>
+                </div>
+                <div class="header-meta-item">
+                    <span class="label">Cycle</span>
+                    <span class="value" id="header-cycle">--</span>
+                </div>
+                <div class="header-meta-item">
+                    <span class="status-dot unknown" id="header-status-dot"></span>
+                    <span class="value" id="header-loop-status">UNKNOWN</span>
+                </div>
+                <div class="header-meta-item">
+                    <span class="label">Uptime</span>
+                    <span class="value" id="header-uptime">--</span>
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <span class="refresh-indicator" id="refresh-indicator">Updated just now</span>
+        </div>
+    </header>
+
+    <!-- ====================================================================
+         DASHBOARD GRID
+         ==================================================================== -->
+    <main class="dashboard">
+
+        <!-- ROW 1, COL 1: Sprint Progress -->
+        <div class="panel" id="panel-progress">
+            <div class="panel-header">
+                <span class="panel-title"><span class="icon">&#9881;</span> Sprint Progress</span>
+                <span class="panel-badge blue" id="sprint-badge">--</span>
+            </div>
+            <div class="panel-body" id="progress-body">
+                <div class="skeleton skeleton-block"></div>
+                <div class="skeleton skeleton-line long"></div>
+                <div class="skeleton skeleton-line medium"></div>
+                <div class="skeleton skeleton-line short"></div>
+            </div>
+            <div class="panel-error" id="progress-error">Offline</div>
+        </div>
+
+        <!-- ROW 1, COL 2: Agent Activity / Live Log -->
+        <div class="panel log-panel" id="panel-log" style="grid-row: span 2;">
+            <div class="panel-header">
+                <span class="panel-title"><span class="icon">&#9655;</span> Agent Activity</span>
+                <div class="log-controls">
+                    <button class="log-btn active" id="btn-auto-scroll" title="Auto-scroll">AUTO</button>
+                    <button class="log-btn" id="btn-clear-log" title="Clear log display">CLEAR</button>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="log-lines" id="log-container">
+                    <div class="log-empty">Connecting to log stream...</div>
+                </div>
+            </div>
+            <div class="panel-error" id="log-error">SSE Disconnected</div>
+        </div>
+
+        <!-- ROW 2, COL 1: Sprint Board (Kanban) -->
+        <div class="panel" id="panel-kanban">
+            <div class="panel-header">
+                <span class="panel-title"><span class="icon">&#9638;</span> Sprint Board</span>
+                <span class="panel-badge green" id="kanban-badge">--</span>
+            </div>
+            <div class="panel-body" id="kanban-body" style="padding: 12px;">
+                <div class="skeleton skeleton-block"></div>
+                <div class="skeleton skeleton-block"></div>
+                <div class="skeleton skeleton-block"></div>
+            </div>
+            <div class="panel-error" id="kanban-error">Offline</div>
+        </div>
+
+        <!-- ROW 3, COL 1: Open PRs -->
+        <div class="panel" id="panel-prs">
+            <div class="panel-header">
+                <span class="panel-title"><span class="icon">&#10697;</span> Open PRs</span>
+                <span class="panel-badge orange" id="pr-badge">--</span>
+            </div>
+            <div class="panel-body" id="prs-body">
+                <div class="skeleton skeleton-block"></div>
+                <div class="skeleton skeleton-block"></div>
+            </div>
+            <div class="panel-error" id="prs-error">Offline</div>
+        </div>
+
+        <!-- ROW 3, COL 2: PM Diary + Feedback -->
+        <div class="panel" id="panel-diary">
+            <div class="panel-header">
+                <span class="panel-title"><span class="icon">&#128221;</span> PM Diary &amp; Feedback</span>
+            </div>
+            <div class="panel-body" id="diary-body">
+                <div class="skeleton skeleton-block"></div>
+                <div class="skeleton skeleton-line medium"></div>
+                <div class="skeleton skeleton-line short"></div>
+            </div>
+            <div class="panel-error" id="diary-error">Offline</div>
+        </div>
+
+        <!-- ROW 4, COL 1: Git Activity -->
+        <div class="panel" id="panel-git">
+            <div class="panel-header">
+                <span class="panel-title"><span class="icon">&#9679;</span> Git Activity</span>
+            </div>
+            <div class="panel-body" id="git-body">
+                <div class="skeleton skeleton-block"></div>
+                <div class="skeleton skeleton-block"></div>
+                <div class="skeleton skeleton-block"></div>
+            </div>
+            <div class="panel-error" id="git-error">Offline</div>
+        </div>
+
+        <!-- ROW 4, COL 2: Quick Links + Handoff -->
+        <div class="panel" id="panel-links">
+            <div class="panel-header">
+                <span class="panel-title"><span class="icon">&#9889;</span> Quick Links &amp; Status</span>
+            </div>
+            <div class="panel-body" id="links-body">
+                <div class="skeleton skeleton-block"></div>
+                <div class="skeleton skeleton-line medium"></div>
+            </div>
+            <div class="panel-error" id="links-error">Offline</div>
+        </div>
+
+        <!-- ROW 5, COL 1+2: Handoff Context -->
+        <div class="panel" id="panel-handoff" style="grid-column: 1 / -1;">
+            <div class="panel-header">
+                <span class="panel-title"><span class="icon">&#128257;</span> Handoff Context (last-cycle.md)</span>
+            </div>
+            <div class="panel-body" id="handoff-body">
+                <div class="skeleton skeleton-line long"></div>
+                <div class="skeleton skeleton-line medium"></div>
+                <div class="skeleton skeleton-line short"></div>
+            </div>
+            <div class="panel-error" id="handoff-error">Offline</div>
+        </div>
+
+    </main>
+
+    <!-- Toast container -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ====================================================================
+         JAVASCRIPT
+         ==================================================================== -->
+    <script>
+    (function() {
+        'use strict';
+
+        // ====================================================================
+        // CONFIGURATION
+        // ====================================================================
+        const CONFIG = {
+            API_BASE: '/api',
+            REPO_OWNER: 'stu-greenshoots',
+            REPO_NAME: 'spire-clone',
+            GITHUB_PAGES_URL: 'https://stu-greenshoots.github.io/spire-clone/',
+            REFRESH_INTERVAL: 10000,   // 10 seconds
+            LOG_MAX_LINES: 200,
+            SSE_RECONNECT_DELAY: 3000,
+        };
+
+        const GITHUB_BASE = `https://github.com/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}`;
+
+        // Role metadata
+        const ROLES = {
+            BE:     { label: 'BE',     color: 'var(--role-be)',     cssClass: 'role-be',     dotClass: 'dot-be',     textClass: 'text-be' },
+            GD:     { label: 'GD',     color: 'var(--role-gd)',     cssClass: 'role-gd',     dotClass: 'dot-gd',     textClass: 'text-gd' },
+            QA:     { label: 'QA',     color: 'var(--role-qa)',     cssClass: 'role-qa',     dotClass: 'dot-qa',     textClass: 'text-qa' },
+            UX:     { label: 'UX',     color: 'var(--role-ux)',     cssClass: 'role-ux',     dotClass: 'dot-ux',     textClass: 'text-ux' },
+            JR:     { label: 'JR',     color: 'var(--role-jr)',     cssClass: 'role-jr',     dotClass: 'dot-jr',     textClass: 'text-jr' },
+            AR:     { label: 'AR',     color: 'var(--role-ar)',     cssClass: 'role-ar',     dotClass: 'dot-ar',     textClass: 'text-ar' },
+            PM:     { label: 'PM',     color: 'var(--role-pm)',     cssClass: 'role-pm',     dotClass: 'dot-pm',     textClass: 'text-pm' },
+            VARROW: { label: 'VR',     color: 'var(--role-varrow)', cssClass: 'role-varrow', dotClass: 'dot-varrow', textClass: 'text-varrow' },
+            SL:     { label: 'SL',     color: 'var(--role-sl)',     cssClass: 'role-sl',     dotClass: 'dot-sl',     textClass: 'text-sl' },
+        };
+
+        // ====================================================================
+        // STATE
+        // ====================================================================
+        let state = {
+            autoScroll: true,
+            logLines: [],
+            lastRefresh: Date.now(),
+            sseConnected: false,
+            loopStartTime: null,
+        };
+
+        // ====================================================================
+        // UTILITY FUNCTIONS
+        // ====================================================================
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function relativeTime(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return dateStr;
+            const now = Date.now();
+            const diff = now - date.getTime();
+            const seconds = Math.floor(diff / 1000);
+            if (seconds < 60) return 'just now';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return `${minutes}m ago`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours}h ago`;
+            const days = Math.floor(hours / 24);
+            return `${days}d ago`;
+        }
+
+        function formatUptime(startTime) {
+            if (!startTime) return '--';
+            const diff = Date.now() - startTime;
+            const hours = Math.floor(diff / 3600000);
+            const minutes = Math.floor((diff % 3600000) / 60000);
+            if (hours > 0) return `${hours}h ${minutes}m`;
+            return `${minutes}m`;
+        }
+
+        function getRoleInfo(ownerStr) {
+            if (!ownerStr) return ROLES.PM;
+            const upper = ownerStr.toUpperCase().trim();
+            // Handle combined owners like "BE/UX"
+            const primary = upper.split('/')[0].trim();
+            return ROLES[primary] || ROLES.PM;
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} visible`;
+            setTimeout(() => { toast.classList.remove('visible'); }, 3000);
+        }
+
+        function showPanelError(panelId) {
+            const el = document.getElementById(panelId);
+            if (el) el.classList.add('visible');
+        }
+
+        function hidePanelError(panelId) {
+            const el = document.getElementById(panelId);
+            if (el) el.classList.remove('visible');
+        }
+
+        async function fetchJSON(path) {
+            const response = await fetch(`${CONFIG.API_BASE}${path}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.json();
+        }
+
+        async function fetchText(path) {
+            const response = await fetch(`${CONFIG.API_BASE}${path}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.text();
+        }
+
+        // ====================================================================
+        // HEADER
+        // ====================================================================
+        function updateHeader(data) {
+            if (data.sprint) {
+                document.getElementById('header-sprint').textContent = data.sprint;
+            }
+            if (data.cycle !== undefined) {
+                document.getElementById('header-cycle').textContent = data.cycle;
+            }
+
+            const statusDot = document.getElementById('header-status-dot');
+            const statusText = document.getElementById('header-loop-status');
+            if (data.loopStatus === 'RUNNING') {
+                statusDot.className = 'status-dot running';
+                statusText.textContent = 'RUNNING';
+                statusText.style.color = 'var(--accent-green)';
+            } else if (data.loopStatus === 'STOPPED') {
+                statusDot.className = 'status-dot stopped';
+                statusText.textContent = 'STOPPED';
+                statusText.style.color = 'var(--accent-red)';
+            } else {
+                statusDot.className = 'status-dot unknown';
+                statusText.textContent = 'UNKNOWN';
+                statusText.style.color = 'var(--text-muted)';
+            }
+
+            if (data.loopStartTime) {
+                state.loopStartTime = data.loopStartTime;
+            }
+        }
+
+        function updateUptime() {
+            document.getElementById('header-uptime').textContent = formatUptime(state.loopStartTime);
+        }
+
+        function updateRefreshIndicator() {
+            document.getElementById('refresh-indicator').textContent =
+                `Updated ${relativeTime(new Date(state.lastRefresh).toISOString())}`;
+        }
+
+        // ====================================================================
+        // SPRINT PROGRESS
+        // ====================================================================
+        function renderProgress(data) {
+            hidePanelError('progress-error');
+            const body = document.getElementById('progress-body');
+
+            const total = data.total || 0;
+            const done = data.done || 0;
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+            const p0 = data.p0 || { done: 0, total: 0 };
+            const p1 = data.p1 || { done: 0, total: 0 };
+            const p2 = data.p2 || { done: 0, total: 0 };
+
+            const validationItems = (data.validationGate || []).map(item => {
+                const checkClass = item.status === 'done' ? 'done' :
+                                   item.status === 'partial' ? 'partial' : 'pending';
+                const checkIcon = item.status === 'done' ? '&#10003;' :
+                                  item.status === 'partial' ? '~' : '';
+                return `<div class="validation-item">
+                    <span class="check ${checkClass}">${checkIcon}</span>
+                    <span>${escapeHtml(item.label)}</span>
+                </div>`;
+            }).join('');
+
+            document.getElementById('sprint-badge').textContent = `S${data.sprintNumber || '?'}`;
+
+            body.innerHTML = `
+                <div class="big-progress">
+                    <div class="percent">${pct}%</div>
+                    <div class="desc">${done} / ${total} tasks complete</div>
+                    <div class="big-progress-bar">
+                        <div class="fill" style="width: ${pct}%"></div>
+                    </div>
+                </div>
+
+                <div class="priority-bars">
+                    <div class="priority-row">
+                        <span class="priority-label" style="color: var(--p0)">P0</span>
+                        <div class="priority-bar-track">
+                            <div class="priority-bar-fill" style="width: ${p0.total > 0 ? (p0.done / p0.total * 100) : 0}%; background: var(--p0);"></div>
+                        </div>
+                        <span class="priority-count">${p0.done}/${p0.total}</span>
+                    </div>
+                    <div class="priority-row">
+                        <span class="priority-label" style="color: var(--p1)">P1</span>
+                        <div class="priority-bar-track">
+                            <div class="priority-bar-fill" style="width: ${p1.total > 0 ? (p1.done / p1.total * 100) : 0}%; background: var(--p1);"></div>
+                        </div>
+                        <span class="priority-count">${p1.done}/${p1.total}</span>
+                    </div>
+                    <div class="priority-row">
+                        <span class="priority-label" style="color: var(--p2)">P2</span>
+                        <div class="priority-bar-track">
+                            <div class="priority-bar-fill" style="width: ${p2.total > 0 ? (p2.done / p2.total * 100) : 0}%; background: var(--p2);"></div>
+                        </div>
+                        <span class="priority-count">${p2.done}/${p2.total}</span>
+                    </div>
+                </div>
+
+                ${validationItems ? `
+                    <div class="validation-list">
+                        <div class="validation-title">Validation Gate</div>
+                        ${validationItems}
+                    </div>
+                ` : ''}
+            `;
+        }
+
+        // ====================================================================
+        // KANBAN BOARD
+        // ====================================================================
+        function renderKanban(tasks) {
+            hidePanelError('kanban-error');
+            const body = document.getElementById('kanban-body');
+
+            const pending = tasks.filter(t => t.status === 'PENDING');
+            const inProgress = tasks.filter(t =>
+                t.status === 'IN_PROGRESS' || t.status === 'IN PROGRESS' || t.status === 'REVIEW'
+            );
+            const done = tasks.filter(t =>
+                t.status === 'MERGED' || t.status === 'DONE' || t.status === 'CLOSED'
+            );
+
+            document.getElementById('kanban-badge').textContent = `${done.length}/${tasks.length}`;
+
+            function renderCards(list) {
+                if (list.length === 0) {
+                    return '<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:12px;">No tasks</div>';
+                }
+                return list.map(t => {
+                    const role = getRoleInfo(t.owner);
+                    const priority = (t.priority || 'P2').toLowerCase();
+                    const statusClass = (t.status === 'MERGED' || t.status === 'DONE') ? 'merged' :
+                                        (t.status === 'IN_PROGRESS' || t.status === 'IN PROGRESS') ? 'in-progress' : 'pending';
+                    const prTag = t.pr ? `<a class="task-tag pr" href="${GITHUB_BASE}/pull/${t.pr.replace('#','')}" target="_blank">${t.pr}</a>` : '';
+
+                    return `<div class="task-card ${priority}">
+                        <div class="task-card-top">
+                            <span class="task-id">${escapeHtml(t.id)}</span>
+                            <span class="task-status-dot ${statusClass}"></span>
+                        </div>
+                        <div class="task-desc">${escapeHtml(t.description || t.title || '')}</div>
+                        <div class="task-meta">
+                            <span class="task-tag owner ${role.cssClass}">${escapeHtml(t.owner || '?')}</span>
+                            <span class="task-tag size">${escapeHtml(t.size || '?')}</span>
+                            ${prTag}
+                        </div>
+                    </div>`;
+                }).join('');
+            }
+
+            body.innerHTML = `
+                <div class="kanban">
+                    <div class="kanban-col">
+                        <div class="kanban-col-header">
+                            <span>Pending</span>
+                            <span class="kanban-col-count">${pending.length}</span>
+                        </div>
+                        <div class="kanban-cards">${renderCards(pending)}</div>
+                    </div>
+                    <div class="kanban-col">
+                        <div class="kanban-col-header">
+                            <span>In Progress</span>
+                            <span class="kanban-col-count">${inProgress.length}</span>
+                        </div>
+                        <div class="kanban-cards">${renderCards(inProgress)}</div>
+                    </div>
+                    <div class="kanban-col">
+                        <div class="kanban-col-header">
+                            <span>Done / Merged</span>
+                            <span class="kanban-col-count">${done.length}</span>
+                        </div>
+                        <div class="kanban-cards">${renderCards(done)}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ====================================================================
+        // LIVE LOG
+        // ====================================================================
+        function classifyLogLine(text) {
+            if (!text) return 'info';
+            // Cycle boundaries
+            if (/=== CYCLE \d+|STU LOOP CYCLE|^[=\u2550]+$/.test(text)) return 'cycle-boundary';
+            if (/^[━]+$/.test(text)) return 'cycle-boundary';
+            // Agent markers
+            if (/CLAUDE|Engineer|claude/i.test(text) && /\bCLAUDE\b|Engineer/.test(text)) return 'claude';
+            if (/GEMINI|Overseer|copilot/i.test(text) && /\bGEMINI\b|Overseer/.test(text)) return 'gemini';
+            // Status
+            if (/✅|PASSED|SUCCESS|MERGED|COMPLETE|DONE/.test(text)) return 'success';
+            if (/❌|FAILED|ERROR|BROKEN/.test(text)) return 'error';
+            if (/⚠️|WARNING|WARN|BLOCKED|DEFERRED/.test(text)) return 'warning';
+            // Timestamps
+            if (/^\[\d{4}-\d{2}-\d{2}/.test(text)) return 'timestamp';
+            return 'info';
+        }
+
+        function appendLogLine(text) {
+            if (state.logLines.length >= CONFIG.LOG_MAX_LINES) {
+                state.logLines.shift();
+            }
+            state.logLines.push(text);
+            renderLog();
+        }
+
+        function renderLog() {
+            const container = document.getElementById('log-container');
+            if (state.logLines.length === 0) {
+                container.innerHTML = '<div class="log-empty">No log data yet. Waiting for loop activity...</div>';
+                return;
+            }
+
+            container.innerHTML = state.logLines.map(line => {
+                const cls = classifyLogLine(line);
+                return `<div class="log-line ${cls}">${escapeHtml(line)}</div>`;
+            }).join('');
+
+            if (state.autoScroll) {
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        function connectSSE() {
+            try {
+                const source = new EventSource(`${CONFIG.API_BASE}/log/stream`);
+
+                source.onopen = function() {
+                    state.sseConnected = true;
+                    hidePanelError('log-error');
+                };
+
+                source.onmessage = function(event) {
+                    try {
+                        const data = JSON.parse(event.data);
+                        if (data.raw) {
+                            appendLogLine(data.raw);
+                        } else if (data.content) {
+                            appendLogLine(data.content);
+                        } else if (typeof data === 'string') {
+                            appendLogLine(data);
+                        }
+                    } catch (e) {
+                        // Not JSON, treat as raw text
+                        const lines = event.data.split('\n');
+                        lines.forEach(line => {
+                            if (line.trim()) appendLogLine(line);
+                        });
+                    }
+                };
+
+                source.onerror = function() {
+                    state.sseConnected = false;
+                    showPanelError('log-error');
+                    source.close();
+                    // Reconnect after delay
+                    setTimeout(connectSSE, CONFIG.SSE_RECONNECT_DELAY);
+                };
+            } catch (e) {
+                // SSE not available, fall back to polling
+                state.sseConnected = false;
+                showPanelError('log-error');
+                pollLogs();
+            }
+        }
+
+        async function pollLogs() {
+            try {
+                const data = await fetchJSON('/log?lines=200');
+                hidePanelError('log-error');
+                if (Array.isArray(data.lines)) {
+                    state.logLines = data.lines
+                        .map(l => l.raw || l.content || l)
+                        .slice(-CONFIG.LOG_MAX_LINES);
+                    renderLog();
+                }
+            } catch (e) {
+                showPanelError('log-error');
+            }
+        }
+
+        // ====================================================================
+        // OPEN PRs
+        // ====================================================================
+        function renderPRs(prs) {
+            hidePanelError('prs-error');
+            const body = document.getElementById('prs-body');
+
+            document.getElementById('pr-badge').textContent = `${prs.length} open`;
+            if (prs.length > 0) {
+                document.getElementById('pr-badge').className = 'panel-badge orange';
+            } else {
+                document.getElementById('pr-badge').className = 'panel-badge green';
+                document.getElementById('pr-badge').textContent = 'None';
+            }
+
+            if (prs.length === 0) {
+                body.innerHTML = '<div class="pr-empty">No open pull requests. All clear.</div>';
+                return;
+            }
+
+            body.innerHTML = prs.map(pr => {
+                const ciClass = pr.ci === 'pass' ? 'pass' : pr.ci === 'fail' ? 'fail' : 'pending';
+                const prUrl = `${GITHUB_BASE}/pull/${pr.number}`;
+                return `<div class="pr-card">
+                    <div class="pr-header">
+                        <span class="pr-number">#${pr.number}</span>
+                        <span class="pr-title">${escapeHtml(pr.title)}</span>
+                        <span class="pr-ci-dot ${ciClass}" title="CI: ${pr.ci || 'unknown'}"></span>
+                    </div>
+                    <div class="pr-details">
+                        <span class="pr-branch">${escapeHtml(pr.branch || '')}</span>
+                        <span>${relativeTime(pr.createdAt)}</span>
+                        <a class="pr-link" href="${prUrl}" target="_blank">View on GitHub &#10132;</a>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ====================================================================
+        // GIT ACTIVITY
+        // ====================================================================
+        function renderCommits(commits) {
+            hidePanelError('git-error');
+            const body = document.getElementById('git-body');
+
+            if (!commits || commits.length === 0) {
+                body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-muted);font-style:italic;">No recent commits</div>';
+                return;
+            }
+
+            body.innerHTML = commits.map(c => {
+                const role = getRoleInfo(c.author);
+                const commitUrl = `${GITHUB_BASE}/commit/${c.hash}`;
+                return `<div class="commit-item">
+                    <div class="commit-dot ${role.dotClass}"></div>
+                    <div class="commit-info">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <a class="commit-hash" href="${commitUrl}" target="_blank">${escapeHtml((c.hash || '').slice(0, 7))}</a>
+                            <span class="commit-author ${role.textClass}">${escapeHtml(c.author || 'unknown')}</span>
+                        </div>
+                        <div class="commit-msg">${escapeHtml(c.message || '')}</div>
+                        <div class="commit-meta">
+                            <span>${relativeTime(c.date)}</span>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // ====================================================================
+        // PM DIARY
+        // ====================================================================
+        function renderDiary(entries, rawContent) {
+            hidePanelError('diary-error');
+            const body = document.getElementById('diary-body');
+
+            let entriesHtml = '';
+            if (entries && entries.length > 0) {
+                entriesHtml = '<div class="diary-entries">' + entries.slice(0, 3).map(entry => `
+                    <div class="diary-entry">
+                        <div class="diary-entry-date">${escapeHtml(entry.date || '')}</div>
+                        <div class="diary-entry-content">${entry.html || escapeHtml(entry.text || '')}</div>
+                    </div>
+                `).join('') + '</div>';
+            } else if (rawContent) {
+                // Parse raw markdown and show first few sections
+                try {
+                    const parsed = typeof marked !== 'undefined' ? marked.parse(rawContent) : escapeHtml(rawContent);
+                    entriesHtml = `<div class="diary-entries"><div class="diary-entry"><div class="diary-entry-content">${parsed}</div></div></div>`;
+                } catch (e) {
+                    entriesHtml = `<div class="diary-entries"><div class="diary-entry"><div class="diary-entry-content">${escapeHtml(rawContent)}</div></div></div>`;
+                }
+            } else {
+                entriesHtml = '<div style="text-align:center;padding:20px;color:var(--text-muted);">No diary entries loaded</div>';
+            }
+
+            body.innerHTML = `
+                ${entriesHtml}
+                <div class="feedback-form">
+                    <div class="feedback-form-title">Send Note to Loop</div>
+                    <textarea class="feedback-textarea" id="feedback-text" placeholder="Type a message for the autonomous loop... (e.g., priority changes, bug reports, direction)"></textarea>
+                    <div class="feedback-actions">
+                        <select class="feedback-priority" id="feedback-priority">
+                            <option value="NORMAL">Normal</option>
+                            <option value="HIGH">High</option>
+                            <option value="URGENT">Urgent</option>
+                        </select>
+                        <button class="feedback-submit" id="feedback-submit" onclick="submitFeedback()">Send Note</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Make submitFeedback global
+        window.submitFeedback = async function() {
+            const text = document.getElementById('feedback-text').value.trim();
+            const priority = document.getElementById('feedback-priority').value;
+            const btn = document.getElementById('feedback-submit');
+
+            if (!text) return;
+
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+
+            try {
+                const response = await fetch(`${CONFIG.API_BASE}/diaries/PM/note`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ note: text, priority })
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                document.getElementById('feedback-text').value = '';
+                showToast('Note sent to loop successfully', 'success');
+            } catch (e) {
+                showToast('Failed to send note: ' + e.message, 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Send Note';
+            }
+        };
+
+        // ====================================================================
+        // QUICK LINKS & STATUS
+        // ====================================================================
+        function renderQuickLinks(data) {
+            hidePanelError('links-error');
+            const body = document.getElementById('links-body');
+
+            const testStatus = data.tests || {};
+            const buildStatus = data.build || {};
+            const bundleInfo = data.bundle || {};
+
+            body.innerHTML = `
+                <div class="quick-links-grid">
+                    <a class="quick-link" href="${CONFIG.GITHUB_PAGES_URL}" target="_blank">
+                        <span class="ql-icon">&#127918;</span>
+                        <span class="ql-info">
+                            <span class="ql-label">Play the Game</span>
+                            <span class="ql-detail">GitHub Pages deployment</span>
+                        </span>
+                    </a>
+                    <a class="quick-link" href="${GITHUB_BASE}" target="_blank">
+                        <span class="ql-icon">&#128187;</span>
+                        <span class="ql-info">
+                            <span class="ql-label">Repository</span>
+                            <span class="ql-detail">${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}</span>
+                        </span>
+                    </a>
+                    <a class="quick-link" href="${GITHUB_BASE}/actions" target="_blank">
+                        <span class="ql-icon">&#9889;</span>
+                        <span class="ql-info">
+                            <span class="ql-label">CI / Actions</span>
+                            <span class="ql-detail">Build & test pipeline</span>
+                        </span>
+                    </a>
+                    <a class="quick-link" href="${GITHUB_BASE}/pulls" target="_blank">
+                        <span class="ql-icon">&#10697;</span>
+                        <span class="ql-info">
+                            <span class="ql-label">Pull Requests</span>
+                            <span class="ql-detail">Review & merge queue</span>
+                        </span>
+                    </a>
+                </div>
+
+                <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border);">
+                    <div class="info-row">
+                        <span class="info-label">Test Suite</span>
+                        <span class="info-value ${testStatus.passing ? 'pass' : ''}">${testStatus.count ? testStatus.count + ' tests' : '--'} ${testStatus.passing ? 'PASS' : ''}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Build</span>
+                        <span class="info-value ${buildStatus.status === 'pass' ? 'pass' : buildStatus.status === 'fail' ? 'fail' : ''}">${buildStatus.status ? buildStatus.status.toUpperCase() : '--'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Bundle Size</span>
+                        <span class="info-value">${bundleInfo.size || '--'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Test Files</span>
+                        <span class="info-value">${testStatus.files || '--'}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Lint</span>
+                        <span class="info-value ${data.lint === 'pass' ? 'pass' : ''}">${data.lint ? data.lint.toUpperCase() : '--'}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ====================================================================
+        // HANDOFF CONTEXT
+        // ====================================================================
+        function renderHandoff(content) {
+            hidePanelError('handoff-error');
+            const body = document.getElementById('handoff-body');
+
+            if (!content || content.trim() === '') {
+                body.innerHTML = '<div class="handoff-empty">No handoff context available. The loop has not completed a cycle yet.</div>';
+                return;
+            }
+
+            try {
+                const html = typeof marked !== 'undefined' ? marked.parse(content) : escapeHtml(content);
+                body.innerHTML = `<div class="handoff-content">${html}</div>`;
+            } catch (e) {
+                body.innerHTML = `<div class="handoff-content"><pre>${escapeHtml(content)}</pre></div>`;
+            }
+        }
+
+        // ====================================================================
+        // DATA FETCHING - MAIN REFRESH
+        // ====================================================================
+        async function refreshAll() {
+            state.lastRefresh = Date.now();
+            updateRefreshIndicator();
+
+            // Fetch all data in parallel
+            const fetches = [
+                // Combined status endpoint - header, loop state, validation
+                fetchJSON('/status').then(data => {
+                    // Update header from status data
+                    const sprint = data.sprint || {};
+                    const loop = data.loop || {};
+                    const validation = data.validation || {};
+                    updateHeader({
+                        sprint: sprint.number ? `${sprint.number}: ${sprint.name || ''}` : '--',
+                        cycle: loop.currentCycle || '--',
+                        loopStatus: loop.running ? 'RUNNING' : (loop.currentCycle ? 'STOPPED' : 'UNKNOWN'),
+                        loopStartTime: loop.loopStarted ? new Date(loop.loopStarted.replace(' ', 'T')).getTime() : null,
+                    });
+
+                    // Render quick links with validation data
+                    renderQuickLinks({
+                        tests: {
+                            count: validation.testCount || null,
+                            passing: validation.passed === true,
+                            files: null,
+                        },
+                        build: {
+                            status: validation.buildStatus || (validation.passed ? 'pass' : null),
+                        },
+                        bundle: {},
+                        lint: validation.lintErrors === 0 ? 'pass' : (validation.lintErrors > 0 ? 'fail' : null),
+                    });
+
+                    // Render handoff from status preview
+                    if (data.handoff && data.handoff.preview) {
+                        renderHandoff(data.handoff.preview);
+                    }
+                }).catch(e => {
+                    showPanelError('progress-error');
+                    renderQuickLinks({});
+                }),
+
+                // Sprint board - tasks and progress
+                fetchJSON('/sprint').then(data => {
+                    const tasks = data.tasks || [];
+                    renderKanban(tasks);
+
+                    // Calculate progress from tasks
+                    const total = tasks.length;
+                    const doneStatuses = ['MERGED', 'DONE', 'CLOSED'];
+                    const done = tasks.filter(t => doneStatuses.includes(t.status)).length;
+
+                    const p0Tasks = tasks.filter(t => t.priority === 'P0');
+                    const p1Tasks = tasks.filter(t => t.priority === 'P1');
+                    const p2Tasks = tasks.filter(t => t.priority === 'P2');
+
+                    renderProgress({
+                        sprintNumber: data.number,
+                        total,
+                        done,
+                        p0: { done: p0Tasks.filter(t => doneStatuses.includes(t.status)).length, total: p0Tasks.length },
+                        p1: { done: p1Tasks.filter(t => doneStatuses.includes(t.status)).length, total: p1Tasks.length },
+                        p2: { done: p2Tasks.filter(t => doneStatuses.includes(t.status)).length, total: p2Tasks.length },
+                        validationGate: (data.validationGate || []).map(item => ({
+                            label: item.text,
+                            status: item.checked ? 'done' : (item.partial ? 'partial' : 'pending'),
+                        })),
+                    });
+                }).catch(e => {
+                    showPanelError('kanban-error');
+                    showPanelError('progress-error');
+                }),
+
+                // PRs
+                fetchJSON('/prs').then(data => {
+                    const openPrs = (data.open || []).map(pr => ({
+                        number: pr.number,
+                        title: pr.title,
+                        branch: pr.headRefName,
+                        createdAt: pr.createdAt,
+                        ci: determineCIStatus(pr.checks),
+                    }));
+                    renderPRs(openPrs);
+                }).catch(e => {
+                    showPanelError('prs-error');
+                }),
+
+                // Git commits
+                fetchJSON('/git/log?limit=15').then(data => {
+                    const commits = (data.commits || []).map(c => ({
+                        hash: c.hash || c.shortHash,
+                        author: c.author,
+                        message: c.subject || c.message,
+                        date: c.date,
+                    }));
+                    renderCommits(commits);
+                }).catch(e => {
+                    showPanelError('git-error');
+                }),
+
+                // PM Diary
+                fetchJSON('/diaries/PM').then(data => {
+                    if (data.content) {
+                        // Extract the most recent entries (first few ### sections after ## Entries)
+                        const content = data.content;
+                        const entriesIdx = content.indexOf('## Entries');
+                        if (entriesIdx !== -1) {
+                            const entriesSection = content.slice(entriesIdx);
+                            // Take first ~2000 chars of entries for the preview
+                            const preview = entriesSection.slice(0, 2000);
+                            renderDiary(null, preview);
+                        } else {
+                            // Just show the first chunk
+                            renderDiary(null, content.slice(0, 2000));
+                        }
+                    } else {
+                        renderDiary(null, null);
+                    }
+                }).catch(e => {
+                    showPanelError('diary-error');
+                }),
+            ];
+
+            await Promise.allSettled(fetches);
+
+            // If SSE is not connected, poll logs too
+            if (!state.sseConnected) {
+                pollLogs();
+            }
+        }
+
+        /**
+         * Determine CI status from PR checks array.
+         */
+        function determineCIStatus(checks) {
+            if (!checks || checks.length === 0) return 'pending';
+            const hasFailure = checks.some(c => c.conclusion === 'FAILURE' || c.conclusion === 'failure');
+            if (hasFailure) return 'fail';
+            const allSuccess = checks.every(c => c.conclusion === 'SUCCESS' || c.conclusion === 'success');
+            if (allSuccess) return 'pass';
+            return 'pending';
+        }
+
+        // ====================================================================
+        // LOG CONTROLS
+        // ====================================================================
+        document.getElementById('btn-auto-scroll').addEventListener('click', function() {
+            state.autoScroll = !state.autoScroll;
+            this.classList.toggle('active', state.autoScroll);
+            if (state.autoScroll) {
+                const container = document.getElementById('log-container');
+                container.scrollTop = container.scrollHeight;
+            }
+        });
+
+        document.getElementById('btn-clear-log').addEventListener('click', function() {
+            state.logLines = [];
+            renderLog();
+        });
+
+        // ====================================================================
+        // INITIALIZATION
+        // ====================================================================
+        function init() {
+            // Start SSE for live logs
+            connectSSE();
+
+            // Initial data fetch
+            refreshAll();
+
+            // Periodic refresh
+            setInterval(refreshAll, CONFIG.REFRESH_INTERVAL);
+
+            // Update uptime every second
+            setInterval(updateUptime, 1000);
+
+            // Update refresh indicator every 5 seconds
+            setInterval(updateRefreshIndicator, 5000);
+        }
+
+        // Wait for DOM
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+    })();
+    </script>
+
+</body>
+</html>
