@@ -1981,17 +1981,6 @@
             `;
         }
 
-        // Task card click → show modal
-        document.getElementById('kanban-body').addEventListener('click', function(e) {
-            const card = e.target.closest('.task-card');
-            if (!card) return;
-            // Don't open modal if clicking a PR link
-            if (e.target.closest('.task-tag.pr')) return;
-            const taskId = card.dataset.taskId;
-            const task = state.tasks.find(t => t.id === taskId);
-            if (task) showTaskModal(task);
-        });
-
         function showTaskModal(t) {
             const modal = document.getElementById('task-modal');
             const body = document.getElementById('task-modal-body');
@@ -2776,6 +2765,16 @@
         // INITIALIZATION
         // ====================================================================
         function init() {
+            // Task card click → show modal (must be in init to ensure DOM ready)
+            document.getElementById('kanban-body').addEventListener('click', function(e) {
+                const card = e.target.closest('.task-card');
+                if (!card) return;
+                if (e.target.closest('.task-tag.pr')) return;
+                const taskId = card.dataset.taskId;
+                const task = state.tasks.find(t => t.id === taskId);
+                if (task) showTaskModal(task);
+            });
+
             // Load existing log lines first, then connect SSE for live updates
             pollLogs();
             connectSSE();
