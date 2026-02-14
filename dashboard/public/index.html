@@ -2605,7 +2605,8 @@
         // INITIALIZATION
         // ====================================================================
         function init() {
-            // Start SSE for live logs
+            // Load existing log lines first, then connect SSE for live updates
+            pollLogs();
             connectSSE();
 
             // Initial data fetch
