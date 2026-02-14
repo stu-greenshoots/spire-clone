@@ -29,6 +29,7 @@ export function useTouchGesture({
   const hasMoved = useRef(false);
   const longPressTimer = useRef(null);
   const isDragging = useRef(false);
+  const currentCard = useRef(null);
 
   // Movement threshold (pixels)
   const DRAG_THRESHOLD = 10;
@@ -53,9 +54,10 @@ export function useTouchGesture({
   const handleTouchStart = useCallback((e, card) => {
     const touch = e.touches[0];
 
-    // Record start time and position
+    // Record start time, position, and card
     touchStartTime.current = Date.now();
     touchStartPosition.current = { x: touch.clientX, y: touch.clientY };
+    currentCard.current = card;
     hasMoved.current = false;
     isDragging.current = false;
 
@@ -69,11 +71,9 @@ export function useTouchGesture({
       longPressTimer.current = null;
     }, LONG_PRESS_DURATION);
 
-    // Notify drag start (may be cancelled if tap detected)
-    if (onDragStart) {
-      onDragStart(card, e);
-    }
-  }, [onLongPress, onDragStart, clearLongPressTimer]);
+    // DO NOT call onDragStart here — defer until movement detected
+    // This prevents initializing drag state on every tap, which causes slowness
+  }, [onLongPress, clearLongPressTimer]);
 
   /**
    * Handle touch move
@@ -86,6 +86,11 @@ export function useTouchGesture({
 
     // Check if movement exceeds threshold
     if (distance > DRAG_THRESHOLD) {
+      // First time crossing threshold — initialize drag
+      if (!isDragging.current && onDragStart) {
+        onDragStart(currentCard.current, e);
+      }
+
       hasMoved.current = true;
       isDragging.current = true;
       clearLongPressTimer();
@@ -95,13 +100,14 @@ export function useTouchGesture({
         onDragMove(e);
       }
     }
-  }, [onDragMove, clearLongPressTimer]);
+  }, [onDragStart, onDragMove, clearLongPressTimer]);
 
   /**
    * Handle touch end
    */
-  const handleTouchEnd = useCallback((e, card) => {
+  const handleTouchEnd = useCallback((e) => {
     const touchDuration = Date.now() - touchStartTime.current;
+    const card = currentCard.current;
 
     // Clear timers
     clearLongPressTimer();
@@ -124,6 +130,7 @@ export function useTouchGesture({
     // Reset state
     touchStartTime.current = null;
     isDragging.current = false;
+    currentCard.current = null;
   }, [onTap, onDragEnd, clearLongPressTimer]);
 
   return {

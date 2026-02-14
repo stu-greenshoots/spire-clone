@@ -50,7 +50,7 @@ describe('useTouchGesture', () => {
 
       // Touch end at same position
       act(() => {
-        result.current.handleTouchEnd(createTouchEvent('touchend', 100, 100), mockCard);
+        result.current.handleTouchEnd(createTouchEvent('touchend', 100, 100));
       });
 
       expect(callbacks.onTap).toHaveBeenCalledWith(mockCard, expect.any(Object));
@@ -71,7 +71,7 @@ describe('useTouchGesture', () => {
       });
 
       act(() => {
-        result.current.handleTouchEnd(createTouchEvent('touchend', 100, 100), mockCard);
+        result.current.handleTouchEnd(createTouchEvent('touchend', 100, 100));
       });
 
       expect(callbacks.onTap).not.toHaveBeenCalled();
@@ -90,7 +90,7 @@ describe('useTouchGesture', () => {
       });
 
       act(() => {
-        result.current.handleTouchEnd(createTouchEvent('touchend', 120, 100), mockCard);
+        result.current.handleTouchEnd(createTouchEvent('touchend', 120, 100));
       });
 
       expect(callbacks.onTap).not.toHaveBeenCalled();
@@ -145,7 +145,7 @@ describe('useTouchGesture', () => {
       // End touch after 300ms (before long-press)
       act(() => {
         vi.advanceTimersByTime(300);
-        result.current.handleTouchEnd(createTouchEvent('touchend', 100, 100), mockCard);
+        result.current.handleTouchEnd(createTouchEvent('touchend', 100, 100));
       });
 
       // Continue to 500ms - long-press should not fire
@@ -186,7 +186,7 @@ describe('useTouchGesture', () => {
       });
 
       act(() => {
-        result.current.handleTouchEnd(createTouchEvent('touchend', 120, 100), mockCard);
+        result.current.handleTouchEnd(createTouchEvent('touchend', 120, 100));
       });
 
       expect(callbacks.onDragEnd).toHaveBeenCalled();
@@ -227,16 +227,43 @@ describe('useTouchGesture', () => {
   });
 
   describe('onDragStart callback', () => {
-    it('should call onDragStart on touch start', () => {
+    it('should call onDragStart only when movement exceeds threshold', () => {
       const { result } = renderHook(() => useTouchGesture(callbacks));
 
-      const event = createTouchEvent('touchstart', 100, 100);
+      const startEvent = createTouchEvent('touchstart', 100, 100);
 
       act(() => {
-        result.current.handleTouchStart(event, mockCard);
+        result.current.handleTouchStart(startEvent, mockCard);
       });
 
-      expect(callbacks.onDragStart).toHaveBeenCalledWith(mockCard, event);
+      // onDragStart should NOT be called on touch start
+      expect(callbacks.onDragStart).not.toHaveBeenCalled();
+
+      // Move 15px - now onDragStart should be called
+      const moveEvent = createTouchEvent('touchmove', 115, 100);
+      act(() => {
+        result.current.handleTouchMove(moveEvent);
+      });
+
+      expect(callbacks.onDragStart).toHaveBeenCalledWith(mockCard, moveEvent);
+    });
+
+    it('should only call onDragStart once per gesture', () => {
+      const { result } = renderHook(() => useTouchGesture(callbacks));
+
+      act(() => {
+        result.current.handleTouchStart(createTouchEvent('touchstart', 100, 100), mockCard);
+      });
+
+      // Multiple moves
+      act(() => {
+        result.current.handleTouchMove(createTouchEvent('touchmove', 115, 100));
+        result.current.handleTouchMove(createTouchEvent('touchmove', 130, 100));
+        result.current.handleTouchMove(createTouchEvent('touchmove', 145, 100));
+      });
+
+      // onDragStart should only be called once (on first move)
+      expect(callbacks.onDragStart).toHaveBeenCalledTimes(1);
     });
 
     it('should work when onDragStart is undefined', () => {
@@ -245,6 +272,7 @@ describe('useTouchGesture', () => {
       expect(() => {
         act(() => {
           result.current.handleTouchStart(createTouchEvent('touchstart', 100, 100), mockCard);
+          result.current.handleTouchMove(createTouchEvent('touchmove', 120, 100));
         });
       }).not.toThrow();
     });
@@ -258,7 +286,7 @@ describe('useTouchGesture', () => {
         act(() => {
           result.current.handleTouchStart(createTouchEvent('touchstart', 100, 100), mockCard);
           result.current.handleTouchMove(createTouchEvent('touchmove', 120, 100));
-          result.current.handleTouchEnd(createTouchEvent('touchend', 120, 100), mockCard);
+          result.current.handleTouchEnd(createTouchEvent('touchend', 120, 100));
         });
       }).not.toThrow();
     });
@@ -297,7 +325,7 @@ describe('useTouchGesture', () => {
       act(() => {
         result.current.handleTouchStart(createTouchEvent('touchstart', 100, 100), mockCard);
         vi.advanceTimersByTime(100);
-        result.current.handleTouchEnd(createTouchEvent('touchend', 100, 100), mockCard);
+        result.current.handleTouchEnd(createTouchEvent('touchend', 100, 100));
       });
 
       expect(callbacks.onTap).toHaveBeenCalledTimes(1);
@@ -306,7 +334,7 @@ describe('useTouchGesture', () => {
       act(() => {
         result.current.handleTouchStart(createTouchEvent('touchstart', 200, 200), mockCard);
         vi.advanceTimersByTime(100);
-        result.current.handleTouchEnd(createTouchEvent('touchend', 200, 200), mockCard);
+        result.current.handleTouchEnd(createTouchEvent('touchend', 200, 200));
       });
 
       expect(callbacks.onTap).toHaveBeenCalledTimes(2);

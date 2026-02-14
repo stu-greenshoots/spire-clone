@@ -1367,7 +1367,7 @@ const CombatScreen = ({ showDefeatedEnemies = false, isVictoryTransition = false
               }}
               onTouchEnd={(e) => {
                 if (isMobile) {
-                  touchGesture.handleTouchEnd(e, card);
+                  touchGesture.handleTouchEnd(e);
                 }
               }}
               onTouchMove={(e) => {
