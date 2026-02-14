@@ -48,6 +48,7 @@ load_prompt() {
 # =============================================================================
 
 COPILOT_MODEL="gemini-3-pro-preview"
+AGENT_PID=""
 
 # Run an agent with retry logic for transient errors
 # Usage: run_agent_raw <cli> <prompt> [output_file]
@@ -64,30 +65,36 @@ run_agent_raw() {
     if [[ "$INTERRUPTED" == "true" ]]; then return 130; fi
     local success=false
 
+    # Run agent in background so we can track its PID for Ctrl+C
     if [[ -n "$output_file" ]]; then
       if [[ "$cli" == "claude" ]]; then
-        claude --dangerously-skip-permissions -p "$prompt" 2>&1 | tee -a "$LOG_FILE" "$output_file" && success=true
+        claude --dangerously-skip-permissions -p "$prompt" > >(tee -a "$LOG_FILE" "$output_file") 2>&1 &
       elif [[ "$cli" == "copilot" ]]; then
-        copilot --model "$COPILOT_MODEL" --allow-all -p "$prompt" 2>&1 | tee -a "$LOG_FILE" "$output_file" && success=true
+        copilot --model "$COPILOT_MODEL" --allow-all -p "$prompt" > >(tee -a "$LOG_FILE" "$output_file") 2>&1 &
       else
         log "ERROR: Unknown CLI: $cli"; return 1
       fi
     else
       if [[ "$cli" == "claude" ]]; then
-        claude --dangerously-skip-permissions -p "$prompt" 2>&1 | tee -a "$LOG_FILE" && success=true
+        claude --dangerously-skip-permissions -p "$prompt" > >(tee -a "$LOG_FILE") 2>&1 &
       elif [[ "$cli" == "copilot" ]]; then
-        copilot --model "$COPILOT_MODEL" --allow-all -p "$prompt" 2>&1 | tee -a "$LOG_FILE" && success=true
+        copilot --model "$COPILOT_MODEL" --allow-all -p "$prompt" > >(tee -a "$LOG_FILE") 2>&1 &
       else
         log "ERROR: Unknown CLI: $cli"; return 1
       fi
     fi
+
+    AGENT_PID=$!
+    wait "$AGENT_PID" && success=true
+    AGENT_PID=""
+
+    if [[ "$INTERRUPTED" == "true" ]]; then return 130; fi
 
     if [[ "$success" == "true" ]]; then
       return 0
     fi
 
     retry=$((retry + 1))
-    if [[ "$INTERRUPTED" == "true" ]]; then return 130; fi
     if [[ $retry -lt $max_retries ]]; then
       log "⚠️  $cli call failed, retry $retry/$max_retries in ${delay}s..."
       echo "⚠️  $cli call failed, retry $retry/$max_retries in ${delay}s..."
@@ -352,6 +359,15 @@ handle_interrupt() {
   echo ""
   echo -e "\n${RED}    ✋ Ctrl+C detected. Stopping Stu Loop...${NC}"
   log "=== Stu Loop stopped by user (SIGINT) ==="
+  # Kill the running agent process if any
+  if [[ -n "${AGENT_PID:-}" ]] && kill -0 "$AGENT_PID" 2>/dev/null; then
+    echo -e "${YELLOW}    Killing agent process (PID $AGENT_PID)...${NC}"
+    kill -TERM "$AGENT_PID" 2>/dev/null || true
+    # Also kill the entire process group to catch tee and subshells
+    kill -TERM -"$AGENT_PID" 2>/dev/null || true
+    wait "$AGENT_PID" 2>/dev/null || true
+    AGENT_PID=""
+  fi
   cleanup
   exit 130
 }
