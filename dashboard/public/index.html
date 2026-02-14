@@ -1938,12 +1938,14 @@
             renderLog();
         }
 
+        // Classify log lines into agent sections based on markers in stu-loop.sh
+        // Returns 'engineer', 'overseer', 'pm', or null (unclassified)
         function getLineAgent(text) {
-            if (!text) return 'all';
-            if (/\[ENGINEER\]|Engineer session|claude.*engineer/i.test(text)) return 'engineer';
-            if (/\[OVERSEER\]|Overseer session|gemini.*overseer|copilot/i.test(text)) return 'overseer';
-            if (/\[PM\]|PM session|pm-sprint|orchestrat/i.test(text)) return 'pm';
-            return 'all';
+            if (!text) return null;
+            if (/CLAUDE \(Engineer\)|Work cycle|run_engineer|claude --dangerously/i.test(text)) return 'engineer';
+            if (/GEMINI \(Overseer\)|Review cycle|Housekeeping cycle|run_overseer|copilot --model|gemini/i.test(text)) return 'overseer';
+            if (/pm-sprint|pm-plan|orchestrat|SPRINT_BOARD|sprint.board/i.test(text)) return 'pm';
+            return null;
         }
 
         function renderLog() {
@@ -1953,12 +1955,24 @@
                 return;
             }
 
-            const filtered = state.logFilter === 'all'
-                ? state.logLines
-                : state.logLines.filter(line => {
-                    const agent = getLineAgent(line);
-                    return agent === state.logFilter || agent === 'all';
+            // When 'all', show everything. When filtered, use sticky context:
+            // once we see an agent marker, all subsequent lines belong to that
+            // agent until we see a different marker or a cycle boundary.
+            let filtered;
+            if (state.logFilter === 'all') {
+                filtered = state.logLines;
+            } else {
+                let currentAgent = null;
+                filtered = state.logLines.filter(line => {
+                    // Cycle boundaries reset context
+                    if (/=== CYCLE \d|STU LOOP CYCLE/i.test(line)) {
+                        currentAgent = null;
+                    }
+                    const detected = getLineAgent(line);
+                    if (detected) currentAgent = detected;
+                    return currentAgent === state.logFilter;
                 });
+            }
 
             if (filtered.length === 0) {
                 container.innerHTML = `<div class="log-empty">No ${state.logFilter} log lines yet.</div>`;
