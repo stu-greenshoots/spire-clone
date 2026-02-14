@@ -53,6 +53,28 @@ const PATHS = {
   publicDir: path.join(__dirname, 'public'),
 };
 
+// Find current sprint plan file dynamically
+function getSprintPlanPath(sprintNumber) {
+  return path.join(PROJECT_ROOT, `SPRINT_${sprintNumber}_PLAN.md`);
+}
+
+// Parse sprint plan into task detail blocks keyed by task ID
+function parseSprintPlanDetails(content) {
+  if (!content) return {};
+  const details = {};
+  // Split on ### headers that look like task IDs
+  const blocks = content.split(/(?=^### [A-Z]+-\d+)/m);
+  for (const block of blocks) {
+    const headerMatch = block.match(/^### ([A-Z]+-\d+):\s*(.+)/);
+    if (!headerMatch) continue;
+    const id = headerMatch[1];
+    // Get the body after the header line
+    const body = block.replace(/^### .+\n/, '').replace(/\n---\s*$/, '').trim();
+    details[id] = body;
+  }
+  return details;
+}
+
 // Diary roles that exist in the project
 const DIARY_ROLES = ['PM', 'BE', 'JR', 'AR', 'UX', 'GD', 'QA', 'SL', 'VARROW'];
 
@@ -642,6 +664,17 @@ app.get('/api/sprint', async (_req, res) => {
     }
 
     const sprint = parseSprintBoard(content);
+
+    // Enrich tasks with full details from sprint plan
+    if (sprint.number) {
+      const planContent = await safeReadFile(getSprintPlanPath(sprint.number));
+      const planDetails = parseSprintPlanDetails(planContent);
+      for (const task of sprint.tasks) {
+        if (planDetails[task.id]) {
+          task.detail = planDetails[task.id];
+        }
+      }
+    }
 
     // Group tasks by priority
     const grouped = { P0: [], P1: [], P2: [], other: [] };

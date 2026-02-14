@@ -664,7 +664,7 @@
             border: 1px solid var(--border-light);
             border-radius: 10px;
             padding: 24px;
-            max-width: 420px;
+            max-width: 540px;
             width: 90%;
             box-shadow: 0 16px 48px rgba(0,0,0,0.5);
         }
@@ -716,6 +716,25 @@
             font-weight: 600;
         }
         .modal-pr-link:hover { background: rgba(88, 166, 255, 0.2); }
+        .modal-detail {
+            margin-top: 12px;
+            padding: 14px;
+            background: var(--bg-tertiary);
+            border-radius: 6px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .modal-detail strong { color: var(--text-primary); }
+        .modal-detail .md-check { padding: 2px 0 2px 20px; position: relative; }
+        .modal-detail .md-check::before { content: '\2610'; position: absolute; left: 0; color: var(--text-muted); }
+        .modal-detail .md-check.done::before { content: '\2611'; color: var(--accent-green); }
+        .modal-detail .md-check.done { color: var(--text-muted); text-decoration: line-through; }
+        .modal-detail .md-step { padding: 2px 0 2px 8px; counter-increment: step; }
+        .modal-detail .md-bullet { padding: 2px 0 2px 12px; position: relative; }
+        .modal-detail .md-bullet::before { content: '\2022'; position: absolute; left: 0; color: var(--text-muted); }
 
         /* ========================================================================
            LIVE LOG PANEL
@@ -1986,6 +2005,19 @@
             `;
         }
 
+        // Simple markdown-to-HTML for task details (lists, checkboxes, bold)
+        function renderTaskMarkdown(md) {
+            if (!md) return '';
+            return escapeHtml(md)
+                .replace(/^- \[x\] (.+)$/gm, '<div class="md-check done">$1</div>')
+                .replace(/^- \[ \] (.+)$/gm, '<div class="md-check">$1</div>')
+                .replace(/^\d+\.\s+(.+)$/gm, '<div class="md-step">$1</div>')
+                .replace(/^- (.+)$/gm, '<div class="md-bullet">$1</div>')
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n{2,}/g, '<br><br>')
+                .replace(/\n/g, '<br>');
+        }
+
         function showTaskModal(t) {
             const modal = document.getElementById('task-modal');
             const body = document.getElementById('task-modal-body');
@@ -1997,14 +2029,14 @@
 
             body.innerHTML = `
                 <div class="modal-header">
-                    <span class="modal-title">${escapeHtml(t.id)}</span>
+                    <span class="modal-title">${escapeHtml(t.id)}: ${escapeHtml(t.description || t.title || '')}</span>
                     <button class="modal-close" onclick="document.getElementById('task-modal').classList.remove('visible')">&times;</button>
                 </div>
-                <div class="modal-desc">${escapeHtml(t.description || t.title || '')}</div>
                 <div class="modal-row"><span class="modal-label">Status</span><span class="modal-value">${statusLabel}</span></div>
                 <div class="modal-row"><span class="modal-label">Priority</span><span class="modal-value">${escapeHtml(t.priority || '?')}</span></div>
                 <div class="modal-row"><span class="modal-label">Owner</span><span class="modal-value"><span class="task-tag owner ${role.cssClass}">${escapeHtml(t.owner || '?')}</span></span></div>
                 <div class="modal-row"><span class="modal-label">Size</span><span class="modal-value">${escapeHtml(t.size || '?')}</span></div>
+                ${t.detail ? `<div class="modal-detail">${renderTaskMarkdown(t.detail)}</div>` : ''}
                 ${prNum ? `<a class="modal-pr-link" href="${GITHUB_BASE}/pull/${prNum}" target="_blank">View PR #${prNum}</a>` : ''}
             `;
             modal.classList.add('visible');
