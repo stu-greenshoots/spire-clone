@@ -234,14 +234,12 @@ test.describe('Full Playthrough E2E', () => {
   // Extended timeout for multi-combat playthroughs (reduced from 5 min to 3 min with fewer combats)
   test.setTimeout(180000); // 3 minutes per character
 
-  // QA-27: Skip in CI - these keyboard-based tests are too slow for regular CI
-  // They take ~3 minutes per character. Use faster DOM-based full-run.spec.js for CI.
-  // Run manually with: npx playwright test full-playthrough.spec.js
+  // QA-27: E2E stabilization complete - FIX-13 fixed reward modal timing bug
+  // These tests now run reliably in CI thanks to COMBAT_VICTORY transitional phase
+  // All 4 characters complete 3 combat encounters with keyboard controls
 
   for (const character of CHARACTERS) {
     test(`${character}: complete playthrough through ${MIN_COMBAT_ENCOUNTERS} combat encounters`, async ({ gamePage, gameActions }) => {
-      // eslint-disable-next-line playwright/no-skipped-test
-      test.skip(process.env.CI === 'true', 'Skipped in CI - too slow for regular CI runs');
       const stateLog = [];
       const errors = [];
       const jsErrors = [];
