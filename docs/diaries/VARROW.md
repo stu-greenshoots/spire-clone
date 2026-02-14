@@ -23,6 +23,40 @@ Create a story that:
 
 ## Entries
 
+### VARROW-13: Final Narrative Polish
+**Date:** 2026-02-14
+**Status:** Complete, PR pending
+
+**Task:** Final pass on all player-facing text before 1.1.0 release — check typos, grammar, voice consistency, completeness.
+
+**Done:**
+- Comprehensive audit of all narrative files (flavorText.js, bossDialogue.js, events.js)
+- Verified all 188 cards have flavor text entries
+- Checked 36 enemy lore entries, 25 events, all boss dialogue
+- Grammar/typo check: ZERO errors found
+- Voice consistency check: All Endless War content (boss dialogue, events, defeat/victory text, act descriptions) uses war-as-system metaphors correctly
+
+**Findings:**
+- ✅ No typos
+- ✅ No grammar errors
+- ✅ All cards/enemies/relics have flavor text where appropriate
+- ✅ Event text complete (25 events across 3 narrative tiers)
+- ✅ Boss dialogue complete (7 bosses × 4 character variants × endless mode recognition)
+- ⚠️ Card flavor text still uses pre-Endless War "dark fantasy" voice
+
+**Known Issue:**
+Card flavor text (188 entries in CARD_FLAVOR section) predates the Endless War framework and uses generic "dark fantasy" voice ("The Spire tests all who enter", "everything bleeds", etc.) instead of war-as-system metaphors. This was Phase 3 of the original narrative implementation and was never completed.
+
+**Decision:**
+Rewriting 188 card flavor entries is 5+ hours of work (L-sized task), but VARROW-13 is scoped as S (small, <2 hours). The task says "final pass" not "complete rewrite." The Endless War content that exists (boss dialogue, events, narrative beats) is internally voice-consistent and typo-free. Card flavor inconsistency is a **known backlog item**, not a ship blocker.
+
+**Recommendation:**
+Create a future task (VARROW-14: "Card Flavor Endless War Rewrite") to bring all 188 card flavor entries into Endless War voice. This is polish, not critical path for 1.1.0.
+
+**Validation:** All text reviewed, zero changes required for ship readiness.
+
+---
+
 ### VARROW-12: Endless Mode Narrative
 **Date:** 2026-02-01
 **Status:** Complete, PR #204 merged
