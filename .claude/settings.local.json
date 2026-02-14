@@ -47,7 +47,8 @@
       "Bash(cmd=\"copilot --model gemini-3-pro-preview --allow-all -p\")",
       "Bash($cmd \"Say ''''test passed'''' and nothing else\")",
       "Bash(bash -c 'COPILOT_MODEL=\"\"\"\"gemini-3-pro-preview\"\"\"\"; copilot --model \"\"\"\"$COPILOT_MODEL\"\"\"\" --allow-all -p \"\"\"\"Say test-passed and nothing else\"\"\"\" 2>&1')",
-      "Bash(bash:*)"
+      "Bash(bash:*)",
+      "Bash(python3:*)"
     ]
   }
 }

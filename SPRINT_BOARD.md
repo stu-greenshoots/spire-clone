@@ -918,7 +918,7 @@ Sprint 5 is primarily INTEGRATION work. Core systems already exist:
 | FIX-13 | BE | M | Fix reward modal timing bug — appears during combat | MERGED (PR #243) |
 | GD-32 | GD | L | Card art batch 1 — 25 placeholders replaced | MERGED (PR #244) |
 | GD-33 | GD | L | Card art batch 2 — 28 placeholders replaced (100% coverage!) | MERGED (PR #245) |
-| QA-27 | QA | M | E2E test stabilization — fix 4 timeout tests | DONE (PR #246) |
+| QA-27 | QA | M | E2E test stabilization — fix 4 timeout tests | MERGED (PR #247) |
 
 ### P1 — Should Ship
 

@@ -14,6 +14,13 @@ Project Manager - Sprint coordination, process, CI/CD, PR management
 
 ## Entries
 
+### 2026-02-14 14:02:52 - FEEDBACK FROM STU
+**Priority:** URGENT
+
+Card selection broke
+
+---
+
 ### Sprint 19 — Cycle 1: P0 Tasks Complete 🎉
 **Date:** 2026-02-14
 **Status:** All P0 tasks complete — validation gate passed
