@@ -61,6 +61,7 @@ run_agent_raw() {
   local delay=3
 
   while [[ $retry -lt $max_retries ]]; do
+    if [[ "$INTERRUPTED" == "true" ]]; then return 130; fi
     local success=false
 
     if [[ -n "$output_file" ]]; then
@@ -86,6 +87,7 @@ run_agent_raw() {
     fi
 
     retry=$((retry + 1))
+    if [[ "$INTERRUPTED" == "true" ]]; then return 130; fi
     if [[ $retry -lt $max_retries ]]; then
       log "⚠️  $cli call failed, retry $retry/$max_retries in ${delay}s..."
       echo "⚠️  $cli call failed, retry $retry/$max_retries in ${delay}s..."
@@ -287,14 +289,23 @@ if [[ -f "$DASHBOARD_DIR/server.js" && -f "$DASHBOARD_DIR/package.json" ]]; then
     (cd "$DASHBOARD_DIR" && npm install --silent) 2>/dev/null
   fi
 
-  # Start dashboard in background, suppress output
-  node "$DASHBOARD_DIR/server.js" > /dev/null 2>&1 &
-  DASHBOARD_PID=$!
-  sleep 1
+  # Check if already running on port 3847
+  EXISTING_PID=$(lsof -ti :3847 2>/dev/null | head -1)
+  if [[ -n "$EXISTING_PID" ]]; then
+    echo -e " ${GREEN}✓ (already running, PID $EXISTING_PID)${NC}"
+    DASHBOARD_PID=""
+  else
+    # Start dashboard in background, suppress output
+    node "$DASHBOARD_DIR/server.js" > /dev/null 2>&1 &
+    DASHBOARD_PID=$!
+    sleep 1
+  fi
 
-  # Check it actually started
-  if kill -0 "$DASHBOARD_PID" 2>/dev/null; then
-    echo -e " ${GREEN}✓${NC}"
+  # Check it actually started (or was already running)
+  if [[ -n "$EXISTING_PID" ]] || { [[ -n "$DASHBOARD_PID" ]] && kill -0 "$DASHBOARD_PID" 2>/dev/null; }; then
+    if [[ -z "$EXISTING_PID" ]]; then
+      echo -e " ${GREEN}✓${NC}"
+    fi
 
     # Get local IP for QR code
     LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || hostname -I 2>/dev/null | awk '{print $1}' || echo "localhost")
@@ -324,6 +335,8 @@ else
 fi
 
 # Cleanup function to stop dashboard on exit
+INTERRUPTED=false
+
 cleanup() {
   if [[ -n "${DASHBOARD_PID:-}" ]] && kill -0 "$DASHBOARD_PID" 2>/dev/null; then
     echo ""
@@ -333,7 +346,18 @@ cleanup() {
     echo -e "${GREEN}    Dashboard stopped.${NC}"
   fi
 }
-trap cleanup EXIT INT TERM
+
+handle_interrupt() {
+  INTERRUPTED=true
+  echo ""
+  echo -e "\n${RED}    ✋ Ctrl+C detected. Stopping Stu Loop...${NC}"
+  log "=== Stu Loop stopped by user (SIGINT) ==="
+  cleanup
+  exit 130
+}
+
+trap handle_interrupt INT TERM
+trap cleanup EXIT
 
 echo ""
 
@@ -608,4 +632,5 @@ while true; do
   echo "⏳ Cycle $CYCLE complete. Next cycle in 5 seconds..."
   echo "────────────────────────────────────────────────────────────────────────────────"
   sleep 5
+  if [[ "$INTERRUPTED" == "true" ]]; then exit 130; fi
 done
