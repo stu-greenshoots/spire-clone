@@ -1,0 +1,94 @@
+// Cabinwise data model.
+// Money is stored as integer pence everywhere (field name suffix: ...Pence).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Trip {
+  id        String    @id @default(cuid())
+  name      String
+  startDate DateTime?
+  endDate   DateTime?
+  createdAt DateTime  @default(now())
+  members   Member[]
+  expenses  Expense[]
+  meals     Meal[]
+}
+
+model Member {
+  id     String @id @default(cuid())
+  tripId String
+  trip   Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  name   String
+
+  // Dietary profile — drives automatic per-item participation.
+  vegetarian    Boolean @default(false)
+  vegan         Boolean @default(false)
+  drinksAlcohol Boolean @default(true)
+
+  paidExpenses Expense[]   @relation("PaidBy")
+  itemShares   ItemShare[]
+  mealEaters   MealEater[]
+}
+
+model Expense {
+  id          String     @id @default(cuid())
+  tripId      String
+  trip        Trip       @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  description String
+  paidById    String
+  paidBy      Member     @relation("PaidBy", fields: [paidById], references: [id])
+  date        DateTime   @default(now())
+  source      String     @default("manual") // "manual" | "receipt"
+  items       LineItem[]
+}
+
+model LineItem {
+  id          String      @id @default(cuid())
+  expenseId   String
+  expense     Expense     @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  name        String
+  amountPence Int // total for this line (unit price * quantity)
+  quantity    Int         @default(1)
+  category    String      @default("shared") // shared|meat|fish|vegetarian|vegan|dairy|alcohol
+  shares      ItemShare[]
+}
+
+// Which members split a given line item (equal split among them).
+model ItemShare {
+  id         String   @id @default(cuid())
+  lineItemId String
+  lineItem   LineItem @relation(fields: [lineItemId], references: [id], onDelete: Cascade)
+  memberId   String
+  member     Member   @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([lineItemId, memberId])
+}
+
+// --- Phase 3 (meal planning) — modelled now, wired later ---
+
+model Meal {
+  id     String      @id @default(cuid())
+  tripId String
+  trip   Trip        @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  name   String
+  day    String?
+  cookId String?
+  eaters MealEater[]
+}
+
+model MealEater {
+  id       String @id @default(cuid())
+  mealId   String
+  meal     Meal   @relation(fields: [mealId], references: [id], onDelete: Cascade)
+  memberId String
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@unique([mealId, memberId])
+}
